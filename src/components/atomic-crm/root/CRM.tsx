@@ -5,11 +5,13 @@ import {
   type AuthProvider,
   type DataProvider,
 } from "ra-core";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Route } from "react-router";
 import { Admin } from "@/components/admin/admin";
 import { ForgotPasswordPage } from "@/components/supabase/forgot-password-page";
 import { SetPasswordPage } from "@/components/supabase/set-password-page";
+import { useRealTimeXUser } from "@realtimex/app-sdk/hooks";
+import { useSupabase } from "@realtimex/app-sdk/providers/supabase";
 
 import companies from "../companies";
 import contacts from "../contacts";
@@ -21,6 +23,10 @@ import {
   authProvider as defaultAuthProvider,
   dataProvider as defaultDataProvider,
 } from "../providers/supabase";
+import {
+  createRealtimeXAuthProvider,
+  setRealTimeXUserContext,
+} from "../providers/realtimex/authProvider";
 import sales from "../sales";
 import { SettingsPage } from "../settings/SettingsPage";
 import type { ConfigurationContextValue } from "./ConfigurationContext";
@@ -98,10 +104,29 @@ export const CRM = ({
   taskTypes = defaultTaskTypes,
   title = defaultTitle,
   dataProvider = defaultDataProvider,
-  authProvider = defaultAuthProvider,
+  authProvider: customAuthProvider,
   disableTelemetry,
   ...rest
 }: CRMProps) => {
+  // Get RealTimeX user and Supabase client from SDK
+  const realtimeXUser = useRealTimeXUser();
+  const supabaseClient = useSupabase();
+
+  // Create RealTimeX auth provider with the Supabase client
+  const authProvider = useMemo(() => {
+    if (customAuthProvider) {
+      return customAuthProvider;
+    }
+    return createRealtimeXAuthProvider(supabaseClient);
+  }, [customAuthProvider, supabaseClient]);
+
+  // Set the RealTimeX user context for the auth provider
+  useEffect(() => {
+    if (realtimeXUser) {
+      setRealTimeXUserContext(realtimeXUser);
+    }
+  }, [realtimeXUser]);
+
   useEffect(() => {
     if (
       disableTelemetry ||
