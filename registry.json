@@ -93,7 +93,15 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/setup/SupabaseSetupWizard.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/settings/SettingsPage.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/settings/DatabaseSettings.tsx",
           "type": "registry:component"
         },
         {
