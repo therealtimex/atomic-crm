@@ -8,12 +8,12 @@ export const Welcome = () => (
     <CardContent className="px-4">
       <p className="text-sm mb-4">
         <a
-          href="https://marmelab.com/atomic-crm"
+          href="https://github.com/therealtimex/realtimex-crm"
           className="underline hover:no-underline"
         >
-          Atomic CRM
+          RealTimeX CRM
         </a>{" "}
-        is a template designed to help you quickly build your own CRM.
+        is a full-featured CRM designed to help you manage contacts, deals, and tasks.
       </p>
       <p className="text-sm mb-4">
         This demo runs on a mock API, so you can explore and modify the data. It
@@ -27,14 +27,14 @@ export const Welcome = () => (
         >
           shadcn-admin-kit
         </a>
-        , Atomic CRM is fully open-source. You can find the code at{" "}
+        . Fork of{" "}
         <a
           href="https://github.com/marmelab/atomic-crm"
           className="underline hover:no-underline"
         >
-          marmelab/atomic-crm
-        </a>
-        .
+          Atomic CRM
+        </a>{" "}
+        by Marmelab.
       </p>
     </CardContent>
   </Card>

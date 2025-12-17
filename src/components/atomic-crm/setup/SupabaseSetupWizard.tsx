@@ -73,7 +73,7 @@ export function SupabaseSetupWizard({
             <DialogHeader>
               <div className="flex items-center gap-2 mb-2">
                 <Database className="h-6 w-6 text-primary" />
-                <DialogTitle>Welcome to Atomic CRM</DialogTitle>
+                <DialogTitle>Welcome to CRM</DialogTitle>
               </div>
               <DialogDescription>
                 To get started, you'll need to connect to a Supabase database.
