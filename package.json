@@ -1,7 +1,51 @@
 {
-  "name": "atomic-crm",
+  "name": "realtimex-crm",
   "version": "0.1.0",
+  "description": "RealTimeX CRM - A full-featured CRM built with React, shadcn-admin-kit, and Supabase. Fork of Atomic CRM with RealTimeX App SDK integration.",
   "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "supabase",
+    "public",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "crm",
+    "realtimex",
+    "supabase",
+    "react",
+    "shadcn",
+    "admin",
+    "customer-relationship-management",
+    "self-hosted",
+    "typescript",
+    "contacts",
+    "deals",
+    "tasks",
+    "local-app"
+  ],
+  "author": "RealTimeX Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ledangtrung/atomic-crm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ledangtrung/atomic-crm/issues"
+  },
+  "homepage": "https://github.com/ledangtrung/atomic-crm#readme",
   "scripts": {
     "test": "vitest",
     "dev": "vite --force",

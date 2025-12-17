@@ -11,7 +11,7 @@ export interface SupabaseConfig {
   configuredAt?: string;
 }
 
-const STORAGE_KEY = 'atomic_crm_supabase_config';
+const STORAGE_KEY = 'realtimex_crm_supabase_config';
 
 /**
  * Get the current Supabase configuration

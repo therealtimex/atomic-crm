@@ -447,7 +447,7 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 **Configuration Management:**
 - Settings → Database: View connection status, change credentials, or clear configuration
-- UI configuration is stored in `localStorage` under key `atomic_crm_supabase_config`
+- UI configuration is stored in `localStorage` under key `realtimex_crm_supabase_config`
 - Priority: `localStorage` > environment variables
 
 **Technical Details:**
