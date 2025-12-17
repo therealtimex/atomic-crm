@@ -8,9 +8,9 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     }
   },
   "files": [
@@ -40,12 +40,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ledangtrung/atomic-crm.git"
+    "url": "https://github.com/therealtimex/realtimex-crm.git"
   },
   "bugs": {
-    "url": "https://github.com/ledangtrung/atomic-crm/issues"
+    "url": "https://github.com/therealtimex/realtimex-crm/issues"
   },
-  "homepage": "https://github.com/ledangtrung/atomic-crm#readme",
+  "homepage": "https://github.com/therealtimex/realtimex-crm#readme",
   "scripts": {
     "test": "vitest",
     "dev": "vite --force",

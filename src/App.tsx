@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CRM } from "@/components/atomic-crm/root/CRM";
 import { SupabaseSetupWizard } from "@/components/atomic-crm/setup/SupabaseSetupWizard";
 import { isSupabaseConfigured } from "@/lib/supabase-config";
