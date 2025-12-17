@@ -23,17 +23,19 @@ import { getCompanyAvatar } from "../commons/getCompanyAvatar";
 import { getContactAvatar } from "../commons/getContactAvatar";
 import { getIsInitialized } from "./authProvider";
 import { supabase } from "./supabase";
+import { getSupabaseConfig } from "@/lib/supabase-config";
 
-if (import.meta.env.VITE_SUPABASE_URL === undefined) {
-  throw new Error("Please set the VITE_SUPABASE_URL environment variable");
-}
-if (import.meta.env.VITE_SUPABASE_ANON_KEY === undefined) {
-  throw new Error("Please set the VITE_SUPABASE_ANON_KEY environment variable");
-}
+// Get config dynamically (from localStorage or env vars)
+// If no config, create a dummy provider that will never be used
+// (App.tsx will show setup wizard before CRM loads)
+const config = getSupabaseConfig() || {
+  url: "https://placeholder.supabase.co",
+  anonKey: "placeholder-key",
+};
 
 const baseDataProvider = supabaseDataProvider({
-  instanceUrl: import.meta.env.VITE_SUPABASE_URL,
-  apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+  instanceUrl: config.url,
+  apiKey: config.anonKey,
   supabaseClient: supabase,
   sortOrder: "asc,desc.nullslast" as any,
 });

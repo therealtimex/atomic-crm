@@ -6,6 +6,18 @@ Atomic CRM is a full-featured CRM built with React, shadcn-admin-kit, and Supaba
 
 ## Development Commands
 
+### Prerequisites
+
+Before starting development, ensure you have:
+- **Node.js** (v18 or higher)
+- **npm** (v9 or higher)
+- **Docker** (for local Supabase)
+
+**Required NPX packages** (installed automatically via package.json):
+- `supabase` - Supabase CLI for database management
+- `serve` - Static file server for production preview
+- `shadcn` - UI component registry builder
+
 ### Setup
 ```bash
 make install          # Install dependencies (frontend, backend, local Supabase)
@@ -13,6 +25,17 @@ make start            # Start full stack with real API (Supabase + Vite dev serv
 make stop             # Stop the stack
 make start-demo       # Start full-stack with FakeRest data provider
 ```
+
+**First-Time Setup:**
+On first launch, if no Supabase configuration is found, a setup wizard will automatically appear. You can either:
+1. **Enter existing credentials**: If you already have a Supabase project
+2. **Configure via Settings**: Navigate to Settings → Database after closing the wizard
+
+The app supports two configuration methods:
+- **UI Configuration** (recommended for end users): Configure via the setup wizard or Settings page
+- **Environment Variables** (recommended for developers): Use `.env` or `.env.production.local` files
+
+Priority: UI configuration overrides environment variables.
 
 ### Testing and Code Quality
 
@@ -26,6 +49,7 @@ make lint             # Run ESLint and Prettier checks
 
 ```bash
 make build            # Build production bundle (runs tsc + vite build)
+npm run serve         # Serve production build locally at http://127.0.0.1:3000
 ```
 
 ### Database Management
@@ -35,7 +59,16 @@ npx supabase migration new <name>  # Create new migration
 npx supabase migration up          # Apply migrations locally
 npx supabase db push               # Push migrations to remote
 npx supabase db reset              # Reset local database (destructive)
+npm run supabase:remote:init       # Automated remote Supabase setup (creates project, links, deploys)
 ```
+
+**Note:** The `supabase:remote:init` script automates:
+1. Supabase CLI login
+2. Project creation with generated password
+3. Waiting for project to be ready
+4. Linking local to remote
+5. Pushing migrations
+6. Writing `.env.production.local` with credentials
 
 ### Registry (Shadcn Components)
 
@@ -392,3 +425,33 @@ Import `test-data/contacts.csv` via the Contacts page → Import button.
 - Unit tests can be added in the `src/` directory (test files are named `*.test.ts` or `*.test.tsx`)
 - User deletion is not supported to avoid data loss; use account disabling instead
 - Filter operators must be supported by the `supabaseAdapter` when using FakeRest
+
+## Supabase Configuration
+
+### "Bring Your Own Database" UX
+
+Atomic CRM supports a user-friendly "Bring Your Own API Key" experience:
+
+**For End Users:**
+1. Launch the app → Setup wizard appears automatically
+2. Enter Supabase URL and Anon Key (or create new project at supabase.com)
+3. App validates connection and saves configuration to localStorage
+4. Configuration persists across sessions
+
+**For Developers:**
+Use environment variables in `.env` or `.env.production.local`:
+```env
+VITE_SUPABASE_URL=https://xxxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Configuration Management:**
+- Settings → Database: View connection status, change credentials, or clear configuration
+- UI configuration is stored in `localStorage` under key `atomic_crm_supabase_config`
+- Priority: `localStorage` > environment variables
+
+**Technical Details:**
+- Config utilities: `src/lib/supabase-config.ts`
+- Setup wizard: `src/components/atomic-crm/setup/SupabaseSetupWizard.tsx`
+- Settings page: `src/components/atomic-crm/settings/DatabaseSettings.tsx`
+- Supabase client: `src/components/atomic-crm/providers/supabase/supabase.ts` (reads from config)
