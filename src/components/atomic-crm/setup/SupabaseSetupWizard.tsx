@@ -1,22 +1,22 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Database, CheckCircle, AlertCircle } from 'lucide-react';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, Database, CheckCircle, AlertCircle } from "lucide-react";
 import {
   saveSupabaseConfig,
   validateSupabaseConnection,
-} from '@/lib/supabase-config';
+} from "@/lib/supabase-config";
 
-type WizardStep = 'welcome' | 'credentials' | 'validating' | 'success';
+type WizardStep = "welcome" | "credentials" | "validating" | "success";
 
 interface SupabaseSetupWizardProps {
   open: boolean;
@@ -29,20 +29,20 @@ export function SupabaseSetupWizard({
   onComplete,
   canClose = false,
 }: SupabaseSetupWizardProps) {
-  const [step, setStep] = useState<WizardStep>('welcome');
-  const [url, setUrl] = useState('');
-  const [anonKey, setAnonKey] = useState('');
+  const [step, setStep] = useState<WizardStep>("welcome");
+  const [url, setUrl] = useState("");
+  const [anonKey, setAnonKey] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const handleValidateAndSave = async () => {
     setError(null);
-    setStep('validating');
+    setStep("validating");
 
     const result = await validateSupabaseConnection(url, anonKey);
 
     if (result.valid) {
       saveSupabaseConfig({ url, anonKey });
-      setStep('success');
+      setStep("success");
 
       // Reload after short delay to apply new config
       setTimeout(() => {
@@ -50,8 +50,8 @@ export function SupabaseSetupWizard({
         window.location.href = window.location.origin;
       }, 1500);
     } else {
-      setError(result.error || 'Connection failed');
-      setStep('credentials');
+      setError(result.error || "Connection failed");
+      setStep("credentials");
     }
   };
 
@@ -68,7 +68,7 @@ export function SupabaseSetupWizard({
         onPointerDownOutside={(e) => !canClose && e.preventDefault()}
         onEscapeKeyDown={(e) => !canClose && e.preventDefault()}
       >
-        {step === 'welcome' && (
+        {step === "welcome" && (
           <>
             <DialogHeader>
               <div className="flex items-center gap-2 mb-2">
@@ -85,7 +85,7 @@ export function SupabaseSetupWizard({
                 <AlertDescription>
                   <strong>Don't have a Supabase project?</strong>
                   <br />
-                  Create one for free at{' '}
+                  Create one for free at{" "}
                   <a
                     href="https://supabase.com"
                     target="_blank"
@@ -105,14 +105,14 @@ export function SupabaseSetupWizard({
                 </ul>
               </div>
 
-              <Button onClick={() => setStep('credentials')} className="w-full">
+              <Button onClick={() => setStep("credentials")} className="w-full">
                 Continue
               </Button>
             </div>
           </>
         )}
 
-        {step === 'credentials' && (
+        {step === "credentials" && (
           <>
             <DialogHeader>
               <DialogTitle>Connect to Supabase</DialogTitle>
@@ -159,7 +159,7 @@ export function SupabaseSetupWizard({
               <div className="flex gap-2">
                 <Button
                   variant="outline"
-                  onClick={() => setStep('welcome')}
+                  onClick={() => setStep("welcome")}
                   className="flex-1"
                 >
                   Back
@@ -176,7 +176,7 @@ export function SupabaseSetupWizard({
           </>
         )}
 
-        {step === 'validating' && (
+        {step === "validating" && (
           <>
             <DialogHeader>
               <DialogTitle>Validating Connection</DialogTitle>
@@ -192,7 +192,7 @@ export function SupabaseSetupWizard({
           </>
         )}
 
-        {step === 'success' && (
+        {step === "success" && (
           <>
             <DialogHeader>
               <DialogTitle>Connection Successful!</DialogTitle>

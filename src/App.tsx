@@ -32,7 +32,7 @@ const App = () => {
   const [needsSetup, setNeedsSetup] = useState<boolean>(() => {
     // Check immediately on mount
     const configured = isSupabaseConfigured();
-    console.log('[App] Supabase configured:', configured);
+    console.log("[App] Supabase configured:", configured);
     return !configured;
   });
 

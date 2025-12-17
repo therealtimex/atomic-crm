@@ -1,15 +1,21 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Database, CheckCircle, XCircle, Settings, Trash2 } from 'lucide-react';
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Database, CheckCircle, XCircle, Settings, Trash2 } from "lucide-react";
 import {
   getSupabaseConfig,
   clearSupabaseConfig,
   getConfigSource,
-} from '@/lib/supabase-config';
-import { SupabaseSetupWizard } from '../setup/SupabaseSetupWizard';
+} from "@/lib/supabase-config";
+import { SupabaseSetupWizard } from "../setup/SupabaseSetupWizard";
 
 export function DatabaseSettings() {
   const [showWizard, setShowWizard] = useState(false);
@@ -19,7 +25,7 @@ export function DatabaseSettings() {
   const handleClearConfig = () => {
     if (
       confirm(
-        'Are you sure you want to clear the database configuration? The app will need to be reconfigured on next launch.'
+        "Are you sure you want to clear the database configuration? The app will need to be reconfigured on next launch.",
       )
     ) {
       clearSupabaseConfig();
@@ -37,8 +43,8 @@ export function DatabaseSettings() {
               <CardTitle>Database Connection</CardTitle>
             </div>
             {config && (
-              <Badge variant={source === 'ui' ? 'default' : 'secondary'}>
-                {source === 'ui' ? 'UI Configured' : 'Environment Variables'}
+              <Badge variant={source === "ui" ? "default" : "secondary"}>
+                {source === "ui" ? "UI Configured" : "Environment Variables"}
               </Badge>
             )}
           </div>
@@ -58,7 +64,7 @@ export function DatabaseSettings() {
                   <p className="text-sm text-muted-foreground">{config.url}</p>
                   {config.configuredAt && (
                     <p className="text-xs text-muted-foreground">
-                      Configured on{' '}
+                      Configured on{" "}
                       {new Date(config.configuredAt).toLocaleDateString()}
                     </p>
                   )}
@@ -66,12 +72,12 @@ export function DatabaseSettings() {
               </div>
 
               {/* Configuration Source Info */}
-              {source === 'env' && (
+              {source === "env" && (
                 <Alert>
                   <Settings className="h-4 w-4" />
                   <AlertDescription>
-                    Using configuration from environment variables. You can override this by
-                    setting up a new connection via the UI.
+                    Using configuration from environment variables. You can
+                    override this by setting up a new connection via the UI.
                   </AlertDescription>
                 </Alert>
               )}
@@ -86,7 +92,7 @@ export function DatabaseSettings() {
                   <Settings className="h-4 w-4 mr-2" />
                   Change Connection
                 </Button>
-                {source === 'ui' && (
+                {source === "ui" && (
                   <Button
                     variant="destructive"
                     onClick={handleClearConfig}
@@ -102,7 +108,8 @@ export function DatabaseSettings() {
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Anonymous Key</Label>
                 <div className="font-mono text-sm p-2 bg-muted rounded">
-                  {config.anonKey.substring(0, 20)}...{config.anonKey.substring(config.anonKey.length - 10)}
+                  {config.anonKey.substring(0, 20)}...
+                  {config.anonKey.substring(config.anonKey.length - 10)}
                 </div>
               </div>
             </>
@@ -120,8 +127,8 @@ export function DatabaseSettings() {
 
               <Alert>
                 <AlertDescription>
-                  Connect to a Supabase database to start using Atomic CRM. You can create a
-                  free project at{' '}
+                  Connect to a Supabase database to start using Atomic CRM. You
+                  can create a free project at{" "}
                   <a
                     href="https://supabase.com"
                     target="_blank"
@@ -151,6 +158,12 @@ export function DatabaseSettings() {
   );
 }
 
-function Label({ children, className }: { children: React.ReactNode; className?: string }) {
+function Label({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return <label className={className}>{children}</label>;
 }

@@ -11,10 +11,10 @@ function getSupabaseClient(): SupabaseClient {
     if (!config) {
       // Return a placeholder client that will never be used
       // (App.tsx will show setup wizard before this is accessed)
-      console.warn('[Supabase] No configuration found, using placeholder');
+      console.warn("[Supabase] No configuration found, using placeholder");
       supabaseInstance = createClient(
-        'https://placeholder.supabase.co',
-        'placeholder-key'
+        "https://placeholder.supabase.co",
+        "placeholder-key",
       );
     } else {
       supabaseInstance = createClient(config.url, config.anonKey);
@@ -29,6 +29,6 @@ export const supabase = new Proxy({} as SupabaseClient, {
   get(_target, prop) {
     const client = getSupabaseClient();
     const value = client[prop as keyof SupabaseClient];
-    return typeof value === 'function' ? value.bind(client) : value;
+    return typeof value === "function" ? value.bind(client) : value;
   },
 });
