@@ -131,32 +131,32 @@ export const CRM = ({
       taskTypes={taskTypes}
       title={title}
     >
-      <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-        store={localStorageStore(undefined, "CRM")}
-        layout={Layout}
-        loginPage={StartPage}
-        i18nProvider={i18nProvider}
-        dashboard={Dashboard}
-        requireAuth
-        disableTelemetry
-        {...rest}
-      >
-        <CustomRoutes noLayout>
-          <Route path={SignupPage.path} element={<SignupPage />} />
-          <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
-          <Route
-            path={ForgotPasswordPage.path}
-            element={<ForgotPasswordPage />}
-          />
-        </CustomRoutes>
+      <DatabaseHealthCheck dataProvider={dataProvider}>
+        <Admin
+          dataProvider={dataProvider}
+          authProvider={authProvider}
+          store={localStorageStore(undefined, "CRM")}
+          layout={Layout}
+          loginPage={StartPage}
+          i18nProvider={i18nProvider}
+          dashboard={Dashboard}
+          requireAuth
+          disableTelemetry
+          {...rest}
+        >
+          <CustomRoutes noLayout>
+            <Route path={SignupPage.path} element={<SignupPage />} />
+            <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
+            <Route
+              path={ForgotPasswordPage.path}
+              element={<ForgotPasswordPage />}
+            />
+          </CustomRoutes>
 
-        <CustomRoutes>
-          <Route path={SettingsPage.path} element={<SettingsPage />} />
-          <Route path={DatabasePage.path} element={<DatabasePage />} />
-        </CustomRoutes>
-        <DatabaseHealthCheck>
+          <CustomRoutes>
+            <Route path={SettingsPage.path} element={<SettingsPage />} />
+            <Route path={DatabasePage.path} element={<DatabasePage />} />
+          </CustomRoutes>
           <Resource name="deals" {...deals} />
           <Resource name="contacts" {...contacts} />
           <Resource name="companies" {...companies} />
@@ -165,8 +165,8 @@ export const CRM = ({
           <Resource name="tasks" />
           <Resource name="sales" {...sales} />
           <Resource name="tags" />
-        </DatabaseHealthCheck>
-      </Admin>
+        </Admin>
+      </DatabaseHealthCheck>
     </ConfigurationProvider>
   );
 };

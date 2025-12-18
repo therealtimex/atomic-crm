@@ -4,6 +4,8 @@ import { ExportButton } from "@/components/admin/export-button";
 import { List } from "@/components/admin/list";
 import { ListPagination } from "@/components/admin/list-pagination";
 import { SortButton } from "@/components/admin/sort-button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/components/ui/card";
 
 import { TopToolbar } from "../layout/TopToolbar";
 import { CompanyEmpty } from "./CompanyEmpty";
@@ -11,8 +13,6 @@ import { CompanyListFilter } from "./CompanyListFilter";
 import { ImageList } from "./GridList";
 
 export const CompanyList = () => {
-  const { identity } = useGetIdentity();
-  if (!identity) return null;
   return (
     <List
       title={false}
@@ -28,9 +28,32 @@ export const CompanyList = () => {
 
 const CompanyListLayout = () => {
   const { data, isPending, filterValues } = useListContext();
+  const { identity } = useGetIdentity();
   const hasFilters = filterValues && Object.keys(filterValues).length > 0;
 
-  if (isPending) return null;
+  // Show loading skeleton while identity or data is loading
+  if (!identity || isPending) {
+    return (
+      <div className="w-full flex flex-row gap-8">
+        <div className="w-64">
+          <Skeleton className="h-96 w-full" />
+        </div>
+        <div className="flex flex-col flex-1 gap-4">
+          <Card className="p-4">
+            <div className="grid grid-cols-3 gap-4">
+              <Skeleton className="h-48 w-full" />
+              <Skeleton className="h-48 w-full" />
+              <Skeleton className="h-48 w-full" />
+              <Skeleton className="h-48 w-full" />
+              <Skeleton className="h-48 w-full" />
+              <Skeleton className="h-48 w-full" />
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
   if (!data?.length && !hasFilters) return <CompanyEmpty />;
 
   return (

@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { useDataProvider } from "ra-core";
+import type { DataProvider } from "ra-core";
 import { checkDatabaseHealth, DatabaseHealthStatus } from "@/lib/database-health-check";
 import { getSupabaseConfig } from "@/lib/supabase-config";
 import { DatabaseSetupGuide } from "../setup/DatabaseSetupGuide";
 
 interface DatabaseHealthCheckProps {
   children: React.ReactNode;
+  dataProvider: DataProvider;
 }
 
-export function DatabaseHealthCheck({ children }: DatabaseHealthCheckProps) {
-  const dataProvider = useDataProvider();
+export function DatabaseHealthCheck({ children, dataProvider }: DatabaseHealthCheckProps) {
   const [healthStatus, setHealthStatus] = useState<DatabaseHealthStatus | null>(null);
   const [isChecking, setIsChecking] = useState(true);
 
@@ -24,7 +24,7 @@ export function DatabaseHealthCheck({ children }: DatabaseHealthCheckProps) {
           setIsChecking(false);
         }
       } catch (error) {
-        console.error("Failed to check database health:", error);
+        console.error("[DatabaseHealthCheck] Failed to check database health:", error);
         if (!cancelled) {
           setIsChecking(false);
         }

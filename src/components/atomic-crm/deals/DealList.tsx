@@ -8,6 +8,8 @@ import { ReferenceInput } from "@/components/admin/reference-input";
 import { FilterButton } from "@/components/admin/filter-form";
 import { SearchInput } from "@/components/admin/search-input";
 import { SelectInput } from "@/components/admin/select-input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/components/ui/card";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { TopToolbar } from "../layout/TopToolbar";
@@ -20,10 +22,7 @@ import { DealShow } from "./DealShow";
 import { OnlyMineInput } from "./OnlyMineInput";
 
 const DealList = () => {
-  const { identity } = useGetIdentity();
   const { dealCategories } = useConfigurationContext();
-
-  if (!identity) return null;
 
   const dealFilters = [
     <SearchInput source="q" alwaysOn />,
@@ -60,9 +59,25 @@ const DealLayout = () => {
   const matchEdit = matchPath("/deals/:id", location.pathname);
 
   const { data, isPending, filterValues } = useListContext();
+  const { identity } = useGetIdentity();
   const hasFilters = filterValues && Object.keys(filterValues).length > 0;
 
-  if (isPending) return null;
+  // Show loading skeleton while identity or data is loading
+  if (!identity || isPending) {
+    return (
+      <div className="w-full">
+        <Card className="p-4">
+          <div className="flex gap-4">
+            <Skeleton className="h-96 w-1/4" />
+            <Skeleton className="h-96 w-1/4" />
+            <Skeleton className="h-96 w-1/4" />
+            <Skeleton className="h-96 w-1/4" />
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   if (!data?.length && !hasFilters)
     return (
       <>

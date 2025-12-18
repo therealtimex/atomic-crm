@@ -11,6 +11,7 @@ import { ExportButton } from "@/components/admin/export-button";
 import { List } from "@/components/admin/list";
 import { SortButton } from "@/components/admin/sort-button";
 import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import type { Company, Contact, Sale, Tag } from "../types";
 import { ContactEmpty } from "./ContactEmpty";
@@ -20,10 +21,6 @@ import { ContactListFilter } from "./ContactListFilter";
 import { TopToolbar } from "../layout/TopToolbar";
 
 export const ContactList = () => {
-  const { identity } = useGetIdentity();
-
-  if (!identity) return null;
-
   return (
     <List
       title={false}
@@ -43,7 +40,27 @@ const ContactListLayout = () => {
 
   const hasFilters = filterValues && Object.keys(filterValues).length > 0;
 
-  if (!identity || isPending) return null;
+  // Show loading skeleton while identity or data is loading
+  if (!identity || isPending) {
+    return (
+      <div className="flex flex-row gap-8">
+        <div className="w-64">
+          <Skeleton className="h-96 w-full" />
+        </div>
+        <div className="w-full flex flex-col gap-4">
+          <Card className="p-4">
+            <div className="space-y-3">
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   if (!data?.length && !hasFilters) return <ContactEmpty />;
 
