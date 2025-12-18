@@ -61,17 +61,65 @@ export function DatabaseSetupGuide({
             </div>
           </div>
 
-          {/* Option 1: Direct SQL File */}
+          {/* Option 1: Automatic Migration */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm font-bold">
                 1
               </div>
-              <h3 className="font-semibold">Quick Setup (Recommended)</h3>
+              <h3 className="font-semibold">Automatic Migration (Recommended)</h3>
             </div>
             <div className="ml-8 space-y-3">
               <p className="text-sm text-muted-foreground">
-                Download and run the combined migration file:
+                Run the automated migration script from your terminal:
+              </p>
+
+              <div className="space-y-3">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2 font-semibold">
+                    If you used the CLI to create your project:
+                  </p>
+                  <pre className="bg-muted p-3 rounded text-sm overflow-x-auto">
+                    npm run db:migrate
+                  </pre>
+                </div>
+
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2 font-semibold">
+                    Or clone the repository first:
+                  </p>
+                  <pre className="bg-muted p-3 rounded text-sm overflow-x-auto">
+                    git clone https://github.com/therealtimex/realtimex-crm.git{"\n"}
+                    cd realtimex-crm{"\n"}
+                    npm install{"\n"}
+                    npm run db:migrate
+                  </pre>
+                </div>
+
+                <div className="text-sm text-muted-foreground space-y-2">
+                  <p>The script will:</p>
+                  <ul className="list-disc list-inside ml-2 space-y-1">
+                    <li>Install Supabase CLI if needed</li>
+                    <li>Link your project using Project ID and Database Password</li>
+                    <li>Apply all migrations automatically</li>
+                    <li>Take about 5-10 seconds to complete</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Option 2: SQL Editor */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm font-bold">
+                2
+              </div>
+              <h3 className="font-semibold">Manual SQL Editor</h3>
+            </div>
+            <div className="ml-8 space-y-3">
+              <p className="text-sm text-muted-foreground">
+                Copy and paste SQL directly into Supabase:
               </p>
 
               <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
@@ -82,7 +130,7 @@ export function DatabaseSetupGuide({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary hover:underline inline-flex items-center gap-1"
-                    download
+                    download="setup.sql"
                   >
                     setup.sql
                     <ExternalLink className="h-3 w-3" />
@@ -100,15 +148,9 @@ export function DatabaseSetupGuide({
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 </li>
-                <li>
-                  Copy the entire contents of setup.sql and paste into the SQL Editor
-                </li>
-                <li>
-                  Click "Run" to execute all migrations at once
-                </li>
-                <li>
-                  Reload this page after completion
-                </li>
+                <li>Copy all contents from setup.sql and paste into the editor</li>
+                <li>Click "Run" to execute</li>
+                <li>Reload this page after completion</li>
               </ol>
 
               {projectRef && (
@@ -126,13 +168,13 @@ export function DatabaseSetupGuide({
             </div>
           </div>
 
-          {/* Option 2: Supabase CLI */}
+          {/* Option 3: Supabase CLI Manual */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm font-bold">
-                2
+                3
               </div>
-              <h3 className="font-semibold">Using Supabase CLI</h3>
+              <h3 className="font-semibold">Advanced: Manual CLI Setup</h3>
             </div>
             <div className="ml-8 space-y-3">
               <div>
@@ -180,53 +222,6 @@ export function DatabaseSetupGuide({
             </div>
           </div>
 
-          {/* Option 3: Individual Migrations */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm font-bold">
-                3
-              </div>
-              <h3 className="font-semibold">Advanced: Run Individual Migrations</h3>
-            </div>
-            <div className="ml-8 space-y-3">
-              <p className="text-sm text-muted-foreground">
-                For advanced users who want to review each migration:
-              </p>
-
-              <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-                <li>
-                  Browse migrations at{" "}
-                  <a
-                    href="https://github.com/therealtimex/realtimex-crm/tree/main/supabase/migrations"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline inline-flex items-center gap-1"
-                  >
-                    GitHub
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </li>
-                <li>
-                  Open your{" "}
-                  <a
-                    href={`https://supabase.com/dashboard/project/${projectRef}/sql/new`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline inline-flex items-center gap-1"
-                  >
-                    Supabase SQL Editor
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </li>
-                <li>
-                  Run each migration file in chronological order (by date in filename)
-                </li>
-                <li>
-                  Reload this page after all migrations are complete
-                </li>
-              </ol>
-            </div>
-          </div>
 
           {/* Verification */}
           <div className="space-y-3 pt-4 border-t">
