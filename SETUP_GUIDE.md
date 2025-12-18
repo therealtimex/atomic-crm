@@ -64,24 +64,41 @@ The script will ask for:
 
 Edge Functions are required for team management features.
 
-### Option A: Using Supabase CLI (Included in auto-migrate)
+### Option A: Supabase Dashboard (Recommended for non-technical users)
+
+Deploy the two essential functions directly from Supabase Dashboard:
+
+1. **Download function files:**
+   - [users.ts](https://raw.githubusercontent.com/therealtimex/realtimex-crm/main/public/edge-functions/users.ts) - Required for team management
+   - [updatePassword.ts](https://raw.githubusercontent.com/therealtimex/realtimex-crm/main/public/edge-functions/updatePassword.ts) - Required for password reset
+
+2. **For each function:**
+   - Go to your Supabase Dashboard → Edge Functions
+   - Click "Deploy a new function" or "+ New Edge Function"
+   - **Function name:** Enter exactly `users` (or `updatePassword`)
+   - **Code:** Open the downloaded .ts file, copy ALL contents, paste into editor
+   - Click "Deploy"
+   - Wait 10-20 seconds for deployment
+
+3. **Verify:** Functions should show "Active" status in the list
+
+📖 [View detailed Edge Functions guide](https://raw.githubusercontent.com/therealtimex/realtimex-crm/main/public/edge-functions/README.md)
+
+### Option B: Using Supabase CLI (For technical users)
 
 If you ran `npm run db:migrate`, it prompts you to deploy Edge Functions automatically.
 
-### Option B: Manual Deployment
-
-If you only ran the SQL setup, deploy Edge Functions manually:
-
+Or deploy manually:
 ```bash
 # In the cloned repository folder
 npx supabase functions deploy
 ```
 
 **What Edge Functions do:**
-- **users** - Create and update team members (**required for multi-user setup**)
-- **updatePassword** - Reset user passwords
-- **mergeContacts** - Merge duplicate contact records
-- **postmark** - Inbound email integration (optional)
+- **users** ⭐ - Create and update team members (**required for multi-user setup**)
+- **updatePassword** ⭐ - Reset user passwords
+- **mergeContacts** - Merge duplicate contact records (optional, requires CLI)
+- **postmark** - Inbound email integration (optional, requires CLI)
 
 ⚠️ **Note:** Basic CRM features (contacts, deals, tasks, notes) work without Edge Functions, but you won't be able to invite new team members.
 
