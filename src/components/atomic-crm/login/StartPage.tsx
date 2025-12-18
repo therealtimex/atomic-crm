@@ -3,8 +3,6 @@ import { useDataProvider } from "ra-core";
 import { Navigate } from "react-router-dom";
 import { LoginPage } from "@/components/admin/login-page";
 import { checkDatabaseHealth } from "@/lib/database-health-check";
-import { getSupabaseConfig } from "@/lib/supabase-config";
-import { DatabaseSetupGuide } from "../setup/DatabaseSetupGuide";
 
 import type { CrmDataProvider } from "../providers/types";
 import { LoginSkeleton } from "./LoginSkeleton";
