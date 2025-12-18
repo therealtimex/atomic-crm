@@ -97,6 +97,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/setup/DatabaseSetupGuide.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/settings/SettingsPage.tsx",
           "type": "registry:component"
         },
@@ -138,6 +142,10 @@
         },
         {
           "path": "src/components/atomic-crm/root/defaultConfiguration.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/root/DatabaseHealthCheck.tsx",
           "type": "registry:component"
         },
         {
