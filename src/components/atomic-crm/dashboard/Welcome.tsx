@@ -13,7 +13,8 @@ export const Welcome = () => (
         >
           RealTimeX CRM
         </a>{" "}
-        is a full-featured CRM designed to help you manage contacts, deals, and tasks.
+        is a full-featured CRM designed to help you manage contacts, deals, and
+        tasks.
       </p>
       <p className="text-sm mb-4">
         This demo runs on a mock API, so you can explore and modify the data. It

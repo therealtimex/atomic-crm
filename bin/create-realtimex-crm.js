@@ -364,7 +364,9 @@ async function createLocalApp(projectPath, projectName, config) {
   // Update package.json with RealTimeX App SDK
   const packageJsonPath = join(projectPath, "package.json");
   const packageJson = JSON.parse(
-    await import("fs").then((fs) => fs.promises.readFile(packageJsonPath, "utf8")),
+    await import("fs").then((fs) =>
+      fs.promises.readFile(packageJsonPath, "utf8"),
+    ),
   );
 
   packageJson.dependencies["@realtimex/app-sdk"] = "latest";
@@ -597,7 +599,10 @@ export function MyCRMPage() {
 }
 `;
 
-  await writeFile(join(projectPath, "examples/react-integration.tsx"), exampleReact);
+  await writeFile(
+    join(projectPath, "examples/react-integration.tsx"),
+    exampleReact,
+  );
 
   const readme = `# ${projectName}
 
