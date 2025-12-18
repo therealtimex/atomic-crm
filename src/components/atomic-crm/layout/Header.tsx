@@ -1,5 +1,5 @@
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { Settings, User } from "lucide-react";
+import { Database, Settings, User } from "lucide-react";
 import { CanAccess } from "ra-core";
 import { Link, matchPath, useLocation } from "react-router";
 import { RefreshButton } from "@/components/admin/refresh-button";
@@ -76,6 +76,7 @@ const Header = () => {
               <RefreshButton />
               <UserMenu>
                 <ConfigurationMenu />
+                <DatabaseMenu />
                 <CanAccess resource="sales" action="list">
                   <UsersMenu />
                 </CanAccess>
@@ -125,10 +126,23 @@ const ConfigurationMenu = () => {
   return (
     <DropdownMenuItem asChild onClick={onClose}>
       <Link to="/settings" className="flex items-center gap-2">
-        <Settings />
+        <User />
         My info
       </Link>
     </DropdownMenuItem>
   );
 };
+
+const DatabaseMenu = () => {
+  const { onClose } = useUserMenu() ?? {};
+  return (
+    <DropdownMenuItem asChild onClick={onClose}>
+      <Link to="/database" className="flex items-center gap-2">
+        <Database />
+        Database
+      </Link>
+    </DropdownMenuItem>
+  );
+};
+
 export default Header;

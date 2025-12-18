@@ -24,7 +24,6 @@ import {
 import ImageEditorField from "../misc/ImageEditorField";
 import type { CrmDataProvider } from "../providers/types";
 import type { Sale, SalesFormData } from "../types";
-import { DatabaseSettings } from "./DatabaseSettings";
 
 export const SettingsPage = () => {
   const [isEditMode, setEditMode] = useState(false);
@@ -130,8 +129,6 @@ const SettingsForm = ({
 
   return (
     <div className="space-y-4">
-      <DatabaseSettings />
-
       <Card>
         <CardContent>
           <div className="mb-4 flex flex-row justify-between">

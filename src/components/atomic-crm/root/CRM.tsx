@@ -22,6 +22,7 @@ import {
   dataProvider as defaultDataProvider,
 } from "../providers/supabase";
 import sales from "../sales";
+import { DatabasePage } from "../settings/DatabasePage";
 import { SettingsPage } from "../settings/SettingsPage";
 import type { ConfigurationContextValue } from "./ConfigurationContext";
 import { ConfigurationProvider } from "./ConfigurationContext";
@@ -152,6 +153,7 @@ export const CRM = ({
 
         <CustomRoutes>
           <Route path={SettingsPage.path} element={<SettingsPage />} />
+          <Route path={DatabasePage.path} element={<DatabasePage />} />
         </CustomRoutes>
         <Resource name="deals" {...deals} />
         <Resource name="contacts" {...contacts} />
