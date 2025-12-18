@@ -22,7 +22,24 @@ RealTimeX CRM is free and open-source.
 
 ## Quick Start
 
-### Option 1: Use the CLI (Recommended)
+### Step 1: Prepare Your Supabase Database
+
+**IMPORTANT**: You must set up your Supabase database BEFORE connecting the CRM application.
+
+1. Create a Supabase project at [supabase.com](https://supabase.com)
+2. Run the database setup SQL:
+   - Download [setup.sql](https://raw.githubusercontent.com/therealtimex/realtimex-crm/main/public/setup.sql)
+   - Open your Supabase SQL Editor
+   - Paste the entire file contents and click "Run"
+3. Get your credentials:
+   - Project URL (from Settings → API)
+   - Anon public key (from Settings → API)
+
+📖 **[View detailed setup guide](./SETUP_GUIDE.md)** for step-by-step instructions with screenshots.
+
+### Step 2: Launch the CRM Application
+
+#### Option A: Use the CLI (Recommended)
 
 Create a new CRM project in seconds:
 
@@ -32,7 +49,7 @@ npx create-realtimex-crm@latest
 
 The CLI will guide you through:
 1. Choosing a template (standalone app, RealTimeX Local App, or component)
-2. Configuring Supabase (optional)
+2. Entering your Supabase URL and Anon Key (from Step 1)
 3. Setting up your project structure
 
 Then:
@@ -42,7 +59,7 @@ npm install
 npm run dev
 ```
 
-### Option 2: Clone and Customize
+#### Option B: Clone and Customize
 
 To run this project locally, you will need the following tools installed on your computer:
 
