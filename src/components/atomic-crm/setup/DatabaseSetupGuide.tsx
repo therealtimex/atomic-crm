@@ -61,13 +61,78 @@ export function DatabaseSetupGuide({
             </div>
           </div>
 
-          {/* Option 1: Supabase CLI */}
+          {/* Option 1: Direct SQL File */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm font-bold">
                 1
               </div>
-              <h3 className="font-semibold">Using Supabase CLI (Recommended)</h3>
+              <h3 className="font-semibold">Quick Setup (Recommended)</h3>
+            </div>
+            <div className="ml-8 space-y-3">
+              <p className="text-sm text-muted-foreground">
+                Download and run the combined migration file:
+              </p>
+
+              <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
+                <li>
+                  Download{" "}
+                  <a
+                    href="https://raw.githubusercontent.com/therealtimex/realtimex-crm/main/public/setup.sql"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline inline-flex items-center gap-1"
+                    download
+                  >
+                    setup.sql
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </li>
+                <li>
+                  Open your{" "}
+                  <a
+                    href={`https://supabase.com/dashboard/project/${projectRef}/sql/new`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline inline-flex items-center gap-1"
+                  >
+                    Supabase SQL Editor
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </li>
+                <li>
+                  Copy the entire contents of setup.sql and paste into the SQL Editor
+                </li>
+                <li>
+                  Click "Run" to execute all migrations at once
+                </li>
+                <li>
+                  Reload this page after completion
+                </li>
+              </ol>
+
+              {projectRef && (
+                <Button asChild variant="outline" className="w-full">
+                  <a
+                    href={`https://supabase.com/dashboard/project/${projectRef}/sql/new`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Open SQL Editor
+                  </a>
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* Option 2: Supabase CLI */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm font-bold">
+                2
+              </div>
+              <h3 className="font-semibold">Using Supabase CLI</h3>
             </div>
             <div className="ml-8 space-y-3">
               <div>
@@ -115,22 +180,22 @@ export function DatabaseSetupGuide({
             </div>
           </div>
 
-          {/* Option 2: SQL Editor */}
+          {/* Option 3: Individual Migrations */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm font-bold">
-                2
+                3
               </div>
-              <h3 className="font-semibold">Using Supabase SQL Editor</h3>
+              <h3 className="font-semibold">Advanced: Run Individual Migrations</h3>
             </div>
             <div className="ml-8 space-y-3">
               <p className="text-sm text-muted-foreground">
-                Manually run the SQL migrations in your Supabase SQL Editor:
+                For advanced users who want to review each migration:
               </p>
 
               <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
                 <li>
-                  Download migrations from{" "}
+                  Browse migrations at{" "}
                   <a
                     href="https://github.com/therealtimex/realtimex-crm/tree/main/supabase/migrations"
                     target="_blank"
@@ -154,25 +219,12 @@ export function DatabaseSetupGuide({
                   </a>
                 </li>
                 <li>
-                  Run each migration file in order (by date in filename)
+                  Run each migration file in chronological order (by date in filename)
                 </li>
                 <li>
                   Reload this page after all migrations are complete
                 </li>
               </ol>
-
-              {projectRef && (
-                <Button asChild variant="outline" className="w-full">
-                  <a
-                    href={`https://supabase.com/dashboard/project/${projectRef}/sql/new`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Open SQL Editor
-                  </a>
-                </Button>
-              )}
             </div>
           </div>
 
