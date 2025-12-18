@@ -59,7 +59,7 @@ async function main() {
 
   try {
     execSync('npx supabase db push', { stdio: 'inherit' });
-    console.log('\n✨ Migration complete! Your database is ready.');
+    console.log('\n✅ Database migrations complete!');
   } catch (err) {
     console.error('\n✗ Migration failed');
     console.log('\nTroubleshooting:');
@@ -69,6 +69,39 @@ async function main() {
     console.log('4. Try running manually: npx supabase db push');
     process.exit(1);
   }
+
+  // Deploy Edge Functions
+  const deployFunctions = await confirm({
+    message: 'Deploy Edge Functions? (Required for team management)',
+    default: true,
+  });
+
+  if (deployFunctions) {
+    console.log('\n✓ Deploying Edge Functions...');
+    console.log('  - users (create/update team members)');
+    console.log('  - updatePassword (password reset)');
+    console.log('  - mergeContacts (merge duplicates)');
+    console.log('  - postmark (email integration)\n');
+
+    try {
+      execSync('npx supabase functions deploy', { stdio: 'inherit' });
+      console.log('\n✅ Edge Functions deployed!');
+    } catch (err) {
+      console.error('\n⚠ Edge Function deployment failed');
+      console.log('\nYou can deploy them later with:');
+      console.log('  npx supabase functions deploy');
+      console.log('\nNote: Basic CRM works without them, but team management is limited.');
+    }
+  } else {
+    console.log('\n⚠ Skipped Edge Functions');
+    console.log('Deploy later with: npx supabase functions deploy');
+  }
+
+  console.log('\n✨ Setup complete! Your CRM is ready.');
+  console.log('\nNext steps:');
+  console.log('1. Get URL + Anon Key from Supabase Settings → API');
+  console.log('2. Enter them in your CRM application');
+  console.log('3. Start using your CRM!');
 }
 
 async function linkProject() {

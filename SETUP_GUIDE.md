@@ -60,7 +60,32 @@ The script will ask for:
    - Wait 5-10 seconds for completion
    - You should see "Success. No rows returned"
 
-## Step 3: Verify Setup
+## Step 3: Deploy Edge Functions (Optional but Recommended)
+
+Edge Functions are required for team management features.
+
+### Option A: Using Supabase CLI (Included in auto-migrate)
+
+If you ran `npm run db:migrate`, it prompts you to deploy Edge Functions automatically.
+
+### Option B: Manual Deployment
+
+If you only ran the SQL setup, deploy Edge Functions manually:
+
+```bash
+# In the cloned repository folder
+npx supabase functions deploy
+```
+
+**What Edge Functions do:**
+- **users** - Create and update team members (**required for multi-user setup**)
+- **updatePassword** - Reset user passwords
+- **mergeContacts** - Merge duplicate contact records
+- **postmark** - Inbound email integration (optional)
+
+⚠️ **Note:** Basic CRM features (contacts, deals, tasks, notes) work without Edge Functions, but you won't be able to invite new team members.
+
+## Step 4: Verify Setup
 
 After running the setup, verify it worked:
 
@@ -75,21 +100,28 @@ After running the setup, verify it worked:
    - `tags`
    - `tasks`
 
-## Step 4: Get Connection Credentials
+3. Go to "Edge Functions" (left sidebar)
+4. You should see (if deployed):
+   - `users`
+   - `updatePassword`
+   - `mergeContacts`
+   - `postmark`
+
+## Step 5: Get Connection Credentials
 
 1. In Supabase dashboard, go to "Settings" → "API"
 2. Copy these two values:
    - **Project URL** (looks like `https://xxxxx.supabase.co`)
    - **anon public key** (long string starting with `eyJ...`)
 
-## Step 5: Connect CRM Application
+## Step 6: Connect CRM Application
 
 Now you're ready to connect the CRM:
 
 1. Open your RealTimeX CRM application
 2. On the setup screen, enter:
-   - Supabase URL (from Step 4)
-   - Supabase Anon Key (from Step 4)
+   - Supabase URL (from Step 5)
+   - Supabase Anon Key (from Step 5)
 3. Click "Connect"
 4. You should see the login/signup page
 
