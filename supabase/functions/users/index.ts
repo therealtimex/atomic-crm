@@ -49,25 +49,27 @@ async function inviteUser(req: Request, currentUserSale: any) {
     return createErrorResponse(401, "Not Authorized");
   }
 
-  // Create user WITHOUT password - inviteUserByEmail will send them a link to set it
-  const { data, error: userError } = await supabaseAdmin.auth.admin.createUser({
-    email,
-    email_confirm: false, // User must confirm via invite email
-    user_metadata: { first_name, last_name },
+  // Create user using inviteUserByEmail which:
+  // 1. Creates the user account
+  // 2. Sends the "Invite user" email template (not "Confirm signup")
+  // 3. User will use OTP to log in (not the invite link)
+  console.log(`[inviteUser] Creating user and sending welcome email to ${email}`);
+
+  const { data, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+    data: { first_name, last_name }, // User metadata
   });
 
-  const { error: emailError } =
-    await supabaseAdmin.auth.admin.inviteUserByEmail(email);
-
-  if (!data?.user || userError) {
-    console.error(`Error inviting user: user_error=${userError}`);
-    return createErrorResponse(500, "Internal Server Error");
+  if (inviteError) {
+    console.error(`[inviteUser] Error: ${inviteError.message}`);
+    return createErrorResponse(500, `Failed to invite user: ${inviteError.message}`);
   }
 
-  if (!data?.user || userError || emailError) {
-    console.error(`Error inviting user, email_error=${emailError}`);
-    return createErrorResponse(500, "Failed to send invitation mail");
+  if (!data?.user) {
+    console.error(`[inviteUser] No user returned from invite`);
+    return createErrorResponse(500, "Failed to create user");
   }
+
+  console.log(`[inviteUser] User created and welcome email sent to ${email}`);
 
   try {
     await updateSaleDisabled(data.user.id, disabled);
@@ -117,34 +119,13 @@ async function resendInvite(req: Request, currentUserSale: any) {
 
     console.log("[resendInvite] User email:", authUser.user.email, "Action:", action);
 
-    let emailError = null;
+    // NOTE: With OTP authentication, users don't need invite/reset emails
+    // Instead, instruct them to:
+    // - For new users: Use "Login with email code (OTP)" to set up their account
+    // - For password reset: Use "Forgot Password?" which sends OTP code
 
-    if (action === "reset") {
-      // Send password reset link
-      console.log("[resendInvite] Sending password reset...");
-      const { data: linkData, error } = await supabaseAdmin.auth.admin.generateLink({
-        type: "recovery",
-        email: authUser.user.email!,
-      });
-      console.log("[resendInvite] Reset link generated:", { hasLink: !!linkData, error });
-      emailError = error;
-    } else {
-      // Resend confirmation email for existing unconfirmed users
-      console.log("[resendInvite] Resending confirmation...");
-      const { data: linkData, error } = await supabaseAdmin.auth.admin.generateLink({
-        type: "signup",
-        email: authUser.user.email!,
-      });
-      console.log("[resendInvite] Confirmation link generated:", { hasLink: !!linkData, error });
-      emailError = error;
-    }
-
-    if (emailError) {
-      console.error(`[resendInvite] Error sending ${action === "reset" ? "password reset" : "invite"}:`, emailError);
-      return createErrorResponse(500, `Failed to send ${action === "reset" ? "password reset" : "invitation"}: ${emailError.message || JSON.stringify(emailError)}`);
-    }
-
-    console.log("[resendInvite] Email sent successfully");
+    // Return success - admin should manually notify user to use OTP login
+    console.log("[resendInvite] OTP-based flow - no email sent");
     return new Response(
       JSON.stringify({
         data: sale,

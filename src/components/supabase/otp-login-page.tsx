@@ -117,28 +117,25 @@ export const OtpLoginPage = () => {
       }
 
       // User is logged in and authorized
-      console.log('User authorized, syncing with react-admin...');
+      console.log('User authorized, OTP verification complete');
       notify('Login successful!', { type: 'success' });
 
-      // Trigger login to sync with react-admin auth state
-      try {
-        await login({});
-        console.log('React-admin login sync successful');
-      } catch (loginError) {
-        console.error('React-admin login sync failed:', loginError);
-        // Don't throw - user is already authenticated with Supabase
-        // Just navigate anyway
-      }
+      // IMPORTANT: Don't call login() - user is already authenticated via Supabase
+      // The OTP verification already set the session
+      // Calling login({}) with empty params could cause session confusion
+
+      // Force reload to ensure clean state
+      console.log('Reloading to establish session...');
 
       // Check if this is their first login (email not confirmed yet)
-      // If so, redirect to change password
-      console.log('Navigating to:', !saleData.email_confirmed_at ? '/change-password' : '/');
       if (!saleData.email_confirmed_at) {
-        setIsNewUser(true);
-        navigate('/change-password');
+        // Navigate to change password
+        window.location.href = '#/change-password';
+        window.location.reload();
       } else {
-        // Regular login, go to dashboard
-        navigate('/');
+        // Navigate to dashboard
+        window.location.href = '#/';
+        window.location.reload();
       }
     } catch (error: any) {
       setOtpError(true);

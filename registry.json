@@ -685,11 +685,23 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/supabase/otp-login-page.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/supabase/otp-input.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/supabase/layout.tsx",
           "type": "registry:component"
         },
         {
           "path": "src/components/supabase/forgot-password-page.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/supabase/change-password-page.tsx",
           "type": "registry:component"
         },
         {

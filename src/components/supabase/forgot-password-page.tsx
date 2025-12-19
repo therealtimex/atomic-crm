@@ -101,19 +101,14 @@ export const ForgotPasswordPage = () => {
       // User is now logged in, redirect to change password page
       notify('Code verified! Please set your new password.', { type: 'success' });
 
-      // Trigger login to sync with react-admin auth state
-      try {
-        await login({});
-        console.log('React-admin login sync successful');
-      } catch (loginError) {
-        console.error('React-admin login sync failed:', loginError);
-        // Don't throw - user is already authenticated with Supabase
-        // Just navigate anyway
-      }
+      // IMPORTANT: Don't call login() - user is already authenticated via Supabase
+      // The OTP verification already set the session
+      // Calling login({}) with empty params could cause session confusion
 
-      // Navigate to change password page
+      // Navigate to change password page with reload
       console.log('Navigating to /change-password');
-      navigate('/change-password');
+      window.location.href = '#/change-password';
+      window.location.reload();
     } catch (error: any) {
       setOtpError(true);
       notify(

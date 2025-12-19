@@ -10,6 +10,7 @@ import {
 } from "ra-core";
 import { useState } from "react";
 import { useFormState } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { RecordField } from "@/components/admin/record-field";
 import { TextInput } from "@/components/admin/text-input";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ import type { Sale, SalesFormData } from "../types";
 export const SettingsPage = () => {
   const [isEditMode, setEditMode] = useState(false);
   const { identity, refetch: refetchIdentity } = useGetIdentity();
+  const navigate = useNavigate();
   const { data, refetch: refetchUser } = useGetOne("sales", {
     id: identity?.id,
   });
@@ -78,28 +80,14 @@ const SettingsForm = ({
   setEditMode: (value: boolean) => void;
 }) => {
   const notify = useNotify();
+  const navigate = useNavigate();
   const record = useRecordContext<Sale>();
   const { identity, refetch } = useGetIdentity();
   const { isDirty } = useFormState();
   const dataProvider = useDataProvider<CrmDataProvider>();
 
-  const { mutate: updatePassword } = useMutation({
-    mutationKey: ["updatePassword"],
-    mutationFn: async () => {
-      if (!identity) {
-        throw new Error("Record not found");
-      }
-      return dataProvider.updatePassword(identity.id);
-    },
-    onSuccess: () => {
-      notify("A reset password email has been sent to your email address");
-    },
-    onError: (e) => {
-      notify(`${e}`, {
-        type: "error",
-      });
-    },
-  });
+  // Removed old updatePassword mutation - now uses OTP flow
+  // Users will be redirected to forgot-password page which sends OTP
 
   const { mutate: mutateSale } = useMutation({
     mutationKey: ["signup"],
@@ -120,7 +108,8 @@ const SettingsForm = ({
   if (!identity) return null;
 
   const handleClickOpenPasswordChange = () => {
-    updatePassword();
+    // Redirect to forgot-password page which uses OTP flow
+    navigate('/forgot-password');
   };
 
   const handleAvatarUpdate = async (values: any) => {
