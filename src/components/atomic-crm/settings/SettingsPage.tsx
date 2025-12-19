@@ -29,7 +29,6 @@ import type { Sale, SalesFormData } from "../types";
 export const SettingsPage = () => {
   const [isEditMode, setEditMode] = useState(false);
   const { identity, refetch: refetchIdentity } = useGetIdentity();
-  const navigate = useNavigate();
   const { data, refetch: refetchUser } = useGetOne("sales", {
     id: identity?.id,
   });

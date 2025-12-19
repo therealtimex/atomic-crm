@@ -20,12 +20,9 @@ export const OtpLoginPage = () => {
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState(false);
-  const [isNewUser, setIsNewUser] = useState(false);
 
   const notify = useNotify();
   const translate = useTranslate();
-  const login = useLogin();
-  const navigate = useNavigate();
 
   const submitEmail = async (values: EmailFormData) => {
     try {

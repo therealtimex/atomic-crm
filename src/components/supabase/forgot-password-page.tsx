@@ -23,8 +23,6 @@ export const ForgotPasswordPage = () => {
 
   const notify = useNotify();
   const translate = useTranslate();
-  const login = useLogin();
-  const navigate = useNavigate();
 
   const submitEmail = async (values: EmailFormData) => {
     try {
