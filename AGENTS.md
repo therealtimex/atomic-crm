@@ -149,6 +149,37 @@ All tables have RLS enabled but currently use **permissive policies** (`using (t
 - `sales_id` tracks ownership but doesn't enforce it at database level
 - Policies can be made restrictive to implement data isolation (see migrations for examples)
 
+#### Authentication Methods
+
+Atomic CRM supports multiple authentication methods:
+
+1. **Email/Password Login** (default)
+   - Traditional username/password authentication
+   - Users log in at `/` with email and password credentials
+
+2. **Email OTP (One-Time Password) Login**
+   - Passwordless authentication using 6-digit codes sent via email
+   - Ideal for local-first/CLI applications where `localhost` redirects may not work
+   - Users log in at `/otp-login` by entering email → receiving code → entering code
+   - **Benefits over magic links:**
+     - No localhost dependency
+     - Users stay in the app (no browser switching)
+     - Works offline (code can be entered manually)
+   - **Setup required:** Update Supabase email template to show `{{ .Token }}` instead of links
+   - **Documentation:** See `docs/OTP_AUTHENTICATION_SETUP.md` for detailed setup guide
+
+3. **Password Reset via OTP**
+   - Forgot password flow uses OTP instead of magic links
+   - User enters email → receives 6-digit code → verifies code → sets new password
+   - Accessed at `/forgot-password`
+
+**Routes:**
+- `/` - Email/password login
+- `/otp-login` - OTP-based login
+- `/forgot-password` - Password reset via OTP
+- `/change-password` - Set new password (after OTP verification)
+- `/set-password` - Set password via token (legacy magic link flow)
+
 #### Adding External Auth Providers
 
 **Option 1: OAuth Providers (Keycloak, Azure AD, etc.)**
@@ -163,7 +194,19 @@ To add OAuth providers:
 3. Include custom metadata in OAuth response to populate `sales` fields
 4. No code changes needed - existing RLS policies work with `auth.uid()`
 
-**Option 2: RealTimeX App SDK Integration**
+**Option 2: Email OTP Authentication (Recommended for Local/CLI Apps)**
+
+Email OTP is already implemented. To enable:
+
+1. Update Supabase email template (Authentication → Email Templates → Magic Link):
+   ```html
+   <h1>{{ .Token }}</h1>
+   <p>Enter this code in the application to continue.</p>
+   ```
+2. Users can log in at `/otp-login` route
+3. See `docs/OTP_QUICK_REFERENCE.md` for setup checklist
+
+**Option 3: RealTimeX App SDK Integration**
 
 To integrate Atomic CRM as a Local App within RealTimeX.ai:
 

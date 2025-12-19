@@ -89,12 +89,20 @@ export const LoginPage = (props: { redirectTo?: string }) => {
               </Button>
             </Form>
 
-            <Link
-              to={"/forgot-password"}
-              className="text-sm text-center hover:underline"
-            >
-              Forgot your password?
-            </Link>
+            <div className="flex flex-col gap-2 text-sm text-center">
+              <Link
+                to={"/forgot-password"}
+                className="hover:underline"
+              >
+                Forgot your password?
+              </Link>
+              <Link
+                to={"/otp-login"}
+                className="hover:underline"
+              >
+                Login with email code (OTP)
+              </Link>
+            </div>
           </div>
         </div>
       </div>

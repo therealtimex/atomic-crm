@@ -14,12 +14,13 @@ interface EmailFormData {
 
 type Step = 'email' | 'otp';
 
-export const ForgotPasswordPage = () => {
+export const OtpLoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<Step>('email');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState(false);
+  const [isNewUser, setIsNewUser] = useState(false);
 
   const notify = useNotify();
   const translate = useTranslate();
@@ -36,7 +37,7 @@ export const ForgotPasswordPage = () => {
       const { error } = await supabase.auth.signInWithOtp({
         email: normalizedEmail,
         options: {
-          shouldCreateUser: false, // Only allow existing users to reset password
+          shouldCreateUser: false, // Only allow existing users
         },
       });
 
@@ -78,7 +79,7 @@ export const ForgotPasswordPage = () => {
       // Trim whitespace from OTP code
       const cleanOtp = otpCode.trim();
 
-      console.log('Verifying OTP (forgot password):', { email, token: cleanOtp, type: 'email' });
+      console.log('Verifying OTP:', { email, token: cleanOtp, type: 'email' });
 
       const { data, error } = await supabase.auth.verifyOtp({
         email: email.trim().toLowerCase(), // Normalize email
@@ -96,10 +97,28 @@ export const ForgotPasswordPage = () => {
         throw new Error('Failed to create session');
       }
 
-      console.log('Session created successfully for password reset');
+      console.log('Session created successfully, user:', data.user);
 
-      // User is now logged in, redirect to change password page
-      notify('Code verified! Please set your new password.', { type: 'success' });
+      // Check if user exists in sales table (access control)
+      console.log('Checking sales table for user_id:', data.user.id);
+      const { data: saleData, error: saleError } = await supabase
+        .from('sales')
+        .select('id, email_confirmed_at')
+        .eq('user_id', data.user.id)
+        .single();
+
+      console.log('Sales table query result:', { saleData, saleError });
+
+      if (saleError || !saleData) {
+        // User authenticated but not in sales table - deny access
+        console.error('User not found in sales table or query error');
+        await supabase.auth.signOut();
+        throw new Error('You do not have access to this application. Please contact your administrator.');
+      }
+
+      // User is logged in and authorized
+      console.log('User authorized, syncing with react-admin...');
+      notify('Login successful!', { type: 'success' });
 
       // Trigger login to sync with react-admin auth state
       try {
@@ -111,9 +130,16 @@ export const ForgotPasswordPage = () => {
         // Just navigate anyway
       }
 
-      // Navigate to change password page
-      console.log('Navigating to /change-password');
-      navigate('/change-password');
+      // Check if this is their first login (email not confirmed yet)
+      // If so, redirect to change password
+      console.log('Navigating to:', !saleData.email_confirmed_at ? '/change-password' : '/');
+      if (!saleData.email_confirmed_at) {
+        setIsNewUser(true);
+        navigate('/change-password');
+      } else {
+        // Regular login, go to dashboard
+        navigate('/');
+      }
     } catch (error: any) {
       setOtpError(true);
       notify(
@@ -155,14 +181,10 @@ export const ForgotPasswordPage = () => {
         <>
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">
-              {translate("ra-supabase.reset_password.forgot_password", {
-                _: "Forgot password?",
-              })}
+              Login with code
             </h1>
-            <p>
-              {translate("ra-supabase.reset_password.forgot_password_details", {
-                _: "Enter your email to receive a 6-digit code.",
-              })}
+            <p className="text-sm text-muted-foreground">
+              Enter your email to receive a 6-digit login code
             </p>
           </div>
           <Form<EmailFormData>
@@ -178,7 +200,7 @@ export const ForgotPasswordPage = () => {
               validate={required()}
             />
             <Button type="submit" className="cursor-pointer w-full" disabled={loading}>
-              {translate("ra.action.reset_password", {
+              {translate("ra.action.send_code", {
                 _: "Send code",
               })}
             </Button>
@@ -236,4 +258,4 @@ export const ForgotPasswordPage = () => {
   );
 };
 
-ForgotPasswordPage.path = "forgot-password";
+OtpLoginPage.path = "otp-login";

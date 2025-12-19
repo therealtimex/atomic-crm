@@ -10,6 +10,8 @@ import { Route } from "react-router";
 import { Admin } from "@/components/admin/admin";
 import { ForgotPasswordPage } from "@/components/supabase/forgot-password-page";
 import { SetPasswordPage } from "@/components/supabase/set-password-page";
+import { ChangePasswordPage } from "@/components/supabase/change-password-page";
+import { OtpLoginPage } from "@/components/supabase/otp-login-page";
 
 import companies from "../companies";
 import contacts from "../contacts";
@@ -151,6 +153,11 @@ export const CRM = ({
               path={ForgotPasswordPage.path}
               element={<ForgotPasswordPage />}
             />
+            <Route
+              path={ChangePasswordPage.path}
+              element={<ChangePasswordPage />}
+            />
+            <Route path={OtpLoginPage.path} element={<OtpLoginPage />} />
           </CustomRoutes>
 
           <CustomRoutes>

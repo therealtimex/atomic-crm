@@ -105,19 +105,15 @@ const dataProviderWithCustomMethods = {
   },
 
   async signUp({ email, password, first_name, last_name }: SignUpData) {
-    const response = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          first_name,
-          last_name,
-        },
-      },
+    // Use admin API via edge function to create first user
+    // This bypasses the signup restriction (enable_signup = false)
+    const { data, error } = await supabase.functions.invoke("setup", {
+      method: "POST",
+      body: { email, password, first_name, last_name },
     });
 
-    if (!response.data?.user || response.error) {
-      console.error("signUp.error", response.error);
+    if (!data || error) {
+      console.error("signUp.error", error);
       throw new Error("Failed to create account");
     }
 
@@ -125,7 +121,7 @@ const dataProviderWithCustomMethods = {
     getIsInitialized._is_initialized_cache = true;
 
     return {
-      id: response.data.user.id,
+      id: data.data.id,
       email,
       password,
     };
@@ -172,6 +168,44 @@ const dataProviderWithCustomMethods = {
     }
 
     return data;
+  },
+  async resendInvite(id: Identifier) {
+    const { data: sale, error } = await supabase.functions.invoke<Sale>(
+      "users",
+      {
+        method: "PUT",
+        body: {
+          sales_id: id,
+          action: "invite",
+        },
+      },
+    );
+
+    if (!sale || error) {
+      console.error("resendInvite.error", error);
+      throw new Error("Failed to resend invitation");
+    }
+
+    return sale;
+  },
+  async resetPassword(id: Identifier) {
+    const { data: sale, error } = await supabase.functions.invoke<Sale>(
+      "users",
+      {
+        method: "PUT",
+        body: {
+          sales_id: id,
+          action: "reset",
+        },
+      },
+    );
+
+    if (!sale || error) {
+      console.error("resetPassword.error", error);
+      throw new Error("Failed to send password reset");
+    }
+
+    return sale;
   },
   async updatePassword(id: Identifier) {
     const { data: passwordUpdated, error } =

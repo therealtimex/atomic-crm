@@ -49,9 +49,10 @@ async function inviteUser(req: Request, currentUserSale: any) {
     return createErrorResponse(401, "Not Authorized");
   }
 
+  // Create user WITHOUT password - inviteUserByEmail will send them a link to set it
   const { data, error: userError } = await supabaseAdmin.auth.admin.createUser({
     email,
-    password,
+    email_confirm: false, // User must confirm via invite email
     user_metadata: { first_name, last_name },
   });
 
@@ -83,6 +84,78 @@ async function inviteUser(req: Request, currentUserSale: any) {
   } catch (e) {
     console.error("Error patching sale:", e);
     return createErrorResponse(500, "Internal Server Error");
+  }
+}
+
+async function resendInvite(req: Request, currentUserSale: any) {
+  try {
+    const { sales_id, action } = await req.json();
+    console.log("[resendInvite] Request:", { sales_id, action });
+
+    if (!currentUserSale.administrator) {
+      return createErrorResponse(401, "Not Authorized");
+    }
+
+    const { data: sale } = await supabaseAdmin
+      .from("sales")
+      .select("*")
+      .eq("id", sales_id)
+      .single();
+
+    if (!sale) {
+      return createErrorResponse(404, "User not found");
+    }
+
+    // Get user from auth
+    const { data: authUser, error: getUserError } =
+      await supabaseAdmin.auth.admin.getUserById(sale.user_id);
+
+    if (!authUser?.user || getUserError) {
+      console.error("Error getting user:", getUserError);
+      return createErrorResponse(404, "User not found");
+    }
+
+    console.log("[resendInvite] User email:", authUser.user.email, "Action:", action);
+
+    let emailError = null;
+
+    if (action === "reset") {
+      // Send password reset link
+      console.log("[resendInvite] Sending password reset...");
+      const { data: linkData, error } = await supabaseAdmin.auth.admin.generateLink({
+        type: "recovery",
+        email: authUser.user.email!,
+      });
+      console.log("[resendInvite] Reset link generated:", { hasLink: !!linkData, error });
+      emailError = error;
+    } else {
+      // Resend confirmation email for existing unconfirmed users
+      console.log("[resendInvite] Resending confirmation...");
+      const { data: linkData, error } = await supabaseAdmin.auth.admin.generateLink({
+        type: "signup",
+        email: authUser.user.email!,
+      });
+      console.log("[resendInvite] Confirmation link generated:", { hasLink: !!linkData, error });
+      emailError = error;
+    }
+
+    if (emailError) {
+      console.error(`[resendInvite] Error sending ${action === "reset" ? "password reset" : "invite"}:`, emailError);
+      return createErrorResponse(500, `Failed to send ${action === "reset" ? "password reset" : "invitation"}: ${emailError.message || JSON.stringify(emailError)}`);
+    }
+
+    console.log("[resendInvite] Email sent successfully");
+    return new Response(
+      JSON.stringify({
+        data: sale,
+      }),
+      {
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      },
+    );
+  } catch (err) {
+    console.error("[resendInvite] Unexpected error:", err);
+    return createErrorResponse(500, `Internal error: ${err instanceof Error ? err.message : "Unknown error"}`);
   }
 }
 
@@ -200,6 +273,10 @@ Deno.serve(async (req: Request) => {
 
   if (req.method === "PATCH") {
     return patchUser(req, currentUserSale.data);
+  }
+
+  if (req.method === "PUT") {
+    return resendInvite(req, currentUserSale.data);
   }
 
   return createErrorResponse(405, "Method Not Allowed");

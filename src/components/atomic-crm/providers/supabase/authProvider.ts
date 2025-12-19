@@ -59,6 +59,20 @@ export const authProvider: AuthProvider = {
     ) {
       return;
     }
+    // Users are on the change-password page, nothing to do
+    if (
+      window.location.pathname === "/change-password" ||
+      window.location.hash.includes("#/change-password")
+    ) {
+      return;
+    }
+    // Users are on the otp-login page, nothing to do
+    if (
+      window.location.pathname === "/otp-login" ||
+      window.location.hash.includes("#/otp-login")
+    ) {
+      return;
+    }
     // Users are on the sign-up page, nothing to do
     if (
       window.location.pathname === "/sign-up" ||
