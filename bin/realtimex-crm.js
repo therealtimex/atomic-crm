@@ -72,9 +72,9 @@ async function main() {
     });
 
     const supabaseAnonKey = await input({
-      message: "Supabase Anon Key:",
+      message: "Supabase Publishable API Key (anon key):",
       validate: (value) => {
-        if (!value.trim()) return "Supabase Anon Key is required";
+        if (!value.trim()) return "Supabase Publishable API Key is required";
         return true;
       },
     });
@@ -91,7 +91,7 @@ async function main() {
     const configPath = join(tmpdir(), "realtimex-crm-config.txt");
     const configContent = `Supabase Configuration:
 URL: ${supabaseUrl}
-Anon Key: ${supabaseAnonKey}
+Publishable API Key (anon key): ${supabaseAnonKey}
 
 To configure the app:
 1. Open the app in your browser
@@ -103,10 +103,12 @@ To configure the app:
 
     // Helper to run supabase commands
     const runSupabaseCommand = async (command, message) => {
-      console.log(`\n${message}`);
+      const cwd = process.cwd();
+      console.log(`\n${message} (from directory: ${cwd})`);
       const proc = spawn("npx", ["supabase", ...command], {
         stdio: "inherit",
         shell: true,
+        cwd: cwd,
       });
 
       return new Promise((resolve, reject) => {
