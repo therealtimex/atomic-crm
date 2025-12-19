@@ -1,4 +1,8 @@
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { Database, User } from "lucide-react";
 import { CanAccess } from "ra-core";
 import { Link, matchPath, useLocation } from "react-router";
@@ -80,6 +84,12 @@ const Header = () => {
                 <CanAccess resource="sales" action="list">
                   <UsersMenu />
                 </CanAccess>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="font-normal">
+                  <div className="text-xs text-muted-foreground">
+                    Version {import.meta.env.VITE_APP_VERSION}
+                  </div>
+                </DropdownMenuLabel>
               </UserMenu>
             </div>
           </div>

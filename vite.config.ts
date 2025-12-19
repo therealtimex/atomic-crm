@@ -4,10 +4,30 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
 import createHtmlPlugin from "vite-plugin-simple-html";
+import packageJson from "./package.json";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
+
+  const define = {
+    "import.meta.env.VITE_APP_VERSION": JSON.stringify(packageJson.version),
+  };
+
+  if (mode === "production") {
+    Object.assign(define, {
+      "import.meta.env.VITE_IS_DEMO": JSON.stringify(env.VITE_IS_DEMO),
+      "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(
+        env.VITE_SUPABASE_URL,
+      ),
+      "import.meta.env.VITE_SUPABASE_ANON_KEY": JSON.stringify(
+        env.VITE_SUPABASE_ANON_KEY,
+      ),
+      "import.meta.env.VITE_INBOUND_EMAIL": JSON.stringify(
+        env.VITE_INBOUND_EMAIL,
+      ),
+    });
+  }
 
   return {
     plugins: [
@@ -26,21 +46,7 @@ export default defineConfig(({ mode }) => {
         },
       }),
     ],
-    define:
-      mode === "production"
-        ? {
-            "import.meta.env.VITE_IS_DEMO": JSON.stringify(env.VITE_IS_DEMO),
-            "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(
-              env.VITE_SUPABASE_URL,
-            ),
-            "import.meta.env.VITE_SUPABASE_ANON_KEY": JSON.stringify(
-              env.VITE_SUPABASE_ANON_KEY,
-            ),
-            "import.meta.env.VITE_INBOUND_EMAIL": JSON.stringify(
-              env.VITE_INBOUND_EMAIL,
-            ),
-          }
-        : undefined,
+    define,
     base: "./",
     esbuild: {
       keepNames: true,
