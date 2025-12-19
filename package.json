@@ -14,7 +14,8 @@
     }
   },
   "bin": {
-    "create-realtimex-crm": "./bin/create-realtimex-crm.js"
+    "create-realtimex-crm": "./bin/create-realtimex-crm.js",
+    "realtimex-crm": "./bin/realtimex-crm.js"
   },
   "files": [
     "dist",
@@ -147,6 +148,7 @@
     "prettier": "^3.6.2",
     "serve": "^14.2.5",
     "shadcn": "^3.5.0",
+    "supabase": "^2.67.2",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.4",
