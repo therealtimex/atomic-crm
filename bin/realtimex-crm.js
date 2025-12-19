@@ -58,6 +58,9 @@ async function main() {
   });
 
   if (configureNow) {
+    console.log("First, ensure you are logged in to the Supabase CLI.");
+    console.log("Run `npx supabase login` if you haven't already.");
+
     const supabaseUrl = await input({
       message: "Supabase URL:",
       validate: (value) => {
@@ -123,30 +126,43 @@ To configure the app:
       });
     };
 
-    const runDbPush = await confirm({
-      message: "Run `npx supabase db push` to apply migrations?",
-      default: false,
-    });
-
-    if (runDbPush) {
+    // Link the project
+    const projectRefMatch = supabaseUrl.match(/https:\/\/([a-zA-Z0-9_-]+)\.supabase\.co/);
+    if (projectRefMatch && projectRefMatch[1]) {
+      const projectRef = projectRefMatch[1];
       try {
-        await runSupabaseCommand(["db", "push"], "🚀 Running `npx supabase db push`...");
-      } catch (error) {
-        console.error("Continuing without successful db push.");
-      }
-    }
+        await runSupabaseCommand(["link", "--project-ref", projectRef], `🔗 Linking to Supabase project '${projectRef}'...`);
 
-    const runFunctionsDeploy = await confirm({
-      message: "Run `npx supabase functions deploy` to deploy functions?",
-      default: false,
-    });
+        const runDbPush = await confirm({
+          message: "Run `npx supabase db push` to apply migrations?",
+          default: false,
+        });
 
-    if (runFunctionsDeploy) {
-      try {
-        await runSupabaseCommand(["functions", "deploy"], "🚀 Running `npx supabase functions deploy`...");
+        if (runDbPush) {
+          try {
+            await runSupabaseCommand(["db", "push"], "🚀 Running `npx supabase db push`...");
+          } catch (error) {
+            console.error("Continuing without successful db push.");
+          }
+        }
+
+        const runFunctionsDeploy = await confirm({
+          message: "Run `npx supabase functions deploy` to deploy functions?",
+          default: false,
+        });
+
+        if (runFunctionsDeploy) {
+          try {
+            await runSupabaseCommand(["functions", "deploy"], "🚀 Running `npx supabase functions deploy`...");
+          } catch (error) {
+            console.error("Continuing without successful functions deploy.");
+          }
+        }
       } catch (error) {
-        console.error("Continuing without successful functions deploy.");
+        console.error("Could not link to Supabase project. Skipping db push and functions deploy.");
       }
+    } else {
+      console.warn("Could not extract project reference from Supabase URL. Skipping link, db push, and functions deploy.");
     }
   }
 
