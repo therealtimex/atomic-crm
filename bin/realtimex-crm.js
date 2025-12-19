@@ -103,12 +103,12 @@ To configure the app:
 
     // Helper to run supabase commands
     const runSupabaseCommand = async (command, message) => {
-      const cwd = process.cwd();
-      console.log(`\n${message} (from directory: ${cwd})`);
+      const packageRoot = join(__dirname, '..');
+      console.log(`\n${message} (from package root: ${packageRoot})`);
       const proc = spawn("npx", ["supabase", ...command], {
         stdio: "inherit",
         shell: true,
-        cwd: cwd,
+        cwd: packageRoot,
       });
 
       return new Promise((resolve, reject) => {
