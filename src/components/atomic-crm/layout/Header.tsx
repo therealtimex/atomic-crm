@@ -3,7 +3,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Database, User } from "lucide-react";
+import { Database, Settings, User } from "lucide-react";
 import { CanAccess } from "ra-core";
 import { Link, matchPath, useLocation } from "react-router";
 import { RefreshButton } from "@/components/admin/refresh-button";
@@ -17,87 +17,96 @@ const Header = () => {
   const { darkModeLogo, lightModeLogo, title } = useConfigurationContext();
   const location = useLocation();
 
-  let currentPath: string | boolean = "/";
-  if (matchPath("/", location.pathname)) {
-    currentPath = "/";
-  } else if (matchPath("/contacts/*", location.pathname)) {
-    currentPath = "/contacts";
-  } else if (matchPath("/companies/*", location.pathname)) {
-    currentPath = "/companies";
-  } else if (matchPath("/deals/*", location.pathname)) {
-    currentPath = "/deals";
-  } else {
-    currentPath = false;
-  }
+  // Simplified path matching logic
+  const navPaths = [
+    { path: "/", pattern: "/" },
+    { path: "/contacts", pattern: "/contacts/*" },
+    { path: "/companies", pattern: "/companies/*" },
+    { path: "/deals", pattern: "/deals/*" },
+  ];
+
+  const currentPath =
+    navPaths.find((nav) => matchPath(nav.pattern, location.pathname))?.path ||
+    false;
 
   return (
-    <nav>
-      <header className="bg-secondary sticky top-0 z-50">
-        <div className="px-4">
-          <div className="flex justify-between items-center flex-1">
-            <Link
+    <header className="bg-secondary sticky top-0 z-50 border-b border-border">
+      <div className="px-4">
+        <div className="flex justify-between items-center flex-1">
+          <Logo darkLogo={darkModeLogo} lightLogo={lightModeLogo} title={title} />
+
+          <nav className="flex" aria-label="Main navigation">
+            <NavigationTab
+              label="Dashboard"
               to="/"
-              className="flex items-center gap-2 text-secondary-foreground no-underline"
-            >
-              <img
-                className="[.light_&]:hidden h-6"
-                src={darkModeLogo}
-                alt={title}
-              />
-              <img
-                className="[.dark_&]:hidden h-6"
-                src={lightModeLogo}
-                alt={title}
-              />
-              <h1 className="text-xl font-semibold">{title}</h1>
-            </Link>
-            <div>
-              <nav className="flex">
-                <NavigationTab
-                  label="Dashboard"
-                  to="/"
-                  isActive={currentPath === "/"}
-                />
-                <NavigationTab
-                  label="Contacts"
-                  to="/contacts"
-                  isActive={currentPath === "/contacts"}
-                />
-                <NavigationTab
-                  label="Companies"
-                  to="/companies"
-                  isActive={currentPath === "/companies"}
-                />
-                <NavigationTab
-                  label="Deals"
-                  to="/deals"
-                  isActive={currentPath === "/deals"}
-                />
-              </nav>
-            </div>
-            <div className="flex items-center">
-              <ThemeModeToggle />
-              <RefreshButton />
-              <UserMenu>
-                <ConfigurationMenu />
-                <DatabaseMenu />
-                <CanAccess resource="sales" action="list">
-                  <UsersMenu />
-                </CanAccess>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="font-normal">
-                  <div className="text-xs text-muted-foreground">
-                    Version {import.meta.env.VITE_APP_VERSION}
-                  </div>
-                </DropdownMenuLabel>
-              </UserMenu>
-            </div>
+              isActive={currentPath === "/"}
+            />
+            <NavigationTab
+              label="Contacts"
+              to="/contacts"
+              isActive={currentPath === "/contacts"}
+            />
+            <NavigationTab
+              label="Companies"
+              to="/companies"
+              isActive={currentPath === "/companies"}
+            />
+            <NavigationTab
+              label="Deals"
+              to="/deals"
+              isActive={currentPath === "/deals"}
+            />
+          </nav>
+
+          <div className="flex items-center">
+            <ThemeModeToggle />
+            <RefreshButton />
+            <UserMenu>
+              <ConfigurationMenu />
+              <DatabaseMenu />
+              <CanAccess resource="sales" action="list">
+                <UsersMenu />
+              </CanAccess>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel className="font-normal">
+                <div className="text-xs text-muted-foreground">
+                  Version {import.meta.env.VITE_APP_VERSION}
+                </div>
+              </DropdownMenuLabel>
+            </UserMenu>
           </div>
         </div>
-      </header>
-    </nav>
+      </div>
+    </header>
   );
 };
+
+const Logo = ({
+  darkLogo,
+  lightLogo,
+  title,
+}: {
+  darkLogo: string;
+  lightLogo: string;
+  title: string;
+}) => (
+  <Link
+    to="/"
+    className="flex items-center gap-2 text-secondary-foreground no-underline hover:opacity-80 transition-opacity"
+  >
+    <img
+      className="[.light_&]:hidden h-6"
+      src={darkLogo}
+      alt={`${title} logo`}
+    />
+    <img
+      className="[.dark_&]:hidden h-6"
+      src={lightLogo}
+      alt={`${title} logo`}
+    />
+    <h1 className="text-xl font-semibold">{title}</h1>
+  </Link>
+);
 
 const NavigationTab = ({
   label,
@@ -125,7 +134,8 @@ const UsersMenu = () => {
   return (
     <DropdownMenuItem asChild onClick={onClose}>
       <Link to="/sales" className="flex items-center gap-2">
-        <User /> Users
+        <User className="h-4 w-4" />
+        Users
       </Link>
     </DropdownMenuItem>
   );
@@ -136,7 +146,7 @@ const ConfigurationMenu = () => {
   return (
     <DropdownMenuItem asChild onClick={onClose}>
       <Link to="/settings" className="flex items-center gap-2">
-        <User />
+        <Settings className="h-4 w-4" />
         My info
       </Link>
     </DropdownMenuItem>
@@ -148,7 +158,7 @@ const DatabaseMenu = () => {
   return (
     <DropdownMenuItem asChild onClick={onClose}>
       <Link to="/database" className="flex items-center gap-2">
-        <Database />
+        <Database className="h-4 w-4" />
         Database
       </Link>
     </DropdownMenuItem>
