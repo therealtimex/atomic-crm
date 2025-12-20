@@ -24,7 +24,7 @@ export const ApiKeysTab = () => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const queryClient = useQueryClient();
-  const { identity } = useGetIdentity();
+  const { identity: _identity } = useGetIdentity();
 
   const { data: apiKeys, isLoading } = useQuery({
     queryKey: ["api_keys"],
