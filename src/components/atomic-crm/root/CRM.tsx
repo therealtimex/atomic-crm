@@ -26,6 +26,7 @@ import {
 import sales from "../sales";
 import { DatabasePage } from "../settings/DatabasePage";
 import { SettingsPage } from "../settings/SettingsPage";
+import { IntegrationsPage } from "../integrations/IntegrationsPage";
 import type { ConfigurationContextValue } from "./ConfigurationContext";
 import { ConfigurationProvider } from "./ConfigurationContext";
 import {
@@ -163,6 +164,7 @@ export const CRM = ({
           <CustomRoutes>
             <Route path={SettingsPage.path} element={<SettingsPage />} />
             <Route path={DatabasePage.path} element={<DatabasePage />} />
+            <Route path={IntegrationsPage.path} element={<IntegrationsPage />} />
           </CustomRoutes>
           <Resource name="deals" {...deals} />
           <Resource name="contacts" {...contacts} />
