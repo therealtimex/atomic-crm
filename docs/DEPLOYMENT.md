@@ -104,6 +104,30 @@ WHERE table_schema = 'public'
   AND table_name IN ('api_keys', 'webhooks', 'api_logs', 'webhook_queue');
 ```
 
+### 1.4 Enable Extensions and Configure Cron (Critical)
+
+The webhook system relies on `pg_cron` and `pg_net` extensions to dispatch events. You must manually enable these and configure the dispatcher settings.
+
+Run this SQL in your Supabase Dashboard SQL Editor:
+
+```sql
+-- 1. Enable required extensions
+CREATE EXTENSION IF NOT EXISTS pg_cron WITH SCHEMA extensions;
+CREATE EXTENSION IF NOT EXISTS pg_net WITH SCHEMA extensions;
+
+-- 2. Configure project settings for the cron job
+-- Replace with your actual values!
+ALTER DATABASE postgres SET app.settings.supabase_url = 'your-project-ref.supabase.co';
+ALTER DATABASE postgres SET app.settings.service_role_key = 'your-service-role-key';
+
+-- 3. Verify settings
+SELECT 
+  current_setting('app.settings.supabase_url', true) as url,
+  current_setting('app.settings.service_role_key', true) as key;
+```
+
+> **Note:** Without this step, webhooks will remain in "pending" status indefinitely.
+
 ---
 
 ## Step 2: Deploy Edge Functions
