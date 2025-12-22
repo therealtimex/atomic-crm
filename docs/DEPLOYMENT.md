@@ -106,24 +106,46 @@ WHERE table_schema = 'public'
 
 ### 1.4 Enable Extensions and Configure Cron (Critical)
 
-The webhook system relies on `pg_cron` and `pg_net` extensions to dispatch events. You must manually enable these and configure the dispatcher settings.
+The webhook system relies on `pg_cron` and `pg_net` extensions to dispatch events. These are automatically enabled by migration `20251222075019_enable_extensions_and_configure_cron.sql`, but you need to configure the cron dispatcher settings.
 
-Run this SQL in your Supabase Dashboard SQL Editor:
+**Option A: Using the Configuration Helper (Recommended)**
+
+Run this command to generate ready-to-run SQL with your project's values:
+
+```bash
+npm run supabase:configure:cron
+```
+
+This helper will:
+- Read your linked Supabase project reference
+- Fetch your service role key from the Supabase CLI
+- Generate the SQL command with your actual values
+- Provide a direct link to your project's SQL Editor
+
+Copy the generated SQL and paste it into your Supabase Dashboard SQL Editor.
+
+**Option B: Manual Configuration via SQL**
+
+If the automated script doesn't work, run this SQL in your Supabase Dashboard SQL Editor:
 
 ```sql
--- 1. Enable required extensions
-CREATE EXTENSION IF NOT EXISTS pg_cron WITH SCHEMA extensions;
-CREATE EXTENSION IF NOT EXISTS pg_net WITH SCHEMA extensions;
+-- Configure using the helper function (replace with your actual values!)
+SELECT configure_webhook_cron_settings(
+  'your-project-ref.supabase.co',
+  'your-service-role-key-here'
+);
+```
 
--- 2. Configure project settings for the cron job
--- Replace with your actual values!
-ALTER DATABASE postgres SET app.settings.supabase_url = 'your-project-ref.supabase.co';
-ALTER DATABASE postgres SET app.settings.service_role_key = 'your-service-role-key';
+Find your values in: **Supabase Dashboard → Settings → API**
+- **Project URL**: Copy without `https://`
+- **Service Role Key**: Copy the `service_role` key
 
--- 3. Verify settings
-SELECT 
+**Verify Configuration:**
+
+```sql
+SELECT
   current_setting('app.settings.supabase_url', true) as url,
-  current_setting('app.settings.service_role_key', true) as key;
+  left(current_setting('app.settings.service_role_key', true), 20) || '...' as key;
 ```
 
 > **Note:** Without this step, webhooks will remain in "pending" status indefinitely.
