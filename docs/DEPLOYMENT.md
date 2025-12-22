@@ -154,7 +154,7 @@ SELECT
 
 ## Step 2: Deploy Edge Functions
 
-The API consists of five Edge Functions that need to be deployed.
+The API consists of six Edge Functions that need to be deployed.
 
 ### 2.1 Edge Functions Overview
 
@@ -165,6 +165,7 @@ The API consists of five Edge Functions that need to be deployed.
 | `api-v1-deals` | Deal CRUD operations | `/functions/v1/api-v1-deals/{id}` |
 | `api-v1-activities` | Create notes and tasks | `/functions/v1/api-v1-activities` |
 | `webhook-dispatcher` | Async webhook delivery | `/functions/v1/webhook-dispatcher` |
+| `process-large-payloads` | Moves large activity payloads to storage | `/functions/v1/process-large-payloads` |
 
 ### 2.2 Deploy All Functions
 
@@ -177,8 +178,11 @@ npx supabase functions deploy api-v1-contacts --no-verify-jwt && \
 npx supabase functions deploy api-v1-companies --no-verify-jwt && \
 npx supabase functions deploy api-v1-deals --no-verify-jwt && \
 npx supabase functions deploy api-v1-activities --no-verify-jwt && \
-npx supabase functions deploy webhook-dispatcher --no-verify-jwt
+npx supabase functions deploy webhook-dispatcher --no-verify-jwt && \
+npx supabase functions deploy process-large-payloads
 ```
+
+**Note:** The `process-large-payloads` function uses the default JWT verification since it's called by the cron job with service role authentication.
 
 **Expected output for each function:**
 ```
@@ -517,11 +521,13 @@ npx supabase db reset
 Before going live, ensure:
 
 - [ ] All migrations applied successfully (`npx supabase migration list`)
-- [ ] All Edge Functions deployed with `--no-verify-jwt` flag
+- [ ] All Edge Functions deployed (including `process-large-payloads`)
+- [ ] Cron settings configured (`npm run supabase:configure:cron`)
 - [ ] Test API key created with appropriate scopes
 - [ ] API tested with GET, POST, PATCH, DELETE operations
 - [ ] Rate limiting verified (100 req/min)
 - [ ] Webhooks tested with real endpoint
+- [ ] Large payload handling tested (> 100KB activities)
 - [ ] API documentation reviewed (docs/API.md)
 - [ ] Environment variables configured in production
 - [ ] API keys stored securely (never in version control)
@@ -546,7 +552,11 @@ npx supabase functions deploy api-v1-contacts --no-verify-jwt && \
 npx supabase functions deploy api-v1-companies --no-verify-jwt && \
 npx supabase functions deploy api-v1-deals --no-verify-jwt && \
 npx supabase functions deploy api-v1-activities --no-verify-jwt && \
-npx supabase functions deploy webhook-dispatcher --no-verify-jwt
+npx supabase functions deploy webhook-dispatcher --no-verify-jwt && \
+npx supabase functions deploy process-large-payloads
+
+# Configure cron settings
+npm run supabase:configure:cron
 
 # List deployed functions
 npx supabase functions list
@@ -561,10 +571,12 @@ curl "https://your-project-ref.supabase.co/functions/v1/api-v1-contacts/1" \
 ## Next Steps
 
 - Review the [API Documentation](./API.md) for complete endpoint reference
+- Understand [Large Payload Handling](./LARGE_PAYLOAD_HANDLING.md) for ingestion best practices
 - Set up webhooks for your integrations
 - Implement webhook signature verification in your webhook receivers
 - Monitor API logs via the Supabase dashboard
 - Set up monitoring and alerts for webhook failures
+- Configure large payload retention policies if needed
 
 ---
 
