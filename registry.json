@@ -281,6 +281,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/providers/commons/mergeCompanies.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/providers/commons/getContactAvatar.ts",
           "type": "registry:component"
         },
@@ -626,6 +630,10 @@
         },
         {
           "path": "src/components/atomic-crm/companies/CompanyShow.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/companies/CompanyMergeButton.tsx",
           "type": "registry:component"
         },
         {

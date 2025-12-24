@@ -41,8 +41,12 @@ Deno.serve(async (req: Request) => {
 
     let response: Response;
 
-    if (req.method === "GET" && companyId) {
-      response = await getCompany(apiKey, companyId);
+    if (req.method === "GET") {
+      if (companyId) {
+        response = await getCompany(apiKey, companyId);
+      } else {
+        response = await listCompanies(apiKey, req);
+      }
     } else if (req.method === "POST") {
       response = await createCompany(apiKey, req);
     } else if (req.method === "PATCH" && companyId) {
@@ -78,6 +82,42 @@ Deno.serve(async (req: Request) => {
     return createErrorResponse(500, "Internal server error");
   }
 });
+
+async function listCompanies(apiKey: any, req: Request) {
+  if (!hasScope(apiKey, "companies:read")) {
+    return createErrorResponse(403, "Insufficient permissions");
+  }
+
+  const url = new URL(req.url);
+  const name = url.searchParams.get("name");
+  const website = url.searchParams.get("website");
+  const domain = url.searchParams.get("domain"); // Alias for website
+
+  let query = supabaseAdmin.from("companies").select("*");
+
+  if (name) {
+    query = query.ilike("name", `%${name}%`);
+  }
+
+  if (website || domain) {
+    // Exact match for website/domain
+    query = query.eq("website", website || domain);
+  }
+
+  if (!name && !website && !domain) {
+    query = query.limit(50);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    return createErrorResponse(500, error.message);
+  }
+
+  return new Response(JSON.stringify({ data }), {
+    headers: { "Content-Type": "application/json", ...corsHeaders },
+  });
+}
 
 async function getCompany(apiKey: any, companyId: string) {
   if (!hasScope(apiKey, "companies:read")) {

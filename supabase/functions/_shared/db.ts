@@ -74,8 +74,31 @@ interface DealsTable {
   index: number | null;
 }
 
+export interface CompaniesTable {
+  id: Generated<number>;
+  created_at: Date;
+  name: string;
+  sector: string | null;
+  size: number | null;
+  linkedin_url: string | null;
+  website: string | null;
+  phone_number: string | null;
+  address: string | null;
+  zipcode: string | null;
+  city: string | null;
+  stateAbbr: string | null;
+  sales_id: number | null;
+  context_links: unknown | null; // JSON array
+  country: string | null;
+  description: string | null;
+  revenue: string | null;
+  tax_identifier: string | null;
+  logo: unknown | null; // JSONB
+}
+
 interface Database {
   contacts: ContactsTable;
+  companies: CompaniesTable;
   tasks: TasksTable;
   contactNotes: ContactNotesTable;
   deals: DealsTable;

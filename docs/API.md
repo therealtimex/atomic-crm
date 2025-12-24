@@ -46,6 +46,29 @@ When rate limited, the API returns `429 Too Many Requests` with a `Retry-After` 
 
 ### Contacts
 
+#### GET /api-v1-contacts
+
+List or search contacts.
+
+**Required scope**: `contacts:read`
+
+**Parameters**:
+- `email` (query, optional): Search for contacts matching this email address.
+
+**Response**:
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "first_name": "John",
+      "last_name": "Doe",
+      ...
+    }
+  ]
+}
+```
+
 #### GET /api-v1-contacts/{id}
 
 Get a single contact by ID.
@@ -142,6 +165,30 @@ Delete a contact.
 ---
 
 ### Companies
+
+#### GET /api-v1-companies
+
+List or search companies.
+
+**Required scope**: `companies:read`
+
+**Parameters**:
+- `name` (query, optional): Search for companies with a name matching this string (partial, case-insensitive).
+- `website` (query, optional): Search for companies matching this website/domain.
+- `domain` (query, optional): Alias for `website`.
+
+**Response**:
+```json
+{
+  "data": [
+    {
+      "id": 5,
+      "name": "Acme Corp",
+      ...
+    }
+  ]
+}
+```
 
 #### GET /api-v1-companies/{id}
 
@@ -583,6 +630,10 @@ For issues or questions:
 - Documentation: https://github.com/therealtimex/realtimex-crm
 
 ## Changelog
+
+### v1.1.0 (2025-12-24)
+- Added search support for Contacts (by email)
+- Added search support for Companies (by name and website)
 
 ### v1.0.0 (2025-12-19)
 - Initial API release

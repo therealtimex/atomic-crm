@@ -267,6 +267,19 @@ const dataProviderWithCustomMethods = {
 
     return data;
   },
+  async mergeCompanies(sourceId: Identifier, targetId: Identifier) {
+    const { data, error } = await supabase.functions.invoke("mergeCompanies", {
+      method: "POST",
+      body: { loserId: sourceId, winnerId: targetId },
+    });
+
+    if (error) {
+      console.error("mergeCompanies.error", error);
+      throw new Error("Failed to merge companies");
+    }
+
+    return data;
+  },
 } satisfies DataProvider;
 
 export type CrmDataProvider = typeof dataProviderWithCustomMethods;

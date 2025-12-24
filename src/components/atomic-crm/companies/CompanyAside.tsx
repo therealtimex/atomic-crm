@@ -13,6 +13,7 @@ import { AsideSection } from "../misc/AsideSection";
 import { SaleName } from "../sales/SaleName";
 import type { Company } from "../types";
 import { sizes } from "./sizes";
+import { CompanyMergeButton } from "./CompanyMergeButton";
 
 interface CompanyAsideProps {
   link?: string;
@@ -41,12 +42,17 @@ export const CompanyAside = ({ link = "edit" }: CompanyAsideProps) => {
       <AdditionalInfo record={record} />
 
       {link !== "edit" && (
-        <div className="mt-6 pt-6 border-t hidden sm:flex flex-col gap-2 items-start">
-          <DeleteButton
-            className="h-6 cursor-pointer hover:bg-destructive/10! text-destructive! border-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
-            size="sm"
-          />
-        </div>
+        <>
+          <div className="mt-6 pt-6 border-t hidden sm:flex flex-col gap-2 items-start">
+            <CompanyMergeButton />
+          </div>
+          <div className="mt-6 pt-6 border-t hidden sm:flex flex-col gap-2 items-start">
+            <DeleteButton
+              className="h-6 cursor-pointer hover:bg-destructive/10! text-destructive! border-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
+              size="sm"
+            />
+          </div>
+        </>
       )}
     </div>
   );

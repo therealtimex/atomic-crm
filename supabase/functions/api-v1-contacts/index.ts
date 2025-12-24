@@ -45,8 +45,12 @@ Deno.serve(async (req: Request) => {
 
     let response: Response;
 
-    if (req.method === "GET" && contactId) {
-      response = await getContact(apiKey, contactId);
+    if (req.method === "GET") {
+      if (contactId) {
+        response = await getContact(apiKey, contactId);
+      } else {
+        response = await listContacts(apiKey, req);
+      }
     } else if (req.method === "POST") {
       response = await createContact(apiKey, req);
     } else if (req.method === "PATCH" && contactId) {
@@ -82,6 +86,38 @@ Deno.serve(async (req: Request) => {
     return createErrorResponse(500, "Internal server error");
   }
 });
+
+async function listContacts(apiKey: any, req: Request) {
+  if (!hasScope(apiKey, "contacts:read")) {
+    return createErrorResponse(403, "Insufficient permissions");
+  }
+
+  const url = new URL(req.url);
+  const email = url.searchParams.get("email");
+
+  let query = supabaseAdmin.from("contacts").select("*");
+
+  if (email) {
+    // Search within the email_jsonb array
+    // email_jsonb structure: [{ "email": "test@example.com", "type": "Work" }]
+    // We look for any object in the array that matches the email
+    query = query.contains("email_jsonb", JSON.stringify([{ email }]));
+  } else {
+    // If no specific search is provided, we default to a limit to prevent dumping the whole DB
+    // The apiKey owner can see all contacts, but let's limit it to 50 for safety if not searching
+    query = query.limit(50);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    return createErrorResponse(500, error.message);
+  }
+
+  return new Response(JSON.stringify({ data }), {
+    headers: { "Content-Type": "application/json", ...corsHeaders },
+  });
+}
 
 async function getContact(apiKey: any, contactId: string) {
   if (!hasScope(apiKey, "contacts:read")) {
