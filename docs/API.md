@@ -46,7 +46,7 @@ When rate limited, the API returns `429 Too Many Requests` with a `Retry-After` 
 
 ### Contacts
 
-#### GET /v1/contacts/{id}
+#### GET /api-v1-contacts/{id}
 
 Get a single contact by ID.
 
@@ -71,7 +71,7 @@ Get a single contact by ID.
 }
 ```
 
-#### POST /v1/contacts
+#### POST /api-v1-contacts
 
 Create a new contact.
 
@@ -100,7 +100,7 @@ Create a new contact.
 }
 ```
 
-#### PATCH /v1/contacts/{id}
+#### PATCH /api-v1-contacts/{id}
 
 Update an existing contact.
 
@@ -128,7 +128,7 @@ Update an existing contact.
 }
 ```
 
-#### DELETE /v1/contacts/{id}
+#### DELETE /api-v1-contacts/{id}
 
 Delete a contact.
 
@@ -143,7 +143,7 @@ Delete a contact.
 
 ### Companies
 
-#### GET /v1/companies/{id}
+#### GET /api-v1-companies/{id}
 
 Get a single company by ID.
 
@@ -163,7 +163,7 @@ Get a single company by ID.
 }
 ```
 
-#### POST /v1/companies
+#### POST /api-v1-companies
 
 Create a new company.
 
@@ -179,13 +179,13 @@ Create a new company.
 }
 ```
 
-#### PATCH /v1/companies/{id}
+#### PATCH /api-v1-companies/{id}
 
 Update a company.
 
 **Required scope**: `companies:write`
 
-#### DELETE /v1/companies/{id}
+#### DELETE /api-v1-companies/{id}
 
 Delete a company.
 
@@ -195,7 +195,7 @@ Delete a company.
 
 ### Deals
 
-#### GET /v1/deals/{id}
+#### GET /api-v1-deals/{id}
 
 Get a single deal by ID.
 
@@ -216,7 +216,7 @@ Get a single deal by ID.
 }
 ```
 
-#### POST /v1/deals
+#### POST /api-v1-deals
 
 Create a new deal.
 
@@ -233,7 +233,7 @@ Create a new deal.
 }
 ```
 
-#### PATCH /v1/deals/{id}
+#### PATCH /api-v1-deals/{id}
 
 Update a deal.
 
@@ -247,7 +247,7 @@ Update a deal.
 }
 ```
 
-#### DELETE /v1/deals/{id}
+#### DELETE /api-v1-deals/{id}
 
 Delete a deal.
 
@@ -257,7 +257,7 @@ Delete a deal.
 
 ### Activities
 
-#### POST /v1/activities
+#### POST /api-v1-activities
 
 Create an activity (note or task).
 
@@ -491,11 +491,11 @@ After 3 failed attempts, the webhook delivery is marked as failed and will not b
 
 ```bash
 # Get a contact
-curl -X GET "https://your-project.supabase.co/functions/v1/v1/contacts/1" \
+curl -X GET "https://your-project.supabase.co/functions/v1/api-v1-contacts/1" \
   -H "Authorization: Bearer ak_live_your_api_key_here"
 
 # Create a contact
-curl -X POST "https://your-project.supabase.co/functions/v1/v1/contacts" \
+curl -X POST "https://your-project.supabase.co/functions/v1/api-v1-contacts" \
   -H "Authorization: Bearer ak_live_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -512,7 +512,7 @@ const API_KEY = 'ak_live_your_api_key_here';
 const BASE_URL = 'https://your-project.supabase.co/functions/v1';
 
 async function getContact(id: number) {
-  const response = await fetch(`${BASE_URL}/v1/contacts/${id}`, {
+  const response = await fetch(`${BASE_URL}/api-v1-contacts/${id}`, {
     headers: {
       'Authorization': `Bearer ${API_KEY}`
     }
@@ -527,7 +527,7 @@ async function getContact(id: number) {
 }
 
 async function createContact(contactData: any) {
-  const response = await fetch(`${BASE_URL}/v1/contacts`, {
+  const response = await fetch(`${BASE_URL}/api-v1-contacts`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${API_KEY}`,
@@ -555,7 +555,7 @@ BASE_URL = 'https://your-project.supabase.co/functions/v1'
 
 def get_contact(contact_id):
     response = requests.get(
-        f'{BASE_URL}/v1/contacts/{contact_id}',
+        f'{BASE_URL}/api-v1-contacts/{contact_id}',
         headers={'Authorization': f'Bearer {API_KEY}'}
     )
     response.raise_for_status()
@@ -563,7 +563,7 @@ def get_contact(contact_id):
 
 def create_contact(contact_data):
     response = requests.post(
-        f'{BASE_URL}/v1/contacts',
+        f'{BASE_URL}/api-v1-contacts',
         headers={
             'Authorization': f'Bearer {API_KEY}',
             'Content-Type': 'application/json'
