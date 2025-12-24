@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiKeysTab } from "./ApiKeysTab";
 import { WebhooksTab } from "./WebhooksTab";
 import { IngestionChannelsTab } from "./IngestionChannelsTab";
+import { FileUpload } from "../activities/FileUpload";
 
 export const IntegrationsPage = () => {
   return (
@@ -17,12 +18,17 @@ export const IntegrationsPage = () => {
       <Tabs defaultValue="ingestion">
         <TabsList className="mb-4">
           <TabsTrigger value="ingestion">Ingestion Channels</TabsTrigger>
+          <TabsTrigger value="file-upload">File Upload</TabsTrigger>
           <TabsTrigger value="api-keys">API Keys</TabsTrigger>
           <TabsTrigger value="webhooks">Webhooks (Outbound)</TabsTrigger>
         </TabsList>
 
         <TabsContent value="ingestion">
           <IngestionChannelsTab />
+        </TabsContent>
+
+        <TabsContent value="file-upload">
+          <FileUpload />
         </TabsContent>
 
         <TabsContent value="api-keys">

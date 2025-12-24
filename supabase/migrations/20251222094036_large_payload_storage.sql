@@ -7,8 +7,8 @@ VALUES (
   'activity-payloads',
   'activity-payloads',
   false, -- Private bucket
-  10485760, -- 10MB max file size
-  ARRAY['application/json', 'text/plain']
+  NULL, -- No file size limit (supports large payloads of any size)
+  NULL  -- Allow all MIME types (PDFs, images, videos, etc.)
 )
 ON CONFLICT (id) DO NOTHING;
 

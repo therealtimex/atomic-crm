@@ -10,7 +10,9 @@ import { supabaseAdmin } from "./supabaseAdmin.ts";
 export async function validateIngestionRequest(req: Request) {
   const url = new URL(req.url);
   const providerCode = url.searchParams.get("provider");
-  const ingestionKey = url.searchParams.get("key");
+
+  // Check for ingestion key in header (preferred) or URL query param (backward compatibility)
+  const ingestionKey = req.headers.get("x-ingestion-key") || url.searchParams.get("key");
 
   // 1. Internal/Manual API Key (Bearer)
   const authHeader = req.headers.get("Authorization");

@@ -42,9 +42,32 @@ $$;
 comment on function enable_realtime_for_table(text, text) is
 'Safely adds tables to supabase_realtime publication. Realtime respects RLS policies - clients only receive changes for rows they can SELECT.';
 
--- 2. Enable Realtime for 'activities' table (Required for RealTimeX ingestion)
--- Note: RLS policies on activities ensure users only receive notifications for their own data
+-- 2. Enable Realtime for core CRM tables
+-- Note: All realtime subscriptions respect RLS policies - users only receive changes for rows they can SELECT
+
+-- Activities: Real-time ingestion, activity feed updates
 select enable_realtime_for_table('activities');
 
--- 3. Enable Realtime for 'tasks' table (Useful for CRM updates)
+-- Tasks: Task assignments, status changes, team collaboration
 select enable_realtime_for_table('tasks');
+
+-- Contacts: Contact profile updates, new contact notifications
+select enable_realtime_for_table('contacts');
+
+-- Companies: Company data changes, relationship updates
+select enable_realtime_for_table('companies');
+
+-- Deals: Pipeline movement, stage changes, deal value updates (critical for sales teams!)
+select enable_realtime_for_table('deals');
+
+-- Contact Notes: Real-time note additions/updates
+select enable_realtime_for_table('contactNotes');
+
+-- Deal Notes: Deal discussion updates
+select enable_realtime_for_table('dealNotes');
+
+-- Sales: Team member changes, user status updates
+select enable_realtime_for_table('sales');
+
+-- Ingestion Providers: Channel configuration changes
+select enable_realtime_for_table('ingestion_providers');
