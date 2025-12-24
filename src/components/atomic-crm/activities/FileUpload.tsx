@@ -33,7 +33,7 @@ export const FileUpload = () => {
   const { data: identity } = useGetIdentity();
 
   // Load ingestion providers using React-Admin hook (cleaner than manual useEffect)
-  const { data: providers = [], isLoading } = useGetList<IngestionProvider>('ingestion_providers', {
+  const { data: providers = [] } = useGetList<IngestionProvider>('ingestion_providers', {
     filter: { is_active: true },
     pagination: { page: 1, perPage: 100 },
     sort: { field: 'created_at', order: 'DESC' }

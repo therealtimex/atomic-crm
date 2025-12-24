@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
     // 2. Parse Body based on Content-Type
     const contentType = req.headers.get("content-type") || "";
     let rawBody: any;
-    let uploadedFiles: Array<{ fieldName: string; storagePath: string; size: number; type: string }> = [];
+    const uploadedFiles: Array<{ fieldName: string; storagePath: string; size: number; type: string }> = [];
 
     if (contentType.includes("application/json")) {
       rawBody = await req.json();
@@ -219,7 +219,7 @@ function normalizeActivity(providerCode: string, payload: any) {
       // Handle uploaded files
       if (fileFields.length === 1) {
         // Single file - store in raw_data
-        const [fieldName, fileRef] = fileFields[0];
+        const [_fieldName, fileRef] = fileFields[0];
         raw_data = {
           source_type: "storage_ref",
           storage_path: (fileRef as any).storage_path,

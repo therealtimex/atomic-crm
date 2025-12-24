@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/components/atomic-crm/providers/supabase/supabase";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,7 +16,7 @@ interface ActivityFeedProps {
 
 export const ActivityFeed = ({ contactId, salesId, className }: ActivityFeedProps) => {
   const queryClient = useQueryClient();
-  const queryKey = ["activities", contactId, salesId];
+  const queryKey = useMemo(() => ["activities", contactId, salesId], [contactId, salesId]);
 
   // 1. Initial Fetch
   const { data: activities, isLoading } = useQuery({
