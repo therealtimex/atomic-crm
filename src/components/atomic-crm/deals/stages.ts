@@ -10,7 +10,9 @@ export const getDealsByStage = (
   if (!dealStages) return {};
   const dealsByStage: Record<Deal["stage"], Deal[]> = unorderedDeals.reduce(
     (acc, deal) => {
-      acc[deal.stage].push(deal);
+      if (acc[deal.stage]) {
+        acc[deal.stage].push(deal);
+      }
       return acc;
     },
     dealStages.reduce(
