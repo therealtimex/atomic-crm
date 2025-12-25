@@ -70,7 +70,47 @@ export type Company = {
   nb_contacts?: number;
   nb_deals?: number;
   nb_notes?: number;
+  nb_tasks?: number;
   last_seen?: string;
+
+  // Phase 1: Lifecycle & Classification
+  updated_at?: string;
+  lifecycle_stage?: string;
+  company_type?: string;
+  qualification_status?: string;
+
+  // Phase 1: External Integration
+  external_id?: string;
+  external_system?: string;
+
+  // Phase 1: Contact Information
+  email?: string;
+
+  // Phase 1: Firmographics
+  industry?: string;
+  revenue_range?: string;
+  employee_count?: number;
+  founded_year?: number;
+
+  // Phase 1: Social & Enrichment
+  social_profiles?: Record<string, string>;
+  logo_url?: string;
+
+  // Phase 2: External Heartbeat
+  external_heartbeat_status?: string;
+  external_heartbeat_checked_at?: string;
+
+  // Phase 2: Internal Heartbeat
+  internal_heartbeat_status?: string;
+  internal_heartbeat_score?: number;
+  internal_heartbeat_updated_at?: string;
+
+  // View-computed fields
+  last_note_date?: string;
+  last_deal_activity?: string;
+  last_task_activity?: string;
+  days_since_last_activity?: number;
+  total_deal_amount?: number;
 } & Pick<RaRecord, "id">;
 
 export type EmailAndType = {
