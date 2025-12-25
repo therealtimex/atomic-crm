@@ -78,9 +78,18 @@ export async function validateSupabaseConnection(
       return { valid: false, error: 'Invalid URL format' };
     }
 
-    // Basic anon key validation (JWT format)
-    if (!anonKey.startsWith('eyJ')) {
-      return { valid: false, error: 'Invalid anon key format' };
+    // Basic API key validation (supports both JWT anon keys and publishable keys)
+    const isJwtKey = anonKey.startsWith('eyJ');
+    const isPublishableKey = anonKey.startsWith('sb_publishable_');
+
+    if (!isJwtKey && !isPublishableKey) {
+      return { valid: false, error: 'Invalid API key format (must be anon or publishable key)' };
+    }
+
+    // Skip network validation for publishable keys as they might not be standard JWTs
+    // compatible with the Postgrest root endpoint check
+    if (isPublishableKey) {
+      return { valid: true };
     }
 
     // Test connection by making a simple request

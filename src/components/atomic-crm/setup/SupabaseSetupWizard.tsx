@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Database, CheckCircle, AlertCircle } from "lucide-react";
+import { Loader2, Database, CheckCircle, AlertCircle, ExternalLink, Check } from "lucide-react";
 import {
   saveSupabaseConfig,
   validateSupabaseConnection,
@@ -24,6 +24,77 @@ interface SupabaseSetupWizardProps {
   canClose?: boolean;
 }
 
+/**
+ * Normalizes Supabase URL input - accepts either full URL or just project ID
+ */
+function normalizeSupabaseUrl(input: string): string {
+  const trimmed = input.trim();
+  if (!trimmed) return "";
+
+  // If it starts with http:// or https://, treat as full URL
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    return trimmed;
+  }
+
+  // Otherwise, treat as project ID and construct full URL
+  return `https://${trimmed}.supabase.co`;
+}
+
+/**
+ * Validates if input looks like a valid Supabase URL or project ID
+ */
+function validateUrlFormat(input: string): { valid: boolean; message?: string } {
+  const trimmed = input.trim();
+  if (!trimmed) return { valid: false };
+
+  // Check if it's a full URL
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    try {
+      const url = new URL(trimmed);
+      if (url.hostname.endsWith(".supabase.co")) {
+        return { valid: true, message: "Valid Supabase URL" };
+      }
+      return { valid: false, message: "URL must be a Supabase domain" };
+    } catch {
+      return { valid: false, message: "Invalid URL format" };
+    }
+  }
+
+  // Check if it's a project ID (alphanumeric, typically 20 chars)
+  if (/^[a-z0-9]+$/.test(trimmed)) {
+    return { valid: true, message: "Valid project ID (will expand to full URL)" };
+  }
+
+  return { valid: false, message: "Enter full URL or project ID" };
+}
+
+/**
+ * Validates if input looks like a valid Supabase API key
+ */
+function validateKeyFormat(input: string): { valid: boolean; message?: string } {
+  const trimmed = input.trim();
+  if (!trimmed) return { valid: false };
+
+  // New publishable keys start with "sb_publishable_" followed by key content
+  if (trimmed.startsWith("sb_publishable_")) {
+    // Check that there's actual key content after the prefix (at least 20 chars)
+    if (trimmed.length > "sb_publishable_".length + 20) {
+      return { valid: true, message: "Valid publishable key format" };
+    }
+    return { valid: false, message: "Publishable key seems incomplete" };
+  }
+
+  // Legacy anon keys are JWT tokens starting with "eyJ"
+  if (trimmed.startsWith("eyJ")) {
+    if (trimmed.length > 100) {
+      return { valid: true, message: "Valid anon key format" };
+    }
+    return { valid: false, message: "Anon key seems incomplete" };
+  }
+
+  return { valid: false, message: "Must be a valid Supabase API key (anon or publishable)" };
+}
+
 export function SupabaseSetupWizard({
   open,
   onComplete,
@@ -33,15 +104,21 @@ export function SupabaseSetupWizard({
   const [url, setUrl] = useState("");
   const [anonKey, setAnonKey] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [urlTouched, setUrlTouched] = useState(false);
+  const [keyTouched, setKeyTouched] = useState(false);
 
   const handleValidateAndSave = async () => {
     setError(null);
     setStep("validating");
 
-    const result = await validateSupabaseConnection(url, anonKey);
+    // Normalize the URL before validation
+    const normalizedUrl = normalizeSupabaseUrl(url);
+    const trimmedKey = anonKey.trim();
+
+    const result = await validateSupabaseConnection(normalizedUrl, trimmedKey);
 
     if (result.valid) {
-      saveSupabaseConfig({ url, anonKey });
+      saveSupabaseConfig({ url: normalizedUrl, anonKey: trimmedKey });
       setStep("success");
 
       // Reload after short delay to apply new config
@@ -54,6 +131,12 @@ export function SupabaseSetupWizard({
       setStep("credentials");
     }
   };
+
+  // Get validation states
+  const urlValidation = url ? validateUrlFormat(url) : { valid: false };
+  const keyValidation = anonKey ? validateKeyFormat(anonKey) : { valid: false };
+  const normalizedUrl = url ? normalizeSupabaseUrl(url) : "";
+  const showUrlExpansion = url && !url.startsWith("http") && urlValidation.valid;
 
   const handleClose = () => {
     if (canClose) {
@@ -90,9 +173,10 @@ export function SupabaseSetupWizard({
                     href="https://supabase.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline text-primary"
+                    className="underline text-primary inline-flex items-center gap-1"
                   >
                     supabase.com
+                    <ExternalLink className="h-3 w-3" />
                   </a>
                 </AlertDescription>
               </Alert>
@@ -100,9 +184,21 @@ export function SupabaseSetupWizard({
               <div className="space-y-2">
                 <h4 className="font-medium text-sm">What you'll need:</h4>
                 <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                  <li>Your Supabase project URL</li>
-                  <li>Your anonymous (anon) API key</li>
+                  <li>Your Supabase project URL or project ID</li>
+                  <li>Your API key (anon or publishable key)</li>
                 </ul>
+              </div>
+
+              <div className="space-y-2">
+                <a
+                  href="https://supabase.com/docs/guides/api#api-url-and-keys"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                >
+                  Where do I find these?
+                  <ExternalLink className="h-3 w-3" />
+                </a>
               </div>
 
               <Button onClick={() => setStep("credentials")} className="w-full">
@@ -130,30 +226,80 @@ export function SupabaseSetupWizard({
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="supabase-url">Supabase URL</Label>
-                <Input
-                  id="supabase-url"
-                  placeholder="https://xxxxx.supabase.co"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                />
-                <p className="text-xs text-muted-foreground">
-                  Found in Project Settings → API
-                </p>
+                <Label htmlFor="supabase-url">Project URL or ID</Label>
+                <div className="relative">
+                  <Input
+                    id="supabase-url"
+                    placeholder="xxxxx or https://xxxxx.supabase.co"
+                    value={url}
+                    onChange={(e) => {
+                      setUrl(e.target.value);
+                      setUrlTouched(true);
+                    }}
+                    onBlur={() => setUrlTouched(true)}
+                    className={
+                      urlTouched && url
+                        ? urlValidation.valid
+                          ? "pr-8 border-green-500"
+                          : "pr-8 border-destructive"
+                        : ""
+                    }
+                  />
+                  {urlTouched && url && urlValidation.valid && (
+                    <Check className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-green-500" />
+                  )}
+                </div>
+                {showUrlExpansion && (
+                  <div className="flex items-start gap-1.5 text-xs text-green-600 dark:text-green-400">
+                    <Check className="h-3 w-3 mt-0.5 flex-shrink-0" />
+                    <span>Will expand to: {normalizedUrl}</span>
+                  </div>
+                )}
+                {urlTouched && url && urlValidation.message && !urlValidation.valid && (
+                  <p className="text-xs text-destructive">{urlValidation.message}</p>
+                )}
+                {(!urlTouched || !url) && (
+                  <p className="text-xs text-muted-foreground">
+                    Enter full URL or just the project ID (from Project Settings → API)
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="anon-key">Anonymous Key</Label>
-                <Input
-                  id="anon-key"
-                  type="password"
-                  placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                  value={anonKey}
-                  onChange={(e) => setAnonKey(e.target.value)}
-                />
-                <p className="text-xs text-muted-foreground">
-                  Found in Project Settings → API → Project API keys
-                </p>
+                <Label htmlFor="anon-key">API Key</Label>
+                <div className="relative">
+                  <Input
+                    id="anon-key"
+                    type="password"
+                    placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    value={anonKey}
+                    onChange={(e) => {
+                      setAnonKey(e.target.value);
+                      setKeyTouched(true);
+                    }}
+                    onBlur={() => setKeyTouched(true)}
+                    className={
+                      keyTouched && anonKey
+                        ? keyValidation.valid
+                          ? "pr-8 border-green-500"
+                          : "pr-8 border-destructive"
+                        : ""
+                    }
+                  />
+                  {keyTouched && anonKey && keyValidation.valid && (
+                    <Check className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-green-500" />
+                  )}
+                </div>
+                {keyTouched && anonKey && keyValidation.message && (
+                  <p className={`text-xs ${keyValidation.valid ? "text-green-600 dark:text-green-400" : "text-destructive"}`}>
+                    {keyValidation.message}
+                  </p>
+                )}
+                {(!keyTouched || !anonKey) && (
+                  <p className="text-xs text-muted-foreground">
+                    Anon or publishable key (from Project Settings → API)
+                  </p>
+                )}
               </div>
 
               <div className="flex gap-2">
@@ -166,7 +312,7 @@ export function SupabaseSetupWizard({
                 </Button>
                 <Button
                   onClick={handleValidateAndSave}
-                  disabled={!url || !anonKey}
+                  disabled={!urlValidation.valid || !keyValidation.valid}
                   className="flex-1"
                 >
                   Connect
