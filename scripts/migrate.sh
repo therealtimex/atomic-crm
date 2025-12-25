@@ -20,9 +20,13 @@
 #   3. You need your Supabase Project Reference ID (e.g., 'abcdefghijklm').
 #   4. You need your Database Password (to type when prompted).
 #
-# USAGE:
-#   Run this one-liner in your terminal:
-#   curl -sL https://raw.githubusercontent.com/therealtimex/realtimex-crm/main/scripts/migrate.sh | bash
+# HOW TO USE:
+#   1. Download this file to your computer.
+#   2. Open your terminal and navigate to the folder where you saved it.
+#   3. Make the script executable:
+#      chmod +x migrate.sh
+#   4. Run the script:
+#      ./migrate.sh
 #
 # ==============================================================================
 
