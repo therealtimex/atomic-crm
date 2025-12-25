@@ -8,6 +8,7 @@ on:
       - '**.md'
       - 'docs/**'
       - '.github/**'
+      # It is safer to check the commit message for [skip ci] than relying solely on path ignore
       - '!.github/workflows/publish.yml'
 
   workflow_dispatch:
@@ -24,10 +25,12 @@ on:
 
 jobs:
   publish:
+    # Check if the commit message contains [skip ci] to prevent loops if paths-ignore fails
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
+      id-token: write # Required for npm provenance
 
     steps:
       - name: Checkout code
@@ -42,10 +45,11 @@ jobs:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
+      # Standardize on the specific ID for the GitHub Actions bot
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Install dependencies
         run: npm ci
@@ -87,18 +91,20 @@ jobs:
         run: |
           CURRENT_VERSION=$(node -p "require('./package.json').version")
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          echo "Current version: $CURRENT_VERSION"
 
       - name: Bump version
         id: new_version
         run: |
           BUMP_TYPE="${{ steps.version.outputs.bump_type }}"
+          
+          # Bump version without creating a git tag yet
           npm version $BUMP_TYPE --no-git-tag-version
+          
           NEW_VERSION=$(node -p "require('./package.json').version")
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "New version: $NEW_VERSION"
 
-          # Check if this version already exists as a tag
+          # Check if this version already exists as a tag to avoid failures
           if git ls-remote --tags origin | grep -q "refs/tags/v$NEW_VERSION$"; then
             echo "skip_publish=true" >> $GITHUB_OUTPUT
             echo "::warning::Version v$NEW_VERSION already exists. Skipping publish."
@@ -109,7 +115,7 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Commit version bump
+      - name: Commit and Tag
         if: steps.new_version.outputs.skip_publish != 'true'
         run: |
           git add package.json package-lock.json
@@ -119,6 +125,8 @@ jobs:
       - name: Push changes
         if: steps.new_version.outputs.skip_publish != 'true'
         run: |
+          # Pull rebase to handle race conditions if other commits landed on main
+          git pull --rebase origin main
           git push origin main
           git push origin "v${{ steps.new_version.outputs.version }}"
 
@@ -134,7 +142,8 @@ jobs:
 
       - name: Publish to npm
         if: steps.check_token.outputs.has_token == 'true' && steps.new_version.outputs.skip_publish != 'true'
-        run: npm publish --access public
+        # Added --provenance for supply chain security
+        run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -144,11 +153,11 @@ jobs:
         with:
           tag_name: v${{ steps.new_version.outputs.version }}
           name: Release v${{ steps.new_version.outputs.version }}
+          # Automatically generate release notes from PR titles/labels
+          generate_release_notes: true 
           body: |
-            ## Changes in v${{ steps.new_version.outputs.version }}
-
-            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
-
+            ## Release v${{ steps.new_version.outputs.version }}
+            
             ### Installation
             ```bash
             npm install realtimex-crm@${{ steps.new_version.outputs.version }}
@@ -158,6 +167,8 @@ jobs:
             ```bash
             npx create-realtimex-crm my-crm
             ```
+            
+            *(Automated Release Notes below)*
           draft: false
           prerelease: false
         env:
