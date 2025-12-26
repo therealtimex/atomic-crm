@@ -113,17 +113,17 @@ const dataProviderWithCustomMethods = {
   async update(resource: string, params: any) {
     if (resource === "tasks") {
       const {
-        contact_first_name,
-        contact_last_name,
-        contact_email,
-        company_id,
-        company_name,
-        assigned_first_name,
-        assigned_last_name,
-        creator_first_name,
-        creator_last_name,
-        nb_notes,
-        last_note_date,
+        contact_first_name: _contact_first_name,
+        contact_last_name: _contact_last_name,
+        contact_email: _contact_email,
+        company_id: _company_id,
+        company_name: _company_name,
+        assigned_first_name: _assigned_first_name,
+        assigned_last_name: _assigned_last_name,
+        creator_first_name: _creator_first_name,
+        creator_last_name: _creator_last_name,
+        nb_notes: _nb_notes,
+        last_note_date: _last_note_date,
         ...data
       } = params.data;
 
