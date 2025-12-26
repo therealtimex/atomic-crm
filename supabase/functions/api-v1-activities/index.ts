@@ -73,65 +73,55 @@ async function createActivity(apiKey: any, req: Request) {
   const body = await req.json();
   const { type, ...activityData } = body;
 
-  // Activities can be notes or tasks
-  if (type === "note" || type === "contact_note") {
-    const { data, error } = await supabaseAdmin
-      .from("contactNotes")
-      .insert({
-        ...activityData,
-        sales_id: apiKey.sales_id,
-      })
-      .select()
-      .single();
+  // Map activity type to table and validate
+  let tableName: string;
+  let responseType: string;
 
-    if (error) {
-      return createErrorResponse(400, error.message);
-    }
-
-    return new Response(JSON.stringify({ data, type: "note" }), {
-      status: 201,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
-    });
-  } else if (type === "task") {
-    const { data, error } = await supabaseAdmin
-      .from("tasks")
-      .insert({
-        ...activityData,
-        sales_id: apiKey.sales_id,
-      })
-      .select()
-      .single();
-
-    if (error) {
-      return createErrorResponse(400, error.message);
-    }
-
-    return new Response(JSON.stringify({ data, type: "task" }), {
-      status: 201,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
-    });
-  } else if (type === "deal_note") {
-    const { data, error } = await supabaseAdmin
-      .from("dealNotes")
-      .insert({
-        ...activityData,
-        sales_id: apiKey.sales_id,
-      })
-      .select()
-      .single();
-
-    if (error) {
-      return createErrorResponse(400, error.message);
-    }
-
-    return new Response(JSON.stringify({ data, type: "deal_note" }), {
-      status: 201,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
-    });
-  } else {
-    return createErrorResponse(
-      400,
-      "Invalid activity type. Must be 'note', 'contact_note', 'task', or 'deal_note'"
-    );
+  switch (type) {
+    case "note":
+    case "contact_note":
+      tableName = "contactNotes";
+      responseType = "contact_note";
+      break;
+    case "company_note":
+      tableName = "companyNotes";
+      responseType = "company_note";
+      break;
+    case "deal_note":
+      tableName = "dealNotes";
+      responseType = "deal_note";
+      break;
+    case "task_note":
+      tableName = "taskNotes";
+      responseType = "task_note";
+      break;
+    case "task":
+      tableName = "tasks";
+      responseType = "task";
+      break;
+    default:
+      return createErrorResponse(
+        400,
+        "Invalid activity type. Must be 'contact_note', 'company_note', 'deal_note', 'task_note', or 'task'"
+      );
   }
+
+  // Insert activity
+  const { data, error } = await supabaseAdmin
+    .from(tableName)
+    .insert({
+      ...activityData,
+      sales_id: apiKey.sales_id,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    return createErrorResponse(400, error.message);
+  }
+
+  return new Response(JSON.stringify({ data, type: responseType }), {
+    status: 201,
+    headers: { "Content-Type": "application/json", ...corsHeaders },
+  });
 }

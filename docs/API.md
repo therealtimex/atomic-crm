@@ -310,6 +310,13 @@ Create an activity (note or task).
 
 **Required scope**: `activities:write`
 
+**Supported activity types**:
+- `contact_note` - Note attached to a contact
+- `company_note` - Note attached to a company
+- `deal_note` - Note attached to a deal
+- `task_note` - Note attached to a task
+- `task` - A task (to-do item)
+
 **Request body for contact note**:
 ```json
 {
@@ -317,6 +324,34 @@ Create an activity (note or task).
   "contact_id": 1,
   "text": "Follow-up call scheduled for next week",
   "status": "cold"
+}
+```
+
+**Request body for company note**:
+```json
+{
+  "type": "company_note",
+  "company_id": 5,
+  "text": "Annual contract renewal discussion",
+  "status": "warm"
+}
+```
+
+**Request body for deal note**:
+```json
+{
+  "type": "deal_note",
+  "deal_id": 10,
+  "text": "Customer requested custom pricing"
+}
+```
+
+**Request body for task note**:
+```json
+{
+  "type": "task_note",
+  "task_id": 42,
+  "text": "Blocked by infrastructure team - waiting for API access"
 }
 ```
 
@@ -331,12 +366,24 @@ Create an activity (note or task).
 }
 ```
 
-**Request body for deal note**:
+**Including attachments** (supported for all note types):
 ```json
 {
-  "type": "deal_note",
-  "deal_id": 10,
-  "text": "Customer requested custom pricing"
+  "type": "contact_note",
+  "contact_id": 1,
+  "text": "Discussed pricing structure",
+  "attachments": [
+    {
+      "url": "https://storage.example.com/proposal.pdf",
+      "name": "proposal.pdf",
+      "type": "application/pdf"
+    },
+    {
+      "url": "https://storage.example.com/pricing.xlsx",
+      "name": "pricing.xlsx",
+      "type": "application/vnd.ms-excel"
+    }
+  ]
 }
 ```
 
@@ -346,9 +393,12 @@ Create an activity (note or task).
   "data": {
     "id": 15,
     "text": "Follow-up call scheduled for next week",
+    "contact_id": 1,
+    "sales_id": 2,
+    "date": "2025-12-26T10:30:00Z",
     ...
   },
-  "type": "note"
+  "type": "contact_note"
 }
 ```
 
@@ -630,6 +680,13 @@ For issues or questions:
 - Documentation: https://github.com/therealtimex/realtimex-crm
 
 ## Changelog
+
+### v1.2.0 (2025-12-26)
+- **Activities endpoint enhancements**:
+  - Added support for `company_note` activity type
+  - Added support for `task_note` activity type
+  - Documented attachments support for all note types (contact, company, deal, task)
+  - Improved error messages to list all valid activity types
 
 ### v1.1.0 (2025-12-24)
 - Added search support for Contacts (by email)
