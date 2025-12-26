@@ -457,6 +457,10 @@ Create a note attached to a contact, company, deal, or task.
 
 **Note**: For creating tasks (to-do items), use the `/api-v1-tasks` endpoint instead.
 
+**Content Types Supported**:
+- `application/json` - Create note with attachment URLs (you manage file storage)
+- `multipart/form-data` - Upload files directly with the note (API handles storage)
+
 **Request body for contact note**:
 ```json
 {
@@ -466,8 +470,8 @@ Create a note attached to a contact, company, deal, or task.
   "status": "cold",
   "attachments": [
     {
-      "url": "https://storage.example.com/meeting-notes.pdf",
-      "name": "meeting-notes.pdf",
+      "src": "https://storage.example.com/meeting-notes.pdf",
+      "title": "meeting-notes.pdf",
       "type": "application/pdf"
     }
   ]
@@ -503,9 +507,26 @@ Create a note attached to a contact, company, deal, or task.
 }
 ```
 
-**Attachments support**: All note types support an optional `attachments` field containing an array of attachment objects with `url`, `name`, and `type` properties.
+**Attachments support**: All note types support attachments in two ways:
 
-**Example with multiple attachments**:
+**Option 1: Upload files directly with multipart/form-data** (recommended):
+```bash
+curl -X POST "https://your-project.supabase.co/functions/v1/api-v1-activities" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "type=contact_note" \
+  -F "contact_id=1" \
+  -F "text=Meeting notes with attachments" \
+  -F "status=warm" \
+  -F "files=@/path/to/proposal.pdf" \
+  -F "files=@/path/to/pricing.xlsx"
+```
+
+The API will:
+- Upload files to Supabase Storage automatically
+- Generate attachment metadata
+- Create the note with attachments
+
+**Option 2: Provide attachment URLs with JSON** (you manage storage):
 ```json
 {
   "type": "contact_note",
@@ -513,13 +534,13 @@ Create a note attached to a contact, company, deal, or task.
   "text": "Discussed pricing structure",
   "attachments": [
     {
-      "url": "https://storage.example.com/proposal.pdf",
-      "name": "proposal.pdf",
+      "src": "https://storage.example.com/proposal.pdf",
+      "title": "proposal.pdf",
       "type": "application/pdf"
     },
     {
-      "url": "https://storage.example.com/pricing.xlsx",
-      "name": "pricing.xlsx",
+      "src": "https://storage.example.com/pricing.xlsx",
+      "title": "pricing.xlsx",
       "type": "application/vnd.ms-excel"
     }
   ]
@@ -823,6 +844,14 @@ For issues or questions:
 - Documentation: https://github.com/therealtimex/realtimex-crm
 
 ## Changelog
+
+### v1.4.0 (2025-12-26)
+- **File upload support for notes** (`/api-v1-activities`):
+  - Support `multipart/form-data` for direct file uploads
+  - API automatically uploads files to Supabase Storage
+  - Simplifies workflow - no separate file upload step needed
+  - Backwards compatible with JSON body + attachment URLs
+  - Consistent with UI file upload experience
 
 ### v1.3.0 (2025-12-26)
 - **New Tasks endpoint** (`/api-v1-tasks`):

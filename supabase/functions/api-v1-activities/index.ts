@@ -70,8 +70,77 @@ async function createActivity(apiKey: any, req: Request) {
     return createErrorResponse(403, "Insufficient permissions");
   }
 
-  const body = await req.json();
-  const { type, ...activityData } = body;
+  const contentType = req.headers.get("content-type") || "";
+  let noteData: any;
+  let uploadedFiles: any[] = [];
+
+  // Check if multipart/form-data (with file uploads)
+  if (contentType.includes("multipart/form-data")) {
+    const formData = await req.formData();
+
+    // Extract note fields
+    const type = formData.get("type") as string;
+    const contact_id = formData.get("contact_id");
+    const company_id = formData.get("company_id");
+    const deal_id = formData.get("deal_id");
+    const task_id = formData.get("task_id");
+    const text = formData.get("text") as string;
+    const status = formData.get("status") as string;
+
+    // Build note data
+    noteData = { type, text, status };
+    if (contact_id) noteData.contact_id = parseInt(contact_id as string, 10);
+    if (company_id) noteData.company_id = parseInt(company_id as string, 10);
+    if (deal_id) noteData.deal_id = parseInt(deal_id as string, 10);
+    if (task_id) noteData.task_id = parseInt(task_id as string, 10);
+
+    // Extract and upload files
+    const files = formData.getAll("files");
+    for (const fileEntry of files) {
+      if (fileEntry instanceof File) {
+        const file = fileEntry as File;
+
+        // Generate unique filename
+        const timestamp = Date.now();
+        const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const storagePath = `${timestamp}-${sanitizedName}`;
+
+        // Upload to Supabase Storage using admin client (bypasses RLS)
+        const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
+          .from("attachments")
+          .upload(storagePath, file, {
+            contentType: file.type,
+            upsert: false,
+          });
+
+        if (uploadError) {
+          return createErrorResponse(400, `File upload failed: ${uploadError.message}`);
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabaseAdmin.storage
+          .from("attachments")
+          .getPublicUrl(uploadData.path);
+
+        uploadedFiles.push({
+          src: publicUrl,
+          title: file.name,
+          type: file.type,
+        });
+      }
+    }
+
+    // Add uploaded files to attachments
+    if (uploadedFiles.length > 0) {
+      noteData.attachments = uploadedFiles;
+    }
+
+  } else {
+    // JSON body (backwards compatible)
+    noteData = await req.json();
+  }
+
+  const { type, ...activityData } = noteData;
 
   // Map note type to table and validate
   // Note: Tasks are now handled by /api-v1-tasks endpoint
