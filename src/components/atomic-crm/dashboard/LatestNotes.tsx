@@ -1,6 +1,8 @@
 import { formatDistance } from "date-fns";
 import { FileText } from "lucide-react";
 import { useGetIdentity, useGetList } from "ra-core";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { TextField } from "@/components/admin/text-field";
 import { Card, CardContent } from "@/components/ui/card";
@@ -76,10 +78,10 @@ export const LatestNotes = () => {
                   addSuffix: true,
                 })}
               </div>
-              <div>
-                <p className="text-sm line-clamp-3 overflow-hidden">
-                  {note.text}
-                </p>
+              <div className="prose prose-sm max-w-none dark:prose-invert line-clamp-3 overflow-hidden">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {note.text || ""}
+                </ReactMarkdown>
               </div>
             </div>
           ))}
