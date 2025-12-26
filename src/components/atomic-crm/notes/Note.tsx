@@ -9,6 +9,8 @@ import {
 } from "ra-core";
 import { useState } from "react";
 import type { FieldValues, SubmitHandler } from "react-hook-form";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { Button } from "@/components/ui/button";
 import {
@@ -172,12 +174,10 @@ export const Note = ({
           </div>
         </Form>
       ) : (
-        <div className="pt-2 [&_p:empty]:min-h-[0.75em]">
-          {note.text?.split("\n").map((paragraph: string, index: number) => (
-            <p className="text-sm leading-6 m-0" key={index}>
-              {paragraph}
-            </p>
-          ))}
+        <div className="pt-2 prose prose-sm max-w-none dark:prose-invert">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {note.text || ""}
+          </ReactMarkdown>
 
           {note.attachments && <NoteAttachments note={note} />}
         </div>
