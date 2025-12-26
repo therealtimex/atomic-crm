@@ -126,6 +126,7 @@ supabase functions deploy
 supabase functions deploy api-v1-contacts --no-verify-jwt && \
 supabase functions deploy api-v1-companies --no-verify-jwt && \
 supabase functions deploy api-v1-deals --no-verify-jwt && \
+supabase functions deploy api-v1-tasks --no-verify-jwt && \
 supabase functions deploy api-v1-activities --no-verify-jwt && \
 supabase functions deploy webhook-dispatcher --no-verify-jwt
 
