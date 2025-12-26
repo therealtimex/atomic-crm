@@ -1,4 +1,4 @@
-import { email, required } from "ra-core";
+import { email, required, useRecordContext } from "ra-core";
 import type { FocusEvent, ClipboardEventHandler } from "react";
 import { useFormContext } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
@@ -13,16 +13,26 @@ import { SimpleFormIterator } from "@/components/admin/simple-form-iterator";
 
 import { isLinkedinUrl } from "../misc/isLinkedInUrl";
 import { useConfigurationContext } from "../root/ConfigurationContext";
-import type { Sale } from "../types";
-import { Avatar } from "./Avatar";
+import type { Contact, Sale } from "../types";
+import ImageEditorField from "../misc/ImageEditorField";
 import { AutocompleteCompanyInput } from "../companies/AutocompleteCompanyInput.tsx";
 
 export const ContactInputs = () => {
   const isMobile = useIsMobile();
+  const record = useRecordContext<Contact>();
 
   return (
     <div className="flex flex-col gap-2 p-1">
-      <Avatar />
+      <div className="flex">
+        <ImageEditorField
+          source="avatar"
+          type="avatar"
+          width={60}
+          height={60}
+          emptyText={`${record?.first_name?.charAt(0) || ""}${record?.last_name?.charAt(0) || ""}`}
+          linkPosition="bottom"
+        />
+      </div>
       <div className={`flex gap-6 ${isMobile ? "flex-col" : "flex-row"}`}>
         <div className="flex flex-col gap-10 flex-1">
           <ContactIdentityInputs />
