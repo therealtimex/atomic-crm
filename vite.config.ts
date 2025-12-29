@@ -14,7 +14,7 @@ function getLatestMigrationTimestamp() {
       encoding: "utf8",
     }).trim();
     return timestamp;
-  } catch (error) {
+  } catch (_error) {
     console.warn("Warning: Could not determine latest migration timestamp");
     return "unknown";
   }
