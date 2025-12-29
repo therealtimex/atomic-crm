@@ -1,13 +1,12 @@
 /**
  * MigrationBanner Component
  *
- * Displays a dismissible top banner when database migration is required.
+ * Displays a compact floating notification in top-right corner when migration is required.
  * Non-blocking: allows users to continue using the app while showing the reminder.
  */
 
 import { useState } from 'react';
-import { AlertTriangle, Copy, X } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertTriangle, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import {
@@ -20,7 +19,7 @@ interface MigrationBannerProps {
   status: MigrationStatus;
   /** Callback when banner is dismissed */
   onDismiss?: () => void;
-  /** Callback when user clicks "Learn More" to open modal */
+  /** Callback when user clicks to open modal */
   onLearnMore?: () => void;
 }
 
@@ -39,72 +38,60 @@ export function MigrationBanner({
     onDismiss?.();
   };
 
-  const handleCopyCommand = async () => {
-    const command = 'npx realtimex-crm migrate';
-    try {
-      await navigator.clipboard.writeText(command);
-      toast.success('Command copied to clipboard!', {
-        description: 'Paste it in your terminal to run the migration.',
-      });
-    } catch (error) {
-      console.error('Failed to copy command:', error);
-      toast.error('Failed to copy command', {
-        description: 'Please copy manually: npx realtimex-crm migrate',
-      });
+  const handleClick = () => {
+    if (onLearnMore) {
+      onLearnMore();
+    } else {
+      // Fallback: copy command
+      navigator.clipboard.writeText('npx realtimex-crm migrate');
+      toast.success('Command copied!');
     }
   };
 
   return (
-    <Alert className="relative border-l-4 border-l-yellow-500 bg-yellow-50 dark:bg-yellow-950/20">
-      <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-500" />
-      <AlertTitle className="text-yellow-900 dark:text-yellow-100">
-        Database Update Required (v{status.appVersion})
-      </AlertTitle>
-      <AlertDescription className="text-yellow-800 dark:text-yellow-200">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <span>
-            Your database schema needs to be updated to enable new features.
-          </span>
-          <div className="flex flex-wrap gap-2">
-            <Button
-              size="sm"
-              variant="outline"
-              className="border-yellow-600 text-yellow-900 hover:bg-yellow-100 dark:border-yellow-500 dark:text-yellow-100 dark:hover:bg-yellow-900/30"
-              onClick={handleCopyCommand}
-            >
-              <Copy className="mr-2 h-4 w-4" />
-              Copy Command
-            </Button>
-            {onLearnMore && (
+    <div className="fixed right-4 top-16 z-50 max-w-sm animate-in slide-in-from-top-5">
+      <div className="rounded-lg border border-yellow-500 bg-yellow-50 p-4 shadow-lg dark:bg-yellow-950/90 dark:border-yellow-600">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 flex-shrink-0 text-yellow-600 dark:text-yellow-500 mt-0.5" />
+          <div className="flex-1 space-y-2">
+            <div className="flex items-start justify-between gap-2">
+              <p className="text-sm font-medium text-yellow-900 dark:text-yellow-100">
+                Database Update Available
+              </p>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-5 w-5 -mr-1 -mt-1 text-yellow-900 hover:bg-yellow-100 dark:text-yellow-100 dark:hover:bg-yellow-900/30"
+                onClick={handleDismiss}
+              >
+                <X className="h-3 w-3" />
+                <span className="sr-only">Dismiss</span>
+              </Button>
+            </div>
+            <p className="text-xs text-yellow-800 dark:text-yellow-200">
+              Schema v{status.appVersion} is ready to install
+            </p>
+            <div className="flex gap-2">
               <Button
                 size="sm"
                 variant="default"
-                className="bg-yellow-600 text-white hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600"
-                onClick={onLearnMore}
+                className="h-7 text-xs bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600"
+                onClick={handleClick}
               >
-                Learn More
+                View Details
               </Button>
-            )}
-            <Button
-              size="sm"
-              variant="ghost"
-              className="text-yellow-900 hover:bg-yellow-100 dark:text-yellow-100 dark:hover:bg-yellow-900/30"
-              onClick={handleDismiss}
-            >
-              Remind Later
-            </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-7 text-xs text-yellow-900 hover:bg-yellow-100 dark:text-yellow-100 dark:hover:bg-yellow-900/30"
+                onClick={handleDismiss}
+              >
+                Later
+              </Button>
+            </div>
           </div>
         </div>
-      </AlertDescription>
-      <Button
-        size="icon"
-        variant="ghost"
-        className="absolute right-2 top-2 h-6 w-6 text-yellow-900 hover:bg-yellow-100 dark:text-yellow-100 dark:hover:bg-yellow-900/30"
-        onClick={handleDismiss}
-      >
-        <X className="h-4 w-4" />
-        <span className="sr-only">Dismiss</span>
-      </Button>
-    </Alert>
+      </div>
+    </div>
   );
 }

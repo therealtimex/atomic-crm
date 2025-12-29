@@ -87,8 +87,16 @@ export async function checkMigrationStatus(
   const appVersion = APP_VERSION;
   const dbVersion = await getDatabaseVersion(supabase);
 
+  console.log('[Migration Check]', {
+    appVersion,
+    dbVersion,
+    appVersionType: typeof appVersion,
+    dbVersionType: typeof dbVersion,
+  });
+
   // If we can't determine DB version, assume migration is needed
   if (dbVersion === null) {
+    console.log('[Migration Check] DB version is null - migration needed');
     return {
       needsMigration: true,
       appVersion,
@@ -99,6 +107,13 @@ export async function checkMigrationStatus(
 
   // Compare versions
   const comparison = compareSemver(appVersion, dbVersion);
+  console.log('[Migration Check] Version comparison:', {
+    appVersion,
+    dbVersion,
+    comparison,
+    result:
+      comparison > 0 ? 'app newer' : comparison < 0 ? 'db newer' : 'equal',
+  });
 
   if (comparison > 0) {
     // App version is newer than DB version
@@ -118,6 +133,7 @@ export async function checkMigrationStatus(
     };
   } else {
     // Versions match
+    console.log('[Migration Check] Versions match - no migration needed');
     return {
       needsMigration: false,
       appVersion,

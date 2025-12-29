@@ -148,15 +148,13 @@ const App = () => {
 
   return (
     <>
-      {/* Migration Banner */}
+      {/* Migration Notification (floating, top-right) */}
       {showMigrationBanner && migrationStatus && (
-        <div className="sticky top-0 z-50 w-full">
-          <MigrationBanner
-            status={migrationStatus}
-            onDismiss={() => setShowMigrationBanner(false)}
-            onLearnMore={() => setShowMigrationModal(true)}
-          />
-        </div>
+        <MigrationBanner
+          status={migrationStatus}
+          onDismiss={() => setShowMigrationBanner(false)}
+          onLearnMore={() => setShowMigrationModal(true)}
+        />
       )}
 
       {/* Migration Modal */}
