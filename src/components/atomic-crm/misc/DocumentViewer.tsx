@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, Download, FileText, FileCode, FileImage, FileAudio, FileVideo, FileArchive, Presentation } from "lucide-react";
+import { X, Download, FileText, FileCode, FileImage, FileAudio, FileVideo, FileArchive, Presentation, Mail } from "lucide-react";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import ReactMarkdown from "react-markdown";
 import { renderAsync } from "docx-preview";
@@ -8,6 +8,7 @@ import * as XLSX from "xlsx";
 import { PPTXViewer, parsePPTX } from "@kandiforge/pptx-renderer";
 import DOMPurify from "dompurify";
 import { Button } from "@/components/ui/button";
+import { EmailViewer } from "./EmailViewer";
 
 // Maximum file size: 50MB
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
@@ -28,6 +29,7 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
     const [docxBuffer, setDocxBuffer] = useState<ArrayBuffer | null>(null);
     const [xlsxSheets, setXlsxSheets] = useState<{ name: string; html: string }[]>([]);
     const [activeSheetIndex, setActiveSheetIndex] = useState(0);
+    const [emlBuffer, setEmlBuffer] = useState<ArrayBuffer | null>(null);
     const docxRef = useRef<HTMLDivElement>(null);
 
     // Effect for DOCX content rendering
@@ -58,6 +60,7 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
             setContent(null);
             setError(null);
             setLoading(false);
+            setEmlBuffer(null);
             return;
         }
 
@@ -122,7 +125,11 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
             };
 
             try {
-                if (extension === "docx") {
+                if (extension === "eml") {
+                    const buffer = await getArrayBuffer();
+                    setEmlBuffer(buffer);
+                    setLoading(false);
+                } else if (extension === "docx") {
                     const buffer = await getArrayBuffer();
                     setDocxBuffer(buffer);
                     setContent(<div ref={docxRef} className="p-4 bg-white dark:bg-slate-900 min-h-full" />);
@@ -299,7 +306,15 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
                                 </Button>
                             </div>
                         )}
-                        {!loading && !error && (xlsxSheets.length > 0 ? renderXlsx() : content)}
+                        {!loading && !error && (
+                            emlBuffer ? (
+                                <EmailViewer content={emlBuffer} onError={setError} />
+                            ) : xlsxSheets.length > 0 ? (
+                                renderXlsx()
+                            ) : (
+                                content
+                            )
+                        )}
                     </div>
                 </Dialog.Content>
             </Dialog.Portal>
@@ -335,6 +350,8 @@ const FileIcon = ({ extension, className }: { extension?: string; className?: st
         case "pptx":
         case "ppt":
             return <Presentation className={className} />;
+        case "eml":
+            return <Mail className={className} />;
         default:
             return <FileArchive className={className} />;
     }
@@ -360,6 +377,7 @@ const getMimeTypeFromExtension = (ext?: string): string => {
         markdown: "text/markdown",
         mp4: "video/mp4",
         mp3: "audio/mpeg",
+        eml: "message/rfc822",
     };
     return ext ? mimeTypes[ext] || "application/octet-stream" : "application/octet-stream";
 };

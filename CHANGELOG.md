@@ -5,6 +5,12 @@ All notable changes to Atomic CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Attachments**: Added support for viewing .eml (email) files with full email preview including headers, HTML/plain text body, and embedded attachments.
+
 ## [0.26.0] - 2025-12-28
 
 ### Added
