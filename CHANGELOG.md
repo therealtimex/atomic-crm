@@ -5,6 +5,117 @@ All notable changes to Atomic CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.24.0] - 2025-12-26
+
+### Added
+
+- **Activity Log**: Replaced 'Load more' button with proper pagination for better performance and usability.
+
+## [0.23.0] - 2025-12-26
+
+### Added
+
+- **UI**: Extended markdown rendering support to dashboard components and activity logs.
+
+## [0.22.0] - 2025-12-26
+
+### Added
+
+- **Notes**: Added markdown rendering support for notes across the application.
+
+## [0.21.0] - 2025-12-26
+
+### Changed
+
+- **Database**: Standardized timestamp columns across all database tables for consistency.
+
+## [0.20.1] - 2025-12-26
+
+### Fixed
+
+- **Release**: Internal version bump for deployment synchronization.
+
+## [0.20.0] - 2025-12-26
+
+### Added
+
+- **Integrations**: Added task-related scopes to the API key creation dialog.
+
+### Fixed
+
+- **Attachments**: Fixed attachment upload functionality and made attachments clickable in the UI.
+
+## [0.19.0] - 2025-12-26
+
+### Added
+
+- **API**: New dedicated `/api-v1-tasks` endpoint for full CRUD operations on tasks.
+
+## [0.18.0] - 2025-12-26
+
+### Added
+
+- **API**: Added support for `company_note` and `task_note` in the activities API.
+
+## [0.17.1] - 2025-12-26
+
+### Fixed
+
+- **Contact**: Restored missing `email_fts` and `phone_fts` columns in the `contacts_summary` view.
+
+## [0.17.0] - 2025-12-26
+
+### Added
+
+- **Contact**: Enabled avatar editing for contacts.
+
+## [0.16.0] - 2025-12-26
+
+### Changed
+
+- **Contact**: Made the contact `last_name` field optional.
+
+## [0.15.0] - 2025-12-26
+
+### Added
+
+- **Company**: Exposed more company configuration fields and reorganized the qualification status location.
+
+## [0.14.3] - 2025-12-26
+
+### Fixed
+
+- **Code Quality**: Resolved linting errors in `ApiKeysTab.tsx`.
+
+## [0.14.2] - 2025-12-26
+
+### Added
+
+- **Integrations**: Enhanced integration tools with unmasked API key copying and webhook editing.
+
+## [0.14.1] - 2025-12-26
+
+### Fixed
+
+- **Tasks**: Ensured dashboard tasks behave consistently with the tasks table view.
+
+## [0.14.0] - 2025-12-26
+
+### Added
+
+- **Tasks**: Major enhancement of the tasks module including full CRUD, notes, activity log, and a dedicated summary view.
+
+## [0.13.8] - 2025-12-25
+
+### Fixed
+
+- **Database**: Resolved ambiguous column reference in the heartbeat function migration.
+
+### Changed
+
+- **CI/CD**: Improved publish workflow reliability and added a release guide.
+
+
 ## [0.13.7] - 2025-12-25
 
 ### Fixed
