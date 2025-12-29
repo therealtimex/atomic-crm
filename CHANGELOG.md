@@ -5,6 +5,20 @@ All notable changes to Atomic CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [0.29.0] - 2025-12-29
+
+### Added
+
+- **Infrastructure**: Migrated activities table to standard distributed task queue schema with support for atomic task claiming, stale lock recovery, and retry tracking.
+- **Database**: Added new RPC functions for distributed task processing: `claim_task_compatible`, `claim_next_task_standard`, `complete_task_standard`, and `fail_task_standard`.
+- **Database**: Added fields to activities table: `old_data`, `completed_at`, `error_message`, `attempted_by`, `retry_count`, `result`, and `machine_id` for distributed worker coordination.
+
+### Fixed
+
+- **Deployment**: Fixed ingest-activity edge function deployment configuration to enable file upload functionality.
+
 ## [0.28.0] - 2025-12-28
 
 ### Changed
