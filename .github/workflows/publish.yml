@@ -143,12 +143,15 @@ jobs:
 
           # Create new version section after [Unreleased]
           # This keeps [Unreleased] at the top and adds the new version below it
-          sed -i.bak "/## \[Unreleased\]/a\\
-\\
-## [$NEW_VERSION] - $TODAY" CHANGELOG.md
-
-          # Remove backup file
-          rm -f CHANGELOG.md.bak
+          awk -v version="$NEW_VERSION" -v date="$TODAY" '
+            /^## \[Unreleased\]/ {
+              print $0
+              print ""
+              print "## [" version "] - " date
+              next
+            }
+            { print }
+          ' CHANGELOG.md > CHANGELOG.md.tmp && mv CHANGELOG.md.tmp CHANGELOG.md
 
           echo "✅ Updated CHANGELOG.md with version $NEW_VERSION"
 
