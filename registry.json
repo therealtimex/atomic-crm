@@ -425,6 +425,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/misc/EmailViewer.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/misc/DocumentViewer.tsx",
           "type": "registry:component"
         },
