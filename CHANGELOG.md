@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.31.0] - 2025-12-29
+
+### Added
+
+- **Email Validation**: Self-adaptive email validation system with smart looping that validates all contacts regardless of database size.
+- **Email Validation**: Priority-based validation that processes active contacts (recently seen) first for maximum value.
+- **Email Validation**: Dual-tier validation strategy using free email-validator-js library with optional ZeroBounce API fallback for highest accuracy.
+- **Email Validation**: Three-level rate limiting (email-to-email, batch-to-batch, max iterations) to prevent API throttling and SMTP blacklisting.
+- **Email Validation**: Automatic ContactNotes creation when validation status changes, providing full audit trail of validation events.
+- **Email Validation**: Session-based distributed locking using validation_sessions table to prevent concurrent validation loops.
+- **Email Validation**: Self-adaptive scheduling that auto-restarts validation cycles when new contacts are added, minimizing validation lag.
+- **LinkedIn Validation**: Edge function for validating LinkedIn profile URLs with heartbeat tracking.
+- **Database**: New `validation_sessions` table for tracking validation progress with exclusion constraints to prevent overlapping loops.
+- **Database**: Added `btree_gist` extension to support exclusion constraints on validation sessions.
+- **Cron Jobs**: Daily automated email validation scheduled via pg_cron with configurable batch sizes and rate limits.
+- **Documentation**: Comprehensive guides for email validation system, concurrency control, scheduling modes, and audit trails.
+
+### Changed
+
+- **Email Validation**: Consolidated v1 and v2 validation functions into single canonical implementation without version suffixes.
+- **Email Validation**: Configuration moved from query parameters to JSON request body for better flexibility.
+- **Contacts Schema**: Added `external_heartbeat_status`, `external_heartbeat_checked_at`, and `external_heartbeat_details` for validation tracking.
+
+### Fixed
+
+- **Email Validation**: Fixed critical distributed lock bug where advisory locks were session-scoped and didn't persist across HTTP requests.
+- **Email Validation**: Removed invalid finally block that attempted to release advisory locks in edge functions.
+- **Email Validation**: Fixed session tracking to properly complete sessions in all exit paths (success, failure, max iterations).
+
+### Removed
+
+- **Migrations**: Removed obsolete advisory_locks migration that caused SQLSTATE 42725 errors due to function name conflicts.
+
 ## [0.29.0] - 2025-12-29
 
 ### Added
