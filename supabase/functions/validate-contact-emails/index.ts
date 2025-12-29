@@ -13,6 +13,7 @@ import { EmailValidator } from "npm:email-validator-js@1.0.0";
  * - Priority-based validation (high-value contacts first)
  * - Throttle protection (configurable delays)
  * - 100% coverage guarantee
+ * - Distributed locking via validation_sessions table
  */
 
 interface ValidationConfig {
@@ -197,27 +198,87 @@ async function triggerNextBatch(
   }
 }
 
+/**
+ * Mark session as completed or failed
+ */
+async function completeSession(sessionId: string, status: 'completed' | 'failed', message?: string) {
+  if (!sessionId) return;
+  console.log(`Completing session ${sessionId} with status: ${status}`);
+  
+  const { error } = await supabaseAdmin.rpc('complete_validation_session', {
+    p_session_id: sessionId,
+    p_status: status,
+    p_error_message: message
+  });
+  
+  if (error) {
+    console.error('Failed to complete session:', error);
+  }
+}
+
+/**
+ * Update session progress
+ */
+async function updateSession(sessionId: string, validatedCount: number, iteration: number) {
+  if (!sessionId) return;
+  
+  const { error } = await supabaseAdmin.rpc('update_validation_session', {
+    p_session_id: sessionId,
+    p_validated_count: validatedCount,
+    p_iteration: iteration
+  });
+  
+  if (error) {
+    console.error('Failed to update session:', error);
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: corsHeaders });
   }
 
   const startTime = Date.now();
+  let sessionId: string | undefined;
 
   try {
     // Parse configuration from query params and body
     const url = new URL(req.url);
     const iteration = parseInt(url.searchParams.get('iteration') || '0');
+    
+    const body = req.method === 'POST' ? await req.json().catch(() => ({})) : {};
+    const config: ValidationConfig = {
+      ...DEFAULT_CONFIG,
+      ...body.config,
+    };
 
-    // 1. Check/create validation session (prevent concurrent validation loops)
-    // Only iteration 0 creates session, subsequent iterations reuse it
-    let sessionId: string;
+    console.log(`
+=== Validation Iteration ${iteration} ===`);
+    console.log('Config:', config);
 
+    // 1. Check queue size FIRST
+    const queueSize = await getValidationQueueSize(config);
+    console.log(`Queue size: ${queueSize} contacts need validation`);
+
+    // 2. Manage Session (Prevent concurrent loops)
     if (iteration === 0) {
+      if (queueSize === 0) {
+        console.log('✅ No contacts need validation, skipping session creation');
+        return new Response(
+          JSON.stringify({
+            success: true,
+            message: 'All contacts validated',
+            iteration,
+            queueSize: 0,
+          }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
       // Try to start new session
-      const { data: newSession, error: sessionError } = await supabaseAdmin
+      const { data: newSessionId, error: sessionError } = await supabaseAdmin
         .rpc('start_validation_session', {
-          p_total_contacts: 0, // Will update later
+          p_total_contacts: queueSize,
           p_config: config
         });
 
@@ -238,7 +299,7 @@ Deno.serve(async (req) => {
         throw sessionError;
       }
 
-      sessionId = newSession;
+      sessionId = newSessionId;
       console.log(`✅ Validation session created: ${sessionId}`);
     } else {
       // Continuation iteration - get session ID from query param
@@ -249,18 +310,11 @@ Deno.serve(async (req) => {
       console.log(`🔄 Continuing session: ${sessionId} (iteration ${iteration})`);
     }
 
-    const body = req.method === 'POST' ? await req.json().catch(() => ({})) : {};
-    const config: ValidationConfig = {
-      ...DEFAULT_CONFIG,
-      ...body.config,
-    };
-
-    console.log(`\n=== Validation Iteration ${iteration} ===`);
-    console.log('Config:', config);
-
     // Safety check: prevent infinite loops
     if (iteration >= config.maxIterations) {
-      console.warn(`⚠️ Reached max iterations (${config.maxIterations}), stopping loop`);
+      const msg = `Reached max iterations (${config.maxIterations}), stopping loop`;
+      console.warn(`⚠️ ${msg}`);
+      if (sessionId) await completeSession(sessionId, 'failed', msg);
       return new Response(
         JSON.stringify({
           success: false,
@@ -271,12 +325,10 @@ Deno.serve(async (req) => {
       );
     }
 
-    // 1. Check queue size
-    const queueSize = await getValidationQueueSize(config);
-    console.log(`Queue size: ${queueSize} contacts need validation`);
-
+    // Check queue again (for iteration > 0)
     if (queueSize === 0) {
       console.log('✅ No contacts need validation, exiting loop');
+      if (sessionId) await completeSession(sessionId, 'completed', 'All contacts validated');
       return new Response(
         JSON.stringify({
           success: true,
@@ -288,9 +340,8 @@ Deno.serve(async (req) => {
       );
     }
 
-    // 2. Fetch batch with priority (recent activity first)
+    // 3. Fetch batch with priority (recent activity first)
     const staleDate = new Date(Date.now() - config.daysStale * 86400000).toISOString();
-    const priorityDate = new Date(Date.now() - config.priorityThreshold * 86400000).toISOString();
 
     const { data: contacts, error: fetchError } = await supabaseAdmin
       .from('contacts')
@@ -306,6 +357,7 @@ Deno.serve(async (req) => {
 
     if (!contacts || contacts.length === 0) {
       console.log('No contacts found in this batch, exiting');
+      if (sessionId) await completeSession(sessionId, 'completed', 'Batch empty');
       return new Response(
         JSON.stringify({
           success: true,
@@ -319,7 +371,7 @@ Deno.serve(async (req) => {
 
     console.log(`Processing ${contacts.length} contacts (${queueSize - contacts.length} remaining)`);
 
-    // 3. Validate emails with throttling
+    // 4. Validate emails with throttling
     const results: EmailValidationResult[] = [];
     for (const contact of contacts) {
       if (!contact.email) continue;
@@ -331,7 +383,7 @@ Deno.serve(async (req) => {
       await new Promise(resolve => setTimeout(resolve, config.delayBetweenEmails));
     }
 
-    // 4. Fetch current validation status (to detect changes)
+    // 5. Fetch current validation status (to detect changes)
     const contactsWithStatus = await Promise.all(
       contacts.map(async (contact) => {
         const { data } = await supabaseAdmin
@@ -343,7 +395,7 @@ Deno.serve(async (req) => {
       })
     );
 
-    // 5. Update database and create notes for status changes
+    // 6. Update database
     const updates = contactsWithStatus.map((contact, index) => {
       const result = results[index];
       return supabaseAdmin
@@ -359,53 +411,36 @@ Deno.serve(async (req) => {
 
     await Promise.all(updates);
 
-    // 6. Create contact notes for status changes
+    // 7. Create contact notes for status changes
     const notesToCreate = contactsWithStatus
       .map((contact, index) => {
         const result = results[index];
         const oldStatus = contact.current_status;
         const newStatus = result.status;
 
-        // Only create note if status changed
-        if (oldStatus === newStatus) {
-          return null;
-        }
+        if (oldStatus === newStatus) return null;
 
-        // Generate note text based on status change
         let emoji = '📧';
         let text = '';
 
         if (!oldStatus) {
-          // First validation
           emoji = '✨';
           text = `Email validation completed: ${newStatus}`;
-          if (result.reason) {
-            text += ` (${result.reason})`;
-          }
+          if (result.reason) text += ` (${result.reason})`;
         } else if (newStatus === 'valid' && oldStatus !== 'valid') {
-          // Status improved
           emoji = '✅';
           text = `Email validation improved: ${oldStatus} → ${newStatus}`;
         } else if (newStatus === 'invalid') {
-          // Status degraded to invalid
           emoji = '❌';
           text = `Email validation failed: ${oldStatus} → ${newStatus}`;
-          if (result.reason) {
-            text += ` - ${result.reason}`;
-          }
+          if (result.reason) text += ` - ${result.reason}`;
         } else if (newStatus === 'risky') {
-          // Status degraded to risky
           emoji = '⚠️';
           text = `Email validation warning: ${oldStatus} → ${newStatus}`;
-          if (result.reason) {
-            text += ` - ${result.reason}`;
-          }
+          if (result.reason) text += ` - ${result.reason}`;
         } else {
-          // Generic status change
           text = `Email validation status changed: ${oldStatus} → ${newStatus}`;
-          if (result.reason) {
-            text += ` (${result.reason})`;
-          }
+          if (result.reason) text += ` (${result.reason})`;
         }
 
         return {
@@ -413,12 +448,11 @@ Deno.serve(async (req) => {
           text: `${emoji} ${text}`,
           date: new Date().toISOString(),
           sales_id: null, // System-generated note
-          status: 'cold', // Use existing status value for system notes
+          status: 'cold',
         };
       })
       .filter(note => note !== null);
 
-    // Batch insert notes if any status changes occurred
     if (notesToCreate.length > 0) {
       const { error: notesError } = await supabaseAdmin
         .from('contactNotes')
@@ -426,7 +460,6 @@ Deno.serve(async (req) => {
 
       if (notesError) {
         console.error('Failed to create contact notes:', notesError);
-        // Don't fail the entire batch if note creation fails
       } else {
         console.log(`Created ${notesToCreate.length} contact notes for status changes`);
       }
@@ -444,27 +477,32 @@ Deno.serve(async (req) => {
     const elapsed = Date.now() - startTime;
     console.log(`Batch complete: ${JSON.stringify(summary)} (${elapsed}ms)`);
 
-    // 5. Decide: continue or stop?
+    // 8. Update session progress
+    if (sessionId) {
+      await updateSession(sessionId, contacts.length, iteration);
+    }
+
+    // 9. Decide: continue or stop?
     const remaining = queueSize - contacts.length;
 
     if (remaining > 0) {
       console.log(`📊 Progress: ${contacts.length}/${queueSize} (${Math.round(contacts.length/queueSize*100)}%)`);
       console.log(`🔄 Triggering next batch for ${remaining} remaining contacts...`);
 
-      // Get Supabase config for self-triggering
       const supabaseUrl = Deno.env.get('SUPABASE_URL');
       const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
-      if (supabaseUrl && serviceKey) {
-        // Non-blocking: trigger next batch in background
+      if (supabaseUrl && serviceKey && sessionId) {
         triggerNextBatch(iteration, sessionId, config, supabaseUrl, serviceKey);
       } else {
-        console.warn('⚠️ Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY, cannot self-trigger');
+        console.warn('⚠️ Missing URL/Key or SessionID, cannot self-trigger');
+        if (sessionId) await completeSession(sessionId, 'failed', 'Self-trigger failed: missing config');
       }
     } else {
       console.log('✅ All contacts validated!');
+      if (sessionId) await completeSession(sessionId, 'completed', 'All contacts validated');
 
-      // SELF-ADAPTIVE: Check if new work arrived while we were validating
+      // SELF-ADAPTIVE: Check if new work arrived
       const newQueueSize = await getValidationQueueSize(config);
 
       if (newQueueSize > 0) {
@@ -475,11 +513,17 @@ Deno.serve(async (req) => {
         const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
         if (supabaseUrl && serviceKey) {
-          // Wait a bit before starting new cycle (give system a breather)
+          // Wait a bit before starting new cycle
           await new Promise(resolve => setTimeout(resolve, 60000)); // 1 minute pause
-
-          // Trigger new cycle (iteration 0)
-          await triggerNextBatch(-1, sessionId, config, supabaseUrl, serviceKey); // -1 becomes 0
+          
+          // NOTE: Triggering iteration -1 (which becomes 0) to start NEW session
+          // We pass 'undefined' for sessionId because iteration 0 will create a new one
+          const url = `${supabaseUrl}/functions/v1/validate-contact-emails?iteration=0`;
+           await fetch(url, {
+              method: 'POST',
+              headers: { 'Authorization': `Bearer ${serviceKey}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ config }),
+           }).catch(err => console.error('Failed to trigger next cycle:', err));
         }
       } else {
         console.log('💤 No new work, entering idle state until next cron');
@@ -502,22 +546,11 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     console.error('Validation error:', error);
+    if (sessionId) await completeSession(sessionId, 'failed', error.message);
+    
     return new Response(
       JSON.stringify({ error: error.message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
-  } finally {
-    // Release lock on exit (cleanup)
-    // Note: Advisory lock auto-releases when session ends, but explicit is better
-    if (iteration === 0) {
-      // Only release on first iteration (root caller)
-      // Self-triggered iterations share the same lock
-      try {
-        await supabaseAdmin.rpc('pg_advisory_unlock', { lock_id: 123456789 });
-        console.log('🔓 Lock released');
-      } catch (unlockError) {
-        console.error('Failed to release lock:', unlockError);
-      }
-    }
   }
 });

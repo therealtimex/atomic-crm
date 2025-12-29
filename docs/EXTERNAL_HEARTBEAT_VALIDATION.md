@@ -132,9 +132,15 @@ curl -X POST \
 ```sql
 -- Manually trigger email validation
 SELECT net.http_post(
-  url := current_setting('app.settings.supabase_url', true) || '/functions/v1/validate-contact-emails?batch_size=5',
+  url := current_setting('app.settings.supabase_url', true) || '/functions/v1/validate-contact-emails?iteration=0',
   headers := jsonb_build_object(
-    'Authorization', 'Bearer ' || current_setting('app.settings.supabase_service_role_key', true)
+    'Authorization', 'Bearer ' || current_setting('app.settings.supabase_service_role_key', true),
+    'Content-Type', 'application/json'
+  )::jsonb,
+  body := jsonb_build_object(
+    'config', jsonb_build_object(
+      'batchSize', 5
+    )
   )::jsonb
 );
 ```
@@ -190,8 +196,16 @@ SELECT cron.alter_job(
   schedule := '0 2 * * *',
   command := $$
     SELECT net.http_post(
-      url := current_setting('app.settings.supabase_url', true) || '/functions/v1/validate-contact-emails?batch_size=100',
-      ...
+      url := current_setting('app.settings.supabase_url', true) || '/functions/v1/validate-contact-emails?iteration=0',
+      headers := jsonb_build_object(
+        'Authorization', 'Bearer ' || current_setting('app.settings.supabase_service_role_key', true),
+        'Content-Type', 'application/json'
+      )::jsonb,
+      body := jsonb_build_object(
+        'config', jsonb_build_object(
+          'batchSize', 100
+        )
+      )::jsonb
     );
   $$
 );
