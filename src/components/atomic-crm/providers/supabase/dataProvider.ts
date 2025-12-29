@@ -341,6 +341,28 @@ export const dataProvider = withLifecycleCallbacks(
       },
     },
     {
+      resource: "companyNotes",
+      beforeSave: async (data: ContactNote, _, __) => {
+        if (data.attachments) {
+          for (const fi of data.attachments) {
+            await uploadToBucket(fi);
+          }
+        }
+        return data;
+      },
+    },
+    {
+      resource: "taskNotes",
+      beforeSave: async (data: ContactNote, _, __) => {
+        if (data.attachments) {
+          for (const fi of data.attachments) {
+            await uploadToBucket(fi);
+          }
+        }
+        return data;
+      },
+    },
+    {
       resource: "sales",
       beforeSave: async (data: Sale, _, __) => {
         if (data.avatar) {

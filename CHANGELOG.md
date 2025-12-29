@@ -5,6 +5,22 @@ All notable changes to Atomic CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.25.0] - 2025-12-28
+
+### Added
+
+- **Attachments**: Built-in document viewer modal with support for multiple file formats including PDF, DOCX, XLSX, PPTX, Markdown, images, video, and audio files.
+- **Security**: Added XSS protection for Excel file previews using DOMPurify sanitization.
+- **Performance**: Added 50MB file size limit validation to prevent browser crashes from large files.
+
+### Fixed
+
+- **Attachments**: Fixed Company notes and Task notes to properly upload attachments to Supabase Storage instead of storing temporary blob URLs.
+- **Security**: Fixed XSS vulnerability in XLSX HTML rendering that could allow malicious formulas to execute scripts.
+- **Performance**: Fixed memory leak in DOCX file rendering where large ArrayBuffers persisted in memory after rendering.
+- **Performance**: Fixed race condition when rapidly switching between different attachments.
+- **Attachments**: Improved blob URL handling for file previews with proper fallback mechanisms.
+
 ## [0.24.0] - 2025-12-26
 
 ### Added
