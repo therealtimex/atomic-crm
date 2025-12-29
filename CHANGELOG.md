@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Attachments**: Made attachment filenames directly clickable to open the document viewer for improved UX.
+
 ## [0.27.0] - 2025-12-28
 
 ### Added

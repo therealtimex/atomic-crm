@@ -41,12 +41,16 @@ export const NoteAttachments = ({ note }: { note: ContactNote | DealNote }) => {
       {otherAttachments.length > 0 &&
         otherAttachments.map((attachment: AttachmentNote, index: number) => (
           <div key={index} className="flex items-center justify-between gap-2 p-2 hover:bg-muted/50 rounded-md transition-colors group">
-            <div className="flex items-center gap-2 overflow-hidden">
+            <button
+              onClick={() => setSelectedAttachment(attachment)}
+              className="flex items-center gap-2 overflow-hidden cursor-pointer text-left hover:text-primary transition-colors flex-1 min-w-0"
+              title={`View ${attachment.title}`}
+            >
               <Paperclip className="w-4 h-4 text-muted-foreground shrink-0" />
               <span className="text-sm truncate font-medium">
                 {attachment.title}
               </span>
-            </div>
+            </button>
             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
               <Button
                 variant="ghost"
