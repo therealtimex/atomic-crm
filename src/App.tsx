@@ -1,7 +1,14 @@
-import { useState } from "react";
-import { CRM } from "@/components/atomic-crm/root/CRM";
-import { SupabaseSetupWizard } from "@/components/atomic-crm/setup/SupabaseSetupWizard";
-import { isSupabaseConfigured } from "@/lib/supabase-config";
+import { useState, useEffect } from 'react';
+import { CRM } from '@/components/atomic-crm/root/CRM';
+import { SupabaseSetupWizard } from '@/components/atomic-crm/setup/SupabaseSetupWizard';
+import { isSupabaseConfigured } from '@/lib/supabase-config';
+import { MigrationBanner, MigrationModal } from '@/components/atomic-crm/migration';
+import {
+  checkMigrationStatus,
+  isMigrationReminderDismissed,
+  type MigrationStatus,
+} from '@/lib/migration-check';
+import { supabase } from '@/components/atomic-crm/providers/supabase/supabase';
 
 /**
  * Application entry point
@@ -97,6 +104,32 @@ const App = () => {
     return !configured;
   });
 
+  // Migration state
+  const [migrationStatus, setMigrationStatus] = useState<MigrationStatus | null>(null);
+  const [showMigrationBanner, setShowMigrationBanner] = useState(false);
+  const [showMigrationModal, setShowMigrationModal] = useState(false);
+
+  // Check migration status after setup is complete
+  useEffect(() => {
+    if (needsSetup) return;
+
+    const checkMigration = async () => {
+      try {
+        const status = await checkMigrationStatus(supabase);
+        setMigrationStatus(status);
+
+        // Show banner if migration is needed and not recently dismissed
+        if (status.needsMigration && !isMigrationReminderDismissed()) {
+          setShowMigrationBanner(true);
+        }
+      } catch (error) {
+        console.error('Failed to check migration status:', error);
+      }
+    };
+
+    checkMigration();
+  }, [needsSetup]);
+
   // If Supabase is not configured, only show the setup wizard
   if (needsSetup) {
     return (
@@ -114,14 +147,37 @@ const App = () => {
   }
 
   return (
-    <CRM
-      companyLifecycleStages={companyLifecycleStages}
-      companyTypes={companyTypes}
-      companyQualificationStatuses={companyQualificationStatuses}
-      companyRevenueRanges={companyRevenueRanges}
-      externalHeartbeatStatuses={externalHeartbeatStatuses}
-      internalHeartbeatStatuses={internalHeartbeatStatuses}
-    />
+    <>
+      {/* Migration Banner */}
+      {showMigrationBanner && migrationStatus && (
+        <div className="sticky top-0 z-50 w-full">
+          <MigrationBanner
+            status={migrationStatus}
+            onDismiss={() => setShowMigrationBanner(false)}
+            onLearnMore={() => setShowMigrationModal(true)}
+          />
+        </div>
+      )}
+
+      {/* Migration Modal */}
+      {migrationStatus && (
+        <MigrationModal
+          open={showMigrationModal}
+          onOpenChange={setShowMigrationModal}
+          status={migrationStatus}
+        />
+      )}
+
+      {/* Main CRM App */}
+      <CRM
+        companyLifecycleStages={companyLifecycleStages}
+        companyTypes={companyTypes}
+        companyQualificationStatuses={companyQualificationStatuses}
+        companyRevenueRanges={companyRevenueRanges}
+        externalHeartbeatStatuses={externalHeartbeatStatuses}
+        internalHeartbeatStatuses={internalHeartbeatStatuses}
+      />
+    </>
   );
 };
 

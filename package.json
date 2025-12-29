@@ -15,12 +15,14 @@
   },
   "bin": {
     "create-realtimex-crm": "./bin/create-realtimex-crm.js",
-    "realtimex-crm": "./bin/realtimex-crm.js"
+    "realtimex-crm": "./bin/realtimex-crm.js",
+    "realtimex-crm-migrate": "./bin/realtimex-crm-migrate.js"
   },
   "files": [
     "dist",
     "bin",
     "src",
+    "scripts",
     "supabase/",
     "public",
     "README.md",
@@ -69,6 +71,7 @@
     "ghpages:deploy": "node ./scripts/ghpages-deploy.mjs",
     "supabase:remote:init": "node ./scripts/supabase-remote-init.mjs",
     "supabase:configure:cron": "bash ./scripts/configure-webhook-cron.sh",
+    "migration:create": "node ./scripts/create-migration.mjs",
     "prepare": "husky"
   },
   "dependencies": {

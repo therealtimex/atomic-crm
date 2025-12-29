@@ -123,13 +123,42 @@ jobs:
             echo "skip_publish=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Update CHANGELOG.md
+        if: steps.new_version.outputs.skip_publish != 'true'
+        run: |
+          NEW_VERSION="${{ steps.new_version.outputs.version }}"
+          TODAY=$(date +%Y-%m-%d)
+
+          # Check if CHANGELOG.md exists
+          if [ ! -f CHANGELOG.md ]; then
+            echo "::warning::CHANGELOG.md not found, skipping update"
+            exit 0
+          fi
+
+          # Check if [Unreleased] section exists
+          if ! grep -q "## \[Unreleased\]" CHANGELOG.md; then
+            echo "::warning::[Unreleased] section not found in CHANGELOG.md, skipping update"
+            exit 0
+          fi
+
+          # Create new version section after [Unreleased]
+          # This keeps [Unreleased] at the top and adds the new version below it
+          sed -i.bak "/## \[Unreleased\]/a\\
+\\
+## [$NEW_VERSION] - $TODAY" CHANGELOG.md
+
+          # Remove backup file
+          rm -f CHANGELOG.md.bak
+
+          echo "✅ Updated CHANGELOG.md with version $NEW_VERSION"
+
       - name: Build
         run: npm run build
 
       - name: Commit and Tag
         if: steps.new_version.outputs.skip_publish != 'true'
         run: |
-          git add package.json package-lock.json
+          git add package.json package-lock.json CHANGELOG.md
           git commit -m "chore: bump version to ${{ steps.new_version.outputs.version }} [skip ci]"
           git tag "v${{ steps.new_version.outputs.version }}"
 

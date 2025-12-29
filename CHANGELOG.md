@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Migration UX**: Progressive migration detection system with non-blocking top banner notification when database updates are needed.
+- **Migration UX**: Interactive migration modal with step-by-step instructions for running database migrations via CLI.
+- **Migration UX**: New `npx realtimex-crm migrate` command that automates the migration process (downloads code, links to Supabase, pushes migrations, deploys functions).
+- **Migration UX**: Smart reminder system that dismisses for 24 hours if user defers migration.
+- **Database**: New `schema_migrations` table to track database version and applied migrations.
+- **Migration Detection**: Automatic schema version comparison on app startup to detect when migrations are needed.
+- **Developer Tools**: Version check utility with semantic versioning support for detecting migration requirements.
+- **Developer Tools**: Automatic version injection from package.json into app code via Vite (no manual version updates needed).
+- **Developer Tools**: New `npm run migration:create` command to create migrations with auto-injected version tracking.
+
 ## [0.31.0] - 2025-12-29
 
 ### Added

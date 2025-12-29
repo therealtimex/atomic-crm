@@ -441,6 +441,18 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/migration/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/migration/MigrationModal.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/migration/MigrationBanner.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/login/StartPage.tsx",
           "type": "registry:component"
         },
