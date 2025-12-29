@@ -13,6 +13,13 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 export const APP_VERSION = import.meta.env.VITE_APP_VERSION;
 
 /**
+ * Get the latest migration timestamp bundled with this app
+ * Format: YYYYMMDDHHMMSS (e.g., "20251229213735")
+ */
+export const LATEST_MIGRATION_TIMESTAMP =
+  import.meta.env.VITE_LATEST_MIGRATION_TIMESTAMP;
+
+/**
  * Compare two semantic versions (e.g., "0.31.0" vs "0.30.0")
  * Returns:
  *   1 if v1 > v2
@@ -35,15 +42,23 @@ export function compareSemver(v1: string, v2: string): number {
 }
 
 /**
- * Get the latest applied migration version from the database
+ * Database migration info
  */
-export async function getDatabaseVersion(
+export interface DatabaseMigrationInfo {
+  version: string | null;
+  latestMigrationTimestamp: string | null;
+}
+
+/**
+ * Get the latest applied migration info from the database
+ */
+export async function getDatabaseMigrationInfo(
   supabase: SupabaseClient,
-): Promise<string | null> {
+): Promise<DatabaseMigrationInfo> {
   try {
     const { data, error } = await supabase
       .from('schema_migrations')
-      .select('version')
+      .select('version, latest_migration_timestamp')
       .order('applied_at', { ascending: false })
       .limit(1)
       .maybeSingle();
@@ -51,13 +66,16 @@ export async function getDatabaseVersion(
     if (error) {
       // Table might not exist yet (first run)
       console.warn('schema_migrations table not found:', error.message);
-      return null;
+      return { version: null, latestMigrationTimestamp: null };
     }
 
-    return data?.version || null;
+    return {
+      version: data?.version || null,
+      latestMigrationTimestamp: data?.latest_migration_timestamp || null,
+    };
   } catch (error) {
-    console.error('Error checking database version:', error);
-    return null;
+    console.error('Error checking database migration info:', error);
+    return { version: null, latestMigrationTimestamp: null };
   }
 }
 
@@ -78,6 +96,10 @@ export interface MigrationStatus {
 /**
  * Check if database migration is needed
  *
+ * Uses timestamp comparison for accurate migration detection:
+ * - Compares app's latest migration timestamp with DB's latest migration timestamp
+ * - If app timestamp > DB timestamp → new migrations available
+ *
  * @param supabase - Supabase client instance
  * @returns Promise<MigrationStatus>
  */
@@ -85,59 +107,65 @@ export async function checkMigrationStatus(
   supabase: SupabaseClient,
 ): Promise<MigrationStatus> {
   const appVersion = APP_VERSION;
-  const dbVersion = await getDatabaseVersion(supabase);
+  const appMigrationTimestamp = LATEST_MIGRATION_TIMESTAMP;
+  const dbInfo = await getDatabaseMigrationInfo(supabase);
 
   console.log('[Migration Check]', {
     appVersion,
-    dbVersion,
-    appVersionType: typeof appVersion,
-    dbVersionType: typeof dbVersion,
+    appMigrationTimestamp,
+    dbVersion: dbInfo.version,
+    dbMigrationTimestamp: dbInfo.latestMigrationTimestamp,
   });
 
-  // If we can't determine DB version, assume migration is needed
-  if (dbVersion === null) {
-    console.log('[Migration Check] DB version is null - migration needed');
+  // If we can't determine DB migration info, assume migration is needed
+  if (
+    dbInfo.version === null ||
+    dbInfo.latestMigrationTimestamp === null ||
+    appMigrationTimestamp === 'unknown'
+  ) {
+    console.log('[Migration Check] Incomplete migration info - assuming migration needed');
     return {
       needsMigration: true,
       appVersion,
-      dbVersion: null,
+      dbVersion: dbInfo.version,
       message: `Database schema version unknown. Migration required to v${appVersion}.`,
     };
   }
 
-  // Compare versions
-  const comparison = compareSemver(appVersion, dbVersion);
-  console.log('[Migration Check] Version comparison:', {
-    appVersion,
-    dbVersion,
-    comparison,
-    result:
-      comparison > 0 ? 'app newer' : comparison < 0 ? 'db newer' : 'equal',
+  // Compare migration timestamps (YYYYMMDDHHMMSS format - lexicographic comparison works)
+  const appTimestamp = appMigrationTimestamp;
+  const dbTimestamp = dbInfo.latestMigrationTimestamp;
+
+  console.log('[Migration Check] Timestamp comparison:', {
+    appTimestamp,
+    dbTimestamp,
+    needsMigration: appTimestamp > dbTimestamp,
   });
 
-  if (comparison > 0) {
-    // App version is newer than DB version
+  if (appTimestamp > dbTimestamp) {
+    // App has newer migrations than DB
     return {
       needsMigration: true,
       appVersion,
-      dbVersion,
-      message: `Database schema (v${dbVersion}) is outdated. Migration to v${appVersion} required.`,
+      dbVersion: dbInfo.version,
+      message: `New migrations available. Database is at ${dbTimestamp}, app has ${appTimestamp}.`,
     };
-  } else if (comparison < 0) {
-    // DB version is newer than app version (unusual but possible)
+  } else if (appTimestamp < dbTimestamp) {
+    // DB has newer migrations than app (unusual - user might have downgraded app)
+    console.warn('[Migration Check] DB is ahead of app - possible downgrade');
     return {
       needsMigration: false,
       appVersion,
-      dbVersion,
-      message: `Database schema (v${dbVersion}) is newer than app version (v${appVersion}). Consider updating the app.`,
+      dbVersion: dbInfo.version,
+      message: `Database (${dbTimestamp}) is ahead of app (${appTimestamp}). Consider updating the app.`,
     };
   } else {
-    // Versions match
-    console.log('[Migration Check] Versions match - no migration needed');
+    // Timestamps match - no migration needed
+    console.log('[Migration Check] Timestamps match - database is up-to-date');
     return {
       needsMigration: false,
       appVersion,
-      dbVersion,
+      dbVersion: dbInfo.version,
       message: `Database schema is up-to-date (v${appVersion}).`,
     };
   }

@@ -57,17 +57,21 @@ try {
 
   console.log(`✅ Migration file created: ${migrationFile}`);
 
+  // Extract timestamp from migration filename
+  const timestamp = match[1].match(/^(\d{14})/)[0];
+
   // Append version tracking to the migration file
   const versionTracking = `
 -- Track this migration in schema_migrations table
-INSERT INTO schema_migrations (version, description)
-VALUES ('${version}', '${description}')
-ON CONFLICT (version) DO NOTHING;
+INSERT INTO schema_migrations (version, description, latest_migration_timestamp)
+VALUES ('${version}', '${description}', '${timestamp}')
+ON CONFLICT (version) DO UPDATE
+SET latest_migration_timestamp = EXCLUDED.latest_migration_timestamp;
 `;
 
   appendFileSync(migrationFile, versionTracking);
 
-  console.log(`✅ Version tracking added (v${version})`);
+  console.log(`✅ Version tracking added (v${version}, timestamp: ${timestamp})`);
   console.log(`📝 Edit the migration file to add your SQL:`);
   console.log(`   ${migrationFile}`);
 } catch (error) {
