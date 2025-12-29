@@ -480,6 +480,69 @@ To add hierarchical user relationships (e.g., parent accounts with child users):
 
 Import `test-data/contacts.csv` via the Contacts page → Import button.
 
+### Updating CHANGELOG.md
+
+The project follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format for tracking changes. **Always update CHANGELOG.md when making significant changes.**
+
+#### When to Update
+
+Update the CHANGELOG for:
+- **Added**: New features, components, or capabilities
+- **Changed**: Changes to existing functionality
+- **Fixed**: Bug fixes and corrections
+- **Removed**: Removed features or deprecated functionality
+- **Security**: Security fixes and improvements
+
+#### How to Update
+
+1. **During development**: Add entries under the `[Unreleased]` section
+   ```markdown
+   ## [Unreleased]
+
+   ### Added
+   - **Component**: Description of new feature
+
+   ### Fixed
+   - **Area**: Description of bug fix
+   ```
+
+2. **Before release**: Move `[Unreleased]` entries to a new version section
+   ```markdown
+   ## [Unreleased]
+
+   ## [X.Y.Z] - YYYY-MM-DD
+
+   ### Added
+   - **Component**: Description of new feature
+   ```
+
+3. **Version bumping**: Update `package.json` version to match the changelog version
+
+#### Best Practices
+
+- Use clear, user-facing language (not technical implementation details)
+- Start entries with the affected component/area (e.g., "**Attachments**:", "**Security**:")
+- Be concise but descriptive
+- Group related changes together
+- Always include the category (Added/Changed/Fixed/etc.)
+
+#### Example
+
+```markdown
+## [Unreleased]
+
+## [0.27.0] - 2025-12-28
+
+### Added
+
+- **Attachments**: Added support for viewing .eml (email) files with full email preview.
+- **Email Viewer**: Professional email client-like interface with HTML/text toggle.
+
+### Fixed
+
+- **CI/CD**: Fixed pre-commit hook to automatically stage registry.json changes.
+```
+
 ### Git Hooks
 
 - Pre-commit: Automatically runs `make registry-gen` to update `registry.json` and stages any changes to include them in the commit
