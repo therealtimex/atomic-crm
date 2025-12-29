@@ -1,0 +1,1 @@
+{"version":3,"file":"pptx-renderer_false-BLyX3OEG.js","sources":["../../__vite-optional-peer-dep:canvas:@kandiforge/pptx-renderer:false"],"sourcesContent":["export default {};throw new Error(`Could not resolve \"canvas\" imported by \"@kandiforge/pptx-renderer\".`)"],"names":["pptxRenderer_false"],"mappings":"AAAA,MAAAA,EAAe,CAAA,EAAG,MAAM,IAAI,MAAM,qEAAqE"}
