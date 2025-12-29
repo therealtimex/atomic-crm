@@ -132,7 +132,7 @@ async function validateEmail(email: string): Promise<EmailValidationResult> {
     try {
       return await validateEmailWithAPI(email);
     } catch (error) {
-      console.warn(`API validation failed, falling back to library for ${email}`);
+      console.warn(`API validation failed for ${email}, falling back to library:`, error);
       return await validateEmailWithLibrary(email);
     }
   }
