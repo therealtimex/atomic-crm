@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Atomic CRM is a full-featured CRM built with React, shadcn-admin-kit, and Supabase. It provides contact management, task tracking, notes with attachments, email capture, deal management with a Kanban board, and a built-in document viewer for multiple file formats.
+RealTimeX CRM is a full-featured CRM built with React, shadcn-admin-kit, and Supabase. It provides contact management, task tracking, notes with attachments, email capture, deal management with a Kanban board, and a built-in document viewer for multiple file formats.
 
 ## Development Commands
 
@@ -95,7 +95,7 @@ make registry-build   # Build Shadcn registry
 
 #### User Management System
 
-Atomic CRM uses a two-table system for user management:
+RealTimeX CRM uses a two-table system for user management:
 
 1. **`auth.users`** (Supabase's built-in authentication table)
    - Stores authentication credentials and JWT tokens
@@ -151,7 +151,7 @@ All tables have RLS enabled but currently use **permissive policies** (`using (t
 
 #### Authentication Methods
 
-Atomic CRM supports multiple authentication methods:
+RealTimeX CRM supports multiple authentication methods:
 
 1. **Email/Password Login** (default)
    - Traditional username/password authentication
@@ -208,13 +208,13 @@ Email OTP is already implemented. To enable:
 
 **Option 3: RealTimeX App SDK Integration**
 
-To integrate Atomic CRM as a Local App within RealTimeX.ai:
+To integrate RealTimeX CRM as a Local App within RealTimeX.ai:
 
 The RealTimeX App SDK (`@realtimex/app-sdk`) provides postMessage-based authentication for apps embedded in RealTimeX. This requires replacing Supabase Auth with RealTimeX's authentication system.
 
 **Authentication Flow:**
 ```
-User → RealTimeX Platform (authenticates) → postMessage → Local App (Atomic CRM)
+User → RealTimeX Platform (authenticates) → postMessage → Local App (RealTimeX CRM)
                                                            ↓
                                                     Receives user object
                                                            ↓
@@ -238,7 +238,7 @@ User → RealTimeX Platform (authenticates) → postMessage → Local App (Atomi
      return (
        <RealTimeXApp
          appId="atomic-crm"
-         appName="Atomic CRM"
+         appName="RealTimeX CRM"
          version="1.0.0"
        >
          <SupabaseProvider
@@ -567,7 +567,7 @@ Update the CHANGELOG for:
 
 ### "Bring Your Own Database" UX
 
-Atomic CRM supports a user-friendly "Bring Your Own API Key" experience:
+RealTimeX CRM supports a user-friendly "Bring Your Own API Key" experience:
 
 **For End Users:**
 1. Launch the app → Setup wizard appears automatically
