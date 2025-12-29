@@ -7,9 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.27.0] - 2025-12-28
+
 ### Added
 
 - **Attachments**: Added support for viewing .eml (email) files with full email preview including headers, HTML/plain text body, and embedded attachments.
+- **Email Viewer**: Professional email client-like interface with toggle between HTML and plain text views.
+- **Email Attachments**: Support for viewing and downloading embedded attachments within email files.
+
+### Fixed
+
+- **CI/CD**: Fixed pre-commit hook to automatically stage registry.json changes, preventing publish workflow failures.
 
 ## [0.26.0] - 2025-12-28
 
