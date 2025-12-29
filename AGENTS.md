@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Atomic CRM is a full-featured CRM built with React, shadcn-admin-kit, and Supabase. It provides contact management, task tracking, notes, email capture, and deal management with a Kanban board.
+Atomic CRM is a full-featured CRM built with React, shadcn-admin-kit, and Supabase. It provides contact management, task tracking, notes with attachments, email capture, deal management with a Kanban board, and a built-in document viewer for multiple file formats.
 
 ## Development Commands
 
@@ -317,8 +317,8 @@ src/
 │   │   ├── filters/        # List filters
 │   │   ├── layout/         # App layout components
 │   │   ├── login/          # Authentication pages
-│   │   ├── misc/           # Shared utilities
-│   │   ├── notes/          # Note management
+│   │   ├── misc/           # Shared utilities (includes DocumentViewer and EmailViewer)
+│   │   ├── notes/          # Note management with attachment support
 │   │   ├── providers/      # Data providers (Supabase + FakeRest)
 │   │   ├── root/           # Root CRM component
 │   │   ├── sales/          # Sales team management
@@ -372,6 +372,37 @@ User data syncs between Supabase's `auth.users` table and the CRM's `sales` tabl
 Located in `supabase/functions/`:
 - User management (creating/updating users, account disabling)
 - Inbound email webhook processing
+
+#### Document Viewer
+
+The CRM includes a built-in document viewer (`src/components/atomic-crm/misc/DocumentViewer.tsx`) that provides in-app preview for note attachments.
+
+**Supported Formats:**
+- **Documents**: PDF, DOCX, XLSX (with multi-sheet support), PPTX, Markdown
+- **Images**: PNG, JPG, GIF, WebP
+- **Media**: MP4 (video), MP3/WAV/OGG (audio)
+- **Email**: EML files with full email preview
+
+**Email Viewer Features** (`src/components/atomic-crm/misc/EmailViewer.tsx`):
+- Email headers display (From, To, CC, Subject, Date)
+- HTML and plain text body rendering with DOMPurify sanitization
+- Toggle between HTML and plain text views
+- Embedded attachment listing with download functionality
+- Professional email client-like interface
+
+**Security Features:**
+- XSS protection using DOMPurify for HTML sanitization (Excel and email files)
+- 50MB file size limit to prevent browser crashes
+- Race condition prevention with AbortController
+- Memory leak prevention (DOCX buffer cleanup)
+
+**Dependencies:**
+- `@cyntler/react-doc-viewer` - Multi-format document rendering
+- `docx-preview` - DOCX file rendering
+- `xlsx` - Excel file parsing and rendering
+- `@kandiforge/pptx-renderer` - PowerPoint file rendering
+- `postal-mime` - EML email file parsing
+- `dompurify` - HTML sanitization for security
 
 #### Data Providers
 
@@ -451,7 +482,7 @@ Import `test-data/contacts.csv` via the Contacts page → Import button.
 
 ### Git Hooks
 
-- Pre-commit: Automatically runs `make registry-gen` to update `registry.json`
+- Pre-commit: Automatically runs `make registry-gen` to update `registry.json` and stages any changes to include them in the commit
 
 ### Accessing Local Services During Development
 
