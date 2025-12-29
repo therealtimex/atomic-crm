@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.31.2] - 2025-12-29
+
 ### Added
 
 - **Migration UX**: Progressive migration detection system with non-blocking top banner notification when database updates are needed.
