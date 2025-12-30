@@ -84,6 +84,9 @@ const TaskEditForm = ({
         className="flex flex-col gap-4"
         defaultValues={{
           entity_type: record ? getEntityType(record) : "none",
+          contact_id: record?.contact_id ?? null,
+          company_id: record?.company_id ?? null,
+          deal_id: record?.deal_id ?? null,
         }}
       >
         <DialogHeader>

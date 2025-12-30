@@ -20,6 +20,13 @@ export const getEntityType = (record: Task | undefined): EntityType => {
 export const transformTaskEntityData = (data: any) => {
   const { entity_type, contact_id, company_id, deal_id, ...rest } = data;
 
+  console.log('[transformTaskEntityData] Input:', {
+    entity_type,
+    contact_id,
+    company_id,
+    deal_id,
+  });
+
   // Always start with all entity fields set to null
   const entityData: any = {
     contact_id: null,
@@ -36,8 +43,12 @@ export const transformTaskEntityData = (data: any) => {
     entityData.deal_id = deal_id;
   }
 
-  return {
+  const result = {
     ...rest,
     ...entityData,
   };
+
+  console.log('[transformTaskEntityData] Output:', result);
+
+  return result;
 };
