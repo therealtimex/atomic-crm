@@ -51,27 +51,28 @@ export interface DatabaseMigrationInfo {
 
 /**
  * Get the latest applied migration info from the database
+ * Uses Supabase's internal migration tracking via a database function
  */
 export async function getDatabaseMigrationInfo(
   supabase: SupabaseClient,
 ): Promise<DatabaseMigrationInfo> {
   try {
+    // Call database function that queries Supabase's internal migration table
+    // This is automatically updated by `supabase db push`
     const { data, error } = await supabase
-      .from('schema_migrations')
-      .select('version, latest_migration_timestamp')
-      .order('applied_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+      .rpc('get_latest_migration_timestamp');
 
     if (error) {
-      // Table might not exist yet (first run)
-      console.warn('schema_migrations table not found:', error.message);
+      console.warn('Could not get latest migration timestamp:', error.message);
       return { version: null, latestMigrationTimestamp: null };
     }
 
+    // The returned value IS the migration timestamp (e.g., "20251230082455")
+    const latestTimestamp = data || null;
+
     return {
-      version: data?.version || null,
-      latestMigrationTimestamp: data?.latest_migration_timestamp || null,
+      version: APP_VERSION, // Use app version for display
+      latestMigrationTimestamp: latestTimestamp,
     };
   } catch (error) {
     console.error('Error checking database migration info:', error);
