@@ -8,8 +8,6 @@ import { TaskPriorityBadge } from "./TaskPriorityBadge";
 import { TaskStatusBadge } from "./TaskStatusBadge";
 
 const RelatedEntityField = ({ record }: { record: Task | TaskSummary }) => {
-  const taskSummary = record as TaskSummary;
-
   if (record.contact_id) {
     return (
       <ReferenceField
