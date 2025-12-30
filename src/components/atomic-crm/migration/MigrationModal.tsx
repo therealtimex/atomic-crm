@@ -5,7 +5,7 @@
  * Shows step-by-step guide for users to run the migration command.
  */
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AlertTriangle, Copy, Check, ExternalLink, Info } from 'lucide-react';
 import {
   Dialog,
@@ -38,15 +38,23 @@ interface CodeBlockProps {
 function CodeBlock({ code, label }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
+  const canCopy =
+    typeof navigator !== 'undefined' && !!navigator.clipboard?.writeText;
+
   const handleCopy = async () => {
+    if (!canCopy) {
+      toast.error('Copy not supported in this environment — please copy manually.');
+      return;
+    }
+
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      window.setTimeout(() => setCopied(false), 2000);
       toast.success('Copied to clipboard!');
     } catch (error) {
       console.error('Failed to copy:', error);
-      toast.error('Failed to copy');
+      toast.error('Copy failed — please copy manually.');
     }
   };
 
@@ -62,44 +70,50 @@ function CodeBlock({ code, label }: CodeBlockProps) {
           <code>{code}</code>
         </pre>
         <Button
+          type="button"
           size="icon"
           variant="ghost"
           className="absolute right-2 top-2 h-8 w-8"
           onClick={handleCopy}
+          disabled={!canCopy}
         >
           {copied ? (
             <Check className="h-4 w-4 text-green-600" />
           ) : (
             <Copy className="h-4 w-4" />
           )}
-          <span className="sr-only">Copy</span>
+          <span className="sr-only">{copied ? 'Copied' : 'Copy'}</span>
         </Button>
       </div>
     </div>
   );
 }
 
-export function MigrationModal({
-  open,
-  onOpenChange,
-  status,
-}: MigrationModalProps) {
+export function MigrationModal({ open, onOpenChange, status }: MigrationModalProps) {
   const config = getSupabaseConfig();
-  const projectId = config?.url
-    ? new URL(config.url).hostname.split('.')[0]
-    : 'your-project-id';
+
+  const projectId = useMemo(() => {
+    const url = config?.url;
+    if (!url) return 'your-project-id';
+    try {
+      const host = new URL(url).hostname;
+      return host.split('.')[0] || 'your-project-id';
+    } catch {
+      return 'your-project-id';
+    }
+  }, [config?.url]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
-            <AlertTriangle className="h-6 w-6 text-yellow-600" />
+            <AlertTriangle className="h-6 w-6 text-red-700 dark:text-red-600" />
             Database Migration Required
           </DialogTitle>
           <DialogDescription>
-            Your database schema needs to be updated to v{status.appVersion}.
-            Follow the steps below to complete the migration.
+            Your database schema needs to be updated to v{status.appVersion}. Follow the
+            steps below to complete the migration.
           </DialogDescription>
         </DialogHeader>
 
@@ -138,7 +152,7 @@ export function MigrationModal({
                     {projectId}
                   </code>
                 </li>
-                <li>Your database password (you'll be prompted)</li>
+                <li>Your database password (you&apos;ll be prompted)</li>
               </ul>
             </div>
           </div>
@@ -156,14 +170,20 @@ export function MigrationModal({
                 <p className="text-sm font-medium">macOS / Linux:</p>
                 <CodeBlock code="brew install supabase/tap/supabase" />
               </div>
+
               <div className="space-y-2">
                 <p className="text-sm font-medium">Windows (Scoop):</p>
-                <CodeBlock code="scoop bucket add supabase https://github.com/supabase/scoop-bucket.git&#10;scoop install supabase" />
+                <CodeBlock
+                  code={`scoop bucket add supabase https://github.com/supabase/scoop-bucket.git
+scoop install supabase`}
+                />
               </div>
+
               <div className="space-y-2">
                 <p className="text-sm font-medium">Windows (npm):</p>
                 <CodeBlock code="npm install -g supabase" />
               </div>
+
               <a
                 href="https://supabase.com/docs/guides/cli/getting-started"
                 target="_blank"
@@ -218,25 +238,23 @@ export function MigrationModal({
             </h4>
             <div className="ml-8 space-y-3">
               <p className="text-sm text-muted-foreground">
-                After the migration completes successfully, refresh this page to
-                access the new features.
+                After the migration completes successfully, refresh this page to access the
+                new features.
               </p>
             </div>
           </div>
 
-          {/* Troubleshooting */}
-          <Alert variant="destructive" className="bg-red-50 dark:bg-red-950/20">
-            <AlertTriangle className="h-4 w-4" />
+          {/* Troubleshooting (kept informative, not "error happened" alarming) */}
+          <Alert className="border-red-200 bg-red-50 dark:border-red-900/40 dark:bg-red-950/20">
+            <AlertTriangle className="h-4 w-4 text-red-700 dark:text-red-600" />
             <AlertDescription>
               <strong>Troubleshooting:</strong>
               <ul className="mt-2 list-inside list-disc space-y-1 text-sm">
                 <li>
-                  If login fails, run <code>supabase logout</code> then try
-                  again
+                  If login fails, run <code>supabase logout</code> then try again
                 </li>
                 <li>
-                  Ensure your database password is correct (found in Supabase
-                  Dashboard)
+                  Ensure your database password is correct (found in the Supabase Dashboard)
                 </li>
                 <li>
                   If issues persist, report at{' '}
@@ -255,7 +273,7 @@ export function MigrationModal({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             Close
           </Button>
         </DialogFooter>
