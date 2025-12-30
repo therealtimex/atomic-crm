@@ -1,4 +1,4 @@
-import { Calendar, Building2, UserCircle, UserCheck, Pencil } from "lucide-react";
+import { Calendar, Building2, UserCircle, UserCheck, Pencil, Briefcase } from "lucide-react";
 import { useRecordContext } from "ra-core";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
@@ -52,28 +52,44 @@ export const TaskAside = () => {
       </AsideSection>
 
       <AsideSection title="Related">
-        <InfoRow
-          icon={<UserCircle className="w-4 h-4 text-muted-foreground" />}
-          label="Contact"
-          value={
-            <ReferenceField
-              source="contact_id"
-              reference="contacts"
-              link="show"
-            />
-          }
-        />
-        <InfoRow
-          icon={<Building2 className="w-4 h-4 text-muted-foreground" />}
-          label="Company"
-          value={
-            <ReferenceField source="contact_id" reference="contacts" link={false}>
+        {record.contact_id && (
+          <InfoRow
+            icon={<UserCircle className="w-4 h-4 text-muted-foreground" />}
+            label="Contact"
+            value={
+              <ReferenceField
+                source="contact_id"
+                reference="contacts"
+                link="show"
+              />
+            }
+          />
+        )}
+        {record.company_id && (
+          <InfoRow
+            icon={<Building2 className="w-4 h-4 text-muted-foreground" />}
+            label="Company"
+            value={
               <ReferenceField source="company_id" reference="companies" link="show">
                 <TextField source="name" />
               </ReferenceField>
-            </ReferenceField>
-          }
-        />
+            }
+          />
+        )}
+        {record.deal_id && (
+          <InfoRow
+            icon={<Briefcase className="w-4 h-4 text-muted-foreground" />}
+            label="Deal"
+            value={
+              <ReferenceField source="deal_id" reference="deals" link="show">
+                <TextField source="name" />
+              </ReferenceField>
+            }
+          />
+        )}
+        {!record.contact_id && !record.company_id && !record.deal_id && (
+          <p className="text-sm text-muted-foreground">No related entity</p>
+        )}
       </AsideSection>
 
       <AsideSection title="Assignment">

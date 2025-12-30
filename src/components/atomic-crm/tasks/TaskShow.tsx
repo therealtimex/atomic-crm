@@ -1,6 +1,8 @@
 import { ShowBase, useShowContext } from "ra-core";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReferenceManyField } from "@/components/admin/reference-many-field";
+import { Calendar } from "lucide-react";
+import { formatDistance } from "date-fns";
 
 import { NoteCreate, NotesIterator } from "../notes";
 import type { Task } from "../types";
@@ -31,6 +33,17 @@ const TaskShowContent = () => {
                 <TaskStatusBadge status={record.status} />
                 <TaskPriorityBadge priority={record.priority} />
               </div>
+              {record.due_date && (
+                <div className="flex items-center gap-2 mb-3 text-sm">
+                  <Calendar className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">
+                    Due {formatDistance(new Date(record.due_date), new Date(), { addSuffix: true })}
+                  </span>
+                  <span className="text-muted-foreground">
+                    ({new Date(record.due_date).toLocaleDateString()})
+                  </span>
+                </div>
+              )}
               {record.text && (
                 <p className="text-sm text-muted-foreground whitespace-pre-line">
                   {record.text}

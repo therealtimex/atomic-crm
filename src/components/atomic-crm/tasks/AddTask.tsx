@@ -11,8 +11,6 @@ import {
   useUpdate,
 } from "ra-core";
 import { useState } from "react";
-import { AutocompleteInput } from "@/components/admin/autocomplete-input";
-import { ReferenceInput } from "@/components/admin/reference-input";
 import { TextInput } from "@/components/admin/text-input";
 import { DateInput } from "@/components/admin/date-input";
 import { SelectInput } from "@/components/admin/select-input";
@@ -32,22 +30,26 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { contactOptionText } from "../misc/ContactOption";
 import { useConfigurationContext } from "../root/ConfigurationContext";
+import { EntityTypePillSelector } from "./EntityTypePillSelector";
+import { EntityAutocomplete } from "./EntityAutocomplete";
+import { getEntityType, transformTaskEntityData } from "./taskEntityUtils";
 
 export const AddTask = ({
   selectContact,
   display = "chip",
+  resource,
 }: {
   selectContact?: boolean;
   display?: "chip" | "icon";
+  resource?: "contacts" | "companies" | "deals";
 }) => {
   const { identity } = useGetIdentity();
   const dataProvider = useDataProvider();
   const [update] = useUpdate();
   const notify = useNotify();
-  const { taskTypes } = useConfigurationContext();
-  const contact = useRecordContext();
+  const { taskTypes, taskPriorities, taskStatuses } = useConfigurationContext();
+  const record = useRecordContext();
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -55,21 +57,42 @@ export const AddTask = ({
 
   const handleSuccess = async (data: any) => {
     setOpen(false);
-    const contact = await dataProvider.getOne("contacts", {
-      id: data.contact_id,
-    });
-    if (!contact.data) return;
 
-    await update("contacts", {
-      id: contact.data.id,
-      data: { last_seen: new Date().toISOString() },
-      previousData: contact.data,
-    });
+    // Update last_seen for contacts
+    if (data.contact_id) {
+      const contact = await dataProvider.getOne("contacts", {
+        id: data.contact_id,
+      });
+      if (contact.data) {
+        await update("contacts", {
+          id: contact.data.id,
+          data: { last_seen: new Date().toISOString() },
+          previousData: contact.data,
+        });
+      }
+    }
 
     notify("Task added");
   };
 
   if (!identity) return null;
+
+  // Determine initial entity type and ID based on context
+  const getInitialEntityData = () => {
+    if (!record) return { entity_type: "none" };
+
+    if (resource === "contacts" || record.first_name) {
+      return { entity_type: "contact", contact_id: record.id };
+    } else if (resource === "companies" || record.name) {
+      return { entity_type: "company", company_id: record.id };
+    } else if (resource === "deals") {
+      return { entity_type: "deal", deal_id: record.id };
+    }
+
+    return { entity_type: "none" };
+  };
+
+  const initialEntityData = getInitialEntityData();
 
   return (
     <>
@@ -106,79 +129,85 @@ export const AddTask = ({
       <CreateBase
         resource="tasks"
         record={{
-          type: "None",
-          contact_id: contact?.id,
+          type: taskTypes[0] || "Call",
+          ...initialEntityData,
           due_date: new Date().toISOString().slice(0, 10),
           sales_id: identity.id,
         }}
-        transform={(data) => {
-          const dueDate = new Date(data.due_date);
-          dueDate.setHours(0, 0, 0, 0);
-          data.due_date = dueDate.toISOString();
-          return {
-            ...data,
-            due_date: new Date(data.due_date).toISOString(),
-          };
-        }}
+        transform={(data) => ({
+          ...transformTaskEntityData(data),
+          sales_id: identity.id,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })}
         mutationOptions={{ onSuccess: handleSuccess }}
       >
         <Dialog open={open} onOpenChange={() => setOpen(false)}>
           <DialogContent className="lg:max-w-xl overflow-y-auto max-h-9/10 top-1/20 translate-y-0">
-            <Form className="flex flex-col gap-4">
+            <Form
+              className="flex flex-col gap-4"
+              defaultValues={{
+                entity_type: initialEntityData.entity_type,
+                priority: "medium",
+                status: "todo",
+                assigned_to: identity.id,
+              }}
+            >
               <DialogHeader>
                 <DialogTitle>
-                  {!selectContact
-                    ? "Create a new task for "
+                  {record && !selectContact
+                    ? `Create a new task for ${record.first_name || record.name || "this record"}`
                     : "Create a new task"}
-                  {!selectContact && (
-                    <RecordRepresentation
-                      record={contact}
-                      resource="contacts"
-                    />
-                  )}
                 </DialogTitle>
               </DialogHeader>
-              <div className="flex flex-col gap-4">
-                <TextInput
-                  autoFocus
-                  source="text"
-                  label="Description"
+              <TextInput
+                autoFocus
+                source="text"
+                label="Description"
+                validate={required()}
+                multiline
+                className="m-0"
+                helperText={false}
+              />
+
+              {/* Entity Type Selector */}
+              <div className="grid grid-cols-2 gap-4 mt-2">
+                <EntityTypePillSelector />
+              </div>
+
+              {/* Entity Autocomplete */}
+              <div className="mt-2">
+                <EntityAutocomplete helperText={false} />
+              </div>
+
+              {/* Form Fields */}
+              <div className="grid grid-cols-2 gap-4 mt-2">
+                <DateInput
+                  source="due_date"
+                  helperText={false}
                   validate={required()}
-                  multiline
-                  className="m-0"
+                />
+                <SelectInput
+                  source="type"
+                  validate={required()}
+                  choices={taskTypes.map((type) => ({
+                    id: type,
+                    name: type,
+                  }))}
                   helperText={false}
                 />
-                {selectContact && (
-                  <ReferenceInput
-                    source="contact_id"
-                    reference="contacts_summary"
-                  >
-                    <AutocompleteInput
-                      label="Contact"
-                      optionText={contactOptionText}
-                      helperText={false}
-                      validate={required()}
-                    />
-                  </ReferenceInput>
-                )}
-
-                <div className="grid grid-cols-2 gap-4">
-                  <DateInput
-                    source="due_date"
-                    helperText={false}
-                    validate={required()}
-                  />
-                  <SelectInput
-                    source="type"
-                    validate={required()}
-                    choices={taskTypes.map((type) => ({
-                      id: type,
-                      name: type,
-                    }))}
-                    helperText={false}
-                  />
-                </div>
+                <SelectInput
+                  source="priority"
+                  choices={taskPriorities}
+                  helperText={false}
+                />
+                <SelectInput
+                  source="status"
+                  choices={taskStatuses}
+                  helperText={false}
+                />
               </div>
+
               <DialogFooter className="w-full justify-end">
                 <SaveButton />
               </DialogFooter>

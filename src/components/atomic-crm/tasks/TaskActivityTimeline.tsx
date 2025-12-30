@@ -1,18 +1,21 @@
 import { formatDistance } from "date-fns";
 import { useGetList, useRecordContext } from "ra-core";
 import { ReferenceField } from "@/components/admin/reference-field";
+import { AlertCircle } from "lucide-react";
 import type { TaskActivity, Sale } from "../types";
+
+const MAX_ACTIVITIES = 100;
 
 export const TaskActivityTimeline = ({
   taskId,
 }: {
   taskId: string | number;
 }) => {
-  const { data: activities, isPending } = useGetList<TaskActivity>(
+  const { data: activities, isPending, total } = useGetList<TaskActivity>(
     "task_activity",
     {
       filter: { task_id: taskId },
-      pagination: { page: 1, perPage: 100 },
+      pagination: { page: 1, perPage: MAX_ACTIVITIES },
       sort: { field: "created_at", order: "DESC" },
     },
   );
@@ -30,30 +33,42 @@ export const TaskActivityTimeline = ({
       </div>
     );
 
+  const isTruncated = total !== undefined && total > MAX_ACTIVITIES;
+
   return (
-    <div className="space-y-6 relative pl-4 border-l border-border ml-2 my-4">
-      {activities.map((activity) => (
-        <div key={activity.id} className="relative">
-          <div className="absolute -left-[21px] top-1 h-3 w-3 rounded-full bg-primary ring-4 ring-background" />
-          <div className="text-sm">
-            <ReferenceField
-              source="sales_id"
-              record={activity}
-              reference="sales"
-              link={false}
-            >
-              <SaleName />
-            </ReferenceField>{" "}
-            {formatActivityMessage(activity)}
+    <>
+      <div className="space-y-6 relative pl-4 border-l border-border ml-2 my-4">
+        {activities.map((activity) => (
+          <div key={activity.id} className="relative">
+            <div className="absolute -left-[21px] top-1 h-3 w-3 rounded-full bg-primary ring-4 ring-background" />
+            <div className="text-sm">
+              <ReferenceField
+                source="sales_id"
+                record={activity}
+                reference="sales"
+                link={false}
+              >
+                <SaleName />
+              </ReferenceField>{" "}
+              {formatActivityMessage(activity)}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              {formatDistance(new Date(activity.created_at), new Date(), {
+                addSuffix: true,
+              })}
+            </div>
           </div>
-          <div className="text-xs text-muted-foreground">
-            {formatDistance(new Date(activity.created_at), new Date(), {
-              addSuffix: true,
-            })}
-          </div>
+        ))}
+      </div>
+      {isTruncated && (
+        <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-md text-sm text-muted-foreground">
+          <AlertCircle className="w-4 h-4" />
+          <span>
+            Showing {MAX_ACTIVITIES} of {total} activities. Older activities are not displayed.
+          </span>
         </div>
-      ))}
-    </div>
+      )}
+    </>
   );
 };
 
