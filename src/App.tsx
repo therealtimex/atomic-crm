@@ -9,6 +9,7 @@ import {
   type MigrationStatus,
 } from '@/lib/migration-check';
 import { supabase } from '@/components/atomic-crm/providers/supabase/supabase';
+import { MigrationProvider } from '@/contexts/MigrationContext';
 
 /**
  * Application entry point
@@ -147,7 +148,14 @@ const App = () => {
   }
 
   return (
-    <>
+    <MigrationProvider
+      value={{
+        migrationStatus,
+        showMigrationBanner,
+        showMigrationModal,
+        openMigrationModal: () => setShowMigrationModal(true),
+      }}
+    >
       {/* Migration Notification (floating, top-right) */}
       {showMigrationBanner && migrationStatus && (
         <MigrationBanner
@@ -175,7 +183,7 @@ const App = () => {
         externalHeartbeatStatuses={externalHeartbeatStatuses}
         internalHeartbeatStatuses={internalHeartbeatStatuses}
       />
-    </>
+    </MigrationProvider>
   );
 };
 

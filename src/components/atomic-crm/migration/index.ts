@@ -6,3 +6,4 @@
 
 export { MigrationBanner } from './MigrationBanner';
 export { MigrationModal } from './MigrationModal';
+export { MigrationPulseIndicator } from './MigrationPulseIndicator';

@@ -445,6 +445,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/migration/MigrationPulseIndicator.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/migration/MigrationModal.tsx",
           "type": "registry:component"
         },

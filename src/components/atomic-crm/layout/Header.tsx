@@ -10,12 +10,15 @@ import { RefreshButton } from "@/components/admin/refresh-button";
 import { ThemeModeToggle } from "@/components/admin/theme-mode-toggle";
 import { UserMenu } from "@/components/admin/user-menu";
 import { useUserMenu } from "@/hooks/user-menu-context";
+import { MigrationPulseIndicator } from "@/components/atomic-crm/migration";
+import { useMigrationContextSafe } from "@/contexts/MigrationContext";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
 
 const Header = () => {
   const { darkModeLogo, lightModeLogo, title } = useConfigurationContext();
   const location = useLocation();
+  const migrationContext = useMigrationContextSafe();
 
   // Simplified path matching logic
   const navPaths = [
@@ -29,6 +32,11 @@ const Header = () => {
   const currentPath =
     navPaths.find((nav) => matchPath(nav.pattern, location.pathname))?.path ||
     false;
+
+  // Show pulse indicator when migration is needed but banner is dismissed
+  const showPulseIndicator =
+    migrationContext?.migrationStatus?.needsMigration &&
+    !migrationContext?.showMigrationBanner;
 
   return (
     <header className="bg-secondary fixed top-0 left-0 right-0 z-50 border-b border-border">
@@ -65,6 +73,11 @@ const Header = () => {
           </nav>
 
           <div className="flex items-center">
+            {showPulseIndicator && (
+              <MigrationPulseIndicator
+                onClick={() => migrationContext?.openMigrationModal()}
+              />
+            )}
             <ThemeModeToggle />
             <RefreshButton />
             <UserMenu>
