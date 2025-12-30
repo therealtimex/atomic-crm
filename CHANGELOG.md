@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.33.2] - 2025-12-30
+
 ### Added
 
 - **Tasks**: Tasks can now be linked to Contacts, Companies, or Deals (all optional).
