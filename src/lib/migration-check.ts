@@ -130,7 +130,11 @@ export async function checkMigrationStatus(
   }
 
   // 2. Database has timestamp tracking (Modern)
-  if (dbInfo.latestMigrationTimestamp) {
+  // Check for valid timestamp (not empty/whitespace)
+  if (
+    dbInfo.latestMigrationTimestamp &&
+    dbInfo.latestMigrationTimestamp.trim() !== ''
+  ) {
     const appTimestamp = appMigrationTimestamp;
     const dbTimestamp = dbInfo.latestMigrationTimestamp;
 
@@ -163,22 +167,38 @@ export async function checkMigrationStatus(
   // 3. Database has version but NO timestamp (Legacy Schema)
   // Fallback to SemVer comparison
   if (dbInfo.version) {
-    console.log('[Migration Check] Legacy DB detected (no timestamp). Falling back to SemVer.');
+    console.log(
+      '[Migration Check] Legacy DB detected (no timestamp). Falling back to SemVer.',
+    );
     const comparison = compareSemver(appVersion, dbInfo.version);
 
     if (comparison > 0) {
+      // App version is newer - definitely needs migration
       return {
         needsMigration: true,
         appVersion,
         dbVersion: dbInfo.version,
-        message: `Database schema (v${dbInfo.version}) is outdated (no timestamp). Migration to v${appVersion} required.`,
+        message: `Database schema (v${dbInfo.version}) is outdated. Migration to v${appVersion} required.`,
+      };
+    } else if (comparison === 0) {
+      // Versions match BUT we can't verify migrations without timestamps
+      // Be pessimistic: force migration to upgrade to modern timestamp tracking
+      console.warn(
+        '[Migration Check] Legacy DB with matching version - forcing migration to add timestamp tracking',
+      );
+      return {
+        needsMigration: true,
+        appVersion,
+        dbVersion: dbInfo.version,
+        message: `Database lacks timestamp tracking. Please run migration to upgrade to modern schema (v${appVersion}).`,
       };
     } else {
+      // DB version is ahead of app version
       return {
         needsMigration: false,
         appVersion,
         dbVersion: dbInfo.version,
-        message: `Database version (v${dbInfo.version}) matches app. (Legacy Mode)`,
+        message: `Database version (v${dbInfo.version}) is ahead of app (v${appVersion}).`,
       };
     }
   }
