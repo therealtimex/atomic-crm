@@ -1,5 +1,8 @@
 -- Update tasks_summary view to support tasks linked to contacts, companies, or deals
-CREATE OR REPLACE VIEW public.tasks_summary AS
+-- Drop the existing view first because we're changing column order
+DROP VIEW IF EXISTS public.tasks_summary;
+
+CREATE VIEW public.tasks_summary AS
 SELECT
     t.id,
     t.contact_id,
