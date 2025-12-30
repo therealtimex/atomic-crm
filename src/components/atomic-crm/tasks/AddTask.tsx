@@ -2,7 +2,6 @@ import { Plus } from "lucide-react";
 import {
   CreateBase,
   Form,
-  RecordRepresentation,
   required,
   useDataProvider,
   useGetIdentity,
@@ -33,7 +32,7 @@ import {
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { EntityTypePillSelector } from "./EntityTypePillSelector";
 import { EntityAutocomplete } from "./EntityAutocomplete";
-import { getEntityType, transformTaskEntityData } from "./taskEntityUtils";
+import { transformTaskEntityData } from "./taskEntityUtils";
 
 export const AddTask = ({
   selectContact,
