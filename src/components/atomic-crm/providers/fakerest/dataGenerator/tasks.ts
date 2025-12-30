@@ -36,41 +36,79 @@ export const type: TaskType[] = [
 
 export const generateTasks = (db: Db) => {
   return Array.from(Array(400).keys()).map<any>((id) => {
-    const contact = random.arrayElement(db.contacts);
-    const company = db.companies.find((c) => c.id === contact.company_id);
-    const creator = db.sales.find((s) => s.id === contact.sales_id);
-    contact.nb_tasks++;
-    
-    const createdDate = randomDate(new Date(contact.first_seen)).toISOString();
+    // Randomly choose entity type: contact (60%), company (20%), deal (15%), none (5%)
+    const entityTypeRandom = Math.random();
+    const entityType =
+      entityTypeRandom < 0.60 ? "contact" :
+      entityTypeRandom < 0.80 ? "company" :
+      entityTypeRandom < 0.95 ? "deal" : "none";
+
+    let contact_id = null;
+    let company_id = null;
+    let deal_id = null;
+    let sales_id = null;
+    let contact = null;
+    let company = null;
+    let deal = null;
+
+    // Set the appropriate entity ID based on entity type
+    if (entityType === "contact") {
+      contact = random.arrayElement(db.contacts);
+      contact_id = contact.id;
+      sales_id = contact.sales_id;
+      company = db.companies.find((c) => c.id === contact.company_id);
+      contact.nb_tasks++;
+    } else if (entityType === "company") {
+      company = random.arrayElement(db.companies);
+      company_id = company.id;
+      sales_id = company.sales_id;
+    } else if (entityType === "deal") {
+      deal = random.arrayElement(db.deals);
+      deal_id = deal.id;
+      sales_id = deal.sales_id;
+      company = db.companies.find((c) => c.id === deal.company_id);
+    } else {
+      // None - standalone task
+      const randomSales = random.arrayElement(db.sales);
+      sales_id = randomSales.id;
+    }
+
+    const creator = db.sales.find((s) => s.id === sales_id);
+    const baseDate = contact?.first_seen || new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
+
+    const createdDate = randomDate(new Date(baseDate)).toISOString();
     const dueDate = randomDate(
-      datatype.boolean() ? new Date() : new Date(contact.first_seen),
+      datatype.boolean() ? new Date() : new Date(baseDate),
       new Date(Date.now() + 100 * 24 * 60 * 60 * 1000),
     ).toISOString();
-    
+
     const isDone = datatype.boolean();
     const doneDate = isDone ? randomDate(new Date(createdDate)).toISOString() : undefined;
-    
+
     return {
       id,
-      contact_id: contact.id,
+      contact_id,
+      company_id,
+      deal_id,
       type: random.arrayElement(defaultTaskTypes),
       text: lorem.sentence(),
       due_date: dueDate,
       done_date: doneDate,
-      sales_id: contact.sales_id,
+      sales_id,
       priority: random.arrayElement(["low", "medium", "high", "urgent"]),
-      assigned_to: contact.sales_id,
+      assigned_to: sales_id,
       status: isDone ? "done" : "todo",
       created_at: createdDate,
       updated_at: createdDate,
       archived: false,
-      
+
       // Denormalized fields for TaskSummary simulation
-      contact_first_name: contact.first_name,
-      contact_last_name: contact.last_name,
-      contact_email: contact.email_jsonb?.[0]?.email,
-      company_id: contact.company_id,
+      contact_first_name: contact?.first_name,
+      contact_last_name: contact?.last_name,
+      contact_email: contact?.email_jsonb?.[0]?.email,
+      company_id_computed: company?.id,
       company_name: company?.name,
+      deal_name: deal?.name,
       creator_first_name: creator?.first_name,
       creator_last_name: creator?.last_name,
       assigned_first_name: creator?.first_name,

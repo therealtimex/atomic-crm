@@ -226,7 +226,9 @@ export type TaskStatus =
   | "cancelled";
 
 export type Task = {
-  contact_id: Identifier;
+  contact_id?: Identifier | null;
+  company_id?: Identifier | null;
+  deal_id?: Identifier | null;
   type: string;
   text: string;
   due_date: string;
@@ -247,6 +249,7 @@ export type TaskSummary = Task & {
   contact_email?: string;
   company_id?: Identifier;
   company_name?: string;
+  deal_name?: string;
   assigned_first_name?: string;
   assigned_last_name?: string;
   creator_first_name?: string;

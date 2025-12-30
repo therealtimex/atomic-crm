@@ -22,6 +22,12 @@ const TaskList = () => {
     <ReferenceInput source="contact_id" reference="contacts">
       <AutocompleteInput label={false} placeholder="Contact" />
     </ReferenceInput>,
+    <ReferenceInput source="company_id" reference="companies">
+      <AutocompleteInput label={false} placeholder="Company" optionText="name" />
+    </ReferenceInput>,
+    <ReferenceInput source="deal_id" reference="deals">
+      <AutocompleteInput label={false} placeholder="Deal" optionText="name" />
+    </ReferenceInput>,
     <SelectInput source="priority" choices={taskPriorities} />,
     <MyTasksInput source="assigned_to" label="My Tasks" alwaysOn />,
     <BooleanInput source="archived" label="Archived" />,

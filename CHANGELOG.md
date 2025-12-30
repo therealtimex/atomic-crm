@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Tasks**: Tasks can now be linked to Contacts, Companies, or Deals (all optional).
+- **Tasks**: Pill-based entity type selector with one-click selection (None, Contact, Company, Deal).
+- **Tasks**: "Related To" column in task list displays the linked entity (Contact, Company, or Deal).
+- **Tasks**: Filter tasks by Contact, Company, or Deal in the task list.
+- **Database**: Database migration to add `company_id` and `deal_id` columns to tasks table with mutually exclusive constraint.
+- **Database**: Updated `tasks_summary` view to include company and deal information with proper joins.
+
+### Changed
+
+- **Tasks**: `contact_id` field is now optional instead of required - tasks can exist without being linked to any entity.
+- **Tasks**: Task creation form no longer requires selecting a contact.
+- **Tasks**: Improved task form layout - pills inline with "Related To" label, entity autocomplete on separate full-width row for long names.
+- **Tasks**: Removed duplicate "Create Task" header for cleaner UI and better space utilization.
+
 ## [0.33.1] - 2025-12-30
 
 ## [0.33.0] - 2025-12-30

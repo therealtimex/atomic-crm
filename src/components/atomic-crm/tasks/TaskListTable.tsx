@@ -3,9 +3,52 @@ import { DateField } from "@/components/admin/date-field";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { TextField } from "@/components/admin/text-field";
 
-import type { Task } from "../types";
+import type { Task, TaskSummary } from "../types";
 import { TaskPriorityBadge } from "./TaskPriorityBadge";
 import { TaskStatusBadge } from "./TaskStatusBadge";
+
+const RelatedEntityField = ({ record }: { record: Task | TaskSummary }) => {
+  const taskSummary = record as TaskSummary;
+
+  if (record.contact_id) {
+    return (
+      <ReferenceField
+        record={record}
+        source="contact_id"
+        reference="contacts"
+        link="show"
+      />
+    );
+  }
+
+  if (record.company_id) {
+    return (
+      <ReferenceField
+        record={record}
+        source="company_id"
+        reference="companies"
+        link="show"
+      >
+        <TextField source="name" />
+      </ReferenceField>
+    );
+  }
+
+  if (record.deal_id) {
+    return (
+      <ReferenceField
+        record={record}
+        source="deal_id"
+        reference="deals"
+        link="show"
+      >
+        <TextField source="name" />
+      </ReferenceField>
+    );
+  }
+
+  return <span className="text-muted-foreground">—</span>;
+};
 
 export const TaskListTable = () => {
   return (
@@ -24,19 +67,12 @@ export const TaskListTable = () => {
           </div>
         )}
       />
-      <DataTable.Col label="Contact" className="w-[15%]">
-        <ReferenceField source="contact_id" reference="contacts" link="show" />
-      </DataTable.Col>
-      <DataTable.Col label="Company" className="w-[15%]">
-        <ReferenceField
-          source="company_id"
-          reference="companies"
-          link="show"
-          sortable={false}
-        >
-          <TextField source="name" />
-        </ReferenceField>
-      </DataTable.Col>
+      <DataTable.Col
+        label="Related To"
+        className="w-[20%]"
+        sortable={false}
+        render={(record: Task) => <RelatedEntityField record={record} />}
+      />
       <DataTable.Col label="Due Date" className="w-[12%]">
         <DateField source="due_date" />
       </DataTable.Col>
