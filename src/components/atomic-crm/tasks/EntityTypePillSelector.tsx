@@ -13,6 +13,14 @@ export const EntityTypePillSelector = () => {
   const entityType = useWatch({ name: "entity_type" });
   const { setValue } = useFormContext();
 
+  const handleEntityTypeChange = (newType: string) => {
+    // Clear all entity ID fields when changing type
+    setValue("contact_id", null);
+    setValue("company_id", null);
+    setValue("deal_id", null);
+    setValue("entity_type", newType);
+  };
+
   return (
     <div className="col-span-2 flex items-center gap-3">
       <Label className="text-sm font-medium shrink-0">Related To</Label>
@@ -24,7 +32,7 @@ export const EntityTypePillSelector = () => {
             role="radio"
             aria-checked={entityType === type.value}
             aria-label={`Link to ${type.label}`}
-            onClick={() => setValue("entity_type", type.value)}
+            onClick={() => handleEntityTypeChange(type.value)}
             className={cn(
               "px-3 py-1.5 text-sm rounded-full border transition-colors",
               entityType === type.value
