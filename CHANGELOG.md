@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.33.4] - 2025-12-30
 
+### Added
+
+- **Migration**: Added `get_latest_migration_timestamp()` function to query Supabase's internal migration tracking.
+
+### Changed
+
+- **Migration**: Refactored migration detection to use Supabase's built-in tracking instead of custom table.
+
 ## [0.33.3] - 2025-12-30
 
 ## [0.33.2] - 2025-12-30
