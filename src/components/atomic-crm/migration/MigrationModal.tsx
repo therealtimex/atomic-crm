@@ -66,8 +66,8 @@ function CodeBlock({ code, label }: CodeBlockProps) {
         </div>
       )}
       <div className="group relative">
-        <pre className="overflow-x-auto rounded-md bg-muted p-3 pr-12 text-sm">
-          <code>{code}</code>
+        <pre className="overflow-hidden rounded-md bg-muted p-3 pr-12 text-sm">
+          <code className="block whitespace-pre-wrap break-all">{code}</code>
         </pre>
         <Button
           type="button"
