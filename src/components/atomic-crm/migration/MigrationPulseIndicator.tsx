@@ -32,11 +32,11 @@ export function MigrationPulseIndicator({
             className="relative"
             onClick={onClick}
           >
-            <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-500" />
+            <AlertTriangle className="h-5 w-5 text-red-700 dark:text-red-600" />
             {/* Pulsing dot */}
-            <span className="absolute -right-1 -top-1 flex h-3 w-3">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75"></span>
-              <span className="relative inline-flex h-3 w-3 rounded-full bg-yellow-500"></span>
+            <span className="absolute right-0 top-0 flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-red-600/70 opacity-75 motion-safe:animate-ping motion-reduce:animate-none" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-red-700 dark:bg-red-600" />
             </span>
             <span className="sr-only">Database migration pending</span>
           </Button>
