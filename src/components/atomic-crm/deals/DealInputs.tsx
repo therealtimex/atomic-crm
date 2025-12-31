@@ -1,4 +1,5 @@
-import { required } from "ra-core";
+import { useEffect, useRef } from "react";
+import { required, useWatch, useFormContext } from "ra-core";
 import { AutocompleteArrayInput } from "@/components/admin/autocomplete-array-input";
 import { ReferenceArrayInput } from "@/components/admin/reference-array-input";
 import { ReferenceInput } from "@/components/admin/reference-input";
@@ -43,6 +44,21 @@ const DealInfoInputs = () => {
 };
 
 const DealLinkedToInputs = () => {
+  const company_id = useWatch({ name: "company_id" });
+  const { setValue } = useFormContext();
+  const previousCompanyId = useRef(company_id);
+
+  // Clear selected contacts when company changes
+  useEffect(() => {
+    if (
+      previousCompanyId.current !== undefined &&
+      previousCompanyId.current !== company_id
+    ) {
+      setValue("contact_ids", []);
+    }
+    previousCompanyId.current = company_id;
+  }, [company_id, setValue]);
+
   return (
     <div className="flex flex-col gap-4 flex-1">
       <h3 className="text-base font-medium">Linked to</h3>
@@ -50,11 +66,19 @@ const DealLinkedToInputs = () => {
         <AutocompleteCompanyInput validate={required()} />
       </ReferenceInput>
 
-      <ReferenceArrayInput source="contact_ids" reference="contacts_summary">
+      <ReferenceArrayInput
+        source="contact_ids"
+        reference="contacts_summary"
+        filter={company_id ? { company_id } : undefined}
+      >
         <AutocompleteArrayInput
           label="Contacts"
           optionText={contactOptionText}
-          helperText={false}
+          helperText={
+            company_id
+              ? false
+              : "Please select a company first to see its contacts"
+          }
         />
       </ReferenceArrayInput>
     </div>
