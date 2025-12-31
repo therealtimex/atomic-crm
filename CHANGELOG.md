@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Tasks**: Visual task type icons for improved scannability.
+  - Each task type displays a distinctive icon (Email ✉️, Call 📞, Meeting 👥, Demo 📊, etc.)
+  - Icons appear in 24px circular badges with muted background
+  - Tooltips show task type name on hover for accessibility
+  - Gracefully handles "None" and unknown task types (no icon shown or generic fallback)
+  - Replaces bold "Type:" text prefix with clean icon representation
+  - Supports all default task types: Email, Call, Meeting, Demo, Lunch, Follow-up, Thank you, Ship
+  - Extensible icon mapping for custom task types
+
 ## [0.36.0] - 2025-12-31
 
 ### Added

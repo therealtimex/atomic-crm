@@ -18,6 +18,7 @@ import type { Task, TaskSummary } from "../types";
 import { TaskPriorityBadge } from "./TaskPriorityBadge";
 import { TaskStatusBadge } from "./TaskStatusBadge";
 import { TaskEdit } from "./TaskEdit";
+import { TaskTypeIcon } from "./TaskTypeIcon";
 
 const RelatedEntityField = ({ record }: { record: Task | TaskSummary }) => {
   const getEntityName = () => {
@@ -231,11 +232,11 @@ export const TaskListTable = () => {
         className="w-[35%]"
         cellClassName="max-w-md overflow-hidden"
         render={(record: Task) => (
-          <div className="line-clamp-2" title={record.text}>
-            {record.type && record.type !== "None" && (
-              <span className="font-semibold">{record.type}: </span>
-            )}
-            {record.text}
+          <div className="flex items-start gap-2">
+            <TaskTypeIcon taskType={record.type} />
+            <div className="line-clamp-2 flex-1" title={record.text}>
+              {record.text}
+            </div>
           </div>
         )}
       />

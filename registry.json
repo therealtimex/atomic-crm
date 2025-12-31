@@ -45,6 +45,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/tasks/TaskTypeIcon.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/tasks/TaskStatusBadge.tsx",
           "type": "registry:component"
         },
