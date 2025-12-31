@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.39.0] - 2025-12-31
+
 ### Added
 
 - **Tasks**: Automatic audit trail for quick actions with taskNotes integration.
