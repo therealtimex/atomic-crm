@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Tasks**: Relative due date display with smart time indicators (e.g., "Overdue by 2 days", "Due today", "Due in 3 days").
+  - Shows relative time as primary text with actual date as secondary detail
+  - Overdue tasks highlighted with red text and subtle warning background
+  - Completed tasks (done/cancelled) show simple date format without overdue styling
+  - Maintains sortability by due_date column
+- **Tables**: Zebra striping for improved row tracking in all data tables.
+  - Even rows have subtle background color (30% opacity)
+  - Enhanced hover state (70% opacity) for better visual feedback
+  - Works seamlessly in both light and dark themes
+
+### Changed
+
+- **Tasks**: Optimized column widths to eliminate horizontal scrolling.
+  - Task column expanded to 40% (from 35%) for better readability
+  - Added smart truncation to "Related To" column with max-width and tooltips
+  - Reduced Priority, Status, and Assigned To columns to 9% each
+  - Added overflow protection to all cells
+
+### Fixed
+
+- **Tables**: Eliminated horizontal scrolling by adding proper text truncation and optimized column widths.
+
 ## [0.34.1] - 2025-12-31
 
 ### Added
