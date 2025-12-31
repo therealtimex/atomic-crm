@@ -157,24 +157,27 @@ const TaskActions = ({ record }: { record: Task }) => {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const dueDate = record.due_date ? new Date(record.due_date) : null;
+    // Parse due date string directly to avoid timezone issues
+    const dueDate = record.due_date ? new Date(record.due_date + 'T00:00:00') : null;
     if (dueDate) {
       dueDate.setHours(0, 0, 0, 0);
     }
 
     const isOverdueOrDueToday = !dueDate || dueDate <= today;
 
-    let newDueDate: Date;
+    let newDueDateString: string;
     let noteText: string;
     let notificationText: string;
 
     if (isOverdueOrDueToday) {
-      newDueDate = tomorrow;
+      newDueDateString = tomorrow.toISOString().slice(0, 10);
       noteText = `Due date snoozed to ${tomorrow.toLocaleDateString()}`;
       notificationText = "Task snoozed to tomorrow";
     } else {
-      newDueDate = new Date(dueDate);
+      // Add 1 day directly to avoid timezone issues
+      const newDueDate = new Date(dueDate);
       newDueDate.setDate(newDueDate.getDate() + 1);
+      newDueDateString = newDueDate.toISOString().slice(0, 10);
       noteText = `Due date postponed by 1 day to ${newDueDate.toLocaleDateString()}`;
       notificationText = "Task postponed by 1 day";
     }
@@ -184,7 +187,7 @@ const TaskActions = ({ record }: { record: Task }) => {
       {
         id: record.id,
         data: {
-          due_date: newDueDate.toISOString().slice(0, 10),
+          due_date: newDueDateString,
           updated_at: new Date().toISOString(),
         },
         previousData: record,
@@ -203,11 +206,11 @@ const TaskActions = ({ record }: { record: Task }) => {
   // Determine smart button label
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const dueDate = record.due_date ? new Date(record.due_date) : null;
-  if (dueDate) {
-    dueDate.setHours(0, 0, 0, 0);
+  const labelDueDate = record.due_date ? new Date(record.due_date + 'T00:00:00') : null;
+  if (labelDueDate) {
+    labelDueDate.setHours(0, 0, 0, 0);
   }
-  const isOverdueOrDueToday = !dueDate || dueDate <= today;
+  const isOverdueOrDueToday = !labelDueDate || labelDueDate <= today;
   const snoozeLabel = isOverdueOrDueToday ? "Snooze to tomorrow" : "Postpone by 1 day";
 
   return (
