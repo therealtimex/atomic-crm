@@ -434,7 +434,7 @@ export const dataProvider = withLifecycleCallbacks(
     {
       resource: "deals",
       beforeGetList: async (params) => {
-        return applyFullTextSearch(["name", "type", "description"])(params);
+        return applyFullTextSearch(["name", "category", "description"])(params);
       },
     },
   ],
