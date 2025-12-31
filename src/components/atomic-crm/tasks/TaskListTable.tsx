@@ -157,29 +157,36 @@ const TaskActions = ({ record }: { record: Task }) => {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    // Parse due date string directly to avoid timezone issues
-    const dueDate = record.due_date ? new Date(record.due_date + 'T00:00:00') : null;
-    if (dueDate) {
-      dueDate.setHours(0, 0, 0, 0);
-    }
-
-    const isOverdueOrDueToday = !dueDate || dueDate <= today;
-
     let newDueDateString: string;
     let noteText: string;
     let notificationText: string;
 
-    if (isOverdueOrDueToday) {
+    if (!record.due_date) {
+      // No due date, set to tomorrow
       newDueDateString = tomorrow.toISOString().slice(0, 10);
       noteText = `Due date snoozed to ${tomorrow.toLocaleDateString()}`;
       notificationText = "Task snoozed to tomorrow";
     } else {
-      // Add 1 day directly to avoid timezone issues
-      const newDueDate = new Date(dueDate);
-      newDueDate.setDate(newDueDate.getDate() + 1);
-      newDueDateString = newDueDate.toISOString().slice(0, 10);
-      noteText = `Due date postponed by 1 day to ${newDueDate.toLocaleDateString()}`;
-      notificationText = "Task postponed by 1 day";
+      // Parse the date safely (handles both YYYY-MM-DD and full ISO 8601)
+      // We extract only the date part to avoid timezone shifts when parsing
+      const datePart = record.due_date.split("T")[0];
+      const [year, month, day] = datePart.split("-").map(Number);
+      const dueDate = new Date(year, month - 1, day);
+
+      const isOverdueOrDueToday = dueDate <= today;
+
+      if (isOverdueOrDueToday) {
+        newDueDateString = tomorrow.toISOString().slice(0, 10);
+        noteText = `Due date snoozed to ${tomorrow.toLocaleDateString()}`;
+        notificationText = "Task snoozed to tomorrow";
+      } else {
+        // Add 1 day to the due date
+        const newDueDate = new Date(dueDate);
+        newDueDate.setDate(newDueDate.getDate() + 1);
+        newDueDateString = newDueDate.toISOString().slice(0, 10);
+        noteText = `Due date postponed by 1 day to ${newDueDate.toLocaleDateString()}`;
+        notificationText = "Task postponed by 1 day";
+      }
     }
 
     update(
@@ -206,11 +213,13 @@ const TaskActions = ({ record }: { record: Task }) => {
   // Determine smart button label
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const labelDueDate = record.due_date ? new Date(record.due_date + 'T00:00:00') : null;
-  if (labelDueDate) {
-    labelDueDate.setHours(0, 0, 0, 0);
+  let isOverdueOrDueToday = true;
+  if (record.due_date) {
+    const datePart = record.due_date.split("T")[0];
+    const [year, month, day] = datePart.split("-").map(Number);
+    const labelDueDate = new Date(year, month - 1, day);
+    isOverdueOrDueToday = labelDueDate <= today;
   }
-  const isOverdueOrDueToday = !labelDueDate || labelDueDate <= today;
   const snoozeLabel = isOverdueOrDueToday ? "Snooze to tomorrow" : "Postpone by 1 day";
 
   return (

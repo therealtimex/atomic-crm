@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Tasks**: Robust parsing of `due_date` to handle both date-only strings and full ISO 8601 timestamps, preventing "Invalid Date" errors and timezone shifts during snooze/postpone actions.
+
 ## [0.40.1] - 2025-12-31
 
 ## [0.40.0] - 2025-12-31
