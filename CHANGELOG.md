@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Tasks**: Quick actions on row hover for efficient task management.
+  - Mark complete button (✓) - Sets task status to "done" immediately
+  - Edit button (✎) - Opens task edit dialog without navigating to detail page
+  - Snooze button (⏰) - Postpones due date to tomorrow (+1 day)
+  - Actions appear with smooth fade-in on row hover
+  - Context-aware: Complete and Snooze buttons hidden for completed tasks
+  - Each action includes tooltips and success notifications
+  - All actions prevent row click propagation for smooth UX
+
 ## [0.35.0] - 2025-12-31
 
 ### Added

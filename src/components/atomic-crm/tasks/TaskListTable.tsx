@@ -1,12 +1,23 @@
+import { useState } from "react";
+import { useUpdate, useNotify } from "ra-core";
+import { Check, Pencil, Clock } from "lucide-react";
 import { DataTable } from "@/components/admin/data-table";
 import { DateField } from "@/components/admin/date-field";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { TextField } from "@/components/admin/text-field";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { getRelativeDueDate } from "@/lib/date-utils";
 
 import type { Task, TaskSummary } from "../types";
 import { TaskPriorityBadge } from "./TaskPriorityBadge";
 import { TaskStatusBadge } from "./TaskStatusBadge";
+import { TaskEdit } from "./TaskEdit";
 
 const RelatedEntityField = ({ record }: { record: Task | TaskSummary }) => {
   const getEntityName = () => {
@@ -80,13 +91,136 @@ const DueDateField = ({ record }: { record: Task | TaskSummary }) => {
   );
 };
 
+const TaskActions = ({ record }: { record: Task }) => {
+  const [update] = useUpdate();
+  const notify = useNotify();
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+  const handleMarkComplete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    update(
+      "tasks",
+      {
+        id: record.id,
+        data: {
+          status: "done",
+          done_date: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        previousData: record,
+      },
+      {
+        onSuccess: () => {
+          notify("Task marked as complete", { type: "success" });
+        },
+      }
+    );
+  };
+
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditDialogOpen(true);
+  };
+
+  const handleSnooze = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    update(
+      "tasks",
+      {
+        id: record.id,
+        data: {
+          due_date: tomorrow.toISOString().slice(0, 10),
+          updated_at: new Date().toISOString(),
+        },
+        previousData: record,
+      },
+      {
+        onSuccess: () => {
+          notify("Task snoozed to tomorrow", { type: "success" });
+        },
+      }
+    );
+  };
+
+  const isCompleted = record.status === "done" || record.status === "cancelled";
+
+  return (
+    <>
+      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <TooltipProvider>
+          {!isCompleted && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={handleMarkComplete}
+                >
+                  <Check className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Mark complete</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={handleEdit}
+              >
+                <Pencil className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Edit</p>
+            </TooltipContent>
+          </Tooltip>
+          {!isCompleted && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={handleSnooze}
+                >
+                  <Clock className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Snooze to tomorrow</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </TooltipProvider>
+      </div>
+      {editDialogOpen && (
+        <TaskEdit
+          taskId={record.id}
+          open={editDialogOpen}
+          close={() => setEditDialogOpen(false)}
+        />
+      )}
+    </>
+  );
+};
+
 export const TaskListTable = () => {
   const getRowClassName = (record: Task) => {
     const isCompleted = record.status === "done" || record.status === "cancelled";
-    if (isCompleted) return undefined;
-
     const { isOverdue } = getRelativeDueDate(record.due_date, isCompleted);
-    return isOverdue ? "bg-destructive/10 hover:bg-destructive/20" : undefined;
+
+    // Add 'group' class for hover actions, plus overdue styling
+    const baseClass = "group";
+    if (isCompleted) return baseClass;
+    return isOverdue ? `${baseClass} bg-destructive/10 hover:bg-destructive/20` : baseClass;
   };
 
   return (
@@ -94,7 +228,7 @@ export const TaskListTable = () => {
       <DataTable.Col
         source="text"
         label="Task"
-        className="w-[40%]"
+        className="w-[35%]"
         cellClassName="max-w-md overflow-hidden"
         render={(record: Task) => (
           <div className="line-clamp-2" title={record.text}>
@@ -107,7 +241,7 @@ export const TaskListTable = () => {
       />
       <DataTable.Col
         label="Related To"
-        className="w-[18%]"
+        className="w-[16%]"
         cellClassName="overflow-hidden"
         sortable={false}
         render={(record: Task) => <RelatedEntityField record={record} />}
@@ -115,25 +249,32 @@ export const TaskListTable = () => {
       <DataTable.Col
         source="due_date"
         label="Due Date"
-        className="w-[15%]"
+        className="w-[14%]"
         cellClassName="overflow-hidden"
         render={(record: Task) => <DueDateField record={record} />}
       />
       <DataTable.Col
         label="Priority"
-        className="w-[9%]"
+        className="w-[8%]"
         render={(record: Task) => (
           <TaskPriorityBadge priority={record.priority} />
         )}
       />
       <DataTable.Col
         label="Status"
-        className="w-[9%]"
+        className="w-[8%]"
         render={(record: Task) => <TaskStatusBadge status={record.status} />}
       />
-      <DataTable.Col label="Assigned To" className="w-[9%]" cellClassName="truncate">
+      <DataTable.Col label="Assigned To" className="w-[8%]" cellClassName="truncate">
         <ReferenceField source="assigned_to" reference="sales" link={false} />
       </DataTable.Col>
+      <DataTable.Col
+        label="Actions"
+        className="w-[11%]"
+        sortable={false}
+        cellClassName="text-right pr-2"
+        render={(record: Task) => <TaskActions record={record} />}
+      />
     </DataTable>
   );
 };
