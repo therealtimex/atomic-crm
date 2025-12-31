@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Tasks**: Active filter bar with removable chips for clear filter visibility.
+  - Displays all active filters as badge chips above the task list
+  - User-friendly labels (e.g., "My Tasks", "Contact: John Doe", "Status: Done")
+  - One-click removal via X button on each chip
+  - Automatically fetches and displays names for Contact, Company, and Deal filters
+  - Hides when no filters are active (no visual clutter)
+  - Excludes default filters (e.g., archived: false) from display
+  - Supports all filter types: search, select, reference, boolean, custom
+  - Updates list immediately when filters are removed
 - **Tasks**: Visual task type icons for improved scannability.
   - Each task type displays a distinctive icon (Email ✉️, Call 📞, Meeting 👥, Demo 📊, etc.)
   - Icons appear in 24px circular badges with muted background

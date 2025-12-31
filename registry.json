@@ -105,6 +105,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/tasks/ActiveFilterBar.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/tags/colors.ts",
           "type": "registry:component"
         },

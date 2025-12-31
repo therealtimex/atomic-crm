@@ -12,6 +12,7 @@ import { useConfigurationContext } from "../root/ConfigurationContext";
 import { TopToolbar } from "../layout/TopToolbar";
 import { MyTasksInput } from "./MyTasksInput";
 import { TaskListTable } from "./TaskListTable";
+import { ActiveFilterBar } from "./ActiveFilterBar";
 
 const TaskList = () => {
   const { taskStatuses, taskPriorities } = useConfigurationContext();
@@ -42,6 +43,7 @@ const TaskList = () => {
       actions={<TaskActions />}
       title="Tasks"
     >
+      <ActiveFilterBar />
       <TaskListTable />
     </List>
   );
