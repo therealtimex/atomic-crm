@@ -222,7 +222,6 @@ const ArchiveButton = ({ record }: { record: Deal }) => {
 
 const UnarchiveButton = ({ record }: { record: Deal }) => {
   const dataProvider = useDataProvider();
-  const redirect = useRedirect();
   const notify = useNotify();
   const refresh = useRefresh();
 
