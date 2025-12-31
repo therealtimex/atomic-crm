@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Notes created automatically after successful task updates
   - Non-blocking implementation with silent error handling
   - Provides complete change history for task accountability
+- **Tasks**: Smart snooze/postpone button with context-aware behavior.
+  - Single action button with adaptive label based on task due date
+  - Shows "Snooze to Tomorrow" for overdue or today's tasks (sets due date to tomorrow)
+  - Shows "Postpone by 1 Day" for future tasks (adds 1 day to current due date)
+  - Intelligent logic prevents confusing UX (e.g., "snoozing" a task already due next week)
+  - Available in both task list table and detail page sidebar
+  - Audit trail notes reflect actual action taken ("snoozed" vs "postponed")
+  - Tooltip labels update dynamically based on task due date context
 
 ## [0.38.0] - 2025-12-31
 

@@ -1,5 +1,5 @@
-import { Calendar, Building2, UserCircle, UserCheck, Pencil, Briefcase } from "lucide-react";
-import { useRecordContext } from "ra-core";
+import { Calendar, Building2, UserCircle, UserCheck, Pencil, Briefcase, Check, Clock } from "lucide-react";
+import { useRecordContext, useUpdate, useCreate, useNotify, useGetIdentity } from "ra-core";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/admin/delete-button";
@@ -14,11 +14,119 @@ import { TaskEdit } from "./TaskEdit";
 export const TaskAside = () => {
   const record = useRecordContext<Task>();
   const [editOpen, setEditOpen] = useState(false);
+  const [update] = useUpdate();
+  const [create] = useCreate();
+  const notify = useNotify();
+  const { identity } = useGetIdentity();
 
   if (!record) return null;
+
+  const isCompleted = record.status === "done" || record.status === "cancelled";
+
+  // Create audit trail note
+  const createTaskNote = (text: string) => {
+    if (!identity?.id) return;
+
+    create(
+      "taskNotes",
+      {
+        data: {
+          task_id: record.id,
+          text,
+          date: new Date().toISOString(),
+          sales_id: identity.id,
+          status: "cold",
+        },
+      },
+      {
+        onError: (error) => {
+          console.error("Failed to create task note:", error);
+        },
+      }
+    );
+  };
+
+  const handleMarkComplete = () => {
+    update(
+      "tasks",
+      {
+        id: record.id,
+        data: {
+          status: "done",
+          done_date: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        previousData: record,
+      },
+      {
+        onSuccess: () => {
+          notify("Task marked as complete", { type: "success" });
+          createTaskNote("Task marked as complete");
+        },
+      }
+    );
+  };
+
+  const handleSnooze = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const dueDate = record.due_date ? new Date(record.due_date) : null;
+    if (dueDate) {
+      dueDate.setHours(0, 0, 0, 0);
+    }
+
+    const isOverdueOrDueToday = !dueDate || dueDate <= today;
+
+    let newDueDate: Date;
+    let noteText: string;
+    let notificationText: string;
+
+    if (isOverdueOrDueToday) {
+      newDueDate = tomorrow;
+      noteText = `Due date snoozed to ${tomorrow.toLocaleDateString()}`;
+      notificationText = "Task snoozed to tomorrow";
+    } else {
+      newDueDate = new Date(dueDate);
+      newDueDate.setDate(newDueDate.getDate() + 1);
+      noteText = `Due date postponed by 1 day to ${newDueDate.toLocaleDateString()}`;
+      notificationText = "Task postponed by 1 day";
+    }
+
+    update(
+      "tasks",
+      {
+        id: record.id,
+        data: {
+          due_date: newDueDate.toISOString().slice(0, 10),
+          updated_at: new Date().toISOString(),
+        },
+        previousData: record,
+      },
+      {
+        onSuccess: () => {
+          notify(notificationText, { type: "success" });
+          createTaskNote(noteText);
+        },
+      }
+    );
+  };
+
+  // Determine smart button label
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dueDate = record.due_date ? new Date(record.due_date) : null;
+  if (dueDate) {
+    dueDate.setHours(0, 0, 0, 0);
+  }
+  const isOverdueOrDueToday = !dueDate || dueDate <= today;
+  const snoozeLabel = isOverdueOrDueToday ? "Snooze to Tomorrow" : "Postpone by 1 Day";
+
   return (
     <div className="hidden sm:block w-64 min-w-64 text-sm">
-      <div className="mb-4 -ml-1">
+      <div className="mb-4 -ml-1 flex flex-col gap-2">
         <Button
           variant="outline"
           size="sm"
@@ -28,6 +136,30 @@ export const TaskAside = () => {
           <Pencil className="h-4 w-4" />
           Edit Task
         </Button>
+
+        {!isCompleted && (
+          <>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={handleMarkComplete}
+              className="flex items-center gap-2"
+            >
+              <Check className="h-4 w-4" />
+              Mark Complete
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSnooze}
+              className="flex items-center gap-2"
+            >
+              <Clock className="h-4 w-4" />
+              {snoozeLabel}
+            </Button>
+          </>
+        )}
       </div>
 
       <TaskEdit

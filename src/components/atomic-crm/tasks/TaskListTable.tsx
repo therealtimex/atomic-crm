@@ -151,30 +151,64 @@ const TaskActions = ({ record }: { record: Task }) => {
 
   const handleSnooze = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const tomorrow = new Date();
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const newDueDate = tomorrow.toISOString().slice(0, 10);
+
+    const dueDate = record.due_date ? new Date(record.due_date) : null;
+    if (dueDate) {
+      dueDate.setHours(0, 0, 0, 0);
+    }
+
+    const isOverdueOrDueToday = !dueDate || dueDate <= today;
+
+    let newDueDate: Date;
+    let noteText: string;
+    let notificationText: string;
+
+    if (isOverdueOrDueToday) {
+      newDueDate = tomorrow;
+      noteText = `Due date snoozed to ${tomorrow.toLocaleDateString()}`;
+      notificationText = "Task snoozed to tomorrow";
+    } else {
+      newDueDate = new Date(dueDate);
+      newDueDate.setDate(newDueDate.getDate() + 1);
+      noteText = `Due date postponed by 1 day to ${newDueDate.toLocaleDateString()}`;
+      notificationText = "Task postponed by 1 day";
+    }
 
     update(
       "tasks",
       {
         id: record.id,
         data: {
-          due_date: newDueDate,
+          due_date: newDueDate.toISOString().slice(0, 10),
           updated_at: new Date().toISOString(),
         },
         previousData: record,
       },
       {
         onSuccess: () => {
-          notify("Task snoozed to tomorrow", { type: "success" });
-          createTaskNote(`Due date postponed to ${tomorrow.toLocaleDateString()}`);
+          notify(notificationText, { type: "success" });
+          createTaskNote(noteText);
         },
       }
     );
   };
 
   const isCompleted = record.status === "done" || record.status === "cancelled";
+
+  // Determine smart button label
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dueDate = record.due_date ? new Date(record.due_date) : null;
+  if (dueDate) {
+    dueDate.setHours(0, 0, 0, 0);
+  }
+  const isOverdueOrDueToday = !dueDate || dueDate <= today;
+  const snoozeLabel = isOverdueOrDueToday ? "Snooze to tomorrow" : "Postpone by 1 day";
 
   return (
     <>
@@ -225,7 +259,7 @@ const TaskActions = ({ record }: { record: Task }) => {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Snooze to tomorrow</p>
+                <p>{snoozeLabel}</p>
               </TooltipContent>
             </Tooltip>
           )}
