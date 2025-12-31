@@ -1,5 +1,5 @@
-import { Archive, ArchiveRestore, Building2, Calendar, UserCheck, DollarSign, Tag, TrendingUp } from "lucide-react";
-import { useRecordContext, useDataProvider, useNotify, useRedirect, useRefresh, useUpdate } from "ra-core";
+import { Archive, ArchiveRestore, Calendar, UserCheck, DollarSign, Tag, TrendingUp } from "lucide-react";
+import { useRecordContext, useDataProvider, useNotify, useRefresh, useUpdate } from "ra-core";
 import { useMutation } from "@tanstack/react-query";
 import { format, isValid } from "date-fns";
 import type { ReactNode } from "react";
