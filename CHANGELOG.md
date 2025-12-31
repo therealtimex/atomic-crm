@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.38.0] - 2025-12-31
 
-## [0.37.0] - 2025-12-31
-
 ### Added
 
 - **Tasks**: Active filter bar with removable chips for clear filter visibility.
@@ -22,6 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Excludes default filters (e.g., archived: false) from display
   - Supports all filter types: search, select, reference, boolean, custom
   - Updates list immediately when filters are removed
+
+## [0.37.0] - 2025-12-31
+
+### Added
+
 - **Tasks**: Visual task type icons for improved scannability.
   - Each task type displays a distinctive icon (Email ✉️, Call 📞, Meeting 👥, Demo 📊, etc.)
   - Icons appear in 24px circular badges with muted background
