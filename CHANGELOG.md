@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.40.0] - 2025-12-31
 
-## [0.39.0] - 2025-12-31
-
 ### Added
 
 - **Tasks**: Automatic audit trail for quick actions with taskNotes integration.
@@ -21,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Notes created automatically after successful task updates
   - Non-blocking implementation with silent error handling
   - Provides complete change history for task accountability
+
+## [0.39.0] - 2025-12-31
+
+### Added
+
 - **Tasks**: Smart snooze/postpone button with context-aware behavior.
   - Single action button with adaptive label based on task due date
   - Shows "Snooze to Tomorrow" for overdue or today's tasks (sets due date to tomorrow)
