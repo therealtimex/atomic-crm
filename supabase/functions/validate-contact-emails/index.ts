@@ -324,7 +324,7 @@ Deno.serve(async (req) => {
 
     // Test database connectivity with a simple query
     console.log('Testing database connectivity...');
-    const { data: testTables, error: testError } = await supabaseAdmin
+    const { data: _testTables, error: testError } = await supabaseAdmin
       .from('contacts')
       .select('id')
       .limit(1);
@@ -343,7 +343,7 @@ Deno.serve(async (req) => {
 
     // Check if required columns exist
     console.log('Checking for email validation columns...');
-    const { data: columnTest, error: columnError } = await supabaseAdmin
+    const { data: _columnTest, error: columnError } = await supabaseAdmin
       .from('contacts')
       .select('id, email_jsonb, email_validation_status, external_heartbeat_checked_at')
       .limit(1);
