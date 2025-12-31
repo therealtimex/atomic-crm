@@ -7,11 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Tasks**: Fixed task type icon alignment in task list - icons now vertically center with task titles even when text wraps to multiple lines.
+- **UI**: Fixed checkbox vertical alignment in all data tables - checkboxes now properly center within table rows by matching cell padding and using flex container with full height.
+
 ## [0.40.4] - 2025-12-31
 
 ### Fixed
 
-- **Notes**: Use UTC ISO strings for all new timestamps and conditionally update last_seen in notes.
+- **Notes**: Fixed error when adding notes to tasks by only updating `last_seen` column for resources that have it (contacts, companies), not for tasks or deals.
+- **Notes**: Unified timestamp system - all notes (UI-created and automated) now use simple server-based UTC timestamps (`new Date().toISOString()`) instead of complex client-side timezone conversions, ensuring single source of truth and avoiding issues with incorrect client machine time.
 
 ## [0.40.3] - 2025-12-31
 

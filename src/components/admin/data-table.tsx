@@ -268,11 +268,13 @@ const DataTableRow = ({
       className={cn(rowClick !== false && "cursor-pointer", className)}
     >
       {hasBulkActions ? (
-        <TableCell className="flex w-8" onClick={handleToggle}>
-          <Checkbox
-            checked={selectedIds?.includes(record.id)}
-            onClick={handleToggle}
-          />
+        <TableCell className="w-8 py-1" onClick={handleToggle}>
+          <div className="flex items-center h-full">
+            <Checkbox
+              checked={selectedIds?.includes(record.id)}
+              onClick={handleToggle}
+            />
+          </div>
         </TableCell>
       ) : null}
       {children}

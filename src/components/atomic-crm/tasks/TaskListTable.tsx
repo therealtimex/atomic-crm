@@ -311,7 +311,7 @@ export const TaskListTable = () => {
         className="w-[35%]"
         cellClassName="max-w-md overflow-hidden"
         render={(record: Task) => (
-          <div className="flex items-start gap-2">
+          <div className="flex items-center gap-2">
             <TaskTypeIcon taskType={record.type} />
             <div className="line-clamp-2 flex-1" title={record.text}>
               {record.text}
