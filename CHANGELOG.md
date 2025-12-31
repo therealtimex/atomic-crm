@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Deals**: Converted deal detail view from dialog to full-page layout with sidebar.
+  - Consistent UX pattern matching Contacts and Tasks detail pages
+  - More horizontal space for content (no longer constrained by dialog max-width)
+  - Sidebar displays metadata, actions, and relationships (company, contacts, assignment)
+  - Action buttons (Edit, Archive/Unarchive, Delete) moved to sidebar
+  - Improved readability with Card-based layout
+  - Natural scrolling without modal overlay
+  - Browser back button navigation support
+  - Note: Create and Edit remain as dialogs on Kanban board for quick interactions
+
 ## [0.40.5] - 2025-12-31
 
 ### Fixed
