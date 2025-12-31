@@ -85,16 +85,23 @@ const NoteCreateButton = ({
     reset(resetValues, { keepValues: false });
     refetch();
 
-    const updateData: any = { last_seen: new Date().toISOString() };
+    // Only update last_seen for resources that have this column (contacts, companies)
+    const updateData: any = {};
+    if (reference === "contacts" || reference === "companies") {
+      updateData.last_seen = new Date().toISOString();
+    }
     if (reference === "contacts") {
       updateData.status = data.status;
     }
 
-    update(reference, {
-      id: (record && record.id) as unknown as Identifier,
-      data: updateData,
-      previousData: record,
-    });
+    // Only perform update if there's data to update
+    if (Object.keys(updateData).length > 0) {
+      update(reference, {
+        id: (record && record.id) as unknown as Identifier,
+        data: updateData,
+        previousData: record,
+      });
+    }
     notify("Note added");
   };
 

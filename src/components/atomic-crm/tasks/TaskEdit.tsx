@@ -38,12 +38,17 @@ export const TaskEdit = ({
   const createTaskNote = () => {
     if (!identity?.id || !taskId) return;
 
+    // Use server-based UTC timestamp (single source of truth)
+    // Avoids client-side time issues (wrong machine time, timezone errors)
+    const date = new Date().toISOString();
+
     create(
       "taskNotes",
       {
         data: {
           task_id: taskId,
           text: "Task updated via quick edit action",
+          date,
           sales_id: identity.id,
           status: "cold",
         },

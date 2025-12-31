@@ -27,12 +27,17 @@ export const TaskAside = () => {
   const createTaskNote = (text: string) => {
     if (!identity?.id) return;
 
+    // Use server-based UTC timestamp (single source of truth)
+    // Avoids client-side time issues (wrong machine time, timezone errors)
+    const date = new Date().toISOString();
+
     create(
       "taskNotes",
       {
         data: {
           task_id: record.id,
           text,
+          date,
           sales_id: identity.id,
           status: "cold",
         },
