@@ -1,9 +1,5 @@
 import { Filter, X } from "lucide-react";
-import {
-  useGetIdentity,
-  useGetOne,
-  useListFilterContext,
-} from "ra-core";
+import { useGetIdentity, useGetOne, useListFilterContext } from "ra-core";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -32,8 +28,7 @@ const getSalesLabel = (sale?: Sale, id?: number | string) => {
 };
 
 export const TaskActiveFilters = () => {
-  const { filterValues, displayedFilters, setFilters } =
-    useListFilterContext();
+  const { filterValues, displayedFilters, setFilters } = useListFilterContext();
   const { identity } = useGetIdentity();
   const { taskStatuses, taskPriorities } = useConfigurationContext();
 
@@ -127,11 +122,7 @@ export const TaskActiveFilters = () => {
         Active filters
       </span>
       {chips.map((chip) => (
-        <Badge
-          key={chip.key}
-          variant="secondary"
-          className="gap-1 pr-1"
-        >
+        <Badge key={chip.key} variant="secondary" className="gap-1 pr-1">
           <span>{chip.label}</span>
           <button
             type="button"
