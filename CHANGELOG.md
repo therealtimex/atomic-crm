@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.33.11] - 2025-12-31
 
+- **Fix**: Import `useWatch` and `useFormContext` from `react-hook-form` instead of `ra-core`.
+
 ## [0.33.10] - 2025-12-31
+
+-  **Feat**: filter deal contacts by selected company for better UX
 
 ## [0.33.9] - 2025-12-31
 
