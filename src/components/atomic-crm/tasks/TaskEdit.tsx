@@ -44,7 +44,6 @@ export const TaskEdit = ({
         data: {
           task_id: taskId,
           text: "Task updated via quick edit action",
-          date: new Date().toISOString(),
           sales_id: identity.id,
           status: "cold",
         },

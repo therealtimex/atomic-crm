@@ -109,7 +109,6 @@ const TaskActions = ({ record }: { record: Task }) => {
         data: {
           task_id: record.id,
           text,
-          date: new Date().toISOString(),
           sales_id: identity.id,
           status: "cold",
         },

@@ -7,13 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Tasks**: Synchronized task note timestamps by relying on server-side generation instead of client-side dates, ensuring consistency between UI and API actions.
+
 ## [0.40.2] - 2025-12-31
 
 ### Fixed
 
 - **Tasks**: Robust parsing of `due_date` to handle both date-only strings and full ISO 8601 timestamps, preventing "Invalid Date" errors and timezone shifts during snooze/postpone actions.
-
-## [0.40.1] - 2025-12-31
 
 ## [0.40.0] - 2025-12-31
 
