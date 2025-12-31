@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Navigation**: Smart back button in header that appears on settings/admin pages and detail views.
+  - Shows on /settings, /database, /integrations, /sales pages and routes ending with /show
+  - Automatically hides when dialogs/modals are open
+  - Responsive design (text on desktop, icon-only on mobile)
+  - No-flash implementation using synchronous dialog detection
+
+### Fixed
+
+- **Deals**: Fixed "column deals.type does not exist" error when navigating to Deals page. Changed full-text search to use correct `category` column instead of non-existent `type` column.
+
+### Changed
+
+- **Documentation**: Added pre-commit linting instructions to AGENTS.md with common ESLint rules and best practices.
+
 ## [0.33.12] - 2025-12-31
 
 ## [0.33.11] - 2025-12-31

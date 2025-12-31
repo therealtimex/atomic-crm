@@ -1,17 +1,19 @@
+import { useEffect, useState } from "react";
 import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Database, Settings, User, Webhook } from "lucide-react";
+import { Database, Settings, User, Webhook, ArrowLeft } from "lucide-react";
 import { CanAccess } from "ra-core";
-import { Link, matchPath, useLocation } from "react-router";
+import { Link, matchPath, useLocation, useNavigate } from "react-router";
 import { RefreshButton } from "@/components/admin/refresh-button";
 import { ThemeModeToggle } from "@/components/admin/theme-mode-toggle";
 import { UserMenu } from "@/components/admin/user-menu";
 import { useUserMenu } from "@/hooks/user-menu-context";
 import { MigrationPulseIndicator } from "@/components/atomic-crm/migration";
 import { useMigrationContextSafe } from "@/contexts/MigrationContext";
+import { Button } from "@/components/ui/button";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
 
@@ -19,6 +21,7 @@ const Header = () => {
   const { darkModeLogo, lightModeLogo, title } = useConfigurationContext();
   const location = useLocation();
   const migrationContext = useMigrationContextSafe();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Simplified path matching logic
   const navPaths = [
@@ -38,11 +41,56 @@ const Header = () => {
     migrationContext?.migrationStatus?.needsMigration &&
     !migrationContext?.showMigrationBanner;
 
+  // Check if a dialog is currently open (synchronous check to prevent flash)
+  const checkDialogSync = () => {
+    const dialogOpen = document.querySelector('[role="dialog"][data-state="open"]');
+    return !!dialogOpen;
+  };
+
+  // Detect if a dialog/modal is currently open
+  useEffect(() => {
+    const checkDialog = () => {
+      // Check if a dialog overlay exists in the DOM
+      // We look for role="dialog" which covers both Dialog and Sheet components
+      // and ensure it is in the open state
+      const dialogOpen = checkDialogSync();
+      setIsDialogOpen(dialogOpen);
+    };
+
+    // Check on mount and when location changes
+    checkDialog();
+
+    // Use MutationObserver to detect dialog state changes
+    const observer = new MutationObserver(checkDialog);
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["data-state"],
+    });
+
+    return () => observer.disconnect();
+  }, [location.pathname]);
+
+  // Determine if back button should be shown
+  // Use whitelist approach: show only on specific non-modal pages
+  const backButtonPages = ["/settings", "/database", "/integrations", "/sales"];
+  const isBackButtonPage =
+    backButtonPages.some((page) => location.pathname.startsWith(page)) ||
+    /\/show$/.test(location.pathname);
+
+  // Check dialog state synchronously during render to prevent flash
+  const isDialogCurrentlyOpen = isDialogOpen || checkDialogSync();
+  const showBackButton = isBackButtonPage && !isDialogCurrentlyOpen;
+
   return (
     <header className="bg-secondary fixed top-0 left-0 right-0 z-50 border-b border-border">
       <div className="px-4">
         <div className="flex justify-between items-center flex-1">
-          <Logo darkLogo={darkModeLogo} lightLogo={lightModeLogo} title={title} />
+          <div className="flex items-center gap-2">
+            <Logo darkLogo={darkModeLogo} lightLogo={lightModeLogo} title={title} />
+            {showBackButton && <BackButton />}
+          </div>
 
           <nav className="flex" aria-label="Main navigation">
             <NavigationTab
@@ -127,6 +175,23 @@ const Logo = ({
     <h1 className="text-xl font-semibold">{title}</h1>
   </Link>
 );
+
+const BackButton = () => {
+  const navigate = useNavigate();
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => navigate(-1)}
+      className="gap-1 text-secondary-foreground/70 hover:text-secondary-foreground"
+      aria-label="Go back to previous page"
+    >
+      <ArrowLeft className="h-4 w-4" />
+      <span className="hidden sm:inline">Back</span>
+    </Button>
+  );
+};
 
 const NavigationTab = ({
   label,
