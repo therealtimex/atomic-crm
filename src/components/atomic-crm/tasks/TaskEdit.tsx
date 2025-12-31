@@ -8,6 +8,7 @@ import { SaveButton } from "@/components/admin/form";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -94,6 +95,9 @@ const TaskEditForm = ({
       >
         <DialogHeader>
           <DialogTitle>Edit task</DialogTitle>
+          <DialogDescription>
+            Update task details, assignment, and related entity
+          </DialogDescription>
         </DialogHeader>
         <TextInput
           autoFocus

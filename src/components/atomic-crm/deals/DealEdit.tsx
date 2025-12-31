@@ -9,7 +9,12 @@ import { Link } from "react-router";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 import { FormToolbar } from "../layout/FormToolbar";
 import { CompanyAvatar } from "../companies/CompanyAvatar";
@@ -61,21 +66,26 @@ function EditHeader() {
   }
 
   return (
-    <DialogTitle className="pb-0">
-      <div className="flex justify-between items-start mb-8">
-        <div className="flex items-center gap-4">
-          <ReferenceField source="company_id" reference="companies" link="show">
-            <CompanyAvatar />
-          </ReferenceField>
-          <h2 className="text-2xl font-semibold">Edit {deal.name} deal</h2>
+    <>
+      <DialogTitle className="pb-0">
+        <div className="flex justify-between items-start mb-8">
+          <div className="flex items-center gap-4">
+            <ReferenceField source="company_id" reference="companies" link="show">
+              <CompanyAvatar />
+            </ReferenceField>
+            <h2 className="text-2xl font-semibold">Edit {deal.name} deal</h2>
+          </div>
+          <div className="flex gap-2 pr-12">
+            <DeleteButton />
+            <Button asChild variant="outline" className="h-9">
+              <Link to={`/deals/${deal.id}/show`}>Back to deal</Link>
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-2 pr-12">
-          <DeleteButton />
-          <Button asChild variant="outline" className="h-9">
-            <Link to={`/deals/${deal.id}/show`}>Back to deal</Link>
-          </Button>
-        </div>
-      </div>
-    </DialogTitle>
+      </DialogTitle>
+      <DialogDescription className="sr-only">
+        Edit deal information including name, company, contacts, and other details
+      </DialogDescription>
+    </>
   );
 }

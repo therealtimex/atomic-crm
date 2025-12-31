@@ -17,7 +17,12 @@ import { ReferenceField } from "@/components/admin/reference-field";
 import { ReferenceManyField } from "@/components/admin/reference-many-field";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
 
@@ -40,6 +45,9 @@ export const DealShow = ({ open, id }: { open: boolean; id?: string }) => {
       <DialogContent className="lg:max-w-4xl p-4 overflow-y-auto max-h-9/10 top-1/20 translate-y-0">
         <VisuallyHidden>
           <DialogTitle>Deal Details</DialogTitle>
+          <DialogDescription>
+            View and manage deal information, notes, and related contacts
+          </DialogDescription>
         </VisuallyHidden>
         {id ? (
           <ShowBase id={id}>

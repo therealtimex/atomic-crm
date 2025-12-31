@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -158,6 +159,9 @@ export const AddTask = ({
                     ? `Create a new task for ${record.first_name || record.name || "this record"}`
                     : "Create a new task"}
                 </DialogTitle>
+                <DialogDescription>
+                  Add a new task with description, due date, and assignment details
+                </DialogDescription>
               </DialogHeader>
               <TextInput
                 autoFocus

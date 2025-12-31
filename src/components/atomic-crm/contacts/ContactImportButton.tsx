@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -98,6 +99,9 @@ export function ContactImportDialog({
         <Form className="flex flex-col gap-4">
           <DialogHeader>
             <DialogTitle>Import</DialogTitle>
+            <DialogDescription>
+              Import contacts from a CSV file
+            </DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col space-y-2">
