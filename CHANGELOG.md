@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.40.4] - 2025-12-31
 
+### Fixed
+
+- **Notes**: Use UTC ISO strings for all new timestamps and conditionally update last_seen in notes.
+
 ## [0.40.3] - 2025-12-31
 
 ### Fixed
