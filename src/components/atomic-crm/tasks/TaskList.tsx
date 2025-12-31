@@ -10,6 +10,7 @@ import { SelectInput } from "@/components/admin/select-input";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { TopToolbar } from "../layout/TopToolbar";
+import { TaskActiveFilters } from "./TaskActiveFilters";
 import { MyTasksInput } from "./MyTasksInput";
 import { TaskListTable } from "./TaskListTable";
 
@@ -42,7 +43,10 @@ const TaskList = () => {
       actions={<TaskActions />}
       title="Tasks"
     >
-      <TaskListTable />
+      <div className="flex flex-col gap-3">
+        <TaskActiveFilters />
+        <TaskListTable />
+      </div>
     </List>
   );
 };

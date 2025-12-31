@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Tasks**: Added active filter chips to the tasks list for quick visibility and removal.
+
 ## [0.34.1] - 2025-12-31
 
 ### Added
