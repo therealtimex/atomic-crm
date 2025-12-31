@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.35.0] - 2025-12-31
+
 ### Added
 
 - **Tasks**: Relative due date display with smart time indicators (e.g., "Overdue by 2 days", "Due today", "Due in 3 days").
