@@ -45,6 +45,21 @@ make typecheck        # Run TypeScript type checking
 make lint             # Run ESLint and Prettier checks
 ```
 
+**IMPORTANT: Always run before committing:**
+```bash
+npm run typecheck && npm run lint
+```
+
+This ensures:
+- No TypeScript type errors
+- No ESLint violations (unused variables, incorrect imports, etc.)
+- Code formatting is consistent with Prettier
+
+**Common ESLint Rules:**
+- Unused variables must be prefixed with `_` (e.g., `const { unused: _unused, ...rest } = data`)
+- Imports must be used or removed
+- Console.log statements should be removed before committing (except in error handlers)
+
 ### Building
 
 ```bash
@@ -545,7 +560,16 @@ Update the CHANGELOG for:
 
 ### Git Hooks
 
-- Pre-commit: Automatically runs `make registry-gen` to update `registry.json` and stages any changes to include them in the commit
+**Pre-commit hook automatically:**
+1. Runs `make registry-gen` to update `registry.json`
+2. Stages registry changes for the commit
+
+**Note:** The pre-commit hook does NOT run linter/typecheck automatically. You must run these manually before committing:
+```bash
+npm run typecheck && npm run lint
+```
+
+This is intentional to keep commits fast. CI/CD will catch linting errors, but it's faster to catch them locally first.
 
 ### Accessing Local Services During Development
 
