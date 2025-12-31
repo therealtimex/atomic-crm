@@ -1,4 +1,4 @@
-import { EditBase, Form, required, useNotify, useRecordContext, useRefresh, type Identifier } from "ra-core";
+import { EditBase, Form, required, useNotify, useRecordContext, type Identifier } from "ra-core";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { TextInput } from "@/components/admin/text-input";
 import { DateInput } from "@/components/admin/date-input";
@@ -30,7 +30,6 @@ export const TaskEdit = ({
 }) => {
   const { taskTypes, taskPriorities, taskStatuses } = useConfigurationContext();
   const notify = useNotify();
-  const refresh = useRefresh();
   return (
     <Dialog open={open} onOpenChange={close}>
       {taskId && (
@@ -45,8 +44,6 @@ export const TaskEdit = ({
                 type: "info",
                 undoable: true,
               });
-              // Force refresh to get updated view data
-              setTimeout(() => refresh(), 100);
             },
           }}
           redirect={false}
@@ -55,7 +52,6 @@ export const TaskEdit = ({
               ...transformTaskEntityData(data),
               updated_at: new Date().toISOString(),
             };
-            console.log('[TaskEdit] Final data being sent to Supabase:', transformed);
             return transformed;
           }}
         >

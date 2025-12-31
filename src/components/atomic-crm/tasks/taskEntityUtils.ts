@@ -16,16 +16,29 @@ export const getEntityType = (record: Task | undefined): EntityType => {
 /**
  * Transforms form data to properly set entity relationships
  * Ensures only one entity ID is set and others are nullified
+ * Strips out computed/view-specific fields that shouldn't be sent to the database
  */
 export const transformTaskEntityData = (data: any) => {
-  const { entity_type, contact_id, company_id, deal_id, ...rest } = data;
-
-  console.log('[transformTaskEntityData] Input:', {
+  const {
     entity_type,
     contact_id,
     company_id,
     deal_id,
-  });
+    // Strip out computed fields from tasks_summary view
+    company_id_computed,
+    company_name,
+    contact_first_name,
+    contact_last_name,
+    contact_email,
+    deal_name,
+    assigned_first_name,
+    assigned_last_name,
+    creator_first_name,
+    creator_last_name,
+    nb_notes,
+    last_note_date,
+    ...rest
+  } = data;
 
   // Always start with all entity fields set to null
   const entityData: any = {
@@ -47,8 +60,6 @@ export const transformTaskEntityData = (data: any) => {
     ...rest,
     ...entityData,
   };
-
-  console.log('[transformTaskEntityData] Output:', result);
 
   return result;
 };
