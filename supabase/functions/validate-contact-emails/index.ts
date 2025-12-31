@@ -1,8 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { supabaseAdmin } from "../_shared/supabaseAdmin.ts";
 import { corsHeaders } from "../_shared/utils.ts";
-// @deno-types="npm:@types/node"
-import { EmailValidator } from "npm:email-validator-js@1.0.0";
+import validator from "npm:validator@13.11.0";
 
 /**
  * Smart Email Validation with Adaptive Looping
@@ -32,7 +31,7 @@ interface EmailValidationResult {
 }
 
 const DEFAULT_CONFIG: ValidationConfig = {
-  batchSize: 50,
+  batchSize: 20,               // Reduced from 50 to avoid timeouts
   maxIterations: 100,
   delayBetweenEmails: 100,
   delayBetweenBatches: 5000,
@@ -86,48 +85,100 @@ async function validateEmailWithAPI(email: string): Promise<EmailValidationResul
 }
 
 /**
- * Advanced email validation using email-validator-js (fallback)
+ * Email validation optimized for Edge Functions (no SMTP - Port 25 is blocked)
+ * Performs: regex, MX record lookup, disposable detection, typo checking
+ *
+ * Note: SMTP validation (Port 25) is blocked in Deno Deploy/Edge Functions.
+ * For full SMTP validation, use EMAIL_VALIDATION_API_KEY instead.
  */
 async function validateEmailWithLibrary(email: string): Promise<EmailValidationResult> {
   try {
-    const validator = new EmailValidator();
-    const result = await validator.verify(email);
-
-    if (!result.valid) {
-      if (!result.validators?.regex?.valid) {
-        return { email, status: 'invalid', reason: 'Invalid syntax' };
-      }
-      if (!result.validators?.mx?.valid) {
-        return { email, status: 'invalid', reason: 'No mail server' };
-      }
-      if (!result.validators?.smtp?.valid) {
-        return { email, status: 'invalid', reason: 'Mailbox not found' };
-      }
-      return { email, status: 'invalid', reason: result.reason || 'Validation failed' };
+    // 1. Regex validation (syntax)
+    if (!validator.isEmail(email)) {
+      return { email, status: 'invalid', reason: 'Invalid email format' };
     }
 
-    // Valid but risky
-    if (result.validators?.disposable?.isDisposable) {
-      return { email, status: 'risky', reason: 'Disposable email' };
-    }
-    if (result.validators?.typo?.hasSuggestion) {
-      return { email, status: 'risky', reason: `Typo: ${result.validators.typo.suggestion}` };
+    const domain = email.split('@')[1]?.toLowerCase();
+    if (!domain) {
+      return { email, status: 'invalid', reason: 'Missing domain' };
     }
 
-    return { email, status: 'valid', reason: 'Verified' };
+    // 2. Disposable email detection (expanded list)
+    const disposableDomains = [
+      // Temporary email services
+      'tempmail.com', 'temp-mail.org', 'throwaway.email', 'guerrillamail.com',
+      'mailinator.com', '10minutemail.com', 'trashmail.com', 'maildrop.cc',
+      'getnada.com', 'fakeinbox.com', 'yopmail.com', 'emailondeck.com',
+      'sharklasers.com', 'grr.la', 'mytemp.email', 'temp-mail.io',
+      // One-time/burner services
+      'minuteinbox.com', 'dispostable.com', 'tempmail.net', 'mohmal.com',
+      'emailfake.com', 'throwawaymail.com', 'mailnesia.com', 'spamgourmet.com',
+    ];
+
+    if (disposableDomains.includes(domain)) {
+      return { email, status: 'risky', reason: 'Disposable email domain' };
+    }
+
+    // 3. Common typo detection
+    const typoMap: Record<string, string> = {
+      'gmial.com': 'gmail.com', 'gmai.com': 'gmail.com', 'gmil.com': 'gmail.com',
+      'yahooo.com': 'yahoo.com', 'yaho.com': 'yahoo.com', 'yahho.com': 'yahoo.com',
+      'hotmial.com': 'hotmail.com', 'hotmil.com': 'hotmail.com',
+      'outlok.com': 'outlook.com', 'outloo.com': 'outlook.com',
+      'live.co': 'live.com', 'gmx.co': 'gmx.com',
+    };
+
+    if (typoMap[domain]) {
+      return {
+        email,
+        status: 'risky',
+        reason: `Possible typo: did you mean ${typoMap[domain]}?`,
+      };
+    }
+
+    // 4. MX Record validation (DNS-based, works in Edge Functions)
+    try {
+      const mxRecords = await Deno.resolveDns(domain, 'MX');
+
+      if (!mxRecords || mxRecords.length === 0) {
+        return { email, status: 'invalid', reason: 'No mail server (MX records not found)' };
+      }
+
+      // Valid: passed regex + has MX records
+      return { email, status: 'valid', reason: 'Verified (syntax + MX records)' };
+    } catch (dnsError) {
+      // DNS lookup failed (domain doesn't exist or network issue)
+      console.warn(`MX lookup failed for ${domain}:`, dnsError);
+      return { email, status: 'invalid', reason: 'Domain does not exist or has no mail server' };
+    }
+
   } catch (error) {
     console.error(`Library validation error for ${email}:`, error);
-    return { email, status: 'unknown', reason: 'Error' };
+    return { email, status: 'unknown', reason: 'Validation error' };
   }
 }
 
 /**
- * Main validation function with API fallback to library
+ * Main validation function with two-tier strategy
+ *
+ * Tier 1 (Premium - Recommended):
+ *   - Uses external API (ZeroBounce, Hunter.io, etc.) via EMAIL_VALIDATION_API_KEY
+ *   - Performs full validation: regex, DNS, MX, SMTP, deliverability, spam traps
+ *   - Works around Edge Function Port 25 limitation
+ *   - Cost: ~$0.001-0.01 per email (depending on provider)
+ *
+ * Tier 2 (Free - Limited):
+ *   - Edge-optimized validation using Deno DNS APIs
+ *   - Checks: regex syntax, MX records, disposable domains, typos
+ *   - Cannot verify mailbox existence (SMTP Port 25 blocked in Edge Functions)
+ *   - Cost: Free, but less accurate
+ *
+ * Recommendation: Set EMAIL_VALIDATION_API_KEY for production use
  */
 async function validateEmail(email: string): Promise<EmailValidationResult> {
   const apiKey = Deno.env.get('EMAIL_VALIDATION_API_KEY');
 
-  // Try API first if configured
+  // Try API first if configured (Tier 1)
   if (apiKey) {
     try {
       return await validateEmailWithAPI(email);
@@ -137,28 +188,44 @@ async function validateEmail(email: string): Promise<EmailValidationResult> {
     }
   }
 
-  // Use library if no API key
+  // Use library if no API key (Tier 2)
   return await validateEmailWithLibrary(email);
 }
 
 /**
  * Get count of contacts needing validation
+ * Note: email_jsonb is an array like [{"email": "user@example.com", "type": "Work"}]
  */
 async function getValidationQueueSize(config: ValidationConfig): Promise<number> {
   const staleDate = new Date(Date.now() - config.daysStale * 86400000).toISOString();
 
-  const { count, error } = await supabaseAdmin
-    .from('contacts')
-    .select('id', { count: 'exact', head: true })
-    .not('email', 'is', null)
-    .or(`email_validation_status.is.null,external_heartbeat_checked_at.lt.${staleDate}`);
+  try {
+    // Query for contacts with emails that need validation
+    // email_jsonb is not null and not empty array
+    const { count, error } = await supabaseAdmin
+      .from('contacts')
+      .select('id', { count: 'exact', head: true })
+      .not('email_jsonb', 'is', null)
+      .neq('email_jsonb', '[]')
+      .or(`email_validation_status.is.null,external_heartbeat_checked_at.lt.${staleDate}`);
 
-  if (error) {
-    console.error('Failed to get queue size:', error);
-    return 0;
+    if (error) {
+      console.error('Failed to get queue size:', {
+        error,
+        errorMessage: error.message,
+        errorDetails: error.details,
+        errorHint: error.hint,
+        errorCode: error.code,
+        staleDate,
+      });
+      throw new Error(`Query failed: ${error.message || 'Unknown error'}`);
+    }
+
+    return count || 0;
+  } catch (err) {
+    console.error('Exception in getValidationQueueSize:', err);
+    throw err;
   }
-
-  return count || 0;
 }
 
 /**
@@ -242,6 +309,69 @@ Deno.serve(async (req) => {
   let sessionId: string | undefined;
 
   try {
+    // Debug: Check environment configuration
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const hasServiceKey = !!Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    console.log('Environment check:', {
+      supabaseUrl: supabaseUrl || 'NOT SET',
+      hasServiceKey,
+      supabaseUrlLength: supabaseUrl?.length || 0,
+    });
+
+    if (!supabaseUrl || !hasServiceKey) {
+      throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables');
+    }
+
+    // Test database connectivity with a simple query
+    console.log('Testing database connectivity...');
+    const { data: testTables, error: testError } = await supabaseAdmin
+      .from('contacts')
+      .select('id')
+      .limit(1);
+
+    if (testError) {
+      console.error('Database connectivity test failed:', {
+        message: testError.message,
+        details: testError.details,
+        hint: testError.hint,
+        code: testError.code,
+      });
+      throw new Error(`Database connection failed: ${testError.message || 'Unknown error'}`);
+    }
+
+    console.log('✅ Database connectivity OK');
+
+    // Check if required columns exist
+    console.log('Checking for email validation columns...');
+    const { data: columnTest, error: columnError } = await supabaseAdmin
+      .from('contacts')
+      .select('id, email_jsonb, email_validation_status, external_heartbeat_checked_at')
+      .limit(1);
+
+    if (columnError) {
+      console.error('Column check failed:', {
+        message: columnError.message,
+        details: columnError.details,
+        hint: columnError.hint,
+        code: columnError.code,
+      });
+
+      // If specific columns don't exist, the migrations haven't been deployed
+      if (columnError.message.includes('column') || columnError.code === '42703') {
+        throw new Error(
+          'Email validation columns not found. Please deploy migrations:\n' +
+          '  npx supabase db push\n' +
+          'Required migrations:\n' +
+          '  - 20250109152531_email_jsonb.sql\n' +
+          '  - 20251226100000_add_contact_heartbeats.sql'
+        );
+      }
+
+      throw new Error(`Column validation failed: ${columnError.message || 'Unknown error'}`);
+    }
+
+    console.log('✅ Email validation columns exist');
+
     // Parse configuration from query params and body
     const url = new URL(req.url);
     const iteration = parseInt(url.searchParams.get('iteration') || '0');
@@ -345,8 +475,9 @@ Deno.serve(async (req) => {
 
     const { data: contacts, error: fetchError } = await supabaseAdmin
       .from('contacts')
-      .select('id, email, last_seen')
-      .not('email', 'is', null)
+      .select('id, email_jsonb, last_seen')
+      .not('email_jsonb', 'is', null)
+      .neq('email_jsonb', '[]')
       .or(`email_validation_status.is.null,external_heartbeat_checked_at.lt.${staleDate}`)
       .order('last_seen', { ascending: false, nullsFirst: false }) // Active contacts first
       .limit(config.batchSize);
@@ -372,11 +503,18 @@ Deno.serve(async (req) => {
     console.log(`Processing ${contacts.length} contacts (${queueSize - contacts.length} remaining)`);
 
     // 4. Validate emails with throttling
+    // Extract primary (first) email from email_jsonb array
     const results: EmailValidationResult[] = [];
     for (const contact of contacts) {
-      if (!contact.email) continue;
+      if (!contact.email_jsonb || !Array.isArray(contact.email_jsonb) || contact.email_jsonb.length === 0) {
+        continue;
+      }
 
-      const result = await validateEmail(contact.email);
+      // Get the first email address from the array
+      const primaryEmail = contact.email_jsonb[0]?.email;
+      if (!primaryEmail) continue;
+
+      const result = await validateEmail(primaryEmail);
       results.push(result);
 
       // Throttle between emails

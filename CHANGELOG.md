@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Email Validation**: Smart email validation edge function with adaptive looping and two-tier validation strategy.
+  - Tier 1 (Premium): External API support (ZeroBounce, Hunter.io) for full SMTP validation
+  - Tier 2 (Free): Edge-optimized validation using DNS MX records, disposable domain detection, and typo checking
+  - Batch processing with automatic retry and session management
+  - Self-triggering loops to validate all contacts without manual intervention
+  - Configurable batch size (default: 20 emails) to prevent timeouts
+  - Priority-based validation (recent contacts first)
+  - Contact notes automatically created when validation status changes
+  - Works with `email_jsonb` schema (validates primary email from array)
+  - Port 25 aware: No SMTP checks in Edge Functions (blocked by Deno Deploy), uses DNS MX records instead
+
 ## [0.34.0] - 2025-12-31
 
 ### Added
