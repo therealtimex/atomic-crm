@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { required, useWatch, useFormContext } from "ra-core";
+import { useWatch, useFormContext } from "react-hook-form";
+import { required } from "ra-core";
 import { AutocompleteArrayInput } from "@/components/admin/autocomplete-array-input";
 import { ReferenceArrayInput } from "@/components/admin/reference-array-input";
 import { ReferenceInput } from "@/components/admin/reference-input";
