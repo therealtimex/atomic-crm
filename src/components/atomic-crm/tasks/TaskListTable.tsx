@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUpdate, useNotify } from "ra-core";
+import { useUpdate, useNotify, useCreate, useGetIdentity } from "ra-core";
 import { Check, Pencil, Clock } from "lucide-react";
 import { DataTable } from "@/components/admin/data-table";
 import { DateField } from "@/components/admin/date-field";
@@ -94,8 +94,33 @@ const DueDateField = ({ record }: { record: Task | TaskSummary }) => {
 
 const TaskActions = ({ record }: { record: Task }) => {
   const [update] = useUpdate();
+  const [create] = useCreate();
   const notify = useNotify();
+  const { identity } = useGetIdentity();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+  // Create a task note for audit trail
+  const createTaskNote = (text: string) => {
+    if (!identity?.id) return;
+
+    create(
+      "taskNotes",
+      {
+        data: {
+          task_id: record.id,
+          text,
+          date: new Date().toISOString(),
+          sales_id: identity.id,
+          status: "cold",
+        },
+      },
+      {
+        onError: (error) => {
+          console.error("Failed to create task note:", error);
+        },
+      }
+    );
+  };
 
   const handleMarkComplete = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -113,6 +138,7 @@ const TaskActions = ({ record }: { record: Task }) => {
       {
         onSuccess: () => {
           notify("Task marked as complete", { type: "success" });
+          createTaskNote("Task marked as complete via quick action");
         },
       }
     );
@@ -127,12 +153,14 @@ const TaskActions = ({ record }: { record: Task }) => {
     e.stopPropagation();
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
+    const newDueDate = tomorrow.toISOString().slice(0, 10);
+
     update(
       "tasks",
       {
         id: record.id,
         data: {
-          due_date: tomorrow.toISOString().slice(0, 10),
+          due_date: newDueDate,
           updated_at: new Date().toISOString(),
         },
         previousData: record,
@@ -140,6 +168,7 @@ const TaskActions = ({ record }: { record: Task }) => {
       {
         onSuccess: () => {
           notify("Task snoozed to tomorrow", { type: "success" });
+          createTaskNote(`Due date postponed to ${tomorrow.toLocaleDateString()}`);
         },
       }
     );

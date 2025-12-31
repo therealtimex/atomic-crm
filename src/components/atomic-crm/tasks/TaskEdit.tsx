@@ -1,4 +1,4 @@
-import { EditBase, Form, required, useNotify, useRecordContext, type Identifier } from "ra-core";
+import { EditBase, Form, required, useNotify, useRecordContext, useCreate, useGetIdentity, type Identifier } from "ra-core";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { TextInput } from "@/components/admin/text-input";
 import { DateInput } from "@/components/admin/date-input";
@@ -31,6 +31,32 @@ export const TaskEdit = ({
 }) => {
   const { taskTypes, taskPriorities, taskStatuses } = useConfigurationContext();
   const notify = useNotify();
+  const [create] = useCreate();
+  const { identity } = useGetIdentity();
+
+  // Create audit trail note
+  const createTaskNote = () => {
+    if (!identity?.id || !taskId) return;
+
+    create(
+      "taskNotes",
+      {
+        data: {
+          task_id: taskId,
+          text: "Task updated via quick edit action",
+          date: new Date().toISOString(),
+          sales_id: identity.id,
+          status: "cold",
+        },
+      },
+      {
+        onError: (error) => {
+          console.error("Failed to create task note:", error);
+        },
+      }
+    );
+  };
+
   return (
     <Dialog open={open} onOpenChange={close}>
       {taskId && (
@@ -45,6 +71,7 @@ export const TaskEdit = ({
                 type: "info",
                 undoable: true,
               });
+              createTaskNote();
             },
           }}
           redirect={false}

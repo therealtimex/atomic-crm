@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Tasks**: Automatic audit trail for quick actions with taskNotes integration.
+  - Mark complete action creates note: "Task marked as complete via quick action"
+  - Edit action creates note: "Task updated via quick edit action"
+  - Snooze action creates note: "Due date postponed to [date]" with formatted date
+  - All notes include acting user (sales_id) and ISO 8601 timestamp
+  - Notes created automatically after successful task updates
+  - Non-blocking implementation with silent error handling
+  - Provides complete change history for task accountability
+
 ## [0.38.0] - 2025-12-31
 
 ### Added
