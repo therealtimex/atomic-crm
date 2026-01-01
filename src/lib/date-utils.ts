@@ -50,10 +50,15 @@ export function getRelativeDueDate(
     return { text: "No due date", isOverdue: false };
   }
 
-  const dueDate = new Date(dateString);
+  // Parse date as local date to avoid timezone shift
+  // Extract date part (handles both "YYYY-MM-DD" and "YYYY-MM-DDTHH:MM:SS" formats)
+  const datePart = dateString.split('T')[0];
+  const [year, month, day] = datePart.split('-').map(Number);
+  const dueDate = new Date(year, month - 1, day);
+  dueDate.setHours(0, 0, 0, 0);
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  dueDate.setHours(0, 0, 0, 0);
 
   const daysDiff = getDaysDifference(today, dueDate);
 
@@ -88,21 +93,9 @@ export function getRelativeDueDate(
     return { text: "Due tomorrow", isOverdue: false };
   }
 
-  // Due in the next week
-  if (daysDiff <= 7) {
-    return {
-      text: `Due in ${daysDiff} days`,
-      isOverdue: false,
-    };
-  }
-
-  // For dates further out, show the actual date
+  // All future dates show "Due in X days"
   return {
-    text: dueDate.toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-      year: dueDate.getFullYear() !== new Date().getFullYear() ? "numeric" : undefined,
-    }),
+    text: `Due in ${daysDiff} ${daysDiff === 1 ? 'day' : 'days'}`,
     isOverdue: false,
   };
 }

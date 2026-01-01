@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useUpdate, useNotify, useCreate, useGetIdentity } from "ra-core";
 import { Check, Pencil, Clock } from "lucide-react";
 import { DataTable } from "@/components/admin/data-table";
-import { DateField } from "@/components/admin/date-field";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { TextField } from "@/components/admin/text-field";
 import { Button } from "@/components/ui/button";
@@ -70,6 +69,15 @@ const DueDateField = ({ record }: { record: Task | TaskSummary }) => {
   const isCompleted = record.status === "done" || record.status === "cancelled";
   const { text, isOverdue } = getRelativeDueDate(record.due_date, isCompleted);
 
+  // Parse date as local date to avoid timezone shift (same logic as getRelativeDueDate)
+  let formattedDate = "";
+  if (record.due_date) {
+    const datePart = record.due_date.split('T')[0];
+    const [year, month, day] = datePart.split('-').map(Number);
+    const dueDate = new Date(year, month - 1, day);
+    formattedDate = dueDate.toLocaleDateString();
+  }
+
   return (
     <div className="flex flex-col gap-0.5">
       <span
@@ -85,19 +93,24 @@ const DueDateField = ({ record }: { record: Task | TaskSummary }) => {
       </span>
       {record.due_date && !isCompleted && (
         <span className="text-xs text-muted-foreground">
-          <DateField source="due_date" record={record} />
+          {formattedDate}
         </span>
       )}
     </div>
   );
 };
 
-const TaskActions = ({ record }: { record: Task }) => {
+const TaskActions = ({
+  record,
+  onEdit
+}: {
+  record: Task;
+  onEdit: (taskId: number) => void;
+}) => {
   const [update] = useUpdate();
   const [create] = useCreate();
   const notify = useNotify();
   const { identity } = useGetIdentity();
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   // Create a task note for audit trail
   const createTaskNote = (text: string) => {
@@ -150,7 +163,7 @@ const TaskActions = ({ record }: { record: Task }) => {
 
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setEditDialogOpen(true);
+    onEdit(record.id as number);
   };
 
   const handleSnooze = (e: React.MouseEvent) => {
@@ -227,72 +240,65 @@ const TaskActions = ({ record }: { record: Task }) => {
   const snoozeLabel = isOverdueOrDueToday ? "Snooze to tomorrow" : "Postpone by 1 day";
 
   return (
-    <>
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <TooltipProvider>
-          {!isCompleted && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={handleMarkComplete}
-                >
-                  <Check className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Mark complete</p>
-              </TooltipContent>
-            </Tooltip>
-          )}
+    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <TooltipProvider>
+        {!isCompleted && (
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-8 w-8"
-                onClick={handleEdit}
+                onClick={handleMarkComplete}
               >
-                <Pencil className="h-4 w-4" />
+                <Check className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Edit</p>
+              <p>Mark complete</p>
             </TooltipContent>
           </Tooltip>
-          {!isCompleted && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={handleSnooze}
-                >
-                  <Clock className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{snoozeLabel}</p>
-              </TooltipContent>
-            </Tooltip>
-          )}
-        </TooltipProvider>
-      </div>
-      {editDialogOpen && (
-        <TaskEdit
-          taskId={record.id}
-          open={editDialogOpen}
-          close={() => setEditDialogOpen(false)}
-        />
-      )}
-    </>
+        )}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={handleEdit}
+            >
+              <Pencil className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Edit</p>
+          </TooltipContent>
+        </Tooltip>
+        {!isCompleted && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={handleSnooze}
+              >
+                <Clock className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{snoozeLabel}</p>
+            </TooltipContent>
+          </Tooltip>
+        )}
+      </TooltipProvider>
+    </div>
   );
 };
 
 export const TaskListTable = () => {
+  const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
+
   const getRowClassName = (record: Task) => {
     const isCompleted = record.status === "done" || record.status === "cancelled";
     const { isOverdue } = getRelativeDueDate(record.due_date, isCompleted);
@@ -304,7 +310,8 @@ export const TaskListTable = () => {
   };
 
   return (
-    <DataTable rowClick="show" rowClassName={getRowClassName}>
+    <>
+      <DataTable rowClick="show" rowClassName={getRowClassName}>
       <DataTable.Col
         source="text"
         label="Task"
@@ -353,8 +360,19 @@ export const TaskListTable = () => {
         className="w-[11%]"
         sortable={false}
         cellClassName="text-right pr-2"
-        render={(record: Task) => <TaskActions record={record} />}
+        render={(record: Task) => (
+          <TaskActions record={record} onEdit={setEditingTaskId} />
+        )}
       />
     </DataTable>
+
+      {editingTaskId && (
+        <TaskEdit
+          taskId={editingTaskId}
+          open={!!editingTaskId}
+          close={() => setEditingTaskId(null)}
+        />
+      )}
+    </>
   );
 };

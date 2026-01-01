@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Database**: Changed task `due_date` and `done_date` columns from `timestamp with time zone` to `date` type.
+  - **ROOT CAUSE FIX**: Prevents timezone conversion issues for date-only values
+  - User selects "Dec 31, 2025" → saves as "2025-12-31" (not "2026-01-01T08:00:00Z")
+  - No time or timezone components stored, just the calendar date
+  - Migration automatically drops and recreates dependent views (tasks_summary, contacts_summary, companies_summary)
+  - Migration extracts date part from existing timestamps (safe conversion)
+  - **BREAKING**: If you have custom code relying on time/timezone in these fields, it will need updating
+- **Tasks**: Updated completed tasks filter logic to work with date-only values.
+  - Changed from "completed in last 5 minutes" to "completed today"
+  - Shows tasks completed today in the task list (previously tried to compare date with timestamp)
+
+### Fixed
+
+- **Tasks**: Fixed task edit dialog triggering unwanted navigation to detail page when clicking date picker in task list table.
+  - Moved TaskEdit dialog rendering outside of table row context to prevent event bubbling
+  - Edit dialog now renders at TaskListTable component level instead of inside TaskActions
+  - Clicking on date picker or other form elements no longer triggers row click navigation
+  - Issue only affected task list table; sidebar edit was unaffected
+- **Tasks**: Fixed timezone bug causing due dates to display 1 day earlier than saved value.
+  - Date-only strings (YYYY-MM-DD) now parsed as local dates instead of UTC to prevent timezone shift
+  - Example: Setting "Jan 15, 2027" now correctly displays as "Jan 15, 2027" instead of "Jan 14, 2027"
+  - Fixed in both task list table and task detail page for consistent date display
+  - Affects all date parsing including relative dates, formatted dates, and date calculations
+- **Tasks**: Improved due date labels for future tasks - all future dates now show "Due in X days" format.
+  - Changed from showing formatted date (e.g., "Jan 15, 2027") for dates beyond 7 days
+  - Consistent "Due in X days" format makes it easier to scan and prioritize tasks
+  - Completed tasks still show formatted dates
+
 ## [0.40.6] - 2025-12-31
 
 ### Changed
