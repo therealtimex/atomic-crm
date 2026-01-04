@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  base: "/realtimex-crm/doc/",
+  base: "/realtimex-crm/docs/",
   vite: {
     plugins: [tailwindcss()],
   },
@@ -18,8 +18,8 @@ export default defineConfig({
       favicon: "./public/favicon.svg",
       customCss: ["./src/styles/global.css"],
       logo: {
-        dark: "./public/logo_atomic_crm_dark.svg",
-        light: "./public/logo_atomic_crm_light.svg",
+        dark: "./public/logo_realtimex_dark.svg",
+        light: "./public/logo_realtimex_light.svg",
       },
       head: [
         {

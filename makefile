@@ -80,7 +80,7 @@ doc-preview: doc-build
 	@(cd docs && npm run preview)
 
 doc-deploy:
-	@(cd docs && npx gh-pages -b gh-pages -d dist -e doc -m "Deploy docs" --remove doc --add --dotfiles --nojekyll)
+	@(cd docs && npx gh-pages -b gh-pages -d dist -e docs -m "Deploy docs" --remove docs --add --dotfiles --nojekyll)
 
 app-deploy:
 	@npx gh-pages -d dist -m "Deploy app" --no-history --nojekyll
