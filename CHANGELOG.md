@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.42.0] - 2026-01-04
+
 ### Changed
 
 - **Branding**: Updated the default light/dark logos to the new 24px bracket-and-stack mark.
