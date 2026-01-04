@@ -12,7 +12,7 @@
 /coverage
 /dev-test
 /dev-docs
-docs-internal
+/docs-internal
 gtm
 
 # production
@@ -33,7 +33,7 @@ yarn-error.log*
 supabase/.branches
 supabase/.temp
 
-dist/
+/dist/
 /lib/
 .env
 *storybook.log

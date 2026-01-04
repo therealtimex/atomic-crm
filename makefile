@@ -68,19 +68,19 @@ typecheck:
 	npm run typecheck
 
 doc-install:
-	@(cd doc && npm install)
+	@(cd docs && npm install)
 
 doc-dev:
-	@(cd doc && npm run dev)
+	@(cd docs && npm run dev)
 
 doc-build:
-	@(cd doc && npm run build)
+	@(cd docs && npm run build)
 
 doc-preview: doc-build
-	@(cd doc && npm run preview)
+	@(cd docs && npm run preview)
 
 doc-deploy:
-	@(cd doc && npx gh-pages -b gh-pages -d dist -e doc -m "Deploy docs" --remove doc)
+	@(cd docs && npx gh-pages -b gh-pages -d dist -e doc -m "Deploy docs" --remove doc)
 
 registry-build: ## build the shadcn registry
 	npm run registry:build
