@@ -80,13 +80,13 @@ doc-preview: doc-build
 	@(cd docs && npm run preview)
 
 doc-deploy:
-	@(cd docs && npx gh-pages -b gh-pages -d dist -e doc -m "Deploy docs" --remove doc)
+	@(cd docs && npx gh-pages -b gh-pages -d dist -e doc -m "Deploy docs" --remove doc --add)
 
 registry-build: ## build the shadcn registry
 	npm run registry:build
 
 registry-deploy: registry-build ## Deploy the shadcn registry (Automatically done by CI/CD pipeline)
-	@(cd public/r && npx gh-pages -b gh-pages -d ./ -s atomic-crm.json -e r -m "Deploy registry" --remove r)
+	@(cd public/r && npx gh-pages -b gh-pages -d ./ -s atomic-crm.json -e r -m "Deploy registry" --remove r --add)
 
 registry-gen: ## Generate the shadcn registry (ran automatically by a pre-commit hook)
 	npm run registry:gen
