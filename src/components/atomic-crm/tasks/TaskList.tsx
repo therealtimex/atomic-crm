@@ -8,14 +8,19 @@ import { ReferenceInput } from "@/components/admin/reference-input";
 import { SearchInput } from "@/components/admin/search-input";
 import { SelectInput } from "@/components/admin/select-input";
 
+import { useState } from "react";
+import { LayoutList, Kanban } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { TopToolbar } from "../layout/TopToolbar";
 import { MyTasksInput } from "./MyTasksInput";
 import { TaskListTable } from "./TaskListTable";
 import { ActiveFilterBar } from "./ActiveFilterBar";
+import { TaskKanbanView } from "./TaskKanbanView";
 
 const TaskList = () => {
   const { taskStatuses, taskPriorities } = useConfigurationContext();
+  const [view, setView] = useState<"table" | "kanban">("table");
 
   const taskFilters = [
     <SearchInput source="q" alwaysOn />,
@@ -36,21 +41,47 @@ const TaskList = () => {
 
   return (
     <List
-      perPage={25}
+      perPage={view === "table" ? 25 : 100}
       sort={{ field: "due_date", order: "ASC" }}
       filters={taskFilters}
       filterDefaultValues={{ archived: false }}
-      actions={<TaskActions />}
+      actions={<TaskActions view={view} setView={setView} />}
       title="Tasks"
     >
       <ActiveFilterBar />
-      <TaskListTable />
+      {view === "table" ? <TaskListTable /> : <TaskKanbanView />}
     </List>
   );
 };
 
-const TaskActions = () => (
+const TaskActions = ({
+  view,
+  setView
+}: {
+  view: "table" | "kanban";
+  setView: (view: "table" | "kanban") => void;
+}) => (
   <TopToolbar>
+    <div className="flex items-center bg-muted rounded-md p-1 mr-2">
+      <Button
+        variant={view === "table" ? "secondary" : "ghost"}
+        size="sm"
+        className="h-8 px-2"
+        onClick={() => setView("table")}
+      >
+        <LayoutList className="h-4 w-4 mr-2" />
+        Table
+      </Button>
+      <Button
+        variant={view === "kanban" ? "secondary" : "ghost"}
+        size="sm"
+        className="h-8 px-2"
+        onClick={() => setView("kanban")}
+      >
+        <Kanban className="h-4 w-4 mr-2" />
+        Kanban
+      </Button>
+    </div>
     <FilterButton />
     <ExportButton />
     <CreateButton label="New Task" />

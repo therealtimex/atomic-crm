@@ -33,6 +33,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/tasks/tasks.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/tasks/taskEntityUtils.ts",
           "type": "registry:component"
         },
@@ -69,11 +73,23 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/tasks/TaskKanbanView.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/tasks/TaskEdit.tsx",
           "type": "registry:component"
         },
         {
           "path": "src/components/atomic-crm/tasks/TaskCreate.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/tasks/TaskColumn.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/tasks/TaskCard.tsx",
           "type": "registry:component"
         },
         {
