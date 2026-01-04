@@ -85,7 +85,7 @@ const Header = () => {
 
   return (
     <header className="bg-secondary fixed top-0 left-0 right-0 z-50 border-b border-border">
-      <div className="px-4">
+      <div className="px-4 sm:px-5 lg:px-6">
         <div className="flex justify-between items-center flex-1">
           <div className="flex items-center gap-2">
             <Logo darkLogo={darkModeLogo} lightLogo={lightModeLogo} title={title} />

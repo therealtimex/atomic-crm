@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Tasks Kanban**: Made column headers sticky, added collapsible columns with per-user persistence, and removed the bottom loading bar to free up vertical space.
-- **Layout**: Adjusted global side padding and removed the max-width container for more horizontal real estate.
+- **Layout**: Adjusted global side padding (responsive) and removed the max-width container for more horizontal real estate.
 - **Tasks**: Persisted Tasks view toggle (Table/Kanban) per user and improved toggle alignment/visual contrast.
 
 ## [0.40.7] - 2026-01-01
