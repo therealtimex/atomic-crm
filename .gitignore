@@ -12,6 +12,7 @@
 /coverage
 /dev-test
 /dev-docs
+/gtm
 
 # production
 /build
