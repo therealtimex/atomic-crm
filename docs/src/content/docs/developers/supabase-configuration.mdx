@@ -1,0 +1,85 @@
+---
+title: Configuring Supabase
+description: This document explains how to configure a remote Supabase instance for RealTimeX CRM.
+---
+
+RealTimeX CRM uses Supabase as its backend. It is designed with a "Bring Your Own Database" philosophy, allowing you to connect to any Supabase instance via the UI or environment variables.
+
+## Connection Methods
+
+### 1. Setup Wizard (UI)
+When you first launch the application, you will be greeted by a Setup Wizard. This is the easiest way to connect your CRM to a Supabase project. Simply enter your **Supabase URL** and **Anon Key**.
+
+The application will validate the connection and save the configuration to your browser's local storage. This configuration will persist across sessions.
+
+### 2. Environment Variables
+For developers, you can configure the connection using a `.env` or `.env.production.local` file in the root directory:
+
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+:::note
+UI configuration (entered via the Setup Wizard) takes precedence over environment variables.
+:::
+
+## Database Migrations
+
+RealTimeX CRM requires specific tables, views, and functions to be present in your Supabase database.
+
+### Using the CLI (Recommended)
+You can use the RealTimeX CRM CLI to apply migrations to your remote Supabase instance:
+
+```bash
+npx realtimex-crm migrate
+```
+
+This command will:
+1. Link your local project to the remote Supabase project.
+2. Push all required database migrations.
+3. Deploy the necessary Edge Functions.
+
+### Manual Migrations
+If you prefer manual control, you can use the Supabase CLI directly:
+
+1. Link your project:
+    ```bash
+    npx supabase link --project-ref your-project-id
+    ```
+2. Push migrations:
+    ```bash
+    npx supabase db push
+    ```
+3. Deploy functions:
+    ```bash
+    npx supabase functions deploy
+    ```
+
+## Email Provider Setup
+
+In order to support user invitations and password resets, RealTimeX CRM needs to be able to send emails from your Supabase instance.
+
+It is highly recommended to use a [custom SMTP provider](https://supabase.com/docs/guides/auth/auth-smtp#how-to-set-up-a-custom-smtp-server) (e.g., Postmark, Resend, AWS SES) for production use, as Supabase's default provider has significant rate limits and restrictions.
+
+Once configured, update your [Rate Limits](https://supabase.com/dashboard/project/_/auth/rate-limits) in the Supabase dashboard to suit your needs.
+
+## Authentication Settings
+
+### Site URL and Redirects
+Ensure your **Site URL** and **Additional Redirect URLs** are correctly configured in the Supabase Dashboard (**Authentication > URL Configuration**).
+
+For example, if your app is hosted at `https://my-crm.com`, set that as the Site URL. The authentication callback handled by the CRM is at `https://my-crm.com/auth-callback.html`.
+
+### Email OTP (Recommended)
+RealTimeX CRM supports Email OTP (One-Time Password) login, which is often more reliable than magic links in some environments. To enable this, update your Supabase email template to include the code:
+
+```html
+<h1>{{ .Token }}</h1>
+<p>Enter this code in the application to continue.</p>
+```
+
+## Troubleshooting
+
+### Connection Status
+You can check the current database connection status at any time by navigating to **Settings > Database** within the RealTimeX CRM application. This page allows you to test the connection, view current credentials, or clear the configuration to restart the Setup Wizard.

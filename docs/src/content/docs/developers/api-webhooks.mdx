@@ -1,0 +1,47 @@
+---
+title: API & Webhooks
+description: Integrate RealTimeX CRM with your other tools using our REST API and Webhook system.
+---
+
+RealTimeX CRM is designed to be highly interoperable. You can interact with your CRM data programmatically via our REST API or receive real-time updates through Webhooks.
+
+## API Keys
+
+To use the API, you must first create an API key in the **Settings > Integrations** page.
+
+- **Scopes**: When creating a key, you can define specific permissions (e.g., `contacts:read`, `deals:write`).
+- **Security**: Your API key is only shown once. Store it securely. All requests use HMAC-SHA256 signature verification for security.
+
+## REST API
+
+Our REST API provides full CRUD operations for all major entities. The base URL is determined by your Supabase project.
+
+### Endpoints
+- `GET/POST/PATCH/DELETE /v1/contacts`
+- `GET/POST/PATCH/DELETE /v1/companies`
+- `GET/POST/PATCH/DELETE /v1/deals`
+- `GET/POST/PATCH/DELETE /v1/tasks`
+- `POST /v1/activities`: Create notes and tasks in a single request.
+
+For the full specification, including request/response examples and error codes, please refer to the [API.md](https://github.com/therealtimex/realtimex-crm/blob/main/docs/API.md) file in the repository.
+
+## Webhooks
+
+Webhooks allow RealTimeX CRM to notify your external services when specific events occur.
+
+### Supported Events
+- **CRUD Events**: `contact.created`, `company.updated`, `deal.deleted`, etc.
+- **Business Events**: `deal.won`, `deal.lost`, `task.completed`.
+
+### Configuration
+1. Navigate to **Settings > Integrations > Webhooks**.
+2. Enter your destination URL.
+3. Select the events you want to subscribe to.
+4. (Optional) Define a secret key to verify the payload signature (`X-Hook-Signature`).
+
+### Delivery & Retries
+Webhooks are delivered asynchronously. If your server is down, the system will retry delivery with exponential backoff to ensure you don't miss important updates.
+
+## Rate Limiting
+
+By default, the API is rate-limited to **100 requests per minute** per API key to ensure stability. Standard rate limit headers (`X-RateLimit-Limit`, `X-RateLimit-Remaining`) are included in every response.
