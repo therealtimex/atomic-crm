@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useGetIdentity, useLocaleState } from "ra-core";
 import { getSupabaseConfig } from "@/lib/supabase-config";
 import { supabase } from "../providers/supabase/supabase";
+import { updateCachedSaleLocale } from "../providers/supabase/authProvider";
 import { resolveLocale } from "@/i18n/locales";
 
 type IdentityWithLocale = {
@@ -15,6 +16,7 @@ export const LocaleSync = () => {
   const lastPersistedLocale = useRef<string | null>(null);
   const hasInitialized = useRef(false);
   const lastIdentityId = useRef<IdentityWithLocale["id"] | null>(null);
+  const pendingPersistLocale = useRef<string | null>(null);
   const supabaseConfig = getSupabaseConfig();
   const supabaseConfigured = Boolean(supabaseConfig);
   const storeKey = "RaStoreCRM.locale";
@@ -23,7 +25,9 @@ export const LocaleSync = () => {
     if (isPending) return;
 
     const identityData = identity as IdentityWithLocale | undefined;
-    const identityLocale = identityData?.locale;
+    const identityLocale = identityData?.locale
+      ? resolveLocale([identityData.locale])
+      : null;
     const identityId = identityData?.id ?? null;
     if (hasInitialized.current && identityId === lastIdentityId.current) {
       return;
@@ -45,9 +49,13 @@ export const LocaleSync = () => {
     const detectedLocale = resolveLocale(
       typeof navigator !== "undefined" ? navigator.languages : undefined,
     );
-    const nextLocale = identityLocale || storedLocale || detectedLocale;
+    const nextLocale = storedLocale || identityLocale || detectedLocale;
 
-    if (nextLocale && nextLocale !== locale) {
+    if (storedLocale) {
+      if (storedLocale !== locale) {
+        setLocale(storedLocale);
+      }
+    } else if (nextLocale && nextLocale !== locale) {
       setLocale(nextLocale);
     }
 
@@ -55,18 +63,29 @@ export const LocaleSync = () => {
       const persistInitialLocale = async () => {
         try {
           if (!supabaseConfigured) return;
+          if (pendingPersistLocale.current === nextLocale) return;
+          pendingPersistLocale.current = nextLocale;
           const { error } = await supabase.rpc("set_sales_locale", {
             new_locale: nextLocale,
           });
           if (error) throw error;
           lastPersistedLocale.current = nextLocale;
+          updateCachedSaleLocale(nextLocale);
         } catch (error) {
           console.error("[i18n] Failed to persist initial locale", error);
+        } finally {
+          if (pendingPersistLocale.current === nextLocale) {
+            pendingPersistLocale.current = null;
+          }
         }
       };
       void persistInitialLocale();
     } else {
-      lastPersistedLocale.current = identityLocale ?? nextLocale;
+      if (storedLocale && identityLocale && storedLocale !== identityLocale) {
+        lastPersistedLocale.current = identityLocale;
+      } else {
+        lastPersistedLocale.current = identityLocale ?? storedLocale ?? nextLocale;
+      }
     }
 
     hasInitialized.current = true;
@@ -82,13 +101,20 @@ export const LocaleSync = () => {
     const persistLocale = async () => {
       try {
         if (!supabaseConfigured) return;
+        if (pendingPersistLocale.current === locale) return;
+        pendingPersistLocale.current = locale;
         const { error } = await supabase.rpc("set_sales_locale", {
           new_locale: locale,
         });
         if (error) throw error;
         lastPersistedLocale.current = locale;
+        updateCachedSaleLocale(locale);
       } catch (error) {
         console.error("[i18n] Failed to persist locale change", error);
+      } finally {
+        if (pendingPersistLocale.current === locale) {
+          pendingPersistLocale.current = null;
+        }
       }
     };
 

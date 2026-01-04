@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Localization**: Persisted locale updates via a database function to avoid `sales` update policy failures.
 - **Localization**: Locale switching now updates immediately and missing admin-kit strings fall back to English.
+- **Localization**: Filled missing React-Admin translations for ES/VI/JA/KO so no raw i18n keys appear.
 
 ### Security
 

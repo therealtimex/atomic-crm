@@ -109,6 +109,14 @@ export const authProvider: AuthProvider = {
 };
 
 let cachedSale: any;
+
+export const updateCachedSaleLocale = (locale: string) => {
+  if (!cachedSale) return;
+  cachedSale = {
+    ...cachedSale,
+    locale,
+  };
+};
 const getSaleFromCache = async () => {
   if (cachedSale != null) return cachedSale;
 

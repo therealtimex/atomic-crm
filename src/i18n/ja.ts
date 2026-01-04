@@ -121,4 +121,134 @@ export const jaMessages = {
       },
     },
   },
+  ra: {
+    action: {
+      clear_array_input: "一覧をクリア",
+      confirm: "確認",
+      create_item: "%{item}を作成",
+      remove_all_filters: "すべてのフィルターを解除",
+      reset: "リセット",
+      search_columns: "列を検索",
+      select_all: "すべて選択",
+      select_all_button: "すべて選択",
+      select_row: "この行を選択",
+      unselect: "選択解除",
+      expand: "展開",
+      close: "閉じる",
+      open_menu: "メニューを開く",
+      close_menu: "メニューを閉じる",
+      update: "更新",
+      move_up: "上へ移動",
+      move_down: "下へ移動",
+      open: "開く",
+      toggle_theme: "ライト/ダークモードを切り替え",
+      select_columns: "列",
+      update_application: "アプリを再読み込み",
+    },
+    boolean: {
+      null: " ",
+    },
+    page: {
+      empty: "%{name}はまだありません。",
+      invite: "追加しますか？",
+      access_denied: "アクセス拒否",
+      authentication_error: "認証エラー",
+    },
+    input: {
+      password: {
+        toggle_visible: "パスワードを非表示",
+        toggle_hidden: "パスワードを表示",
+      },
+    },
+    message: {
+      access_denied: "このページにアクセスする権限がありません",
+      authentication_error:
+        "認証サーバーがエラーを返し、資格情報を確認できませんでした。",
+      auth_error: "認証トークンの検証中にエラーが発生しました。",
+      bulk_update_content:
+        "%{name} %{recordRepresentation} を更新してよろしいですか？ |||| これらの %{smart_count} 件を更新してよろしいですか？",
+      bulk_update_title:
+        "%{name} %{recordRepresentation} を更新 |||| %{smart_count} 件の %{name} を更新",
+      clear_array_input: "一覧をすべてクリアしてよろしいですか？",
+      select_all_limit_reached:
+        "選択できる要素が多すぎます。最初の %{max} 件のみ選択されました。",
+      unsaved_changes:
+        "変更が保存されていません。破棄してよろしいですか？",
+      placeholder_data_warning:
+        "ネットワークの問題: データの更新に失敗しました。",
+    },
+    navigation: {
+      clear_filters: "フィルターをクリア",
+      no_filtered_results:
+        "現在のフィルターで %{name} が見つかりません。",
+      partial_page_range_info: "%{offsetBegin}-%{offsetEnd} / %{offsetEnd} 以上",
+      current_page: "ページ %{page}",
+      page: "%{page} ページへ",
+      first: "最初のページへ",
+      last: "最後のページへ",
+      previous: "前のページへ",
+      skip_nav: "コンテンツへスキップ",
+    },
+    sort: {
+      sort_by: "%{field_lower_first} を %{order} で並べ替え",
+      ASC: "昇順",
+      DESC: "降順",
+    },
+    auth: {
+      auth_check_error: "続行するにはログインしてください",
+      email: "メール",
+    },
+    notification: {
+      i18n_error: "指定された言語の翻訳を読み込めません",
+      logged_out: "セッションが終了しました。再ログインしてください。",
+      not_authorized: "このリソースへのアクセス権限がありません。",
+      application_update_available: "新しいバージョンがあります。",
+      offline: "接続がありません。データを取得できませんでした。",
+    },
+    validation: {
+      unique: "一意である必要があります",
+    },
+    saved_queries: {
+      label: "保存済みクエリ",
+      query_name: "クエリ名",
+      new_label: "現在のクエリを保存...",
+      new_dialog_title: "現在のクエリを次の名前で保存",
+      remove_label: "保存済みクエリを削除",
+      remove_label_with_name: "クエリ「%{name}」を削除",
+      remove_dialog_title: "保存済みクエリを削除しますか？",
+      remove_message:
+        "保存済みクエリの一覧からこの項目を削除してよろしいですか？",
+      help: "リストを絞り込み、このクエリを保存して後で使用できます",
+    },
+    configurable: {
+      customize: "カスタマイズ",
+      configureMode: "このページを設定",
+      inspector: {
+        title: "インスペクタ",
+        content: "UI 要素にカーソルを合わせて設定します",
+        reset: "設定をリセット",
+        hideAll: "すべて非表示",
+        showAll: "すべて表示",
+      },
+      Datagrid: {
+        title: "データグリッド",
+        unlabeled: "ラベルなし列 #%{column}",
+      },
+      SimpleForm: {
+        title: "フォーム",
+        unlabeled: "ラベルなし入力 #%{input}",
+      },
+      SimpleList: {
+        title: "リスト",
+        primaryText: "主要テキスト",
+        secondaryText: "副次テキスト",
+        tertiaryText: "第三テキスト",
+      },
+    },
+  },
+  "ra-supabase": {
+    auth: {
+      password_reset: "パスワード再設定のメールを確認してください。",
+    },
+  },
 };

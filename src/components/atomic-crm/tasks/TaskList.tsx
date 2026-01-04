@@ -9,7 +9,12 @@ import { SearchInput } from "@/components/admin/search-input";
 import { SelectInput } from "@/components/admin/select-input";
 
 import { useEffect, useMemo, useState } from "react";
-import { InfiniteListBase, useGetIdentity, useTranslate } from "ra-core";
+import {
+  InfiniteListBase,
+  useGetIdentity,
+  useLocaleState,
+  useTranslate,
+} from "ra-core";
 import { LayoutList, Kanban } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -29,6 +34,7 @@ const TaskList = () => {
   const { taskStatuses, taskPriorities } = useConfigurationContext();
   const { identity } = useGetIdentity();
   const translate = useTranslate();
+  const [locale] = useLocaleState();
   const [view, setView] = useState<"table" | "kanban">(DEFAULT_VIEW);
   const [isViewHydrated, setIsViewHydrated] = useState(false);
 
@@ -68,7 +74,7 @@ const TaskList = () => {
           status.name,
         ),
       })),
-    [taskStatuses, translate],
+    [taskStatuses, translate, locale],
   );
 
   const translatedTaskPriorities = useMemo(
@@ -82,7 +88,7 @@ const TaskList = () => {
           priority.name,
         ),
       })),
-    [taskPriorities, translate],
+    [taskPriorities, translate, locale],
   );
 
   const taskFilters = [

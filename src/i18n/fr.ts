@@ -121,4 +121,10 @@ export const frMessages = {
       },
     },
   },
+  "ra-supabase": {
+    auth: {
+      password_reset:
+        "Vérifiez vos e-mails pour le message de réinitialisation du mot de passe.",
+    },
+  },
 };
