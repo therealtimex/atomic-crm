@@ -28,13 +28,19 @@ const raSupabaseMessages = mergeTranslations(
   raSupabaseEnglishMessagesOverride,
 );
 
+const baseMessages = mergeTranslations(
+  englishMessages,
+  raSupabaseMessages,
+  enMessages,
+);
+
 const messages = {
-  en: mergeTranslations(englishMessages, raSupabaseMessages, enMessages),
-  fr: mergeTranslations(frenchMessages, raSupabaseMessages, frMessages),
-  es: mergeTranslations(spanishMessages, raSupabaseMessages, esMessages),
-  vi: mergeTranslations(vietnameseMessages, raSupabaseMessages, viMessages),
-  ja: mergeTranslations(japaneseMessages, raSupabaseMessages, jaMessages),
-  ko: mergeTranslations(koreanMessages, raSupabaseMessages, koMessages),
+  en: baseMessages,
+  fr: mergeTranslations(baseMessages, frenchMessages, frMessages),
+  es: mergeTranslations(baseMessages, spanishMessages, esMessages),
+  vi: mergeTranslations(baseMessages, vietnameseMessages, viMessages),
+  ja: mergeTranslations(baseMessages, japaneseMessages, jaMessages),
+  ko: mergeTranslations(baseMessages, koreanMessages, koMessages),
 };
 
 export const i18nProvider = polyglotI18nProvider(

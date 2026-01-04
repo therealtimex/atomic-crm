@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Tasks**: Localized task statuses, priorities, types, and task list labels.
 - **Deals/Companies/Contacts**: Localized deal stages/categories, company sectors, and contact gender labels.
 
+### Fixed
+
+- **Localization**: Persisted locale updates via a database function to avoid `sales` update policy failures.
+- **Localization**: Locale switching now updates immediately and missing admin-kit strings fall back to English.
+
 ### Security
 
 - **Attachments**: Removed SheetJS `xlsx` parsing to address upstream security advisories; spreadsheet previews now use the document viewer renderer.

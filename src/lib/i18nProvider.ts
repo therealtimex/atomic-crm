@@ -14,13 +14,15 @@ import { jaMessages } from "@/i18n/ja";
 import { koMessages } from "@/i18n/ko";
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, normalizeLocale } from "@/i18n/locales";
 
+const baseMessages = mergeTranslations(englishMessages, enMessages);
+
 const messages = {
-  en: mergeTranslations(englishMessages, enMessages),
-  fr: mergeTranslations(frenchMessages, frMessages),
-  es: mergeTranslations(spanishMessages, esMessages),
-  vi: mergeTranslations(vietnameseMessages, viMessages),
-  ja: mergeTranslations(japaneseMessages, jaMessages),
-  ko: mergeTranslations(koreanMessages, koMessages),
+  en: baseMessages,
+  fr: mergeTranslations(baseMessages, frenchMessages, frMessages),
+  es: mergeTranslations(baseMessages, spanishMessages, esMessages),
+  vi: mergeTranslations(baseMessages, vietnameseMessages, viMessages),
+  ja: mergeTranslations(baseMessages, japaneseMessages, jaMessages),
+  ko: mergeTranslations(baseMessages, koreanMessages, koMessages),
 };
 
 export const i18nProvider = polyglotI18nProvider(

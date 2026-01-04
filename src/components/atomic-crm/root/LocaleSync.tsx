@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
-import { useDataProvider, useGetIdentity, useLocaleState } from "ra-core";
+import { useGetIdentity, useLocaleState } from "ra-core";
+import { getSupabaseConfig } from "@/lib/supabase-config";
+import { supabase } from "../providers/supabase/supabase";
 import { resolveLocale } from "@/i18n/locales";
 
 type IdentityWithLocale = {
@@ -8,24 +10,32 @@ type IdentityWithLocale = {
 };
 
 export const LocaleSync = () => {
-  const dataProvider = useDataProvider();
   const { data: identity, isPending } = useGetIdentity();
   const [locale, setLocale] = useLocaleState();
   const lastPersistedLocale = useRef<string | null>(null);
   const hasInitialized = useRef(false);
+  const lastIdentityId = useRef<IdentityWithLocale["id"] | null>(null);
+  const supabaseConfig = getSupabaseConfig();
+  const supabaseConfigured = Boolean(supabaseConfig);
+  const storeKey = "RaStoreCRM.locale";
 
   useEffect(() => {
     if (isPending) return;
 
-    const identityLocale = (identity as IdentityWithLocale | undefined)?.locale;
+    const identityData = identity as IdentityWithLocale | undefined;
+    const identityLocale = identityData?.locale;
+    const identityId = identityData?.id ?? null;
+    if (hasInitialized.current && identityId === lastIdentityId.current) {
+      return;
+    }
     const storedLocale = (() => {
       if (typeof window === "undefined") return null;
       try {
-        const stored = window.localStorage.getItem("CRM");
+        const stored = window.localStorage.getItem(storeKey);
         if (!stored) return null;
         const parsed = JSON.parse(stored);
-        if (typeof parsed?.locale === "string") {
-          return resolveLocale([parsed.locale]);
+        if (typeof parsed === "string") {
+          return resolveLocale([parsed]);
         }
       } catch {
         return null;
@@ -41,14 +51,14 @@ export const LocaleSync = () => {
       setLocale(nextLocale);
     }
 
-    if (!identityLocale && identity?.id != null) {
+    if (!identityLocale && identityId != null) {
       const persistInitialLocale = async () => {
         try {
-          await dataProvider.update("sales", {
-            id: identity.id,
-            data: { locale: nextLocale },
-            previousData: identity,
+          if (!supabaseConfigured) return;
+          const { error } = await supabase.rpc("set_sales_locale", {
+            new_locale: nextLocale,
           });
+          if (error) throw error;
           lastPersistedLocale.current = nextLocale;
         } catch (error) {
           console.error("[i18n] Failed to persist initial locale", error);
@@ -60,7 +70,8 @@ export const LocaleSync = () => {
     }
 
     hasInitialized.current = true;
-  }, [dataProvider, identity, isPending, locale, setLocale]);
+    lastIdentityId.current = identityId;
+  }, [identity, isPending, locale, setLocale, supabaseConfigured]);
 
   useEffect(() => {
     if (!hasInitialized.current) return;
@@ -70,11 +81,11 @@ export const LocaleSync = () => {
 
     const persistLocale = async () => {
       try {
-        await dataProvider.update("sales", {
-          id: identity.id,
-          data: { locale },
-          previousData: identity,
+        if (!supabaseConfigured) return;
+        const { error } = await supabase.rpc("set_sales_locale", {
+          new_locale: locale,
         });
+        if (error) throw error;
         lastPersistedLocale.current = locale;
       } catch (error) {
         console.error("[i18n] Failed to persist locale change", error);
@@ -82,7 +93,7 @@ export const LocaleSync = () => {
     };
 
     void persistLocale();
-  }, [dataProvider, identity, locale]);
+  }, [identity, locale, supabaseConfigured]);
 
   return null;
 };
