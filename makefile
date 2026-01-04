@@ -80,7 +80,13 @@ doc-preview: doc-build
 	@(cd docs && npm run preview)
 
 doc-deploy: doc-build
-	@(cd docs && npx gh-pages -b gh-pages -d dist -m "Deploy docs" --dotfiles --nojekyll)
+	@npx gh-pages -b gh-pages -d docs/dist -m "Deploy docs (clean)" --no-history --dotfiles --nojekyll
+
+doc-reset: ## delete the gh-pages branch to start fresh
+	-git branch -D gh-pages
+	-git push origin --delete gh-pages
+	git fetch --prune origin
+	rm -rf docs/node_modules/.cache/gh-pages
 
 app-deploy:
 	@npx gh-pages -d dist -m "Deploy app" --no-history --nojekyll
