@@ -35,7 +35,7 @@ jobs:
                 git config --global user.name github-actions-bot
 
             - name: 📥 Download deps
-              run: make doc-install
+              run: npm install
 
             - name: 🔨 Build App
               run: npm run build
