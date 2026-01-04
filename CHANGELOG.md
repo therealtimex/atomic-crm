@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Tasks**: Added persisted Kanban ordering with drag-and-drop across columns, plus an "Other" column for unknown statuses.
+- **Tasks**: Added infinite scroll for the Tasks Kanban view and removed pagination controls for that view.
+
 ## [0.40.7] - 2026-01-01
 
 ### Changed

@@ -1,104 +1,328 @@
 import { DragDropContext, type OnDragEndResponder } from "@hello-pangea/dnd";
 import isEqual from "lodash/isEqual";
-import { useDataProvider, useListContext } from "ra-core";
-import { useEffect, useState } from "react";
+import {
+  useDataProvider,
+  useInfinitePaginationContext,
+  useListContext,
+  useNotify,
+  type DataProvider,
+} from "ra-core";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Task } from "../types";
 import { TaskColumn } from "./TaskColumn";
 import type { TasksByStatus } from "./tasks";
-import { getTasksByStatus } from "./tasks";
+import {
+  getTasksByStatus,
+  OTHER_TASK_STATUS_ID,
+  OTHER_TASK_STATUS_LABEL,
+} from "./tasks";
+
+const TASKS_UPDATE_PAGE_SIZE = 1000;
 
 export const TaskKanbanView = () => {
-    const { taskStatuses } = useConfigurationContext();
-    const { data: unorderedTasks, isPending, refetch } = useListContext<Task>();
-    const dataProvider = useDataProvider();
+  const { taskStatuses } = useConfigurationContext();
+  const { data: unorderedTasks, isPending, refetch } = useListContext<Task>();
+  const dataProvider = useDataProvider();
+  const notify = useNotify();
+  const { fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfinitePaginationContext();
 
-    const [tasksByStatus, setTasksByStatus] = useState<TasksByStatus>(
-        getTasksByStatus([], taskStatuses),
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  const hasOtherStatus =
+    taskStatuses?.some((status) => status.id === OTHER_TASK_STATUS_ID) ?? false;
+  const isOtherBucketReadOnly = !hasOtherStatus;
+  const kanbanStatuses = useMemo(() => {
+    if (!taskStatuses) return [];
+    if (hasOtherStatus) return taskStatuses;
+    return [
+      ...taskStatuses,
+      { id: OTHER_TASK_STATUS_ID, name: OTHER_TASK_STATUS_LABEL },
+    ];
+  }, [hasOtherStatus, taskStatuses]);
+
+  const [tasksByStatus, setTasksByStatus] = useState<TasksByStatus>(() =>
+    getTasksByStatus([], taskStatuses, { includeOther: true }),
+  );
+
+  useEffect(() => {
+    if (unorderedTasks) {
+      const newTasksByStatus = getTasksByStatus(unorderedTasks, taskStatuses, {
+        includeOther: true,
+      });
+      if (!isEqual(newTasksByStatus, tasksByStatus)) {
+        setTasksByStatus(newTasksByStatus);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unorderedTasks, taskStatuses]);
+
+  useEffect(() => {
+    if (!hasNextPage || !sentinelRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting && !isFetchingNextPage && hasNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        root: containerRef.current,
+        rootMargin: "200px",
+      },
     );
 
-    useEffect(() => {
-        if (unorderedTasks) {
-            const newTasksByStatus = getTasksByStatus(unorderedTasks, taskStatuses);
-            if (!isEqual(newTasksByStatus, tasksByStatus)) {
-                setTasksByStatus(newTasksByStatus);
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [unorderedTasks]);
+    observer.observe(sentinelRef.current);
 
-    if (isPending) return null;
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-    const onDragEnd: OnDragEndResponder = (result) => {
-        const { destination, source } = result;
+  if (isPending) return null;
 
-        if (!destination) {
-            return;
-        }
+  const onDragEnd: OnDragEndResponder = (result) => {
+    const { destination, source } = result;
 
-        if (
-            destination.droppableId === source.droppableId &&
-            destination.index === source.index
-        ) {
-            return;
-        }
+    if (!destination) {
+      return;
+    }
 
-        const sourceStatus = source.droppableId;
-        const destinationStatus = destination.droppableId;
-        const sourceTask = tasksByStatus[sourceStatus][source.index]!;
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
 
-        // Optimistic update
-        setTasksByStatus(prev => {
-            const newTasksByStatus = { ...prev };
-            const sourceColumn = [...newTasksByStatus[sourceStatus]];
-            const destinationColumn = sourceStatus === destinationStatus
-                ? sourceColumn
-                : [...newTasksByStatus[destinationStatus]];
+    if (isOtherBucketReadOnly && destination.droppableId === OTHER_TASK_STATUS_ID) {
+      return;
+    }
 
-            sourceColumn.splice(source.index, 1);
-            destinationColumn.splice(destination.index, 0, {
-                ...sourceTask,
-                status: destinationStatus as any
-            });
+    const sourceStatus = source.droppableId;
+    const destinationStatus = destination.droppableId;
+    const sourceTask = tasksByStatus[sourceStatus]?.[source.index];
+    if (!sourceTask) {
+      return;
+    }
 
-            newTasksByStatus[sourceStatus] = sourceColumn;
-            if (sourceStatus !== destinationStatus) {
-                newTasksByStatus[destinationStatus] = destinationColumn;
-            }
-
-            return newTasksByStatus;
-        });
-
-        // persist the changes
-        const updateData: any = { status: destinationStatus };
-        if (destinationStatus === "done" && sourceStatus !== "done") {
-            updateData.done_date = new Date().toISOString();
-        } else if (destinationStatus !== "done" && sourceStatus === "done") {
-            updateData.done_date = null;
-        }
-        updateData.updated_at = new Date().toISOString();
-
-        dataProvider.update("tasks", {
-            id: sourceTask.id,
-            data: updateData,
-            previousData: sourceTask,
-        }).then(() => {
-            refetch();
-        });
+    const destinationTask = tasksByStatus[destinationStatus]?.[destination.index] ?? {
+      status: destinationStatus,
+      index: undefined,
     };
 
-    return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex gap-4 overflow-x-auto pb-4 h-[calc(100vh-250px)]">
-                {taskStatuses.map((status) => (
-                    <TaskColumn
-                        status={status.id}
-                        tasks={tasksByStatus[status.id] || []}
-                        key={status.id}
-                    />
-                ))}
-            </div>
-        </DragDropContext>
+    const previousTasksByStatus = tasksByStatus;
+
+    // Optimistic update
+    setTasksByStatus(
+      updateTaskStatusLocal(
+        sourceTask,
+        { status: sourceStatus, index: source.index },
+        { status: destinationStatus, index: destination.index },
+        tasksByStatus,
+      ),
     );
+
+    const actualSourceStatus = sourceTask.status || sourceStatus;
+
+    updateTaskStatus(
+      { ...sourceTask, status: actualSourceStatus },
+      { status: destinationStatus, index: destinationTask.index },
+      dataProvider,
+      source.index,
+    )
+      .then(() => {
+        refetch();
+      })
+      .catch(() => {
+        setTasksByStatus(previousTasksByStatus);
+        notify("Unable to move task. Please try again.", { type: "error" });
+      });
+  };
+
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div
+        ref={containerRef}
+        className="flex flex-col gap-4 h-[calc(100vh-250px)] overflow-y-auto"
+      >
+        <div className="flex gap-4 overflow-x-auto pb-4">
+          {kanbanStatuses.map((status) => (
+            <TaskColumn
+              status={status.id}
+              tasks={tasksByStatus[status.id] || []}
+              key={status.id}
+              isDropDisabled={
+                isOtherBucketReadOnly && status.id === OTHER_TASK_STATUS_ID
+              }
+            />
+          ))}
+        </div>
+        <div
+          ref={sentinelRef}
+          className="py-2 text-center text-xs text-muted-foreground"
+        >
+          {isFetchingNextPage ? "Loading more tasks..." : null}
+        </div>
+      </div>
+    </DragDropContext>
+  );
+};
+
+const updateTaskStatusLocal = (
+  sourceTask: Task,
+  source: { status: string; index: number },
+  destination: {
+    status: string;
+    index?: number; // undefined if dropped after the last item
+  },
+  tasksByStatus: TasksByStatus,
+) => {
+  const sourceColumn = [...(tasksByStatus[source.status] ?? [])];
+  const destinationColumn =
+    source.status === destination.status
+      ? sourceColumn
+      : [...(tasksByStatus[destination.status] ?? [])];
+
+  sourceColumn.splice(source.index, 1);
+  destinationColumn.splice(
+    destination.index ?? destinationColumn.length + 1,
+    0,
+    sourceTask,
+  );
+
+  if (source.status === destination.status) {
+    return {
+      ...tasksByStatus,
+      [destination.status]: destinationColumn,
+    };
+  }
+
+  return {
+    ...tasksByStatus,
+    [source.status]: sourceColumn,
+    [destination.status]: destinationColumn,
+  };
+};
+
+const updateTaskStatus = async (
+  source: Task,
+  destination: {
+    status: string;
+    index?: number; // undefined if dropped after the last item
+  },
+  dataProvider: DataProvider,
+  sourcePosition: number,
+) => {
+  const sourceStatus = source.status || "todo";
+  const sourceIndex =
+    typeof source.index === "number" ? source.index : sourcePosition;
+
+  const updateData: any = { status: destination.status };
+  if (destination.status === "done" && sourceStatus !== "done") {
+    updateData.done_date = new Date().toISOString();
+  } else if (destination.status !== "done" && sourceStatus === "done") {
+    updateData.done_date = null;
+  }
+
+  if (sourceStatus === destination.status) {
+    // moving task inside the same column
+    const { data: columnTasks } = await dataProvider.getList("tasks", {
+      sort: { field: "index", order: "ASC" },
+      pagination: { page: 1, perPage: TASKS_UPDATE_PAGE_SIZE },
+      filter: { status: sourceStatus },
+    });
+    const destinationIndex = destination.index ?? columnTasks.length + 1;
+
+    if (sourceIndex > destinationIndex) {
+      // task moved up
+      await Promise.all([
+        ...columnTasks
+          .filter(
+            (task) =>
+              task.index >= destinationIndex && task.index < sourceIndex,
+          )
+          .map((task) =>
+            dataProvider.update("tasks", {
+              id: task.id,
+              data: { index: task.index + 1 },
+              previousData: task,
+            }),
+          ),
+        dataProvider.update("tasks", {
+          id: source.id,
+          data: { ...updateData, index: destinationIndex },
+          previousData: source,
+        }),
+      ]);
+    } else {
+      // task moved down
+      await Promise.all([
+        ...columnTasks
+          .filter(
+            (task) =>
+              task.index <= destinationIndex && task.index > sourceIndex,
+          )
+          .map((task) =>
+            dataProvider.update("tasks", {
+              id: task.id,
+              data: { index: task.index - 1 },
+              previousData: task,
+            }),
+          ),
+        dataProvider.update("tasks", {
+          id: source.id,
+          data: { ...updateData, index: destinationIndex },
+          previousData: source,
+        }),
+      ]);
+    }
+    return;
+  }
+
+  // moving task across columns
+  const [{ data: sourceTasks }, { data: destinationTasks }] =
+    await Promise.all([
+      dataProvider.getList("tasks", {
+        sort: { field: "index", order: "ASC" },
+        pagination: { page: 1, perPage: TASKS_UPDATE_PAGE_SIZE },
+        filter: { status: sourceStatus },
+      }),
+      dataProvider.getList("tasks", {
+        sort: { field: "index", order: "ASC" },
+        pagination: { page: 1, perPage: TASKS_UPDATE_PAGE_SIZE },
+        filter: { status: destination.status },
+      }),
+    ]);
+  const destinationIndex = destination.index ?? destinationTasks.length + 1;
+
+  await Promise.all([
+    ...sourceTasks
+      .filter((task) => task.index > sourceIndex)
+      .map((task) =>
+        dataProvider.update("tasks", {
+          id: task.id,
+          data: { index: task.index - 1 },
+          previousData: task,
+        }),
+      ),
+    ...destinationTasks
+      .filter((task) => task.index >= destinationIndex)
+      .map((task) =>
+        dataProvider.update("tasks", {
+          id: task.id,
+          data: { index: task.index + 1 },
+          previousData: task,
+        }),
+      ),
+    dataProvider.update("tasks", {
+      id: source.id,
+      data: {
+        ...updateData,
+        index: destinationIndex,
+      },
+      previousData: source,
+    }),
+  ]);
 };

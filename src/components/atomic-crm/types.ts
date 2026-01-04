@@ -237,6 +237,7 @@ export type Task = {
   priority?: TaskPriority;
   assigned_to?: Identifier;
   status?: TaskStatus;
+  index?: number;
   created_at?: string;
   updated_at?: string;
   archived?: boolean;

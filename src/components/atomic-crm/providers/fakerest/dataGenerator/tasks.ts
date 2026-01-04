@@ -1,6 +1,9 @@
 import { datatype, lorem, random } from "faker/locale/en_US";
 
-import { defaultTaskTypes } from "../../../root/defaultConfiguration";
+import {
+  defaultTaskStatuses,
+  defaultTaskTypes,
+} from "../../../root/defaultConfiguration";
 import type { Db } from "./types";
 import { randomDate } from "./utils";
 
@@ -35,7 +38,7 @@ export const type: TaskType[] = [
 ];
 
 export const generateTasks = (db: Db) => {
-  return Array.from(Array(400).keys()).map<any>((id) => {
+  const tasks = Array.from(Array(400).keys()).map<any>((id) => {
     // Randomly choose entity type: contact (60%), company (20%), deal (15%), none (5%)
     const entityTypeRandom = Math.random();
     const entityType =
@@ -101,6 +104,7 @@ export const generateTasks = (db: Db) => {
       created_at: createdDate,
       updated_at: createdDate,
       archived: false,
+      index: 0,
 
       // Denormalized fields for TaskSummary simulation
       contact_first_name: contact?.first_name,
@@ -115,4 +119,14 @@ export const generateTasks = (db: Db) => {
       assigned_last_name: creator?.last_name,
     };
   });
+
+  defaultTaskStatuses.forEach((status) => {
+    tasks
+      .filter((task) => task.status === status.id)
+      .forEach((task, index) => {
+        tasks[task.id].index = index;
+      });
+  });
+
+  return tasks;
 };

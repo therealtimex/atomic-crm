@@ -7,9 +7,12 @@ import { Create } from "@/components/admin/create";
 import {
   Form,
   required,
+  useDataProvider,
   useGetIdentity,
   useNotify,
+  useQueryClient,
   useRedirect,
+  type GetListResult,
 } from "ra-core";
 
 import { FormToolbar } from "../layout/FormToolbar";
@@ -17,14 +20,57 @@ import { useConfigurationContext } from "../root/ConfigurationContext";
 import { EntityTypePillSelector } from "./EntityTypePillSelector";
 import { EntityAutocomplete } from "./EntityAutocomplete";
 import { transformTaskEntityData } from "./taskEntityUtils";
+import type { Task } from "../types";
 
 export const TaskCreate = () => {
   const { identity } = useGetIdentity();
   const { taskTypes, taskPriorities, taskStatuses } = useConfigurationContext();
   const notify = useNotify();
   const redirect = useRedirect();
+  const dataProvider = useDataProvider();
+  const queryClient = useQueryClient();
 
-  const handleSuccess = () => {
+  const handleSuccess = async (task: Task) => {
+    const taskStatus = task.status ?? "todo";
+
+    const { data: statusTasks } = await dataProvider.getList<Task>("tasks", {
+      sort: { field: "index", order: "ASC" },
+      pagination: { page: 1, perPage: 1000 },
+      filter: { status: taskStatus },
+    });
+
+    const tasksToShift = statusTasks.filter((item) => item.id !== task.id);
+
+    await Promise.all(
+      tasksToShift.map((item) =>
+        dataProvider.update("tasks", {
+          id: item.id,
+          data: { index: (item.index ?? 0) + 1 },
+          previousData: item,
+        }),
+      ),
+    );
+
+    const tasksById = tasksToShift.reduce(
+      (acc, item) => ({
+        ...acc,
+        [item.id]: { ...item, index: (item.index ?? 0) + 1 },
+      }),
+      {} as Record<string, Task>,
+    );
+    const now = Date.now();
+    queryClient.setQueriesData<GetListResult | undefined>(
+      { queryKey: ["tasks", "getList"] },
+      (res) => {
+        if (!res) return res;
+        return {
+          ...res,
+          data: res.data.map((item: Task) => tasksById[item.id] || item),
+        };
+      },
+      { updatedAt: now },
+    );
+
     notify("Task created");
     redirect("list", "tasks");
   };
@@ -40,6 +86,7 @@ export const TaskCreate = () => {
             transform={(data) => ({
               ...transformTaskEntityData(data),
               sales_id: identity?.id,
+              index: 0,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
             })}
@@ -51,6 +98,7 @@ export const TaskCreate = () => {
                 status: "todo",
                 assigned_to: identity?.id,
                 entity_type: "none",
+                index: 0,
               }}
             >
               <TextInput

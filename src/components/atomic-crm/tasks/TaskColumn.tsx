@@ -7,9 +7,11 @@ import { TaskCard } from "./TaskCard";
 export const TaskColumn = ({
     status,
     tasks,
+    isDropDisabled,
 }: {
     status: string;
     tasks: Task[];
+    isDropDisabled?: boolean;
 }) => {
     const { taskStatuses } = useConfigurationContext();
 
@@ -24,7 +26,7 @@ export const TaskColumn = ({
                 </h3>
             </div>
 
-            <Droppable droppableId={status}>
+            <Droppable droppableId={status} isDropDisabled={isDropDisabled}>
                 {(droppableProvided, snapshot) => (
                     <div
                         ref={droppableProvided.innerRef}

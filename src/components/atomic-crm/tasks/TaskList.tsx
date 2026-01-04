@@ -3,12 +3,13 @@ import { BooleanInput } from "@/components/admin/boolean-input";
 import { CreateButton } from "@/components/admin/create-button";
 import { ExportButton } from "@/components/admin/export-button";
 import { FilterButton } from "@/components/admin/filter-form";
-import { List } from "@/components/admin/list";
+import { List, ListView } from "@/components/admin/list";
 import { ReferenceInput } from "@/components/admin/reference-input";
 import { SearchInput } from "@/components/admin/search-input";
 import { SelectInput } from "@/components/admin/select-input";
 
 import { useState } from "react";
+import { InfiniteListBase } from "ra-core";
 import { LayoutList, Kanban } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useConfigurationContext } from "../root/ConfigurationContext";
@@ -17,6 +18,9 @@ import { MyTasksInput } from "./MyTasksInput";
 import { TaskListTable } from "./TaskListTable";
 import { ActiveFilterBar } from "./ActiveFilterBar";
 import { TaskKanbanView } from "./TaskKanbanView";
+
+const TASKS_TABLE_PAGE_SIZE = 25;
+const TASKS_KANBAN_PAGE_SIZE = 100;
 
 const TaskList = () => {
   const { taskStatuses, taskPriorities } = useConfigurationContext();
@@ -39,18 +43,38 @@ const TaskList = () => {
     <BooleanInput source="archived" label="Archived" />,
   ];
 
+  if (view === "table") {
+    return (
+      <List
+        perPage={TASKS_TABLE_PAGE_SIZE}
+        sort={{ field: "due_date", order: "ASC" }}
+        filters={taskFilters}
+        filterDefaultValues={{ archived: false }}
+        actions={<TaskActions view={view} setView={setView} />}
+        title="Tasks"
+      >
+        <ActiveFilterBar />
+        <TaskListTable />
+      </List>
+    );
+  }
+
   return (
-    <List
-      perPage={view === "table" ? 25 : 100}
-      sort={{ field: "due_date", order: "ASC" }}
-      filters={taskFilters}
+    <InfiniteListBase
+      perPage={TASKS_KANBAN_PAGE_SIZE}
+      sort={{ field: "index", order: "ASC" }}
       filterDefaultValues={{ archived: false }}
-      actions={<TaskActions view={view} setView={setView} />}
-      title="Tasks"
     >
-      <ActiveFilterBar />
-      {view === "table" ? <TaskListTable /> : <TaskKanbanView />}
-    </List>
+      <ListView
+        filters={taskFilters}
+        actions={<TaskActions view={view} setView={setView} />}
+        title="Tasks"
+        pagination={null}
+      >
+        <ActiveFilterBar />
+        <TaskKanbanView />
+      </ListView>
+    </InfiniteListBase>
   );
 };
 
