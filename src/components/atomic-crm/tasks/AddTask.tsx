@@ -7,6 +7,7 @@ import {
   useGetIdentity,
   useNotify,
   useRecordContext,
+  useTranslate,
   useUpdate,
 } from "ra-core";
 import { useState } from "react";
@@ -29,6 +30,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { translateChoice } from "@/i18n/utils";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { EntityTypePillSelector } from "./EntityTypePillSelector";
@@ -50,6 +52,7 @@ export const AddTask = ({
   const notify = useNotify();
   const { taskTypes, taskPriorities, taskStatuses } = useConfigurationContext();
   const record = useRecordContext();
+  const translate = useTranslate();
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -76,6 +79,31 @@ export const AddTask = ({
   };
 
   if (!identity) return null;
+
+  const translatedTaskTypes = taskTypes.map((type) => ({
+    id: type,
+    name: translateChoice(translate, "crm.task.type", type, type),
+  }));
+
+  const translatedTaskPriorities = taskPriorities.map((priority) => ({
+    ...priority,
+    name: translateChoice(
+      translate,
+      "crm.task.priority",
+      priority.id,
+      priority.name,
+    ),
+  }));
+
+  const translatedTaskStatuses = taskStatuses.map((status) => ({
+    ...status,
+    name: translateChoice(
+      translate,
+      "crm.task.status",
+      status.id,
+      status.name,
+    ),
+  }));
 
   // Determine initial entity type and ID based on context
   const getInitialEntityData = () => {
@@ -193,20 +221,17 @@ export const AddTask = ({
                 <SelectInput
                   source="type"
                   validate={required()}
-                  choices={taskTypes.map((type) => ({
-                    id: type,
-                    name: type,
-                  }))}
+                  choices={translatedTaskTypes}
                   helperText={false}
                 />
                 <SelectInput
                   source="priority"
-                  choices={taskPriorities}
+                  choices={translatedTaskPriorities}
                   helperText={false}
                 />
                 <SelectInput
                   source="status"
-                  choices={taskStatuses}
+                  choices={translatedTaskStatuses}
                   helperText={false}
                 />
               </div>

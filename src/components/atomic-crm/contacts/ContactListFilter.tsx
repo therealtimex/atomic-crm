@@ -1,9 +1,10 @@
 import { endOfYesterday, startOfMonth, startOfWeek, subMonths } from "date-fns";
 import { Activity, CheckSquare, Clock, HeartPulse, Tag, TrendingUp, Users } from "lucide-react";
-import { FilterLiveForm, useGetIdentity, useGetList } from "ra-core";
+import { FilterLiveForm, useGetIdentity, useGetList, useTranslate } from "ra-core";
 import { ToggleFilterButton } from "@/components/admin/toggle-filter-button";
 import { SearchInput } from "@/components/admin/search-input";
 import { Badge } from "@/components/ui/badge";
+import { translateChoice } from "@/i18n/utils";
 
 import { FilterCategory } from "../filters/FilterCategory";
 import { Status } from "../misc/Status";
@@ -12,6 +13,7 @@ import { useConfigurationContext } from "../root/ConfigurationContext";
 export const ContactListFilter = () => {
   const { noteStatuses } = useConfigurationContext();
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
   const { data } = useGetList("tags", {
     pagination: { page: 1, perPage: 10 },
     sort: { field: "name", order: "ASC" },
@@ -122,7 +124,13 @@ export const ContactListFilter = () => {
             className="w-full justify-between"
             label={
               <span>
-                {status.label} <Status status={status.value} />
+                {translateChoice(
+                  translate,
+                  "crm.note.status",
+                  status.value,
+                  status.label,
+                )}{" "}
+                <Status status={status.value} />
               </span>
             }
             value={{ status: status.value }}

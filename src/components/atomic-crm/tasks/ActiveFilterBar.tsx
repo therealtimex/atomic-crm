@@ -1,7 +1,13 @@
-import { useListFilterContext, useGetIdentity, useGetOne } from "ra-core";
+import {
+  useListFilterContext,
+  useGetIdentity,
+  useGetOne,
+  useTranslate,
+} from "ra-core";
 import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { translateChoice } from "@/i18n/utils";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 
 /**
@@ -14,6 +20,7 @@ export const ActiveFilterBar = () => {
     useListFilterContext();
   const { identity } = useGetIdentity();
   const { taskStatuses, taskPriorities } = useConfigurationContext();
+  const translate = useTranslate();
 
   // Default filter values that shouldn't show as active
   const defaultFilters = { archived: false };
@@ -54,37 +61,55 @@ export const ActiveFilterBar = () => {
   const getFilterLabel = (key: string, value: unknown): string => {
     switch (key) {
       case "q":
-        return `Search: "${value}"`;
+        return `${translate("crm.filter.search")}: "${value}"`;
       case "status": {
         const status = taskStatuses.find((s) => s.id === value);
-        return `Status: ${status?.name || value}`;
+        const statusLabel = status
+          ? translateChoice(
+              translate,
+              "crm.task.status",
+              status.id,
+              status.name,
+            )
+          : `${value}`;
+        return `${translate("crm.filter.status")}: ${statusLabel}`;
       }
       case "priority": {
         const priority = taskPriorities.find((p) => p.id === value);
-        return `Priority: ${priority?.name || value}`;
+        const priorityLabel = priority
+          ? translateChoice(
+              translate,
+              "crm.task.priority",
+              priority.id,
+              priority.name,
+            )
+          : `${value}`;
+        return `${translate("crm.filter.priority")}: ${priorityLabel}`;
       }
       case "assigned_to":
         if (identity && value === identity.id) {
-          return "My Tasks";
+          return translate("crm.filter.my_tasks");
         }
-        return `Assigned to: ${value}`;
+        return `${translate("crm.filter.assigned_to")}: ${value}`;
       case "contact_id":
         if (contact) {
-          return `Contact: ${contact.first_name} ${contact.last_name}`;
+          return `${translate("crm.filter.contact")}: ${contact.first_name} ${contact.last_name}`;
         }
-        return "Contact: Loading...";
+        return `${translate("crm.filter.contact")}: ${translate("crm.filter.loading")}`;
       case "company_id":
         if (company) {
-          return `Company: ${company.name}`;
+          return `${translate("crm.filter.company")}: ${company.name}`;
         }
-        return "Company: Loading...";
+        return `${translate("crm.filter.company")}: ${translate("crm.filter.loading")}`;
       case "deal_id":
         if (deal) {
-          return `Deal: ${deal.name}`;
+          return `${translate("crm.filter.deal")}: ${deal.name}`;
         }
-        return "Deal: Loading...";
+        return `${translate("crm.filter.deal")}: ${translate("crm.filter.loading")}`;
       case "archived":
-        return value ? "Archived" : "Active";
+        return value
+          ? translate("crm.filter.archived")
+          : translate("crm.filter.active");
       default:
         return `${key}: ${value}`;
     }
@@ -116,7 +141,7 @@ export const ActiveFilterBar = () => {
   return (
     <div className="flex flex-wrap items-center gap-2 p-4 bg-muted/30 border-b">
       <span className="text-sm font-medium text-muted-foreground">
-        Active filters:
+        {translate("crm.filter.active_filters")}:
       </span>
       {activeFilters.map(([key, value]) => (
         <Badge
@@ -130,7 +155,7 @@ export const ActiveFilterBar = () => {
             size="icon"
             className="h-4 w-4 p-0 hover:bg-transparent"
             onClick={() => handleRemoveFilter(key)}
-            aria-label={`Remove ${key} filter`}
+            aria-label={translate("crm.filter.remove", { filter: key })}
           >
             <X className="h-3 w-3" />
           </Button>

@@ -221,6 +221,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/root/LocaleSync.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/root/DatabaseHealthCheck.tsx",
           "type": "registry:component"
         },

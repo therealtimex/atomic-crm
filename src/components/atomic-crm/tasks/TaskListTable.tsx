@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { useUpdate, useNotify, useCreate, useGetIdentity } from "ra-core";
+import {
+  useUpdate,
+  useNotify,
+  useCreate,
+  useGetIdentity,
+  useTranslate,
+} from "ra-core";
 import { Check, Pencil, Clock } from "lucide-react";
 import { DataTable } from "@/components/admin/data-table";
 import { ReferenceField } from "@/components/admin/reference-field";
@@ -20,6 +26,7 @@ import { TaskEdit } from "./TaskEdit";
 import { TaskTypeIcon } from "./TaskTypeIcon";
 
 const RelatedEntityField = ({ record }: { record: Task | TaskSummary }) => {
+  const translate = useTranslate();
   const getEntityName = () => {
     if (record.contact_id) {
       // For contacts, the ReferenceField will show first_name + last_name
@@ -62,7 +69,19 @@ const RelatedEntityField = ({ record }: { record: Task | TaskSummary }) => {
     return <span className="text-muted-foreground">—</span>;
   };
 
-  return <div className="truncate max-w-[200px]" title={record.contact_id ? "Contact" : record.company_id ? "Company" : record.deal_id ? "Deal" : ""}>{getEntityName()}</div>;
+  const title = record.contact_id
+    ? translate("crm.filter.contact")
+    : record.company_id
+      ? translate("crm.filter.company")
+      : record.deal_id
+        ? translate("crm.filter.deal")
+        : "";
+
+  return (
+    <div className="truncate max-w-[200px]" title={title}>
+      {getEntityName()}
+    </div>
+  );
 };
 
 const DueDateField = ({ record }: { record: Task | TaskSummary }) => {
@@ -298,6 +317,7 @@ const TaskActions = ({
 
 export const TaskListTable = () => {
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
+  const translate = useTranslate();
 
   const getRowClassName = (record: Task) => {
     const isCompleted = record.status === "done" || record.status === "cancelled";
@@ -314,7 +334,7 @@ export const TaskListTable = () => {
       <DataTable rowClick="show" rowClassName={getRowClassName}>
       <DataTable.Col
         source="text"
-        label="Task"
+        label={translate("crm.task.field.task")}
         className="w-[35%]"
         cellClassName="max-w-md overflow-hidden"
         render={(record: Task) => (
@@ -327,7 +347,7 @@ export const TaskListTable = () => {
         )}
       />
       <DataTable.Col
-        label="Related To"
+        label={translate("crm.task.field.related_to")}
         className="w-[16%]"
         cellClassName="overflow-hidden"
         sortable={false}
@@ -335,28 +355,32 @@ export const TaskListTable = () => {
       />
       <DataTable.Col
         source="due_date"
-        label="Due Date"
+        label={translate("crm.task.field.due_date")}
         className="w-[14%]"
         cellClassName="overflow-hidden"
         render={(record: Task) => <DueDateField record={record} />}
       />
       <DataTable.Col
-        label="Priority"
+        label={translate("crm.task.field.priority")}
         className="w-[8%]"
         render={(record: Task) => (
           <TaskPriorityBadge priority={record.priority} />
         )}
       />
       <DataTable.Col
-        label="Status"
+        label={translate("crm.task.field.status")}
         className="w-[8%]"
         render={(record: Task) => <TaskStatusBadge status={record.status} />}
       />
-      <DataTable.Col label="Assigned To" className="w-[8%]" cellClassName="truncate">
+      <DataTable.Col
+        label={translate("crm.task.field.assigned_to")}
+        className="w-[8%]"
+        cellClassName="truncate"
+      >
         <ReferenceField source="assigned_to" reference="sales" link={false} />
       </DataTable.Col>
       <DataTable.Col
-        label="Actions"
+        label={translate("crm.task.field.actions")}
         className="w-[11%]"
         sortable={false}
         cellClassName="text-right pr-2"

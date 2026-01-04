@@ -5,9 +5,11 @@ import { Error } from "@/components/admin/error";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import Header from "./Header";
+import { LocaleSync } from "../root/LocaleSync";
 
 export const Layout = ({ children }: { children: ReactNode }) => (
   <>
+    <LocaleSync />
     <Header />
     <main className="w-full pt-20 px-4 sm:px-5 lg:px-6" id="main-content">
       <ErrorBoundary FallbackComponent={Error}>

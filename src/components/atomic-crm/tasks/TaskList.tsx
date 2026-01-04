@@ -9,10 +9,11 @@ import { SearchInput } from "@/components/admin/search-input";
 import { SelectInput } from "@/components/admin/select-input";
 
 import { useEffect, useMemo, useState } from "react";
-import { InfiniteListBase, useGetIdentity } from "ra-core";
+import { InfiniteListBase, useGetIdentity, useTranslate } from "ra-core";
 import { LayoutList, Kanban } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { translateChoice } from "@/i18n/utils";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { TopToolbar } from "../layout/TopToolbar";
 import { MyTasksInput } from "./MyTasksInput";
@@ -27,6 +28,7 @@ const DEFAULT_VIEW = "table";
 const TaskList = () => {
   const { taskStatuses, taskPriorities } = useConfigurationContext();
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
   const [view, setView] = useState<"table" | "kanban">(DEFAULT_VIEW);
   const [isViewHydrated, setIsViewHydrated] = useState(false);
 
@@ -55,21 +57,64 @@ const TaskList = () => {
     window.localStorage.setItem(viewStorageKey, view);
   }, [viewStorageKey, view, isViewHydrated]);
 
+  const translatedTaskStatuses = useMemo(
+    () =>
+      taskStatuses.map((status) => ({
+        ...status,
+        name: translateChoice(
+          translate,
+          "crm.task.status",
+          status.id,
+          status.name,
+        ),
+      })),
+    [taskStatuses, translate],
+  );
+
+  const translatedTaskPriorities = useMemo(
+    () =>
+      taskPriorities.map((priority) => ({
+        ...priority,
+        name: translateChoice(
+          translate,
+          "crm.task.priority",
+          priority.id,
+          priority.name,
+        ),
+      })),
+    [taskPriorities, translate],
+  );
+
   const taskFilters = [
     <SearchInput source="q" alwaysOn />,
-    <SelectInput source="status" choices={taskStatuses} alwaysOn />,
+    <SelectInput source="status" choices={translatedTaskStatuses} alwaysOn />,
     <ReferenceInput source="contact_id" reference="contacts">
-      <AutocompleteInput label={false} placeholder="Contact" />
+      <AutocompleteInput
+        label={false}
+        placeholder={translate("crm.filter.contact")}
+      />
     </ReferenceInput>,
     <ReferenceInput source="company_id" reference="companies">
-      <AutocompleteInput label={false} placeholder="Company" optionText="name" />
+      <AutocompleteInput
+        label={false}
+        placeholder={translate("crm.filter.company")}
+        optionText="name"
+      />
     </ReferenceInput>,
     <ReferenceInput source="deal_id" reference="deals">
-      <AutocompleteInput label={false} placeholder="Deal" optionText="name" />
+      <AutocompleteInput
+        label={false}
+        placeholder={translate("crm.filter.deal")}
+        optionText="name"
+      />
     </ReferenceInput>,
-    <SelectInput source="priority" choices={taskPriorities} />,
-    <MyTasksInput source="assigned_to" label="My Tasks" alwaysOn />,
-    <BooleanInput source="archived" label="Archived" />,
+    <SelectInput source="priority" choices={translatedTaskPriorities} />,
+    <MyTasksInput
+      source="assigned_to"
+      label={translate("crm.filter.my_tasks")}
+      alwaysOn
+    />,
+    <BooleanInput source="archived" label={translate("crm.filter.archived")} />,
   ];
 
   if (view === "table") {
@@ -80,7 +125,9 @@ const TaskList = () => {
         filters={taskFilters}
         filterDefaultValues={{ archived: false }}
         actions={<TaskActions view={view} setView={setView} />}
-        title="Tasks"
+        title={translate("crm.nav.tasks")}
+        stickyHeader
+        stickyHeaderOffset={80}
       >
         <ActiveFilterBar />
         <TaskListTable />
@@ -97,7 +144,7 @@ const TaskList = () => {
       <ListView
         filters={taskFilters}
         actions={<TaskActions view={view} setView={setView} />}
-        title="Tasks"
+        title={translate("crm.nav.tasks")}
         pagination={null}
       >
         <ActiveFilterBar />
@@ -113,42 +160,46 @@ const TaskActions = ({
 }: {
   view: "table" | "kanban";
   setView: (view: "table" | "kanban") => void;
-}) => (
-  <TopToolbar className="items-center">
-    <div className="flex items-center bg-muted rounded-md p-1 mr-2">
-      <Button
-        variant="ghost"
-        size="sm"
-        className={cn(
-          "h-8 px-2 text-muted-foreground",
-          view === "table" &&
-            "bg-background text-foreground shadow-sm border border-border",
-        )}
-        aria-pressed={view === "table"}
-        onClick={() => setView("table")}
-      >
-        <LayoutList className="h-4 w-4 mr-2" />
-        Table
-      </Button>
-      <Button
-        variant="ghost"
-        size="sm"
-        className={cn(
-          "h-8 px-2 text-muted-foreground",
-          view === "kanban" &&
-            "bg-background text-foreground shadow-sm border border-border",
-        )}
-        aria-pressed={view === "kanban"}
-        onClick={() => setView("kanban")}
-      >
-        <Kanban className="h-4 w-4 mr-2" />
-        Kanban
-      </Button>
-    </div>
-    <FilterButton />
-    <ExportButton />
-    <CreateButton label="New Task" />
-  </TopToolbar>
-);
+}) => {
+  const translate = useTranslate();
+
+  return (
+    <TopToolbar className="items-center">
+      <div className="flex items-center bg-muted rounded-md p-1 mr-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "h-8 px-2 text-muted-foreground",
+            view === "table" &&
+              "bg-background text-foreground shadow-sm border border-border",
+          )}
+          aria-pressed={view === "table"}
+          onClick={() => setView("table")}
+        >
+          <LayoutList className="h-4 w-4 mr-2" />
+          {translate("crm.view.table")}
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "h-8 px-2 text-muted-foreground",
+            view === "kanban" &&
+              "bg-background text-foreground shadow-sm border border-border",
+          )}
+          aria-pressed={view === "kanban"}
+          onClick={() => setView("kanban")}
+        >
+          <Kanban className="h-4 w-4 mr-2" />
+          {translate("crm.view.kanban")}
+        </Button>
+      </div>
+      <FilterButton />
+      <ExportButton />
+      <CreateButton label={translate("crm.action.new_task")} />
+    </TopToolbar>
+  );
+};
 
 export default TaskList;

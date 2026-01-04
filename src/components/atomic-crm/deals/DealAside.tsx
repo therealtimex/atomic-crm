@@ -1,5 +1,5 @@
 import { Archive, ArchiveRestore, Calendar, UserCheck, DollarSign, Tag, TrendingUp } from "lucide-react";
-import { useRecordContext, useDataProvider, useNotify, useRefresh, useUpdate } from "ra-core";
+import { useRecordContext, useDataProvider, useNotify, useRefresh, useTranslate, useUpdate } from "ra-core";
 import { useMutation } from "@tanstack/react-query";
 import { format, isValid } from "date-fns";
 import type { ReactNode } from "react";
@@ -14,7 +14,7 @@ import { TextField } from "@/components/admin/text-field";
 import { AsideSection } from "../misc/AsideSection";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Deal } from "../types";
-import { findDealLabel } from "./deal";
+import { translateChoice } from "@/i18n/utils";
 import { ContactList } from "./ContactList";
 import { CompanyAvatar } from "../companies/CompanyAvatar";
 
@@ -70,8 +70,19 @@ const ArchivedBadge = () => (
 const DealInfoSection = () => {
   const record = useRecordContext<Deal>();
   const { dealStages } = useConfigurationContext();
+  const translate = useTranslate();
 
   if (!record) return null;
+
+  const rawStageLabel =
+    dealStages.find((dealStage) => dealStage.value === record.stage)?.label ||
+    record.stage;
+  const stageLabel = translateChoice(
+    translate,
+    "crm.deal.stage",
+    record.stage,
+    rawStageLabel,
+  );
 
   return (
     <AsideSection title="Deal Info">
@@ -110,7 +121,16 @@ const DealInfoSection = () => {
         <InfoRow
           icon={<Tag className="w-4 h-4 text-muted-foreground" />}
           label="Category"
-          value={<span className="text-sm">{record.category}</span>}
+          value={
+            <span className="text-sm">
+              {translateChoice(
+                translate,
+                "crm.deal.category",
+                record.category,
+                record.category,
+              )}
+            </span>
+          }
         />
       )}
       <InfoRow
@@ -118,7 +138,7 @@ const DealInfoSection = () => {
         label="Stage"
         value={
           <span className="text-sm">
-            {findDealLabel(dealStages, record.stage)}
+            {stageLabel}
           </span>
         }
       />

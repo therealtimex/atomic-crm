@@ -8,6 +8,8 @@ import { TextInput } from "@/components/admin/text-input";
 import { NumberInput } from "@/components/admin/number-input";
 import { DateInput } from "@/components/admin/date-input";
 import { SelectInput } from "@/components/admin/select-input";
+import { useTranslate } from "ra-core";
+import { translateChoice } from "@/i18n/utils";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -88,6 +90,27 @@ const DealLinkedToInputs = () => {
 
 const DealMiscInputs = () => {
   const { dealStages, dealCategories } = useConfigurationContext();
+  const translate = useTranslate();
+
+  const translatedDealCategories = dealCategories.map((category) => ({
+    id: category,
+    name: translateChoice(
+      translate,
+      "crm.deal.category",
+      category,
+      category,
+    ),
+  }));
+
+  const translatedDealStages = dealStages.map((stage) => ({
+    id: stage.value,
+    name: translateChoice(
+      translate,
+      "crm.deal.stage",
+      stage.value,
+      stage.label,
+    ),
+  }));
   return (
     <div className="flex flex-col gap-4 flex-1">
       <h3 className="text-base font-medium">Misc</h3>
@@ -95,10 +118,7 @@ const DealMiscInputs = () => {
       <SelectInput
         source="category"
         label="Category"
-        choices={dealCategories.map((type) => ({
-          id: type,
-          name: type,
-        }))}
+        choices={translatedDealCategories}
         helperText={false}
       />
       <NumberInput
@@ -115,10 +135,7 @@ const DealMiscInputs = () => {
       />
       <SelectInput
         source="stage"
-        choices={dealStages.map((stage) => ({
-          id: stage.value,
-          name: stage.label,
-        }))}
+        choices={translatedDealStages}
         defaultValue="opportunity"
         helperText={false}
         validate={required()}

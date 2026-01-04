@@ -11,6 +11,7 @@ import type {
 
 export type SignUpData = {
   email: string;
+  locale?: string;
   password: string;
   first_name: string;
   last_name: string;

@@ -1,5 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useTranslate } from "ra-core";
+import { translateChoice } from "@/i18n/utils";
 
 const statusColors = {
   todo: "bg-slate-500 hover:bg-slate-600",
@@ -10,12 +12,15 @@ const statusColors = {
 };
 
 export const TaskStatusBadge = ({ status }: { status?: string }) => {
-    if (!status) return null;
-    const colorClass = statusColors[status as keyof typeof statusColors] || "bg-slate-500";
-    
-    return (
-        <Badge className={cn("capitalize", colorClass)}>
-            {status.replace("_", " ")}
-        </Badge>
-    );
+  const translate = useTranslate();
+  if (!status) return null;
+  const colorClass =
+    statusColors[status as keyof typeof statusColors] || "bg-slate-500";
+  const label = translateChoice(translate, "crm.task.status", status, status);
+
+  return (
+    <Badge className={cn(colorClass)}>
+      {label}
+    </Badge>
+  );
 };

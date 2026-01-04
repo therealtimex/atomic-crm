@@ -5,11 +5,12 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Database, Settings, User, Webhook, ArrowLeft } from "lucide-react";
-import { CanAccess } from "ra-core";
+import { CanAccess, useTranslate } from "ra-core";
 import { Link, matchPath, useLocation, useNavigate } from "react-router";
 import { RefreshButton } from "@/components/admin/refresh-button";
 import { ThemeModeToggle } from "@/components/admin/theme-mode-toggle";
 import { UserMenu } from "@/components/admin/user-menu";
+import { LocalesMenuButton } from "@/components/admin/locales-menu-button";
 import { useUserMenu } from "@/hooks/user-menu-context";
 import { MigrationPulseIndicator } from "@/components/atomic-crm/migration";
 import { useMigrationContextSafe } from "@/contexts/MigrationContext";
@@ -21,6 +22,7 @@ const Header = () => {
   const { darkModeLogo, lightModeLogo, title } = useConfigurationContext();
   const location = useLocation();
   const migrationContext = useMigrationContextSafe();
+  const translate = useTranslate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Simplified path matching logic
@@ -94,27 +96,27 @@ const Header = () => {
 
           <nav className="flex" aria-label="Main navigation">
             <NavigationTab
-              label="Dashboard"
+              label={translate("crm.nav.dashboard")}
               to="/"
               isActive={currentPath === "/"}
             />
             <NavigationTab
-              label="Contacts"
+              label={translate("crm.nav.contacts")}
               to="/contacts"
               isActive={currentPath === "/contacts"}
             />
             <NavigationTab
-              label="Companies"
+              label={translate("crm.nav.companies")}
               to="/companies"
               isActive={currentPath === "/companies"}
             />
             <NavigationTab
-              label="Deals"
+              label={translate("crm.nav.deals")}
               to="/deals"
               isActive={currentPath === "/deals"}
             />
             <NavigationTab
-              label="Tasks"
+              label={translate("crm.nav.tasks")}
               to="/tasks"
               isActive={currentPath === "/tasks"}
             />
@@ -126,6 +128,7 @@ const Header = () => {
                 onClick={() => migrationContext?.openMigrationModal()}
               />
             )}
+            <LocalesMenuButton />
             <ThemeModeToggle />
             <RefreshButton />
             <UserMenu>

@@ -4,9 +4,7 @@ import { X, Download, FileText, FileCode, FileImage, FileAudio, FileVideo, FileA
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import ReactMarkdown from "react-markdown";
 import { renderAsync } from "docx-preview";
-import * as XLSX from "xlsx";
 import { PPTXViewer, parsePPTX } from "@kandiforge/pptx-renderer";
-import DOMPurify from "dompurify";
 import { Button } from "@/components/ui/button";
 import { EmailViewer } from "./EmailViewer";
 
@@ -27,8 +25,6 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [docxBuffer, setDocxBuffer] = useState<ArrayBuffer | null>(null);
-    const [xlsxSheets, setXlsxSheets] = useState<{ name: string; html: string }[]>([]);
-    const [activeSheetIndex, setActiveSheetIndex] = useState(0);
     const [emlBuffer, setEmlBuffer] = useState<ArrayBuffer | null>(null);
     const docxRef = useRef<HTMLDivElement>(null);
 
@@ -55,8 +51,6 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
     useEffect(() => {
         if (!open) {
             setDocxBuffer(null);
-            setXlsxSheets([]);
-            setActiveSheetIndex(0);
             setContent(null);
             setError(null);
             setLoading(false);
@@ -67,6 +61,7 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
         const abortController = new AbortController();
         const extension = title.split(".").pop()?.toLowerCase();
         const mimeType = type || getMimeTypeFromExtension(extension);
+        const isSpreadsheet = extension === "xlsx" || extension === "xls";
 
         setLoading(true);
         setError(null);
@@ -128,21 +123,10 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
                 if (extension === "eml") {
                     const buffer = await getArrayBuffer();
                     setEmlBuffer(buffer);
-                    setLoading(false);
                 } else if (extension === "docx") {
                     const buffer = await getArrayBuffer();
                     setDocxBuffer(buffer);
                     setContent(<div ref={docxRef} className="p-4 bg-white dark:bg-slate-900 min-h-full" />);
-                } else if (extension === "xlsx" || extension === "xls") {
-                    const buffer = await getArrayBuffer();
-                    const workbook = XLSX.read(buffer, { type: "array" });
-                    if (!workbook.SheetNames.length) throw new Error("Excel file has no sheets");
-                    const sheets = workbook.SheetNames.map(name => ({
-                        name,
-                        html: XLSX.utils.sheet_to_html(workbook.Sheets[name])
-                    }));
-                    setXlsxSheets(sheets);
-                    setLoading(false);
                 } else if (extension === "md" || extension === "markdown") {
                     const text = await getText();
                     setContent(
@@ -150,7 +134,13 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
                             <ReactMarkdown>{text}</ReactMarkdown>
                         </div>
                     );
-                } else if (mimeType?.startsWith("image/") || mimeType?.startsWith("video/") || mimeType?.startsWith("audio/") || mimeType === "application/pdf") {
+                } else if (
+                    isSpreadsheet ||
+                    mimeType?.startsWith("image/") ||
+                    mimeType?.startsWith("video/") ||
+                    mimeType?.startsWith("audio/") ||
+                    mimeType === "application/pdf"
+                ) {
                     setContent(
                         <DocViewer
                             documents={[{ uri: url, fileName: title, fileType: mimeType }]}
@@ -199,9 +189,7 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
                     : (err instanceof Error ? err.message : "Failed to load document preview.");
                 setError(msg);
             } finally {
-                if (extension !== "xlsx" && extension !== "xls") {
-                    setLoading(false);
-                }
+                setLoading(false);
             }
         };
 
@@ -210,61 +198,6 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
         // Cleanup: abort pending requests when component unmounts or URL changes
         return () => abortController.abort();
     }, [url, title, type, open, file]);
-
-    const renderXlsx = () => {
-        if (!xlsxSheets.length) return null;
-
-        const activeSheet = xlsxSheets[activeSheetIndex];
-
-        return (
-            <div className="flex flex-col h-full overflow-hidden bg-background">
-                {xlsxSheets.length > 1 && (
-                    <div className="flex items-center gap-1 p-2 border-b bg-muted/20 overflow-x-auto no-scrollbar">
-                        {xlsxSheets.map((sheet, idx) => (
-                            <Button
-                                key={idx}
-                                variant={activeSheetIndex === idx ? "secondary" : "ghost"}
-                                size="sm"
-                                className="h-8 text-xs shrink-0"
-                                onClick={() => setActiveSheetIndex(idx)}
-                            >
-                                {sheet.name}
-                            </Button>
-                        ))}
-                    </div>
-                )}
-                <div className="flex-1 overflow-auto p-4 custom-scrollbar">
-                    <style dangerouslySetInnerHTML={{
-                        __html: `
-                        .xlsx-container table {
-                            border-collapse: collapse;
-                            width: 100%;
-                            font-size: 13px;
-                            color: hsl(var(--foreground));
-                        }
-                        .xlsx-container th, .xlsx-container td {
-                            border: 1px solid hsl(var(--border));
-                            padding: 6px 12px;
-                            text-align: left;
-                            min-width: 80px;
-                        }
-                        .xlsx-container tr:nth-child(even) { background-color: hsla(var(--muted), 0.5); }
-                        .xlsx-container th {
-                            background-color: hsl(var(--muted));
-                            font-weight: 600;
-                            position: sticky;
-                            top: 0;
-                            color: hsl(var(--muted-foreground));
-                        }
-                    `}} />
-                    <div
-                        className="xlsx-container"
-                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(activeSheet.html) }}
-                    />
-                </div>
-            </div>
-        );
-    };
 
     return (
         <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -309,8 +242,6 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
                         {!loading && !error && (
                             emlBuffer ? (
                                 <EmailViewer content={emlBuffer} onError={setError} />
-                            ) : xlsxSheets.length > 0 ? (
-                                renderXlsx()
                             ) : (
                                 content
                             )

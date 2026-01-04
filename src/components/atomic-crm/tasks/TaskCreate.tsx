@@ -12,8 +12,10 @@ import {
   useGetIdentity,
   useNotify,
   useRedirect,
+  useTranslate,
   type GetListResult,
 } from "ra-core";
+import { translateChoice } from "@/i18n/utils";
 
 import { FormToolbar } from "../layout/FormToolbar";
 import { useConfigurationContext } from "../root/ConfigurationContext";
@@ -29,6 +31,32 @@ export const TaskCreate = () => {
   const redirect = useRedirect();
   const dataProvider = useDataProvider();
   const queryClient = useQueryClient();
+  const translate = useTranslate();
+
+  const translatedTaskTypes = taskTypes.map((type) => ({
+    id: type,
+    name: translateChoice(translate, "crm.task.type", type, type),
+  }));
+
+  const translatedTaskPriorities = taskPriorities.map((priority) => ({
+    ...priority,
+    name: translateChoice(
+      translate,
+      "crm.task.priority",
+      priority.id,
+      priority.name,
+    ),
+  }));
+
+  const translatedTaskStatuses = taskStatuses.map((status) => ({
+    ...status,
+    name: translateChoice(
+      translate,
+      "crm.task.status",
+      status.id,
+      status.name,
+    ),
+  }));
 
   const handleSuccess = async (task: Task) => {
     const taskStatus = task.status ?? "todo";
@@ -129,18 +157,15 @@ export const TaskCreate = () => {
                 <SelectInput
                   source="type"
                   validate={required()}
-                  choices={taskTypes.map((type) => ({
-                    id: type,
-                    name: type,
-                  }))}
+                  choices={translatedTaskTypes}
                 />
                 <SelectInput
                   source="priority"
-                  choices={taskPriorities}
+                  choices={translatedTaskPriorities}
                 />
                 <SelectInput
                   source="status"
-                  choices={taskStatuses}
+                  choices={translatedTaskStatuses}
                 />
                 <ReferenceInput source="assigned_to" reference="sales">
                   <SelectInput

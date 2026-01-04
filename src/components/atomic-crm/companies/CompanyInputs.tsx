@@ -1,4 +1,4 @@
-import { required, useRecordContext } from "ra-core";
+import { required, useRecordContext, useTranslate } from "ra-core";
 import { ReferenceInput } from "@/components/admin/reference-input";
 import { TextInput } from "@/components/admin/text-input";
 import { SelectInput } from "@/components/admin/select-input";
@@ -10,6 +10,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
+import { translateChoice } from "@/i18n/utils";
 import ImageEditorField from "../misc/ImageEditorField";
 import { isLinkedinUrl } from "../misc/isLinkedInUrl";
 import { useConfigurationContext } from "../root/ConfigurationContext";
@@ -124,6 +125,17 @@ const CompanyContextInputs = () => {
     companyRevenueRanges,
     companyQualificationStatuses,
   } = useConfigurationContext();
+  const translate = useTranslate();
+
+  const translatedCompanySectors = companySectors.map((sector) => ({
+    id: sector,
+    name: translateChoice(
+      translate,
+      "crm.company.sector",
+      sector,
+      sector,
+    ),
+  }));
 
   return (
     <div className="flex flex-col gap-4">
@@ -158,10 +170,7 @@ const CompanyContextInputs = () => {
       {/* Industry & Sector */}
       <SelectInput
         source="sector"
-        choices={companySectors.map((sector) => ({
-          id: sector,
-          name: sector,
-        }))}
+        choices={translatedCompanySectors}
         helperText={false}
       />
       <TextInput source="industry" helperText={false} />

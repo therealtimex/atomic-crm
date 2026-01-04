@@ -1,0 +1,21 @@
+export type Translate = (key: string, options?: Record<string, unknown>) => string;
+
+export const toI18nKey = (value: string): string =>
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+
+export const translateWithFallback = (
+  translate: Translate,
+  key: string,
+  fallback: string,
+) => translate(key, { _: fallback });
+
+export const translateChoice = (
+  translate: Translate,
+  prefix: string,
+  id: string,
+  fallback: string,
+) => translateWithFallback(translate, `${prefix}.${toI18nKey(id)}`, fallback);

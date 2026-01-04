@@ -15,6 +15,7 @@ export const generateSales = (_: Db): Sale[] => {
       first_name,
       last_name,
       email,
+      locale: "en",
       password: "demo",
       administrator: false,
     };
@@ -26,6 +27,7 @@ export const generateSales = (_: Db): Sale[] => {
       first_name: "Jane",
       last_name: "Doe",
       email: "janedoe@atomic.dev",
+      locale: "en",
       password: "demo",
       administrator: true,
       avatar: {

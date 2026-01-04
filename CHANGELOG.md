@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Localization**: Added multilingual UI support (en, fr, es, vi, ja, ko) with per-user locale persistence.
+
+### Changed
+
+- **Tasks**: Localized task statuses, priorities, types, and task list labels.
+- **Deals/Companies/Contacts**: Localized deal stages/categories, company sectors, and contact gender labels.
+
+### Security
+
+- **Attachments**: Removed SheetJS `xlsx` parsing to address upstream security advisories; spreadsheet previews now use the document viewer renderer.
+
 ## [0.44.3] - 2026-01-04
 
 ## [0.44.2] - 2026-01-04

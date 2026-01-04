@@ -7,10 +7,11 @@ RealTimeX CRM uses **React-Admin's i18n system** powered by [Polyglot.js](https:
 ### Architecture
 
 - **i18n Provider**: `src/components/atomic-crm/root/i18nProvider.tsx`
-- **Current Language**: English (en) only
+- **Supported Locales**: English (`en`), French (`fr`), Spanish (`es`), Vietnamese (`vi`), Japanese (`ja`), Korean (`ko`)
 - **Framework**: `ra-i18n-polyglot` + `ra-language-english`
 - **Translation Hook**: `useTranslate()` from `ra-core`
 - **Language Switcher**: `LocalesMenuButton` component (auto-appears when multiple locales configured)
+ - **Locale Persistence**: `sales.locale` (auto-detected on first login and stored per user)
 
 ## How to Add New Languages
 
@@ -286,6 +287,10 @@ The `LocalesMenuButton` component automatically appears in the header when multi
 - Opens a dropdown with all available languages
 - Persists selection to localStorage
 - Auto-hides if only one language is available
+
+Locale selection is also persisted per user in the database:
+- If `sales.locale` is empty, the app detects `navigator.languages`, picks the best supported locale, and saves it.
+- When users change language, the app updates `sales.locale` to keep the preference consistent across devices.
 
 ## Database Content Localization
 

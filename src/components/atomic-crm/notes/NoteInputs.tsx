@@ -7,6 +7,8 @@ import { SelectInput } from "@/components/admin/select-input";
 import { DateTimeInput } from "@/components/admin/date-time-input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslate } from "ra-core";
+import { translateChoice } from "@/i18n/utils";
 
 import { Status } from "../misc/Status";
 import { useConfigurationContext } from "../root/ConfigurationContext";
@@ -16,6 +18,18 @@ export const NoteInputs = ({ showStatus }: { showStatus?: boolean }) => {
   const { noteStatuses } = useConfigurationContext();
   const { setValue } = useFormContext();
   const [displayMore, setDisplayMore] = useState(false);
+  const translate = useTranslate();
+
+  const translatedNoteStatuses = noteStatuses.map((status) => ({
+    id: status.value,
+    name: translateChoice(
+      translate,
+      "crm.note.status",
+      status.value,
+      status.label,
+    ),
+    value: status.value,
+  }));
 
   return (
     <div className="space-y-2">
@@ -57,11 +71,7 @@ export const NoteInputs = ({ showStatus }: { showStatus?: boolean }) => {
           {showStatus && (
             <SelectInput
               source="status"
-              choices={noteStatuses.map((status) => ({
-                id: status.value,
-                name: status.label,
-                value: status.value,
-              }))}
+              choices={translatedNoteStatuses}
               optionText={optionRenderer}
               defaultValue={"warm"}
               helperText={false}

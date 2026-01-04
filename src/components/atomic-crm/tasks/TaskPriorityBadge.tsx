@@ -1,5 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useTranslate } from "ra-core";
+import { translateChoice } from "@/i18n/utils";
 
 const priorityColors = {
   low: "bg-slate-500 hover:bg-slate-600",
@@ -9,12 +11,20 @@ const priorityColors = {
 };
 
 export const TaskPriorityBadge = ({ priority }: { priority?: string }) => {
+  const translate = useTranslate();
   if (!priority) return null;
-  const colorClass = priorityColors[priority as keyof typeof priorityColors] || "bg-slate-500";
-  
+  const colorClass =
+    priorityColors[priority as keyof typeof priorityColors] || "bg-slate-500";
+  const label = translateChoice(
+    translate,
+    "crm.task.priority",
+    priority,
+    priority,
+  );
+
   return (
-    <Badge className={cn("capitalize", colorClass)}>
-      {priority}
+    <Badge className={cn(colorClass)}>
+      {label}
     </Badge>
   );
 };

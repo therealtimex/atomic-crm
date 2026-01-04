@@ -1,4 +1,4 @@
-import { useGetIdentity, useListContext } from "ra-core";
+import { useGetIdentity, useListContext, useTranslate } from "ra-core";
 import { matchPath, useLocation } from "react-router";
 import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { CreateButton } from "@/components/admin/create-button";
@@ -10,6 +10,7 @@ import { SearchInput } from "@/components/admin/search-input";
 import { SelectInput } from "@/components/admin/select-input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
+import { translateChoice } from "@/i18n/utils";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { TopToolbar } from "../layout/TopToolbar";
@@ -22,16 +23,27 @@ import { OnlyMineInput } from "./OnlyMineInput";
 
 const DealList = () => {
   const { dealCategories } = useConfigurationContext();
+  const translate = useTranslate();
+
+  const translatedDealCategories = dealCategories.map((category) => ({
+    id: category,
+    name: translateChoice(
+      translate,
+      "crm.deal.category",
+      category,
+      category,
+    ),
+  }));
 
   const dealFilters = [
     <SearchInput source="q" alwaysOn />,
     <ReferenceInput source="company_id" reference="companies">
-      <AutocompleteInput label={false} placeholder="Company" />
+      <AutocompleteInput label={false} placeholder={translate("crm.filter.company")} />
     </ReferenceInput>,
     <SelectInput
       source="category"
-      emptyText="Category"
-      choices={dealCategories.map((type) => ({ id: type, name: type }))}
+      emptyText={translate("crm.deal.field.category")}
+      choices={translatedDealCategories}
     />,
     <OnlyMineInput source="sales_id" alwaysOn />,
   ];
@@ -96,12 +108,15 @@ const DealLayout = () => {
   );
 };
 
-const DealActions = () => (
-  <TopToolbar>
-    <FilterButton />
-    <ExportButton />
-    <CreateButton label="New Deal" />
-  </TopToolbar>
-);
+const DealActions = () => {
+  const translate = useTranslate();
+  return (
+    <TopToolbar>
+      <FilterButton />
+      <ExportButton />
+      <CreateButton label={translate("crm.action.new_deal")} />
+    </TopToolbar>
+  );
+};
 
 export default DealList;

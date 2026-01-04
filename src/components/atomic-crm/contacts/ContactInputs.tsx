@@ -1,4 +1,4 @@
-import { email, required, useRecordContext } from "ra-core";
+import { email, required, useRecordContext, useTranslate } from "ra-core";
 import type { FocusEvent, ClipboardEventHandler } from "react";
 import { useFormContext } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
@@ -16,6 +16,7 @@ import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Contact, Sale } from "../types";
 import ImageEditorField from "../misc/ImageEditorField";
 import { AutocompleteCompanyInput } from "../companies/AutocompleteCompanyInput.tsx";
+import { translateChoice } from "@/i18n/utils";
 
 export const ContactInputs = () => {
   const isMobile = useIsMobile();
@@ -53,6 +54,16 @@ export const ContactInputs = () => {
 
 const ContactIdentityInputs = () => {
   const { contactGender } = useConfigurationContext();
+  const translate = useTranslate();
+  const translatedGenders = contactGender.map((gender) => ({
+    ...gender,
+    label: translateChoice(
+      translate,
+      "crm.contact.gender",
+      gender.value,
+      gender.label,
+    ),
+  }));
   return (
     <div className="flex flex-col gap-4">
       <h6 className="text-lg font-semibold">Identity</h6>
@@ -60,7 +71,7 @@ const ContactIdentityInputs = () => {
         label={false}
         row
         source="gender"
-        choices={contactGender}
+        choices={translatedGenders}
         helperText={false}
         optionText="label"
         optionValue="value"
