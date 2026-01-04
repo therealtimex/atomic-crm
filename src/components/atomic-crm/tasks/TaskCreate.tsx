@@ -4,13 +4,13 @@ import { SelectInput } from "@/components/admin/select-input";
 import { TextInput } from "@/components/admin/text-input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Create } from "@/components/admin/create";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Form,
   required,
   useDataProvider,
   useGetIdentity,
   useNotify,
-  useQueryClient,
   useRedirect,
   type GetListResult,
 } from "ra-core";

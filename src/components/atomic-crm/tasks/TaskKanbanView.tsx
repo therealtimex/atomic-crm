@@ -3,6 +3,7 @@ import isEqual from "lodash/isEqual";
 import {
   useDataProvider,
   useInfinitePaginationContext,
+  useGetIdentity,
   useListContext,
   useNotify,
   type DataProvider,
@@ -26,11 +27,50 @@ export const TaskKanbanView = () => {
   const { data: unorderedTasks, isPending, refetch } = useListContext<Task>();
   const dataProvider = useDataProvider();
   const notify = useNotify();
+  const { identity } = useGetIdentity();
   const { fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfinitePaginationContext();
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  const collapseStorageKey = useMemo(
+    () =>
+      `realtimex_crm_tasks_kanban_collapsed_${identity?.id ?? "anonymous"}`,
+    [identity?.id],
+  );
+
+  const [collapsedStatuses, setCollapsedStatuses] = useState<
+    Record<string, boolean>
+  >({});
+  const [isCollapsedHydrated, setIsCollapsedHydrated] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    setIsCollapsedHydrated(false);
+    try {
+      const stored = window.localStorage.getItem(collapseStorageKey);
+      setCollapsedStatuses(stored ? JSON.parse(stored) : {});
+    } catch {
+      setCollapsedStatuses({});
+    }
+    setIsCollapsedHydrated(true);
+  }, [collapseStorageKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!isCollapsedHydrated) return;
+
+    try {
+      window.localStorage.setItem(
+        collapseStorageKey,
+        JSON.stringify(collapsedStatuses),
+      );
+    } catch {
+      // ignore write failures (private mode, storage quota, etc.)
+    }
+  }, [collapseStorageKey, collapsedStatuses, isCollapsedHydrated]);
 
   const hasOtherStatus =
     taskStatuses?.some((status) => status.id === OTHER_TASK_STATUS_ID) ?? false;
@@ -141,13 +181,20 @@ export const TaskKanbanView = () => {
       });
   };
 
+  const handleToggleCollapse = (statusId: string) => {
+    setCollapsedStatuses((prev) => ({
+      ...prev,
+      [statusId]: !prev[statusId],
+    }));
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div
         ref={containerRef}
         className="flex flex-col gap-4 h-[calc(100vh-250px)] overflow-y-auto"
       >
-        <div className="flex gap-4 overflow-x-auto pb-4">
+        <div className="flex gap-3 flex-nowrap pb-4 w-full min-w-0">
           {kanbanStatuses.map((status) => (
             <TaskColumn
               status={status.id}
@@ -156,15 +203,12 @@ export const TaskKanbanView = () => {
               isDropDisabled={
                 isOtherBucketReadOnly && status.id === OTHER_TASK_STATUS_ID
               }
+              isCollapsed={collapsedStatuses[status.id]}
+              onToggleCollapse={handleToggleCollapse}
             />
           ))}
         </div>
-        <div
-          ref={sentinelRef}
-          className="py-2 text-center text-xs text-muted-foreground"
-        >
-          {isFetchingNextPage ? "Loading more tasks..." : null}
-        </div>
+        <div ref={sentinelRef} className="h-px" aria-hidden="true" />
       </div>
     </DragDropContext>
   );
