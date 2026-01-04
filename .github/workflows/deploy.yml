@@ -37,11 +37,17 @@ jobs:
             - name: 📥 Download deps
               run: make doc-install
 
+            - name: 🔨 Build App
+              run: npm run build
+
             - name: 🔨 Build Registry
               run: make registry-build
 
             - name: 🔨 Build Documentation
               run: make doc-build
+
+            - name: 📡 Deploy App
+              run: make app-deploy
 
             - name: 📡 Deploy Registry
               run: make registry-deploy

@@ -80,7 +80,10 @@ doc-preview: doc-build
 	@(cd docs && npm run preview)
 
 doc-deploy:
-	@(cd docs && npx gh-pages -b gh-pages -d dist -e doc -m "Deploy docs" --remove doc --add)
+	@(cd docs && npx gh-pages -b gh-pages -d dist -e doc -m "Deploy docs" --remove doc --add --dotfiles)
+
+app-deploy:
+	@npx gh-pages -d dist -m "Deploy app"
 
 registry-build: ## build the shadcn registry
 	npm run registry:build
