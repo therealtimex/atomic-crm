@@ -44,6 +44,7 @@ export const TaskEdit = ({
   const notify = useNotify();
   const [create] = useCreate();
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
 
   // Create audit trail note
   const createTaskNote = () => {
@@ -58,7 +59,7 @@ export const TaskEdit = ({
       {
         data: {
           task_id: taskId,
-          text: "Task updated via quick edit action",
+          text: translate("crm.task.note.quick_edit"),
           date,
           sales_id: identity.id,
           status: "cold",
@@ -82,7 +83,7 @@ export const TaskEdit = ({
           mutationOptions={{
             onSuccess: () => {
               close();
-              notify("Task updated", {
+              notify(translate("crm.task.notification.updated"), {
                 type: "info",
                 undoable: true,
               });
@@ -162,15 +163,15 @@ const TaskEditForm = ({
         }}
       >
         <DialogHeader>
-          <DialogTitle>Edit task</DialogTitle>
+          <DialogTitle>{translate("crm.task.dialog.edit.title")}</DialogTitle>
           <DialogDescription>
-            Update task details, assignment, and related entity
+            {translate("crm.task.dialog.edit.description")}
           </DialogDescription>
         </DialogHeader>
         <TextInput
           autoFocus
           source="text"
-          label="Description"
+          label={translate("crm.task.field.description")}
           validate={required()}
           multiline
           helperText={false}
@@ -214,7 +215,7 @@ const TaskEditForm = ({
               optionText={(record) =>
                 `${record.first_name} ${record.last_name}`
               }
-              label="Assigned To"
+              label={translate("crm.task.field.assigned_to")}
               helperText={false}
             />
           </ReferenceInput>
@@ -224,7 +225,7 @@ const TaskEditForm = ({
             mutationOptions={{
               onSuccess: () => {
                 onClose();
-                notify("Task deleted", {
+                notify(translate("crm.task.notification.deleted"), {
                   type: "info",
                   undoable: true,
                 });
@@ -232,7 +233,7 @@ const TaskEditForm = ({
             }}
             redirect={false}
           />
-          <SaveButton label="Save" />
+          <SaveButton />
         </DialogFooter>
       </Form>
     </DialogContent>

@@ -1,10 +1,19 @@
-import { useGetIdentity, useListFilterContext } from "ra-core";
+import { useGetIdentity, useListFilterContext, useTranslate } from "ra-core";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
-export const MyTasksInput = ({ source = "assigned_to", label = "My Tasks" }: { alwaysOn?: boolean; source?: string, label?: string }) => {
+export const MyTasksInput = ({
+  source = "assigned_to",
+  label,
+}: {
+  alwaysOn?: boolean;
+  source?: string;
+  label?: string;
+}) => {
   const { filterValues, displayedFilters, setFilters } = useListFilterContext();
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
+  const resolvedLabel = label ?? translate("crm.filter.my_tasks");
 
   const handleChange = () => {
     const newFilterValues = { ...filterValues };
@@ -23,7 +32,7 @@ export const MyTasksInput = ({ source = "assigned_to", label = "My Tasks" }: { a
           checked={typeof filterValues[source] !== "undefined"}
           onCheckedChange={handleChange}
         />
-        <Label htmlFor="my-tasks">{label}</Label>
+        <Label htmlFor="my-tasks">{resolvedLabel}</Label>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { MoreVertical } from "lucide-react";
-import { useDeleteWithUndoController, useNotify, useUpdate } from "ra-core";
+import { useDeleteWithUndoController, useNotify, useUpdate, useTranslate } from "ra-core";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { ReferenceField } from "@/components/admin/reference-field";
@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { translateChoice } from "@/i18n/utils";
 
 import type { Contact, Task as TData } from "../types";
 import { TaskEdit } from "./TaskEdit";
@@ -25,6 +26,7 @@ export const Task = ({
   showContact?: boolean;
 }) => {
   const notify = useNotify();
+  const translate = useTranslate();
   const queryClient = useQueryClient();
 
   const [openEdit, setOpenEdit] = useState(false);
@@ -40,7 +42,9 @@ export const Task = ({
     redirect: false,
     mutationOptions: {
       onSuccess() {
-        notify("Task deleted successfully", { undoable: true });
+        notify(translate("crm.task.notification.deleted_success"), {
+          undoable: true,
+        });
       },
     },
   });
@@ -73,6 +77,11 @@ export const Task = ({
   }, [queryClient, isUpdatePending, isSuccess, variables]);
 
   const labelId = `checkbox-list-label-${task.id}`;
+  const hasType =
+    typeof task.type === "string" && task.type.toLowerCase() !== "none";
+  const typeLabel = hasType
+    ? translateChoice(translate, "crm.task.type", task.type, task.type)
+    : "";
 
   return (
     <>
@@ -92,9 +101,9 @@ export const Task = ({
               title={task.text}
             >
               <div className="text-sm line-clamp-2">
-                {task.type && task.type !== "None" && (
+                {hasType && (
                   <>
-                    <span className="font-semibold text-sm">{task.type}</span>
+                    <span className="font-semibold text-sm">{typeLabel}</span>
                     &nbsp;
                   </>
                 )}
@@ -102,7 +111,7 @@ export const Task = ({
               </div>
             </Link>
             <div className="text-sm text-muted-foreground">
-              due&nbsp;
+              {translate("crm.task.due.label")}&nbsp;
               <DateField source="due_date" record={task} />
               {showContact && (
                 <ReferenceField<TData, Contact>
@@ -116,7 +125,7 @@ export const Task = ({
                     return (
                       <>
                         {" "}
-                        (Re:&nbsp;
+                        ({translate("crm.task.related.prefix")}&nbsp;
                         {referenceRecord?.first_name}{" "}
                         {referenceRecord?.last_name})
                       </>
@@ -134,7 +143,7 @@ export const Task = ({
               variant="ghost"
               size="icon"
               className="h-5 pr-0! size-8 cursor-pointer"
-              aria-label="task actions"
+              aria-label={translate("crm.task.action.menu")}
             >
               <MoreVertical className="h-4 w-4" />
             </Button>
@@ -142,7 +151,7 @@ export const Task = ({
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
               <Link to={`/tasks/${task.id}/show`} className="cursor-pointer">
-                Show Details
+                {translate("crm.task.action.show_details")}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -159,7 +168,7 @@ export const Task = ({
                 });
               }}
             >
-              Postpone to tomorrow
+              {translate("crm.task.action.postpone_tomorrow")}
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer"
@@ -175,13 +184,13 @@ export const Task = ({
                 });
               }}
             >
-              Postpone to next week
+              {translate("crm.task.action.postpone_next_week")}
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer" onClick={handleEdit}>
-              Edit
+              {translate("crm.task.action.edit")}
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer" onClick={handleDelete}>
-              Delete
+              {translate("ra.action.delete")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -6,6 +6,7 @@ import {
   useGetIdentity,
   useListContext,
   useNotify,
+  useTranslate,
   type DataProvider,
 } from "ra-core";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -27,6 +28,7 @@ export const TaskKanbanView = () => {
   const { data: unorderedTasks, isPending, refetch } = useListContext<Task>();
   const dataProvider = useDataProvider();
   const notify = useNotify();
+  const translate = useTranslate();
   const { identity } = useGetIdentity();
   const { fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfinitePaginationContext();
@@ -177,7 +179,7 @@ export const TaskKanbanView = () => {
       })
       .catch(() => {
         setTasksByStatus(previousTasksByStatus);
-        notify("Unable to move task. Please try again.", { type: "error" });
+        notify(translate("crm.task.notification.move_failed"), { type: "error" });
       });
   };
 

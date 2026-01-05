@@ -1,5 +1,5 @@
 import { Calendar, Building2, UserCircle, UserCheck, Pencil, Briefcase, Check, Clock } from "lucide-react";
-import { useRecordContext, useUpdate, useCreate, useNotify, useGetIdentity } from "ra-core";
+import { useRecordContext, useUpdate, useCreate, useNotify, useGetIdentity, useLocaleState, useTranslate } from "ra-core";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/admin/delete-button";
@@ -18,6 +18,8 @@ export const TaskAside = () => {
   const [create] = useCreate();
   const notify = useNotify();
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
+  const [locale] = useLocaleState();
 
   if (!record) return null;
 
@@ -64,8 +66,8 @@ export const TaskAside = () => {
       },
       {
         onSuccess: () => {
-          notify("Task marked as complete", { type: "success" });
-          createTaskNote("Task marked as complete");
+          notify(translate("crm.task.notification.marked_complete"), { type: "success" });
+          createTaskNote(translate("crm.task.note.marked_complete"));
         },
       }
     );
@@ -84,8 +86,10 @@ export const TaskAside = () => {
     if (!record.due_date) {
       // No due date, set to tomorrow
       newDueDateString = tomorrow.toISOString().slice(0, 10);
-      noteText = `Due date snoozed to ${tomorrow.toLocaleDateString()}`;
-      notificationText = "Task snoozed to tomorrow";
+      noteText = translate("crm.task.note.snoozed_to_date", {
+        date: tomorrow.toLocaleDateString(locale),
+      });
+      notificationText = translate("crm.task.notification.snoozed_tomorrow");
     } else {
       // Parse the date safely (handles both YYYY-MM-DD and full ISO 8601)
       // We extract only the date part to avoid timezone shifts when parsing
@@ -97,15 +101,19 @@ export const TaskAside = () => {
 
       if (isOverdueOrDueToday) {
         newDueDateString = tomorrow.toISOString().slice(0, 10);
-        noteText = `Due date snoozed to ${tomorrow.toLocaleDateString()}`;
-        notificationText = "Task snoozed to tomorrow";
+        noteText = translate("crm.task.note.snoozed_to_date", {
+          date: tomorrow.toLocaleDateString(locale),
+        });
+        notificationText = translate("crm.task.notification.snoozed_tomorrow");
       } else {
         // Add 1 day to the due date
         const newDueDate = new Date(dueDate);
         newDueDate.setDate(newDueDate.getDate() + 1);
         newDueDateString = newDueDate.toISOString().slice(0, 10);
-        noteText = `Due date postponed by 1 day to ${newDueDate.toLocaleDateString()}`;
-        notificationText = "Task postponed by 1 day";
+        noteText = translate("crm.task.note.postponed_to_date", {
+          date: newDueDate.toLocaleDateString(locale),
+        });
+        notificationText = translate("crm.task.notification.postponed_day");
       }
     }
 
@@ -138,7 +146,9 @@ export const TaskAside = () => {
     const labelDueDate = new Date(year, month - 1, day);
     isOverdueOrDueToday = labelDueDate <= today;
   }
-  const snoozeLabel = isOverdueOrDueToday ? "Snooze to Tomorrow" : "Postpone by 1 Day";
+  const snoozeLabel = isOverdueOrDueToday
+    ? translate("crm.task.action.snooze_tomorrow")
+    : translate("crm.task.action.postpone_day");
 
   return (
     <div className="hidden sm:block w-64 min-w-64 text-sm">
@@ -150,7 +160,7 @@ export const TaskAside = () => {
           className="flex items-center gap-2"
         >
           <Pencil className="h-4 w-4" />
-          Edit Task
+          {translate("crm.task.action.edit_task")}
         </Button>
 
         {!isCompleted && (
@@ -162,7 +172,7 @@ export const TaskAside = () => {
               className="flex items-center gap-2"
             >
               <Check className="h-4 w-4" />
-              Mark Complete
+              {translate("crm.task.action.mark_complete")}
             </Button>
 
             <Button
@@ -184,26 +194,26 @@ export const TaskAside = () => {
         taskId={record.id}
       />
 
-      <AsideSection title="Task Info">
+      <AsideSection title={translate("crm.task.section.info")}>
         <InfoRow
           icon={<Calendar className="w-4 h-4 text-muted-foreground" />}
-          label="Due Date"
+          label={translate("crm.task.field.due_date")}
           value={<DateField source="due_date" />}
         />
         {record.done_date && (
           <InfoRow
             icon={<Calendar className="w-4 h-4 text-muted-foreground" />}
-            label="Completed"
+            label={translate("crm.task.field.completed")}
             value={<DateField source="done_date" />}
           />
         )}
       </AsideSection>
 
-      <AsideSection title="Related">
+      <AsideSection title={translate("crm.task.section.related")}>
         {record.contact_id && (
           <InfoRow
             icon={<UserCircle className="w-4 h-4 text-muted-foreground" />}
-            label="Contact"
+            label={translate("crm.filter.contact")}
             value={
               <ReferenceField
                 source="contact_id"
@@ -216,7 +226,7 @@ export const TaskAside = () => {
         {record.company_id && (
           <InfoRow
             icon={<Building2 className="w-4 h-4 text-muted-foreground" />}
-            label="Company"
+            label={translate("crm.filter.company")}
             value={
               <ReferenceField source="company_id" reference="companies" link="show">
                 <TextField source="name" />
@@ -227,7 +237,7 @@ export const TaskAside = () => {
         {record.deal_id && (
           <InfoRow
             icon={<Briefcase className="w-4 h-4 text-muted-foreground" />}
-            label="Deal"
+            label={translate("crm.filter.deal")}
             value={
               <ReferenceField source="deal_id" reference="deals" link="show">
                 <TextField source="name" />
@@ -236,21 +246,23 @@ export const TaskAside = () => {
           />
         )}
         {!record.contact_id && !record.company_id && !record.deal_id && (
-          <p className="text-sm text-muted-foreground">No related entity</p>
+          <p className="text-sm text-muted-foreground">
+            {translate("crm.task.related.none")}
+          </p>
         )}
       </AsideSection>
 
-      <AsideSection title="Assignment">
+      <AsideSection title={translate("crm.task.section.assignment")}>
         <InfoRow
           icon={<UserCheck className="w-4 h-4 text-muted-foreground" />}
-          label="Assigned To"
+          label={translate("crm.task.field.assigned_to")}
           value={
             <ReferenceField source="assigned_to" reference="sales" link={false} />
           }
         />
         <InfoRow
           icon={<UserCircle className="w-4 h-4 text-muted-foreground" />}
-          label="Created By"
+          label={translate("crm.task.field.created_by")}
           value={
             <ReferenceField source="sales_id" reference="sales" link={false} />
           }

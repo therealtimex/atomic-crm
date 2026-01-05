@@ -1,16 +1,20 @@
 import { formatDistance } from "date-fns";
 import { FileText } from "lucide-react";
-import { useGetIdentity, useGetList } from "ra-core";
+import { useGetIdentity, useGetList, useLocaleState, useTranslate } from "ra-core";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { TextField } from "@/components/admin/text-field";
 import { Card, CardContent } from "@/components/ui/card";
+import { getDateFnsLocale } from "@/i18n/date-fns";
 
 import type { Contact, ContactNote } from "../types";
 
 export const LatestNotes = () => {
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
+  const [locale] = useLocaleState();
+  const dateFnsLocale = getDateFnsLocale(locale);
   const { data: contactNotesData, isPending: contactNotesLoading } = useGetList(
     "contactNotes",
     {
@@ -55,7 +59,7 @@ export const LatestNotes = () => {
           <FileText className="text-muted-foreground w-6 h-6" />
         </div>
         <h2 className="text-xl font-semibold text-muted-foreground">
-          My Latest Notes
+          {translate("crm.dashboard.latest_notes")}
         </h2>
       </div>
       <Card>
@@ -67,15 +71,22 @@ export const LatestNotes = () => {
               className="mb-8"
             >
               <div className="text-sm text-muted-foreground">
-                on{" "}
+                {translate("crm.dashboard.notes.on")}{" "}
                 {note.type === "dealNote" ? (
-                  <Deal note={note} />
+                  <Deal
+                    note={note}
+                    label={translate("crm.dashboard.notes.deal")}
+                  />
                 ) : (
-                  <Contact note={note} />
+                  <Contact
+                    note={note}
+                    label={translate("crm.dashboard.notes.contact")}
+                  />
                 )}
-                , added{" "}
+                , {translate("crm.dashboard.notes.added")}{" "}
                 {formatDistance(note.date, new Date(), {
                   addSuffix: true,
+                  locale: dateFnsLocale,
                 })}
               </div>
               <div className="prose prose-sm max-w-none dark:prose-invert line-clamp-3 overflow-hidden">
@@ -91,9 +102,9 @@ export const LatestNotes = () => {
   );
 };
 
-const Deal = ({ note }: any) => (
+const Deal = ({ note, label }: { note: any; label: string }) => (
   <>
-    Deal{" "}
+    {label}{" "}
     <ReferenceField
       record={note}
       source="deal_id"
@@ -105,9 +116,9 @@ const Deal = ({ note }: any) => (
   </>
 );
 
-const Contact = ({ note }: any) => (
+const Contact = ({ note, label }: { note: any; label: string }) => (
   <>
-    Contact{" "}
+    {label}{" "}
     <ReferenceField<ContactNote, Contact>
       record={note}
       source="contact_id"

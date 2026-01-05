@@ -42,12 +42,27 @@ export function isTomorrow(date: Date): boolean {
  * @param isCompleted - Whether the task is completed (done or cancelled)
  * @returns Object with relative text and whether it's overdue
  */
+import { translateWithFallback, type Translate } from "@/i18n/utils";
+
+type RelativeDueDateOptions = {
+  translate?: Translate;
+  locale?: string;
+};
+
 export function getRelativeDueDate(
   dateString: string | null | undefined,
-  isCompleted: boolean = false
+  isCompleted: boolean = false,
+  options: RelativeDueDateOptions = {},
 ): { text: string; isOverdue: boolean } {
+  const translate = options.translate;
+  const locale = options.locale;
+  const t = (key: string, fallback: string, params?: Record<string, unknown>) =>
+    translate ? translateWithFallback(translate, key, fallback, params) : fallback;
   if (!dateString) {
-    return { text: "No due date", isOverdue: false };
+    return {
+      text: t("crm.task.due.no_date", "No due date"),
+      isOverdue: false,
+    };
   }
 
   // Parse date as local date to avoid timezone shift
@@ -65,7 +80,7 @@ export function getRelativeDueDate(
   // If task is completed, just show the date
   if (isCompleted) {
     return {
-      text: dueDate.toLocaleDateString(undefined, {
+      text: dueDate.toLocaleDateString(locale, {
         month: "short",
         day: "numeric",
         year: dueDate.getFullYear() !== new Date().getFullYear() ? "numeric" : undefined,
@@ -78,24 +93,34 @@ export function getRelativeDueDate(
   if (daysDiff < 0) {
     const daysOverdue = Math.abs(daysDiff);
     return {
-      text: daysOverdue === 1 ? "Overdue by 1 day" : `Overdue by ${daysOverdue} days`,
+      text:
+        daysOverdue === 1
+          ? t("crm.task.due.overdue_one", "Overdue by 1 day")
+          : t("crm.task.due.overdue_many", "Overdue by %{count} days", {
+              count: daysOverdue,
+            }),
       isOverdue: true,
     };
   }
 
   // Due today
   if (isToday(dueDate)) {
-    return { text: "Due today", isOverdue: false };
+    return { text: t("crm.task.due.today", "Due today"), isOverdue: false };
   }
 
   // Due tomorrow
   if (isTomorrow(dueDate)) {
-    return { text: "Due tomorrow", isOverdue: false };
+    return { text: t("crm.task.due.tomorrow", "Due tomorrow"), isOverdue: false };
   }
 
   // All future dates show "Due in X days"
   return {
-    text: `Due in ${daysDiff} ${daysDiff === 1 ? 'day' : 'days'}`,
+    text:
+      daysDiff === 1
+        ? t("crm.task.due.in_days_one", "Due in 1 day")
+        : t("crm.task.due.in_days_many", "Due in %{count} days", {
+            count: daysDiff,
+          }),
     isOverdue: false,
   };
 }

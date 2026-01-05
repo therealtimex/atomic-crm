@@ -99,7 +99,7 @@ export const TaskCreate = () => {
       { updatedAt: now },
     );
 
-    notify("Task created");
+    notify(translate("crm.task.notification.created"));
     redirect("list", "tasks");
   };
 
@@ -132,7 +132,7 @@ export const TaskCreate = () => {
               <TextInput
                 autoFocus
                 source="text"
-                label="Description"
+                label={translate("crm.task.field.description")}
                 validate={required()}
                 multiline
                 className="w-full"
@@ -172,7 +172,7 @@ export const TaskCreate = () => {
                     optionText={(record) =>
                       `${record.first_name} ${record.last_name}`
                     }
-                    label="Assigned To"
+                    label={translate("crm.task.field.assigned_to")}
                   />
                 </ReferenceInput>
               </div>

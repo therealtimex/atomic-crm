@@ -11,7 +11,8 @@ export const translateWithFallback = (
   translate: Translate,
   key: string,
   fallback: string,
-) => translate(key, { _: fallback });
+  options: Record<string, unknown> = {},
+) => translate(key, { _: fallback, ...options });
 
 export const translateChoice = (
   translate: Translate,

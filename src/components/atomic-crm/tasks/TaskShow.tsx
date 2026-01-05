@@ -1,8 +1,10 @@
-import { ShowBase, useShowContext } from "ra-core";
+import { ShowBase, useLocaleState, useShowContext, useTranslate } from "ra-core";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReferenceManyField } from "@/components/admin/reference-many-field";
 import { Calendar } from "lucide-react";
 import { formatDistance } from "date-fns";
+import { getDateFnsLocale } from "@/i18n/date-fns";
+import { translateChoice } from "@/i18n/utils";
 
 import { NoteCreate, NotesIterator } from "../notes";
 import type { Task } from "../types";
@@ -19,7 +21,14 @@ export const TaskShow = () => (
 
 const TaskShowContent = () => {
   const { record, isPending } = useShowContext<Task>();
+  const translate = useTranslate();
+  const [locale] = useLocaleState();
+  const dateFnsLocale = getDateFnsLocale(locale);
   if (isPending || !record) return null;
+
+  const typeLabel = record.type
+    ? translateChoice(translate, "crm.task.type", record.type, record.type)
+    : "";
 
   return (
     <div className="mt-2 mb-2 flex gap-8">
@@ -28,7 +37,7 @@ const TaskShowContent = () => {
           <CardContent>
             {/* Task Header */}
             <div className="mb-6">
-              <h5 className="text-xl font-semibold mb-3">{record.type}</h5>
+              <h5 className="text-xl font-semibold mb-3">{typeLabel || record.type}</h5>
               <div className="flex gap-3 mb-4">
                 <TaskStatusBadge status={record.status} />
                 <TaskPriorityBadge priority={record.priority} />
@@ -38,15 +47,19 @@ const TaskShowContent = () => {
                 const datePart = record.due_date.split('T')[0];
                 const [year, month, day] = datePart.split('-').map(Number);
                 const dueDate = new Date(year, month - 1, day);
+                const relativeDue = formatDistance(dueDate, new Date(), {
+                  addSuffix: true,
+                  locale: dateFnsLocale,
+                });
 
                 return (
                   <div className="flex items-center gap-2 mb-3 text-sm">
                     <Calendar className="w-4 h-4 text-muted-foreground" />
                     <span className="text-muted-foreground">
-                      Due {formatDistance(dueDate, new Date(), { addSuffix: true })}
+                      {translate("crm.task.due.relative", { time: relativeDue })}
                     </span>
                     <span className="text-muted-foreground">
-                      ({dueDate.toLocaleDateString()})
+                      ({dueDate.toLocaleDateString(locale ?? undefined)})
                     </span>
                   </div>
                 );
@@ -60,18 +73,22 @@ const TaskShowContent = () => {
 
             {/* Activity Timeline */}
             <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-4">Activity Timeline</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                {translate("crm.task.section.activity_timeline")}
+              </h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Track all status changes and updates for this task
+                {translate("crm.task.section.activity_description")}
               </p>
               <TaskActivityTimeline taskId={record.id} />
             </div>
 
             {/* Notes */}
             <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-4">Notes</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                {translate("crm.task.section.notes")}
+              </h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Add notes and updates to this task
+                {translate("crm.task.section.notes_description")}
               </p>
               <ReferenceManyField
                 reference="taskNotes"

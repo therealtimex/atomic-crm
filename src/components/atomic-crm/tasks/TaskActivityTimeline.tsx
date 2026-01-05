@@ -1,7 +1,9 @@
 import { formatDistance } from "date-fns";
-import { useGetList, useRecordContext } from "ra-core";
+import { useGetList, useLocaleState, useRecordContext, useTranslate } from "ra-core";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { AlertCircle } from "lucide-react";
+import { getDateFnsLocale } from "@/i18n/date-fns";
+import { translateChoice, type Translate } from "@/i18n/utils";
 import type { TaskActivity, Sale } from "../types";
 
 const MAX_ACTIVITIES = 100;
@@ -11,6 +13,9 @@ export const TaskActivityTimeline = ({
 }: {
   taskId: string | number;
 }) => {
+  const translate = useTranslate();
+  const [locale] = useLocaleState();
+  const dateFnsLocale = getDateFnsLocale(locale);
   const { data: activities, isPending, total } = useGetList<TaskActivity>(
     "task_activity",
     {
@@ -23,13 +28,13 @@ export const TaskActivityTimeline = ({
   if (isPending)
     return (
       <div className="p-4 text-center text-sm text-muted-foreground">
-        Loading activity...
+        {translate("crm.task.activity.loading")}
       </div>
     );
   if (!activities || activities.length === 0)
     return (
       <div className="p-4 text-center text-sm text-muted-foreground">
-        No activity recorded.
+        {translate("crm.task.activity.empty")}
       </div>
     );
 
@@ -50,11 +55,12 @@ export const TaskActivityTimeline = ({
               >
                 <SaleName />
               </ReferenceField>{" "}
-              {formatActivityMessage(activity)}
+              {formatActivityMessage(activity, translate)}
             </div>
             <div className="text-xs text-muted-foreground">
               {formatDistance(new Date(activity.created_at), new Date(), {
                 addSuffix: true,
+                locale: dateFnsLocale,
               })}
             </div>
           </div>
@@ -64,7 +70,10 @@ export const TaskActivityTimeline = ({
         <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-md text-sm text-muted-foreground">
           <AlertCircle className="w-4 h-4" />
           <span>
-            Showing {MAX_ACTIVITIES} of {total} activities. Older activities are not displayed.
+            {translate("crm.task.activity.truncated", {
+              count: MAX_ACTIVITIES,
+              total,
+            })}
           </span>
         </div>
       )}
@@ -82,24 +91,33 @@ const SaleName = () => {
   );
 };
 
-const formatActivityMessage = (activity: TaskActivity) => {
+const formatActivityMessage = (activity: TaskActivity, translate: Translate) => {
   switch (activity.action) {
     case "created":
-      return "created this task";
-    case "updated":
-      if (!activity.field_name) return "updated this task";
-      return `changed ${activity.field_name}`;
+      return translate("crm.task.activity.created");
+    case "updated": {
+      if (!activity.field_name) return translate("crm.task.activity.updated");
+      const fieldLabel = translateChoice(
+        translate,
+        "crm.task.field",
+        activity.field_name,
+        activity.field_name,
+      );
+      return translate("crm.task.activity.updated_field", {
+        field: fieldLabel,
+      });
+    }
     // Simplified because old/new values might be IDs or technical values
     case "assigned":
-      return "assigned this task";
+      return translate("crm.task.activity.assigned");
     case "completed":
-      return "completed this task";
+      return translate("crm.task.activity.completed");
     case "reopened":
-      return "reopened this task";
+      return translate("crm.task.activity.reopened");
     case "duplicated":
-      return "duplicated this task";
+      return translate("crm.task.activity.duplicated");
     case "archived":
-      return "archived this task";
+      return translate("crm.task.activity.archived");
     default:
       return activity.action;
   }

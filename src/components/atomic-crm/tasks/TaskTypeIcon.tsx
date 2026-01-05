@@ -16,6 +16,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useTranslate } from "ra-core";
+import { translateChoice } from "@/i18n/utils";
 
 /**
  * Task type icon mapping
@@ -58,12 +60,14 @@ export const TaskTypeIcon = ({
   showLabel?: boolean;
   size?: number;
 }) => {
+  const translate = useTranslate();
   // Don't render anything for None or missing task type
   if (!taskType || taskType === "None") {
     return null;
   }
 
   const Icon = getTaskTypeIcon(taskType);
+  const label = translateChoice(translate, "crm.task.type", taskType, taskType);
 
   const iconElement = (
     <div className="flex items-center gap-1.5">
@@ -72,7 +76,7 @@ export const TaskTypeIcon = ({
       </div>
       {showLabel && (
         <span className="text-sm font-medium text-muted-foreground">
-          {taskType}
+          {label}
         </span>
       )}
     </div>
@@ -89,7 +93,7 @@ export const TaskTypeIcon = ({
       <Tooltip>
         <TooltipTrigger asChild>{iconElement}</TooltipTrigger>
         <TooltipContent>
-          <p>{taskType}</p>
+          <p>{label}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

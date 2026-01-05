@@ -4,6 +4,7 @@ import {
   useNotify,
   useCreate,
   useGetIdentity,
+  useLocaleState,
   useTranslate,
 } from "ra-core";
 import { Check, Pencil, Clock } from "lucide-react";
@@ -84,9 +85,20 @@ const RelatedEntityField = ({ record }: { record: Task | TaskSummary }) => {
   );
 };
 
-const DueDateField = ({ record }: { record: Task | TaskSummary }) => {
+const DueDateField = ({
+  record,
+  translate,
+  locale,
+}: {
+  record: Task | TaskSummary;
+  translate: ReturnType<typeof useTranslate>;
+  locale?: string;
+}) => {
   const isCompleted = record.status === "done" || record.status === "cancelled";
-  const { text, isOverdue } = getRelativeDueDate(record.due_date, isCompleted);
+  const { text, isOverdue } = getRelativeDueDate(record.due_date, isCompleted, {
+    translate,
+    locale,
+  });
 
   // Parse date as local date to avoid timezone shift (same logic as getRelativeDueDate)
   let formattedDate = "";
@@ -94,7 +106,7 @@ const DueDateField = ({ record }: { record: Task | TaskSummary }) => {
     const datePart = record.due_date.split('T')[0];
     const [year, month, day] = datePart.split('-').map(Number);
     const dueDate = new Date(year, month - 1, day);
-    formattedDate = dueDate.toLocaleDateString();
+    formattedDate = dueDate.toLocaleDateString(locale);
   }
 
   return (
@@ -130,6 +142,8 @@ const TaskActions = ({
   const [create] = useCreate();
   const notify = useNotify();
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
+  const [locale] = useLocaleState();
 
   // Create a task note for audit trail
   const createTaskNote = (text: string) => {
@@ -173,8 +187,8 @@ const TaskActions = ({
       },
       {
         onSuccess: () => {
-          notify("Task marked as complete", { type: "success" });
-          createTaskNote("Task marked as complete via quick action");
+          notify(translate("crm.task.notification.marked_complete"), { type: "success" });
+          createTaskNote(translate("crm.task.note.marked_complete_quick"));
         },
       }
     );
@@ -200,8 +214,10 @@ const TaskActions = ({
     if (!record.due_date) {
       // No due date, set to tomorrow
       newDueDateString = tomorrow.toISOString().slice(0, 10);
-      noteText = `Due date snoozed to ${tomorrow.toLocaleDateString()}`;
-      notificationText = "Task snoozed to tomorrow";
+      noteText = translate("crm.task.note.snoozed_to_date", {
+        date: tomorrow.toLocaleDateString(locale),
+      });
+      notificationText = translate("crm.task.notification.snoozed_tomorrow");
     } else {
       // Parse the date safely (handles both YYYY-MM-DD and full ISO 8601)
       // We extract only the date part to avoid timezone shifts when parsing
@@ -213,15 +229,19 @@ const TaskActions = ({
 
       if (isOverdueOrDueToday) {
         newDueDateString = tomorrow.toISOString().slice(0, 10);
-        noteText = `Due date snoozed to ${tomorrow.toLocaleDateString()}`;
-        notificationText = "Task snoozed to tomorrow";
+        noteText = translate("crm.task.note.snoozed_to_date", {
+          date: tomorrow.toLocaleDateString(locale),
+        });
+        notificationText = translate("crm.task.notification.snoozed_tomorrow");
       } else {
         // Add 1 day to the due date
         const newDueDate = new Date(dueDate);
         newDueDate.setDate(newDueDate.getDate() + 1);
         newDueDateString = newDueDate.toISOString().slice(0, 10);
-        noteText = `Due date postponed by 1 day to ${newDueDate.toLocaleDateString()}`;
-        notificationText = "Task postponed by 1 day";
+        noteText = translate("crm.task.note.postponed_to_date", {
+          date: newDueDate.toLocaleDateString(locale),
+        });
+        notificationText = translate("crm.task.notification.postponed_day");
       }
     }
 
@@ -256,7 +276,9 @@ const TaskActions = ({
     const labelDueDate = new Date(year, month - 1, day);
     isOverdueOrDueToday = labelDueDate <= today;
   }
-  const snoozeLabel = isOverdueOrDueToday ? "Snooze to tomorrow" : "Postpone by 1 day";
+  const snoozeLabel = isOverdueOrDueToday
+    ? translate("crm.task.action.snooze_tomorrow")
+    : translate("crm.task.action.postpone_day");
 
   return (
     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -274,7 +296,7 @@ const TaskActions = ({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Mark complete</p>
+              <p>{translate("crm.task.action.mark_complete")}</p>
             </TooltipContent>
           </Tooltip>
         )}
@@ -290,7 +312,7 @@ const TaskActions = ({
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Edit</p>
+            <p>{translate("crm.task.action.edit")}</p>
           </TooltipContent>
         </Tooltip>
         {!isCompleted && (
@@ -304,13 +326,13 @@ const TaskActions = ({
               >
                 <Clock className="h-4 w-4" />
               </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{snoozeLabel}</p>
-            </TooltipContent>
-          </Tooltip>
-        )}
-      </TooltipProvider>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{snoozeLabel}</p>
+          </TooltipContent>
+        </Tooltip>
+      )}
+    </TooltipProvider>
     </div>
   );
 };
@@ -318,10 +340,14 @@ const TaskActions = ({
 export const TaskListTable = () => {
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
   const translate = useTranslate();
+  const [locale] = useLocaleState();
 
   const getRowClassName = (record: Task) => {
     const isCompleted = record.status === "done" || record.status === "cancelled";
-    const { isOverdue } = getRelativeDueDate(record.due_date, isCompleted);
+    const { isOverdue } = getRelativeDueDate(record.due_date, isCompleted, {
+      translate,
+      locale,
+    });
 
     // Add 'group' class for hover actions, plus overdue styling
     const baseClass = "group";
@@ -358,7 +384,9 @@ export const TaskListTable = () => {
         label={translate("crm.task.field.due_date")}
         className="w-[14%]"
         cellClassName="overflow-hidden"
-        render={(record: Task) => <DueDateField record={record} />}
+        render={(record: Task) => (
+          <DueDateField record={record} translate={translate} locale={locale} />
+        )}
       />
       <DataTable.Col
         label={translate("crm.task.field.priority")}

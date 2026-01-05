@@ -1,5 +1,5 @@
 import { Draggable } from "@hello-pangea/dnd";
-import { useRedirect } from "ra-core";
+import { useLocaleState, useRedirect, useTranslate } from "ra-core";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { TextField } from "@/components/admin/text-field";
@@ -32,6 +32,8 @@ export const TaskCardContent = ({
     task: Task;
 }) => {
     const redirect = useRedirect();
+    const translate = useTranslate();
+    const [locale] = useLocaleState();
     const handleClick = () => {
         redirect(`/tasks/${task.id}/show`, undefined, undefined, undefined, {
             _scrollToTop: false,
@@ -39,7 +41,11 @@ export const TaskCardContent = ({
     };
 
     const isCompleted = task.status === "done" || task.status === "cancelled";
-    const { text: relativeDueDate, isOverdue } = getRelativeDueDate(task.due_date || "", isCompleted);
+    const { text: relativeDueDate, isOverdue } = getRelativeDueDate(
+        task.due_date || "",
+        isCompleted,
+        { translate, locale },
+    );
 
     return (
         <div
@@ -93,7 +99,7 @@ export const TaskCardContent = ({
                             </ReferenceField>
                         )}
                         {!task.contact_id && !task.company_id && !task.deal_id && (
-                            <span>No related entity</span>
+                            <span>{translate("crm.task.related.none")}</span>
                         )}
                     </div>
                 </CardContent>

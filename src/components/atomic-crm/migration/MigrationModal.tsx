@@ -18,6 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from 'sonner';
+import { useTranslate } from 'ra-core';
 import { getSupabaseConfig } from '@/lib/supabase-config';
 import type { MigrationStatus } from '@/lib/migration-check';
 
@@ -37,13 +38,14 @@ interface CodeBlockProps {
 
 function CodeBlock({ code, label }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
+  const translate = useTranslate();
 
   const canCopy =
     typeof navigator !== 'undefined' && !!navigator.clipboard?.writeText;
 
   const handleCopy = async () => {
     if (!canCopy) {
-      toast.error('Copy not supported in this environment — please copy manually.');
+      toast.error(translate('crm.migration.modal.copy.unsupported'));
       return;
     }
 
@@ -51,10 +53,10 @@ function CodeBlock({ code, label }: CodeBlockProps) {
       await navigator.clipboard.writeText(code);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
-      toast.success('Copied to clipboard!');
+      toast.success(translate('crm.migration.modal.copy.success'));
     } catch (error) {
       console.error('Failed to copy:', error);
-      toast.error('Copy failed — please copy manually.');
+      toast.error(translate('crm.migration.modal.copy.error'));
     }
   };
 
@@ -82,7 +84,11 @@ function CodeBlock({ code, label }: CodeBlockProps) {
           ) : (
             <Copy className="h-4 w-4" />
           )}
-          <span className="sr-only">{copied ? 'Copied' : 'Copy'}</span>
+          <span className="sr-only">
+            {copied
+              ? translate('crm.migration.modal.copy.copied_label')
+              : translate('crm.migration.modal.copy.copy_label')}
+          </span>
         </Button>
       </div>
     </div>
@@ -91,6 +97,7 @@ function CodeBlock({ code, label }: CodeBlockProps) {
 
 export function MigrationModal({ open, onOpenChange, status }: MigrationModalProps) {
   const config = getSupabaseConfig();
+  const translate = useTranslate();
 
   const projectId = useMemo(() => {
     const url = config?.url;
@@ -109,11 +116,12 @@ export function MigrationModal({ open, onOpenChange, status }: MigrationModalPro
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
             <AlertTriangle className="h-6 w-6 text-red-700 dark:text-red-600" />
-            Database Migration Required
+            {translate('crm.migration.modal.title')}
           </DialogTitle>
           <DialogDescription>
-            Your database schema needs to be updated to v{status.appVersion}. Follow the
-            steps below to complete the migration.
+            {translate('crm.migration.modal.description', {
+              version: status.appVersion,
+            })}
           </DialogDescription>
         </DialogHeader>
 
@@ -122,12 +130,16 @@ export function MigrationModal({ open, onOpenChange, status }: MigrationModalPro
           <Alert>
             <Info className="h-4 w-4" />
             <AlertDescription>
-              <strong>What will happen:</strong>
+              <strong>{translate('crm.migration.modal.overview.title')}</strong>
               <ul className="mt-2 list-inside list-disc space-y-1 text-sm">
-                <li>Database schema will be updated to v{status.appVersion}</li>
-                <li>New features and improvements will be enabled</li>
-                <li>Your existing data will not be affected</li>
-                <li>This process usually takes less than 2 minutes</li>
+                <li>
+                  {translate('crm.migration.modal.overview.update_schema', {
+                    version: status.appVersion,
+                  })}
+                </li>
+                <li>{translate('crm.migration.modal.overview.enable_features')}</li>
+                <li>{translate('crm.migration.modal.overview.data_safe')}</li>
+                <li>{translate('crm.migration.modal.overview.duration')}</li>
               </ul>
             </AlertDescription>
           </Alert>
@@ -138,21 +150,21 @@ export function MigrationModal({ open, onOpenChange, status }: MigrationModalPro
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                 1
               </span>
-              Prerequisites
+              {translate('crm.migration.modal.prerequisites.title')}
             </h4>
             <div className="ml-8 space-y-3">
               <p className="text-sm text-muted-foreground">
-                Ensure you have the following:
+                {translate('crm.migration.modal.prerequisites.intro')}
               </p>
               <ul className="list-inside list-disc space-y-1 text-sm">
-                <li>Supabase CLI installed (see installation below)</li>
+                <li>{translate('crm.migration.modal.prerequisites.cli_installed')}</li>
                 <li>
-                  Your Supabase project ID:{' '}
+                  {translate('crm.migration.modal.prerequisites.project_id')}{' '}
                   <code className="rounded bg-muted px-1 py-0.5 text-xs">
                     {projectId}
                   </code>
                 </li>
-                <li>Your database password (you&apos;ll be prompted)</li>
+                <li>{translate('crm.migration.modal.prerequisites.db_password')}</li>
               </ul>
             </div>
           </div>
@@ -163,16 +175,20 @@ export function MigrationModal({ open, onOpenChange, status }: MigrationModalPro
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                 2
               </span>
-              Install Supabase CLI (if not already installed)
+              {translate('crm.migration.modal.install_cli.title')}
             </h4>
             <div className="ml-8 space-y-3">
               <div className="space-y-2">
-                <p className="text-sm font-medium">macOS / Linux:</p>
+                <p className="text-sm font-medium">
+                  {translate('crm.migration.modal.install_cli.macos')}
+                </p>
                 <CodeBlock code="brew install supabase/tap/supabase" />
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm font-medium">Windows (Scoop):</p>
+                <p className="text-sm font-medium">
+                  {translate('crm.migration.modal.install_cli.windows_scoop')}
+                </p>
                 <CodeBlock
                   code={`scoop bucket add supabase https://github.com/supabase/scoop-bucket.git
 scoop install supabase`}
@@ -180,7 +196,9 @@ scoop install supabase`}
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm font-medium">Windows (npm):</p>
+                <p className="text-sm font-medium">
+                  {translate('crm.migration.modal.install_cli.windows_npm')}
+                </p>
                 <CodeBlock code="npm install -g supabase" />
               </div>
 
@@ -190,7 +208,7 @@ scoop install supabase`}
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
               >
-                View all installation methods
+                {translate('crm.migration.modal.install_cli.view_all')}
                 <ExternalLink className="h-3 w-3" />
               </a>
             </div>
@@ -202,28 +220,29 @@ scoop install supabase`}
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                 3
               </span>
-              Run Migration Command
+              {translate('crm.migration.modal.run_migration.title')}
             </h4>
             <div className="ml-8 space-y-3">
               <p className="text-sm text-muted-foreground">
-                Open your terminal and run:
+                {translate('crm.migration.modal.run_migration.intro')}
               </p>
               <CodeBlock code="npx realtimex-crm migrate" />
               <p className="text-sm text-muted-foreground">
-                The migration tool will:
+                {translate('crm.migration.modal.run_migration.tool_intro')}
               </p>
               <ol className="list-inside list-decimal space-y-1 text-sm text-muted-foreground">
-                <li>Prompt you to log in to Supabase (if not already)</li>
+                <li>{translate('crm.migration.modal.run_migration.steps.login')}</li>
                 <li>
-                  Ask for your project ID (
+                  {translate('crm.migration.modal.run_migration.steps.project_id')}{' '}
+                  (
                   <code className="rounded bg-muted px-1 py-0.5 text-xs">
                     {projectId}
                   </code>
                   )
                 </li>
-                <li>Request your database password</li>
-                <li>Apply all pending migrations automatically</li>
-                <li>Deploy updated edge functions</li>
+                <li>{translate('crm.migration.modal.run_migration.steps.password')}</li>
+                <li>{translate('crm.migration.modal.run_migration.steps.apply')}</li>
+                <li>{translate('crm.migration.modal.run_migration.steps.deploy')}</li>
               </ol>
             </div>
           </div>
@@ -234,12 +253,11 @@ scoop install supabase`}
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                 4
               </span>
-              Refresh the Application
+              {translate('crm.migration.modal.refresh.title')}
             </h4>
             <div className="ml-8 space-y-3">
               <p className="text-sm text-muted-foreground">
-                After the migration completes successfully, refresh this page to access the
-                new features.
+                {translate('crm.migration.modal.refresh.description')}
               </p>
             </div>
           </div>
@@ -248,23 +266,25 @@ scoop install supabase`}
           <Alert className="border-red-200 bg-red-50 dark:border-red-900/40 dark:bg-red-950/20">
             <AlertTriangle className="h-4 w-4 text-red-700 dark:text-red-600" />
             <AlertDescription>
-              <strong>Troubleshooting:</strong>
+              <strong>{translate('crm.migration.modal.troubleshooting.title')}</strong>
               <ul className="mt-2 list-inside list-disc space-y-1 text-sm">
                 <li>
-                  If login fails, run <code>supabase logout</code> then try again
+                  {translate('crm.migration.modal.troubleshooting.logout_prefix')}{' '}
+                  <code>supabase logout</code>{' '}
+                  {translate('crm.migration.modal.troubleshooting.logout_suffix')}
                 </li>
                 <li>
-                  Ensure your database password is correct (found in the Supabase Dashboard)
+                  {translate('crm.migration.modal.troubleshooting.password')}
                 </li>
                 <li>
-                  If issues persist, report at{' '}
+                  {translate('crm.migration.modal.troubleshooting.report')}{' '}
                   <a
                     href="https://github.com/therealtimex/realtimex-crm/issues"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="underline"
                   >
-                    GitHub Issues
+                    {translate('crm.migration.modal.troubleshooting.report_link')}
                   </a>
                 </li>
               </ul>
@@ -274,7 +294,7 @@ scoop install supabase`}
 
         <DialogFooter>
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-            Close
+            {translate('crm.migration.modal.close')}
           </Button>
         </DialogFooter>
       </DialogContent>

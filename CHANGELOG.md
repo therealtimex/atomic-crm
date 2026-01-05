@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Tasks**: Localized task statuses, priorities, types, and task list labels.
+- **Dashboard/Tasks**: Localized dashboard widgets, task details, and migration prompts.
 - **Deals/Companies/Contacts**: Localized deal stages/categories, company sectors, and contact gender labels.
 
 ### Fixed

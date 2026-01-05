@@ -75,7 +75,7 @@ export const AddTask = ({
       }
     }
 
-    notify("Task added");
+    notify(translate("crm.task.notification.created"));
   };
 
   if (!identity) return null;
@@ -122,6 +122,9 @@ export const AddTask = ({
 
   const initialEntityData = getInitialEntityData();
 
+  const recordLabel =
+    record?.first_name || record?.name || translate("crm.task.dialog.create.this_record");
+
   return (
     <>
       {display === "icon" ? (
@@ -137,7 +140,9 @@ export const AddTask = ({
                 <Plus className="w-4 h-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Create task</TooltipContent>
+            <TooltipContent>
+              {translate("crm.task.action.create_task")}
+            </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       ) : (
@@ -149,7 +154,7 @@ export const AddTask = ({
             size="sm"
           >
             <Plus className="w-4 h-4" />
-            Add task
+            {translate("crm.task.action.add_task")}
           </Button>
         </div>
       )}
@@ -184,17 +189,19 @@ export const AddTask = ({
               <DialogHeader>
                 <DialogTitle>
                   {record && !selectContact
-                    ? `Create a new task for ${record.first_name || record.name || "this record"}`
-                    : "Create a new task"}
+                    ? translate("crm.task.dialog.create.title_for", {
+                        name: recordLabel,
+                      })
+                    : translate("crm.task.dialog.create.title")}
                 </DialogTitle>
                 <DialogDescription>
-                  Add a new task with description, due date, and assignment details
+                  {translate("crm.task.dialog.create.description")}
                 </DialogDescription>
               </DialogHeader>
               <TextInput
                 autoFocus
                 source="text"
-                label="Description"
+                label={translate("crm.task.field.description")}
                 validate={required()}
                 multiline
                 className="m-0"

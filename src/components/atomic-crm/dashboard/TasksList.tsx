@@ -7,6 +7,7 @@ import {
 } from "date-fns";
 import { CheckSquare } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useTranslate } from "ra-core";
 
 import { AddTask } from "../tasks/AddTask";
 import { TasksListEmpty } from "./TasksListEmpty";
@@ -41,6 +42,8 @@ const taskFilters = {
 };
 
 export const TasksList = () => {
+  const translate = useTranslate();
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center">
@@ -48,20 +51,35 @@ export const TasksList = () => {
           <CheckSquare className="text-muted-foreground w-6 h-6" />
         </div>
         <h2 className="text-xl font-semibold text-muted-foreground flex-1">
-          Upcoming Tasks
+          {translate("crm.dashboard.upcoming_tasks")}
         </h2>
         <AddTask display="icon" selectContact />
       </div>
       <Card className="p-4 mb-2">
         <div className="flex flex-col gap-4">
           <TasksListEmpty />
-          <TasksListFilter title="Overdue" filter={taskFilters.overdue} />
-          <TasksListFilter title="Today" filter={taskFilters.today} />
-          <TasksListFilter title="Tomorrow" filter={taskFilters.tomorrow} />
+          <TasksListFilter
+            title={translate("crm.dashboard.task_filters.overdue")}
+            filter={taskFilters.overdue}
+          />
+          <TasksListFilter
+            title={translate("crm.dashboard.task_filters.today")}
+            filter={taskFilters.today}
+          />
+          <TasksListFilter
+            title={translate("crm.dashboard.task_filters.tomorrow")}
+            filter={taskFilters.tomorrow}
+          />
           {isBeforeFriday && (
-            <TasksListFilter title="This week" filter={taskFilters.thisWeek} />
+            <TasksListFilter
+              title={translate("crm.dashboard.task_filters.this_week")}
+              filter={taskFilters.thisWeek}
+            />
           )}
-          <TasksListFilter title="Later" filter={taskFilters.later} />
+          <TasksListFilter
+            title={translate("crm.dashboard.task_filters.later")}
+            filter={taskFilters.later}
+          />
         </div>
       </Card>
     </div>
