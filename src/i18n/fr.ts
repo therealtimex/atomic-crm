@@ -545,9 +545,13 @@ export const frMessages = {
       placeholder: {
         external_id: "ex: ID de compte Salesforce",
         company_name: "Nom de l'entreprise",
+        create_hint: "Commencez à taper pour créer une nouvelle entreprise",
       },
       error: {
         invalid_url: "Doit être une URL valide",
+      },
+      notification: {
+        error_creating: "Une erreur est survenue lors de la création de l'entreprise",
       },
       filter: {
         me: "Moi",
@@ -998,6 +1002,62 @@ export const frMessages = {
           copy_label: "Copier",
           copied_label: "Copié",
         },
+      },
+    },
+  },
+  resources: {
+    contacts: {
+      name: "Contact |||| Contacts",
+      fields: {
+        first_name: "Prénom",
+        last_name: "Nom",
+        title: "Titre",
+        company_id: "Entreprise",
+        email: "Email",
+        phone_number: "Téléphone",
+        linkedin_url: "LinkedIn",
+        sales_id: "Gestionnaire",
+        nb_tasks: "Tâches",
+        last_seen: "Dernière activité",
+      },
+    },
+    companies: {
+      name: "Entreprise |||| Entreprises",
+      fields: {
+        name: "Nom",
+        website: "Site web",
+        phone_number: "Téléphone",
+        sector: "Secteur",
+        size: "Taille",
+        sales_id: "Gestionnaire",
+        nb_contacts: "Contacts",
+        nb_deals: "Affaires",
+        created_at: "Ajouté le",
+      },
+    },
+    deals: {
+      name: "Affaire |||| Affaires",
+      fields: {
+        name: "Nom",
+        amount: "Montant",
+        category: "Catégorie",
+        stage: "Étape",
+        company_id: "Entreprise",
+        sales_id: "Propriétaire",
+      },
+    },
+    tasks: {
+      name: "Tâche |||| Tâches",
+      fields: {
+        title: "Titre",
+        description: "Description",
+        due_date: "Date d'échéance",
+        status: "Statut",
+        priority: "Priorité",
+        sales_id: "Assigné à",
+        contact_id: "Contact",
+        company_id: "Entreprise",
+        deal_id: "Affaire",
       },
     },
   },

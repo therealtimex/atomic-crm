@@ -539,9 +539,13 @@ export const jaMessages = {
       placeholder: {
         external_id: "例: Salesforce アカウントID",
         company_name: "会社名",
+        create_hint: "会社名を読み入力して新しく作成する",
       },
       error: {
         invalid_url: "有効なURLを入力してください",
+      },
+      notification: {
+        error_creating: "会社の作成中にエラーが発生しました",
       },
       filter: {
         me: "私",
@@ -982,6 +986,62 @@ export const jaMessages = {
           copy_label: "コピー",
           copied_label: "コピー済み",
         },
+      },
+    },
+  },
+  resources: {
+    contacts: {
+      name: "連絡先 |||| 連絡先",
+      fields: {
+        first_name: "名",
+        last_name: "姓",
+        title: "役職",
+        company_id: "会社",
+        email: "メールアドレス",
+        phone_number: "電話番号",
+        linkedin_url: "LinkedIn",
+        sales_id: "アカウントマネージャー",
+        nb_tasks: "タスク",
+        last_seen: "最終アクティビティ",
+      },
+    },
+    companies: {
+      name: "会社 |||| 会社",
+      fields: {
+        name: "会社名",
+        website: "ウェブサイト",
+        phone_number: "電話番号",
+        sector: "セクター",
+        size: "規模",
+        sales_id: "アカウントマネージャー",
+        nb_contacts: "連絡先数",
+        nb_deals: "案件数",
+        created_at: "追加日",
+      },
+    },
+    deals: {
+      name: "案件 |||| 案件",
+      fields: {
+        name: "案件名",
+        amount: "金額",
+        category: "カテゴリー",
+        stage: "ステージ",
+        company_id: "会社",
+        sales_id: "所有者",
+      },
+    },
+    tasks: {
+      name: "タスク |||| タスク",
+      fields: {
+        title: "タイトル",
+        description: "説明",
+        due_date: "期限",
+        status: "ステータス",
+        priority: "優先度",
+        sales_id: "担当者",
+        contact_id: "連絡先",
+        company_id: "会社",
+        deal_id: "案件",
       },
     },
   },

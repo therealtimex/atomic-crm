@@ -538,9 +538,13 @@ export const koMessages = {
       placeholder: {
         external_id: "예: Salesforce 계정 ID",
         company_name: "회사 이름",
+        create_hint: "입력하여 새 회사 만들기",
       },
       error: {
         invalid_url: "유효한 URL이어야 합니다",
+      },
+      notification: {
+        error_creating: "회사 생성 중 오류가 발생했습니다",
       },
       filter: {
         me: "나",
@@ -978,6 +982,62 @@ export const koMessages = {
           copy_label: "복사",
           copied_label: "복사됨",
         },
+      },
+    },
+  },
+  resources: {
+    contacts: {
+      name: "연락처 |||| 연락처",
+      fields: {
+        first_name: "이름",
+        last_name: "성",
+        title: "직함",
+        company_id: "회사",
+        email: "이메일",
+        phone_number: "전화번호",
+        linkedin_url: "LinkedIn",
+        sales_id: "계정 관리자",
+        nb_tasks: "작업",
+        last_seen: "최근 활동",
+      },
+    },
+    companies: {
+      name: "회사 |||| 회사",
+      fields: {
+        name: "회사명",
+        website: "웹사이트",
+        phone_number: "전화번호",
+        sector: "섹터",
+        size: "규모",
+        sales_id: "계정 관리자",
+        nb_contacts: "연락처 수",
+        nb_deals: "딜 수",
+        created_at: "추가일",
+      },
+    },
+    deals: {
+      name: "딜 |||| 딜",
+      fields: {
+        name: "딜 이름",
+        amount: "금액",
+        category: "카테고리",
+        stage: "단계",
+        company_id: "회사",
+        sales_id: "소유자",
+      },
+    },
+    tasks: {
+      name: "작업 |||| 작업",
+      fields: {
+        title: "제목",
+        description: "설명",
+        due_date: "마감일",
+        status: "상태",
+        priority: "우선순위",
+        sales_id: "담당자",
+        contact_id: "연락처",
+        company_id: "회사",
+        deal_id: "딜",
       },
     },
   },

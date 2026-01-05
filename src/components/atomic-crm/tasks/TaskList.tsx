@@ -93,7 +93,12 @@ const TaskList = () => {
 
   const taskFilters = [
     <SearchInput source="q" alwaysOn />,
-    <SelectInput source="status" choices={translatedTaskStatuses} alwaysOn />,
+    <SelectInput
+      source="status"
+      choices={translatedTaskStatuses}
+      alwaysOn
+      label={translate("crm.task.field.status")}
+    />,
     <ReferenceInput source="contact_id" reference="contacts">
       <AutocompleteInput
         label={false}
@@ -114,7 +119,11 @@ const TaskList = () => {
         optionText="name"
       />
     </ReferenceInput>,
-    <SelectInput source="priority" choices={translatedTaskPriorities} />,
+    <SelectInput
+      source="priority"
+      choices={translatedTaskPriorities}
+      label={translate("crm.task.field.priority")}
+    />,
     <MyTasksInput
       source="assigned_to"
       label={translate("crm.filter.my_tasks")}

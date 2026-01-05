@@ -540,9 +540,13 @@ export const viMessages = {
       placeholder: {
         external_id: "vd: ID tài khoản Salesforce",
         company_name: "Tên công ty",
+        create_hint: "Bắt đầu nhập để tạo công ty mới",
       },
       error: {
         invalid_url: "Phải là URL hợp lệ",
+      },
+      notification: {
+        error_creating: "Đã xảy ra lỗi khi tạo công ty",
       },
       filter: {
         me: "Tôi",
@@ -988,6 +992,62 @@ export const viMessages = {
           copy_label: "Sao chép",
           copied_label: "Đã sao chép",
         },
+      },
+    },
+  },
+  resources: {
+    contacts: {
+      name: "Liên hệ |||| Liên hệ",
+      fields: {
+        first_name: "Tên",
+        last_name: "Họ",
+        title: "Chức danh",
+        company_id: "Công ty",
+        email: "Email",
+        phone_number: "Số điện thoại",
+        linkedin_url: "LinkedIn",
+        sales_id: "Người quản lý",
+        nb_tasks: "Công việc",
+        last_seen: "Hoạt động gần nhất",
+      },
+    },
+    companies: {
+      name: "Công ty |||| Công ty",
+      fields: {
+        name: "Tên",
+        website: "Website",
+        phone_number: "Số điện thoại",
+        sector: "Lĩnh vực",
+        size: "Quy mô",
+        sales_id: "Người quản lý",
+        nb_contacts: "Liên hệ",
+        nb_deals: "Giao dịch",
+        created_at: "Ngày thêm",
+      },
+    },
+    deals: {
+      name: "Giao dịch |||| Giao dịch",
+      fields: {
+        name: "Tên",
+        amount: "Số tiền",
+        category: "Danh mục",
+        stage: "Giai đoạn",
+        company_id: "Công ty",
+        sales_id: "Người phụ trách",
+      },
+    },
+    tasks: {
+      name: "Công việc |||| Công việc",
+      fields: {
+        title: "Tiêu đề",
+        description: "Mô tả",
+        due_date: "Ngày đến hạn",
+        status: "Trạng thái",
+        priority: "Ưu tiên",
+        sales_id: "Giao cho",
+        contact_id: "Liên hệ",
+        company_id: "Công ty",
+        deal_id: "Giao dịch",
       },
     },
   },

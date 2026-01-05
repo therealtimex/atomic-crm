@@ -541,9 +541,13 @@ export const enMessages = {
       placeholder: {
         external_id: "e.g., Salesforce Account ID",
         company_name: "Company name",
+        create_hint: "Start typing to create a new company",
       },
       error: {
         invalid_url: "Must be a valid URL",
+      },
+      notification: {
+        error_creating: "An error occurred while creating the company",
       },
       filter: {
         me: "Me",
@@ -993,6 +997,62 @@ export const enMessages = {
           copy_label: "Copy",
           copied_label: "Copied",
         },
+      },
+    },
+  },
+  resources: {
+    contacts: {
+      name: "Contact |||| Contacts",
+      fields: {
+        first_name: "First name",
+        last_name: "Last name",
+        title: "Title",
+        company_id: "Company",
+        email: "Email",
+        phone_number: "Phone number",
+        linkedin_url: "LinkedIn URL",
+        sales_id: "Account manager",
+        nb_tasks: "Tasks",
+        last_seen: "Last activity",
+      },
+    },
+    companies: {
+      name: "Company |||| Companies",
+      fields: {
+        name: "Name",
+        website: "Website",
+        phone_number: "Phone number",
+        sector: "Sector",
+        size: "Size",
+        sales_id: "Account manager",
+        nb_contacts: "Contacts",
+        nb_deals: "Deals",
+        created_at: "Added on",
+      },
+    },
+    deals: {
+      name: "Deal |||| Deals",
+      fields: {
+        name: "Name",
+        amount: "Amount",
+        category: "Category",
+        stage: "Stage",
+        company_id: "Company",
+        sales_id: "Owner",
+      },
+    },
+    tasks: {
+      name: "Task |||| Tasks",
+      fields: {
+        title: "Title",
+        description: "Description",
+        due_date: "Due date",
+        status: "Status",
+        priority: "Priority",
+        sales_id: "Assigned to",
+        contact_id: "Contact",
+        company_id: "Company",
+        deal_id: "Deal",
       },
     },
   },

@@ -544,9 +544,13 @@ export const esMessages = {
       placeholder: {
         external_id: "ej., ID de cuenta de Salesforce",
         company_name: "Nombre de la empresa",
+        create_hint: "Comience a escribir para crear una nueva empresa",
       },
       error: {
         invalid_url: "Debe ser una URL válida",
+      },
+      notification: {
+        error_creating: "Ocurrió un error al crear la empresa",
       },
       filter: {
         me: "Yo",
@@ -996,6 +1000,62 @@ export const esMessages = {
           copy_label: "Copiar",
           copied_label: "Copiado",
         },
+      },
+    },
+  },
+  resources: {
+    contacts: {
+      name: "Contacto |||| Contactos",
+      fields: {
+        first_name: "Nombre",
+        last_name: "Apellido",
+        title: "Título",
+        company_id: "Empresa",
+        email: "Correo",
+        phone_number: "Teléfono",
+        linkedin_url: "LinkedIn",
+        sales_id: "Gerente",
+        nb_tasks: "Tareas",
+        last_seen: "Última actividad",
+      },
+    },
+    companies: {
+      name: "Empresa |||| Empresas",
+      fields: {
+        name: "Nombre",
+        website: "Sitio web",
+        phone_number: "Teléfono",
+        sector: "Sector",
+        size: "Tamaño",
+        sales_id: "Gerente",
+        nb_contacts: "Contactos",
+        nb_deals: "Negocios",
+        created_at: "Añadido el",
+      },
+    },
+    deals: {
+      name: "Negocio |||| Negocios",
+      fields: {
+        name: "Nombre",
+        amount: "Monto",
+        category: "Categoría",
+        stage: "Etapa",
+        company_id: "Empresa",
+        sales_id: "Propietario",
+      },
+    },
+    tasks: {
+      name: "Tarea |||| Tareas",
+      fields: {
+        title: "Título",
+        description: "Descripción",
+        due_date: "Fecha de vencimiento",
+        status: "Estado",
+        priority: "Prioridad",
+        sales_id: "Asignado a",
+        contact_id: "Contacto",
+        company_id: "Empresa",
+        deal_id: "Negocio",
       },
     },
   },
