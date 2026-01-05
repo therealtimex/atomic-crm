@@ -5,6 +5,22 @@ All notable changes to Atomic CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.45.9] - 2026-01-04
+
+### Added
+
+- **UI**: Added a dynamic `AnimatedCircuitSVG` component to the authentication pages for a more engaging experience.
+- **UI**: Integrated locale and theme switchers into the login and authentication pages.
+
+### Changed
+
+- **UI**: Improved authentication page layout with better responsiveness and theme-awareness.
+- **Localization**: Localized the "Forgot password?" link and other remaining strings in authentication pages.
+
+### Fixed
+
+- **UI**: Enhanced `AnimatedCircuitSVG` visibility in dark mode and increased animation scale.
+
 ## [0.45.8] - 2026-01-04
 
 ### Added
