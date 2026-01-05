@@ -1019,6 +1019,14 @@ export const viMessages = {
         },
       },
     },
+    common: {
+      activity: "Hoạt động",
+      contacts: "0 Liên hệ |||| 1 Liên hệ |||| %{count} Liên hệ",
+      notes: "0 Ghi chú |||| 1 Ghi chú |||| %{count} Ghi chú",
+      deals: "0 Giao dịch |||| 1 Giao dịch |||| %{count} Giao dịch",
+      last_activity: "hoạt động gần nhất %{distance} trước",
+      add_contact: "Thêm liên hệ",
+    },
   },
   resources: {
     contacts: {

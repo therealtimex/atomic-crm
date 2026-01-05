@@ -1027,6 +1027,14 @@ export const esMessages = {
         },
       },
     },
+    common: {
+      activity: "Actividad",
+      contacts: "0 Contactos |||| 1 Contacto |||| %{count} Contactos",
+      notes: "0 Notas |||| 1 Nota |||| %{count} Notas",
+      deals: "0 Negocios |||| 1 Negocio |||| %{count} Negocios",
+      last_activity: "última actividad hace %{distance}",
+      add_contact: "Añadir contacto",
+    },
   },
   resources: {
     contacts: {

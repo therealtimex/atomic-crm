@@ -1024,6 +1024,14 @@ export const enMessages = {
         },
       },
     },
+    common: {
+      activity: "Activity",
+      contacts: "0 Contacts |||| 1 Contact |||| %{count} Contacts",
+      notes: "0 Notes |||| 1 Note |||| %{count} Notes",
+      deals: "0 Deals |||| 1 Deal |||| %{count} Deals",
+      last_activity: "last activity %{distance} ago",
+      add_contact: "Add contact",
+    },
   },
   resources: {
     contacts: {

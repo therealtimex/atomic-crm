@@ -1029,6 +1029,14 @@ export const frMessages = {
         },
       },
     },
+    common: {
+      activity: "Activité",
+      contacts: "0 Contacts |||| 1 Contact |||| %{count} Contacts",
+      notes: "0 Notes |||| 1 Note |||| %{count} Notes",
+      deals: "0 Affaires |||| 1 Affaire |||| %{count} Affaires",
+      last_activity: "dernière activité il y a %{distance}",
+      add_contact: "Ajouter un contact",
+    },
   },
   resources: {
     contacts: {

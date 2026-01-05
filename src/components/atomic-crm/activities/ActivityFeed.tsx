@@ -7,7 +7,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Mail, Phone, MessageSquare, StickyNote, Play, Calendar, User, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { Button } from "@/components/ui/button";
-import { useTranslate } from "ra-core";
+import { useTranslate, useLocale } from "ra-core";
+import { getDateFnsLocale } from "@/i18n/date-fns";
 
 interface ActivityFeedProps {
   contactId?: number;
@@ -19,6 +20,7 @@ export const ActivityFeed = ({ contactId, salesId, className }: ActivityFeedProp
   const queryClient = useQueryClient();
   const queryKey = useMemo(() => ["activities", contactId, salesId], [contactId, salesId]);
   const translate = useTranslate();
+  const locale = useLocale();
 
   // 1. Initial Fetch
   const { data: activities, isLoading } = useQuery({
@@ -102,6 +104,7 @@ const ActivityCard = ({ activity }: { activity: any }) => {
   const isPending = activity.processing_status === "raw" || activity.processing_status === "processing";
   const isFailed = activity.processing_status === "failed";
   const translate = useTranslate();
+  const locale = useLocale();
 
   return (
     <Card className={`relative overflow-hidden transition-all ${isPending ? 'border-blue-200 bg-blue-50/30 dark:bg-blue-950/10' : ''}`}>
@@ -130,7 +133,10 @@ const ActivityCard = ({ activity }: { activity: any }) => {
             </CardTitle>
             <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
               <Clock className="h-3 w-3" />
-              {formatDistanceToNow(new Date(activity.created_at), { addSuffix: true })}
+              {formatDistanceToNow(new Date(activity.created_at), {
+                addSuffix: true,
+                locale: getDateFnsLocale(locale),
+              })}
               {activity.sales && (
                   <>
                     <span>•</span>

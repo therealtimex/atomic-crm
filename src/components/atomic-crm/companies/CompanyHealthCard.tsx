@@ -1,15 +1,17 @@
 import { formatDistance } from "date-fns";
 import { Activity, HeartPulse } from "lucide-react";
-import { useRecordContext, useTranslate } from "ra-core";
+import { useRecordContext, useTranslate, useLocale } from "ra-core";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
 import { AsideSection } from "../misc/AsideSection";
 import type { Company } from "../types";
+import { getDateFnsLocale } from "@/i18n/date-fns";
 
 export const CompanyHealthCard = () => {
   const record = useRecordContext<Company>();
   const translate = useTranslate();
+  const locale = useLocale();
   if (!record) return null;
 
   const hasInternalHealth =
@@ -78,7 +80,10 @@ export const CompanyHealthCard = () => {
               {formatDistance(
                 new Date(record.internal_heartbeat_updated_at),
                 new Date(),
-                { addSuffix: true },
+                { 
+                  addSuffix: true,
+                  locale: getDateFnsLocale(locale),
+                },
               )}
             </div>
           )}
@@ -107,7 +112,10 @@ export const CompanyHealthCard = () => {
               {formatDistance(
                 new Date(record.external_heartbeat_checked_at),
                 new Date(),
-                { addSuffix: true },
+                { 
+                  addSuffix: true,
+                  locale: getDateFnsLocale(locale),
+                },
               )}
             </div>
           )}

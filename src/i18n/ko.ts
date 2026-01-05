@@ -1009,6 +1009,14 @@ export const koMessages = {
         },
       },
     },
+    common: {
+      activity: "활동",
+      contacts: "연락처 0개 |||| 연락처 1개 |||| 연락처 %{count}개",
+      notes: "노트 0개 |||| 노트 1개 |||| 노트 %{count}개",
+      deals: "딜 0개 |||| 딜 1개 |||| 딜 %{count}개",
+      last_activity: "최근 활동 %{distance} 전",
+      add_contact: "연락처 추가",
+    },
   },
   resources: {
     contacts: {

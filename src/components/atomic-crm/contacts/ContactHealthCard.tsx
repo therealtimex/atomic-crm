@@ -1,11 +1,12 @@
 import { formatDistance } from "date-fns";
 import { Activity, HeartPulse, Mail, Linkedin } from "lucide-react";
-import { useRecordContext, useTranslate } from "ra-core";
+import { useRecordContext, useTranslate, useLocale } from "ra-core";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
 import { AsideSection } from "../misc/AsideSection";
 import type { Contact } from "../types";
+import { getDateFnsLocale } from "@/i18n/date-fns";
 
 const InternalStatusBadge = ({ status }: { status: string }) => {
   const translate = useTranslate();
@@ -101,6 +102,7 @@ const LinkedInStatusBadge = ({ status }: { status: string }) => {
 export const ContactHealthCard = () => {
   const record = useRecordContext<Contact>();
   const translate = useTranslate();
+  const locale = useLocale();
 
   if (!record) return null;
 
@@ -208,7 +210,10 @@ export const ContactHealthCard = () => {
               {formatDistance(
                 new Date(record.external_heartbeat_checked_at),
                 new Date(),
-                { addSuffix: true },
+                { 
+                  addSuffix: true,
+                  locale: getDateFnsLocale(locale),
+                },
               )}
             </div>
           )}

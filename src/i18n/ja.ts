@@ -1013,6 +1013,14 @@ export const jaMessages = {
         },
       },
     },
+    common: {
+      activity: "アクティビティ",
+      contacts: "連絡先 0件 |||| 連絡先 1件 |||| 連絡先 %{count}件",
+      notes: "ノート 0件 |||| ノート 1件 |||| ノート %{count}件",
+      deals: "案件 0件 |||| 案件 1件 |||| 案件 %{count}件",
+      last_activity: "最終アクティビティ %{distance}前",
+      add_contact: "連絡先を追加",
+    },
   },
   resources: {
     contacts: {
