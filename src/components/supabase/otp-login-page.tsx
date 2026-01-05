@@ -41,7 +41,7 @@ export const OtpLoginPage = () => {
         throw error;
       }
 
-      notify('A 6-digit code has been sent to your email', { type: 'success' });
+      notify(translate("crm.auth.code_sent"), { type: 'success' });
       setStep('otp');
     } catch (error: any) {
       notify(
@@ -75,15 +75,11 @@ export const OtpLoginPage = () => {
       // Trim whitespace from OTP code
       const cleanOtp = otpCode.trim();
 
-      console.log('Verifying OTP:', { email, token: cleanOtp, type: 'email' });
-
       const { data, error } = await supabase.auth.verifyOtp({
         email: email.trim().toLowerCase(), // Normalize email
         token: cleanOtp,
         type: 'magiclink', // Changed from 'email' - some Supabase versions treat OTP as magiclink
       });
-
-      console.log('OTP Verification result:', { data, error });
 
       if (error) {
         throw error;
@@ -93,35 +89,21 @@ export const OtpLoginPage = () => {
         throw new Error('Failed to create session');
       }
 
-      console.log('Session created successfully, user:', data.user);
-
       // Check if user exists in sales table (access control)
-      console.log('Checking sales table for user_id:', data.user.id);
       const { data: saleData, error: saleError } = await supabase
         .from('sales')
         .select('id, email_confirmed_at')
         .eq('user_id', data.user.id)
         .single();
 
-      console.log('Sales table query result:', { saleData, saleError });
-
       if (saleError || !saleData) {
         // User authenticated but not in sales table - deny access
-        console.error('User not found in sales table or query error');
         await supabase.auth.signOut();
-        throw new Error('You do not have access to this application. Please contact your administrator.');
+        throw new Error(translate("crm.auth.no_access"));
       }
 
       // User is logged in and authorized
-      console.log('User authorized, OTP verification complete');
-      notify('Login successful!', { type: 'success' });
-
-      // IMPORTANT: Don't call login() - user is already authenticated via Supabase
-      // The OTP verification already set the session
-      // Calling login({}) with empty params could cause session confusion
-
-      // Force reload to ensure clean state
-      console.log('Reloading to establish session...');
+      notify(translate("crm.auth.login_successful"), { type: 'success' });
 
       // Check if this is their first login (email not confirmed yet)
       if (!saleData.email_confirmed_at) {
@@ -139,7 +121,7 @@ export const OtpLoginPage = () => {
         typeof error === "string"
           ? error
           : typeof error === "undefined" || !error.message
-            ? "Invalid or expired code"
+            ? translate("crm.auth.invalid_code")
             : error.message,
         {
           type: "warning",
@@ -174,10 +156,10 @@ export const OtpLoginPage = () => {
         <>
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">
-              Login with code
+              {translate("crm.auth.login_with_code")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Enter your email to receive a 6-digit login code
+              {translate("crm.auth.enter_email_for_code")}
             </p>
           </div>
           <Form<EmailFormData>
@@ -186,16 +168,12 @@ export const OtpLoginPage = () => {
           >
             <TextInput
               source="email"
-              label={translate("ra.auth.email", {
-                _: "Email",
-              })}
+              label={translate("ra.auth.email")}
               autoComplete="email"
               validate={required()}
             />
             <Button type="submit" className="cursor-pointer w-full" disabled={loading}>
-              {translate("ra.action.send_code", {
-                _: "Send code",
-              })}
+              {translate("crm.auth.send_code")}
             </Button>
           </Form>
         </>
@@ -203,10 +181,10 @@ export const OtpLoginPage = () => {
         <>
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">
-              Enter verification code
+              {translate("crm.auth.enter_verification_code")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              We've sent a 6-digit code to {email}
+              {translate("crm.auth.code_sent_to", { email })}
             </p>
           </div>
           <div className="space-y-6">
@@ -221,7 +199,7 @@ export const OtpLoginPage = () => {
               />
               {otpError && (
                 <p className="text-sm text-destructive text-center">
-                  Invalid or expired code. Please try again.
+                  {translate("crm.auth.invalid_code")}
                 </p>
               )}
             </div>
@@ -232,7 +210,7 @@ export const OtpLoginPage = () => {
                 disabled={loading || otp.length !== 6}
                 onClick={() => verifyOtp(otp)}
               >
-                {loading ? 'Verifying...' : 'Verify code'}
+                {loading ? translate("crm.auth.verifying") : translate("crm.auth.verify_code")}
               </Button>
               <Button
                 type="button"
@@ -241,7 +219,7 @@ export const OtpLoginPage = () => {
                 disabled={loading}
                 onClick={handleResendCode}
               >
-                Resend code
+                {translate("crm.auth.resend_code")}
               </Button>
             </div>
           </div>

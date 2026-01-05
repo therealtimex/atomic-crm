@@ -25,13 +25,13 @@ export const ChangePasswordPage = () => {
     if (!values.password) {
       errors.password = translate("ra.validation.required");
     } else if (values.password.length < 6) {
-      errors.password = "Password must be at least 6 characters";
+      errors.password = translate("crm.auth.password_min_length");
     }
 
     if (!values.confirm) {
       errors.confirm = translate("ra.validation.required");
     } else if (values.password !== values.confirm) {
-      errors.confirm = "Passwords do not match";
+      errors.confirm = translate("crm.auth.passwords_do_not_match");
     }
 
     return errors;
@@ -49,14 +49,14 @@ export const ChangePasswordPage = () => {
         throw error;
       }
 
-      notify("Password updated successfully", { type: "success" });
+      notify(translate("crm.auth.password_updated"), { type: "success" });
       navigate("/");
     } catch (error: any) {
       notify(
         typeof error === "string"
           ? error
           : typeof error === "undefined" || !error.message
-            ? "Failed to update password"
+            ? translate("crm.auth.failed_to_update_password")
             : error.message,
         {
           type: "warning",
@@ -79,10 +79,10 @@ export const ChangePasswordPage = () => {
     <Layout>
       <div className="flex flex-col space-y-2 text-center">
         <h1 className="text-2xl font-semibold tracking-tight">
-          Set new password
+          {translate("crm.auth.set_new_password")}
         </h1>
         <p className="text-sm text-muted-foreground">
-          Choose a secure password for your account
+          {translate("crm.auth.choose_password_details")}
         </p>
       </div>
       <Form<FormData>
@@ -93,23 +93,19 @@ export const ChangePasswordPage = () => {
         <TextInput
           source="password"
           type="password"
-          label={translate("ra.auth.password", {
-            _: "New password",
-          })}
+          label={translate("ra.auth.password")}
           autoComplete="new-password"
           validate={required()}
         />
         <TextInput
           source="confirm"
           type="password"
-          label={translate("ra.auth.confirm_password", {
-            _: "Confirm password",
-          })}
+          label={translate("ra.auth.confirm_password")}
           autoComplete="new-password"
           validate={required()}
         />
         <Button type="submit" className="cursor-pointer w-full" disabled={loading}>
-          {loading ? "Updating..." : "Update password"}
+          {loading ? translate("crm.auth.updating_password") : translate("crm.auth.update_password")}
         </Button>
       </Form>
       <div className="text-center">
@@ -117,7 +113,7 @@ export const ChangePasswordPage = () => {
           to="/"
           className="text-sm text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
         >
-          Back to login
+          {translate("crm.auth.back_to_login")}
         </Link>
       </div>
     </Layout>

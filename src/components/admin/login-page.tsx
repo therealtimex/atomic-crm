@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, required, useLogin, useNotify } from "ra-core";
+import { Form, required, useLogin, useNotify, useTranslate } from "ra-core";
 import type { SubmitHandler, FieldValues } from "react-hook-form";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ export const LoginPage = (props: { redirectTo?: string }) => {
   const [loading, setLoading] = useState(false);
   const login = useLogin();
   const notify = useNotify();
+  const translate = useTranslate();
 
   const handleSubmit: SubmitHandler<FieldValues> = (values) => {
     setLoading(true);
@@ -65,17 +66,19 @@ export const LoginPage = (props: { redirectTo?: string }) => {
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
+              <h1 className="text-2xl font-semibold tracking-tight">
+                {translate("crm.auth.sign_in")}
+              </h1>
             </div>
             <Form className="space-y-8" onSubmit={handleSubmit}>
               <TextInput
-                label="Email"
+                label={translate("ra.auth.email")}
                 source="email"
                 type="email"
                 validate={required()}
               />
               <TextInput
-                label="Password"
+                label={translate("ra.auth.password")}
                 source="password"
                 type="password"
                 validate={required()}
@@ -85,7 +88,7 @@ export const LoginPage = (props: { redirectTo?: string }) => {
                 className="cursor-pointer"
                 disabled={loading}
               >
-                Sign in
+                {translate("crm.auth.sign_in")}
               </Button>
             </Form>
 
@@ -94,13 +97,13 @@ export const LoginPage = (props: { redirectTo?: string }) => {
                 to={"/forgot-password"}
                 className="hover:underline"
               >
-                Forgot your password?
+                {translate("ra-supabase.reset_password.forgot_password")}
               </Link>
               <Link
                 to={"/otp-login"}
                 className="hover:underline"
               >
-                Login with email code (OTP)
+                {translate("crm.auth.login_otp_link")}
               </Link>
             </div>
           </div>
