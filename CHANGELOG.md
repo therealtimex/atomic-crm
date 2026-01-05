@@ -5,6 +5,23 @@ All notable changes to Atomic CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.45.4] - 2026-01-04
+
+### Added
+
+- **Localization**: Added full translation support for `ActivityFeed`, `DocumentViewer`, `EmailViewer`, `ImageEditorField`, and `AutocompleteCompanyInput`.
+- **Localization**: Added resource-specific field translations for all supported languages, improving sort dropdowns and filter labels.
+
+### Changed
+
+- **Localization**: Improved relative date formatting (e.g., "X days ago", "last activity ... ago") by correctly applying the user's locale.
+- **Localization**: Localized various UI elements including "New Company", "Create Company", "Add tag", "Context links", and "Type" labels in task forms.
+
+### Fixed
+
+- **Core**: Resolved `ReferenceError` crashes in `CompanyHealthCard` and `DealEmpty` components by adding missing `useTranslate` imports.
+- **UI**: Fixed a JSX syntax error in the `TagsListEdit` component.
+
 ## [0.45.3] - 2026-01-04
 
 ### Fixed
