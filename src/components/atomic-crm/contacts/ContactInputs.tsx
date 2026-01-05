@@ -106,7 +106,12 @@ const ContactPositionInputs = () => {
         label={translate("crm.contact.field.title")}
         helperText={false}
       />
-      <ReferenceInput source="company_id" reference="companies" perPage={10}>
+      <ReferenceInput
+        source="company_id"
+        reference="companies"
+        perPage={10}
+        label={translate("crm.contact.field.company")}
+      >
         <AutocompleteCompanyInput label={translate("crm.contact.field.company")} />
       </ReferenceInput>
     </div>
