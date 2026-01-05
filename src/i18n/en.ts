@@ -1110,6 +1110,7 @@ export const enMessages = {
       contacts: "0 Contacts |||| 1 Contact |||| %{count} Contacts",
       notes: "0 Notes |||| 1 Note |||| %{count} Notes",
       deals: "0 Deals |||| 1 Deal |||| %{count} Deals",
+      tasks: "0 Tasks |||| 1 Task |||| %{count} Tasks",
       last_activity: "last activity %{distance} ago",
       add_contact: "Add contact",
     },

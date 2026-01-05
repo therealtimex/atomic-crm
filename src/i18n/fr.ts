@@ -1115,6 +1115,7 @@ export const frMessages = {
       contacts: "0 Contacts |||| 1 Contact |||| %{count} Contacts",
       notes: "0 Notes |||| 1 Note |||| %{count} Notes",
       deals: "0 Affaires |||| 1 Affaire |||| %{count} Affaires",
+      tasks: "0 Tâches |||| 1 Tâche |||| %{count} Tâches",
       last_activity: "dernière activité il y a %{distance}",
       add_contact: "Ajouter un contact",
     },

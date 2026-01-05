@@ -5,6 +5,13 @@ All notable changes to Atomic CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.45.11] - 2026-01-05
+
+### Fixed
+
+- **Localization**: Translated hardcoded "last activity", "at", and task count strings in the contact list and related components.
+- **Localization**: Added missing pluralized task translations across all supported languages.
+
 ## [0.45.10] - 2026-01-04
 
 ### Changed
