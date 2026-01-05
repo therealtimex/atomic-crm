@@ -381,15 +381,7 @@ export const dataProvider = withLifecycleCallbacks(
         return processContactAvatar(params);
       },
       beforeGetList: async (params) => {
-        return applyFullTextSearch([
-          "first_name",
-          "last_name",
-          "company_name",
-          "title",
-          "email",
-          "phone",
-          "background",
-        ])(params);
+        return applyFullTextSearch(["search_text"])(params);
       },
     },
     {
@@ -422,7 +414,7 @@ export const dataProvider = withLifecycleCallbacks(
     {
       resource: "contacts_summary",
       beforeGetList: async (params) => {
-        return applyFullTextSearch(["first_name", "last_name"])(params);
+        return applyFullTextSearch(["search_text"])(params);
       },
     },
     {
@@ -445,6 +437,24 @@ const applyFullTextSearch = (columns: string[]) => (params: GetListParams) => {
     return params;
   }
   const { q, ...filter } = params.filter;
+
+  // Smart multi-word search using concatenated search field
+  // The database view provides a 'search_text' column that concatenates all searchable fields
+  // This allows order-independent word matching across all fields
+  // Example: "Le Dang" matches "Trung Le" + "Dang Corp" because search_text contains both words
+
+  // Use the search_text column if available (for contacts and contacts_summary)
+  if (columns.includes("search_text")) {
+    return {
+      ...params,
+      filter: {
+        ...filter,
+        "search_text@ilike": q,
+      },
+    };
+  }
+
+  // Fallback: use OR search across all specified columns (for other resources)
   return {
     ...params,
     filter: {

@@ -104,7 +104,7 @@ export const ContactListContent = () => {
       {contacts.length === 0 && (
         <div className="p-4">
           <div className="text-muted-foreground">
-            {translate("resources.contact.empty.title")}
+            {translate("crm.contact.empty.title")}
           </div>
         </div>
       )}
