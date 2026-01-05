@@ -5,6 +5,24 @@ All notable changes to Atomic CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.45.6] - 2026-01-04
+
+### Added
+
+- **Localization**: Added full translation support for the Sales module (`SalesList`, `SalesCreate`, `SalesEdit`).
+- **Localization**: Added full translation support for the `ActivityFeed` component.
+- **Localization**: Added common translation keys for record counts (e.g., "1 Contact", "2 Contacts") and activity labels.
+- **Localization**: Added `sales` and `tasks` resource definitions to translation files for improved field name localization.
+
+### Changed
+
+- **Localization**: Improved localization for various UI elements including "Company" labels, "Create Company" buttons, "Context links", "Add tag" buttons, and task "Type" fields.
+
+### Fixed
+
+- **Core**: Resolved several `ReferenceError` crashes caused by missing `useTranslate` imports.
+- **UI**: Fixed JSX syntax errors and linter warnings in multiple components.
+
 ## [0.45.5] - 2026-01-04
 
 ### Fixed
