@@ -618,7 +618,7 @@ export const esMessages = {
     integrations: {
       title: "Integraciones",
       description:
-        "Administre claves de API, webhooks y canales de ingesta para integrar Atomic CRM con sistemas externos.",
+        "Administre claves de API, webhooks y canales de ingesta para integrar RealTimeX CRM con sistemas externos.",
       tabs: {
         ingestion: "Canales de ingesta",
         file_upload: "Carga de archivos",
@@ -1014,7 +1014,7 @@ export const esMessages = {
       inbound_email: {
         title: "Correo entrante",
         description:
-          "Puedes comenzar a enviar correos electrónicos a la dirección de correo entrante de tu servidor, por ejemplo, agregándola al campo Cc:. Atomic CRM procesará los correos y añadirá notas a los contactos correspondientes.",
+          "Puedes comenzar a enviar correos electrónicos a la dirección de correo entrante de tu servidor, por ejemplo, agregándola al campo Cc:. RealTimeX CRM procesará los correos y añadirá notas a los contactos correspondientes.",
       },
       database: {
         title: "Conexión a la base de datos",
@@ -1026,7 +1026,7 @@ export const esMessages = {
         env_hint:
           "Usando la configuración de las variables de entorno. Puede anular esto configurando una nueva conexión a través de la interfaz de usuario.",
         setup_hint:
-          "Conéctese a una base de datos Supabase para comenzar a usar Atomic CRM. Puede crear un proyecto gratuito en",
+          "Conéctese a una base de datos Supabase para comenzar a usar RealTimeX CRM. Puede crear un proyecto gratuito en",
         anon_key: "Clave anónima (Anon Key)",
         confirm_clear:
           "¿Está seguro de que desea borrar la configuración de la base de datos? La aplicación deberá volver a configurarse en el próximo inicio.",

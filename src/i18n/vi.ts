@@ -614,7 +614,7 @@ export const viMessages = {
     integrations: {
       title: "Tích hợp",
       description:
-        "Quản lý mã API, webhook và các kênh tiếp nhận để tích hợp Atomic CRM với các hệ thống bên ngoài.",
+        "Quản lý mã API, webhook và các kênh tiếp nhận để tích hợp RealTimeX CRM với các hệ thống bên ngoài.",
       tabs: {
         ingestion: "Kênh tiếp nhận",
         file_upload: "Tải tệp lên",
@@ -1006,7 +1006,7 @@ export const viMessages = {
       inbound_email: {
         title: "Email gửi đến",
         description:
-          "Bạn có thể bắt đầu gửi email đến địa chỉ email gửi đến của máy chủ, ví dụ: bằng cách thêm nó vào trường Cc:. Atomic CRM sẽ xử lý email và thêm ghi chú vào các liên hệ tương ứng.",
+          "Bạn có thể bắt đầu gửi email đến địa chỉ email gửi đến của máy chủ, ví dụ: bằng cách thêm nó vào trường Cc:. RealTimeX CRM sẽ xử lý email và thêm ghi chú vào các liên hệ tương ứng.",
       },
       database: {
         title: "Kết nối cơ sở dữ liệu",
@@ -1018,7 +1018,7 @@ export const viMessages = {
         env_hint:
           "Đang sử dụng cấu hình từ biến môi trường. Bạn có thể ghi đè điều này bằng cách thiết lập kết nối mới qua giao diện người dùng.",
         setup_hint:
-          "Kết nối với cơ sở dữ liệu Supabase để bắt đầu sử dụng Atomic CRM. Bạn có thể tạo một dự án miễn phí tại",
+          "Kết nối với cơ sở dữ liệu Supabase để bắt đầu sử dụng RealTimeX CRM. Bạn có thể tạo một dự án miễn phí tại",
         anon_key: "Mã ẩn danh (Anon Key)",
         confirm_clear:
           "Bạn có chắc chắn muốn xóa cấu hình cơ sở dữ liệu? Ứng dụng sẽ cần được cấu hình lại vào lần khởi chạy tiếp theo.",

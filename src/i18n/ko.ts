@@ -612,7 +612,7 @@ export const koMessages = {
     integrations: {
       title: "연동",
       description:
-        "API 키, 웹훅 및 인입 채널을 관리하여 Atomic CRM을 외부 시스템과 연동합니다.",
+        "API 키, 웹훅 및 인입 채널을 관리하여 RealTimeX CRM을 외부 시스템과 연동합니다.",
       tabs: {
         ingestion: "인입 채널",
         file_upload: "파일 업로드",
@@ -998,7 +998,7 @@ export const koMessages = {
       inbound_email: {
         title: "인바운드 메일",
         description:
-          "서버의 인바운드 메일 주소로 메일을 보내기 시작할 수 있습니다(예: Cc: 필드에 추가). Atomic CRM은 메일을 처리하고 해당 연락처에 노트를 추가합니다.",
+          "서버의 인바운드 메일 주소로 메일을 보내기 시작할 수 있습니다(예: Cc: 필드에 추가). RealTimeX CRM은 메일을 처리하고 해당 연락처에 노트를 추가합니다.",
       },
       database: {
         title: "데이터베이스 연결",
@@ -1010,7 +1010,7 @@ export const koMessages = {
         env_hint:
           "환경 변수의 설정을 사용 중입니다. UI를 통해 새 연결을 설정하여 이를 덮어쓸 수 있습니다.",
         setup_hint:
-          "Atomic CRM 사용을 시작하려면 Supabase 데이터베이스에 연결하십시오. 다음에서 무료 프로젝트를 생성할 수 있습니다.",
+          "RealTimeX CRM 사용을 시작하려면 Supabase 데이터베이스에 연결하십시오. 다음에서 무료 프로젝트를 생성할 수 있습니다.",
         anon_key: "익명 키 (Anon Key)",
         confirm_clear:
           "데이터베이스 설정을 삭제하시겠습니까? 다음 실행 시 앱을 다시 설정해야 합니다.",

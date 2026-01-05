@@ -615,7 +615,7 @@ export const enMessages = {
     integrations: {
       title: "Integrations",
       description:
-        "Manage API keys, webhooks, and ingestion channels to integrate Atomic CRM with external systems.",
+        "Manage API keys, webhooks, and ingestion channels to integrate RealTimeX CRM with external systems.",
       tabs: {
         ingestion: "Ingestion Channels",
         file_upload: "File Upload",
@@ -1011,7 +1011,7 @@ export const enMessages = {
       inbound_email: {
         title: "Inbound email",
         description:
-          "You can start sending emails to your server's inbound email address, e.g. by adding it to the Cc: field. Atomic CRM will process the emails and add notes to the corresponding contacts.",
+          "You can start sending emails to your server's inbound email address, e.g. by adding it to the Cc: field. RealTimeX CRM will process the emails and add notes to the corresponding contacts.",
       },
       database: {
         title: "Database Connection",
@@ -1023,7 +1023,7 @@ export const enMessages = {
         env_hint:
           "Using configuration from environment variables. You can override this by setting up a new connection via the UI.",
         setup_hint:
-          "Connect to a Supabase database to start using Atomic CRM. You can create a free project at",
+          "Connect to a Supabase database to start using RealTimeX CRM. You can create a free project at",
         anon_key: "Anonymous Key",
         confirm_clear:
           "Are you sure you want to clear the database configuration? The app will need to be reconfigured on next launch.",

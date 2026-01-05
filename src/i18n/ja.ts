@@ -613,7 +613,7 @@ export const jaMessages = {
     integrations: {
       title: "インテグレーション",
       description:
-        "APIキー、ウェブフック、インジェクションチャネルを管理し、Atomic CRMを外部システムと連携させます。",
+        "APIキー、ウェブフック、インジェクションチャネルを管理し、RealTimeX CRMを外部システムと連携させます。",
       tabs: {
         ingestion: "インジェクションチャネル",
         file_upload: "ファイルアップロード",
@@ -1001,7 +1001,7 @@ export const jaMessages = {
       inbound_email: {
         title: "インバウンドメール",
         description:
-          "サーバーのインバウンドメールアドレスにメールの送信を開始できます（例：Cc：フィールドに追加）。Atomic CRMはメールを処理し、対応する連絡先にノートを追加します。",
+          "サーバーのインバウンドメールアドレスにメールの送信を開始できます（例：Cc：フィールドに追加）。RealTimeX CRMはメールを処理し、対応する連絡先にノートを追加します。",
       },
       database: {
         title: "データベース接続",
@@ -1013,7 +1013,7 @@ export const jaMessages = {
         env_hint:
           "環境変数の設定を使用しています。UIを介して新しい接続を設定することで、これを上書きできます。",
         setup_hint:
-          "Atomic CRMの使用を開始するには、Supabaseデータベースに接続してください。無料のプロジェクトは以下で作成できます：",
+          "RealTimeX CRMの使用を開始するには、Supabaseデータベースに接続してください。無料のプロジェクトは以下で作成できます：",
         anon_key: "匿名キー (Anon Key)",
         confirm_clear:
           "データベース設定を消去してもよろしいですか？アプリは次回の起動時に再設定が必要になります。",
