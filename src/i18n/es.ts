@@ -844,6 +844,43 @@ export const esMessages = {
       },
       alt: "Contenido editable",
     },
+    document_viewer: {
+      error: {
+        docx: "Error al representar el contenido DOCX.",
+        too_large: "Archivo demasiado grande (máx. 50MB). Tamaño: %{size}MB",
+        not_available: "Vista previa no disponible para este tipo de archivo.",
+        access: "No se pudo acceder al archivo. Esto puede deberse a un problema de red, una restricción de CORS o un enlace caducado.",
+        load: "Error al cargar la vista previa del documento.",
+      },
+      action: {
+        download: "Descargar archivo",
+        open_new_tab: "Abrir en una pestaña nueva",
+      },
+    },
+    email_viewer: {
+      error: {
+        parse: "Error al analizar el archivo de correo electrónico",
+        load: "Error al cargar el correo electrónico",
+      },
+      field: {
+        from: "De",
+        to: "Para",
+        cc: "CC",
+        date: "Fecha",
+        subject_none: "(Sin asunto)",
+        content_none: "(Sin contenido)",
+        attachment: "Adjunto",
+        attachments: "Adjuntos",
+        unknown: "Desconocido",
+        unknown_type: "Tipo desconocido",
+        none: "Ninguno",
+      },
+      action: {
+        html: "HTML",
+        text: "Texto plano",
+        download_attachment: "Descargar adjunto",
+      },
+    },
     signup: {
       title: "Bienvenido a %{title}",
       subtitle: "Cree la primera cuenta de usuario para completar la configuración.",

@@ -828,6 +828,43 @@ export const koMessages = {
       },
       alt: "편집 가능한 콘텐츠",
     },
+    document_viewer: {
+      error: {
+        docx: "DOCX 콘텐츠 렌더링에 실패했습니다.",
+        too_large: "파일이 너무 큽니다 (최대 50MB). 크기: %{size}MB",
+        not_available: "이 파일 형식의 미리보기를 사용할 수 없습니다.",
+        access: "파일에 액세스할 수 없습니다. 네트워크 문제, CORS 제한 또는 만료된 링크일 수 있습니다.",
+        load: "문서 미리보기를 불러오지 못했습니다.",
+      },
+      action: {
+        download: "파일 다운로드",
+        open_new_tab: "새 탭에서 열기",
+      },
+    },
+    email_viewer: {
+      error: {
+        parse: "이메일 파일 분석에 실패했습니다",
+        load: "이메일을 불러오지 못했습니다",
+      },
+      field: {
+        from: "보낸 사람",
+        to: "받는 사람",
+        cc: "참조",
+        date: "날짜",
+        subject_none: "(제목 없음)",
+        content_none: "(내용 없음)",
+        attachment: "첨부 파일",
+        attachments: "첨부 파일",
+        unknown: "알 수 없음",
+        unknown_type: "알 수 없는 형식",
+        none: "없음",
+      },
+      action: {
+        html: "HTML",
+        text: "일반 텍스트",
+        download_attachment: "첨부 파일 다운로드",
+      },
+    },
     signup: {
       title: "%{title}에 오신 것을 환영합니다",
       subtitle: "설정을 완료하려면 첫 번째 사용자 계정을 만드십시오.",

@@ -836,6 +836,43 @@ export const viMessages = {
       },
       alt: "Nội dung có thể chỉnh sửa",
     },
+    document_viewer: {
+      error: {
+        docx: "Không thể hiển thị nội dung DOCX.",
+        too_large: "Tệp quá lớn (tối đa 50MB). Kích thước: %{size}MB",
+        not_available: "Không có bản xem trước cho loại tệp này.",
+        access: "Không thể truy cập tệp. Điều này có thể do vấn đề mạng, hạn chế CORS hoặc liên kết đã hết hạn.",
+        load: "Không thể tải bản xem trước tài liệu.",
+      },
+      action: {
+        download: "Tải tệp xuống",
+        open_new_tab: "Mở trong tab mới",
+      },
+    },
+    email_viewer: {
+      error: {
+        parse: "Không thể phân tích tệp email",
+        load: "Không thể tải email",
+      },
+      field: {
+        from: "Từ",
+        to: "Đến",
+        cc: "Cc",
+        date: "Ngày",
+        subject_none: "(Không có tiêu đề)",
+        content_none: "(Không có nội dung)",
+        attachment: "Tệp đính kèm",
+        attachments: "Tệp đính kèm",
+        unknown: "Không xác định",
+        unknown_type: "Loại không xác định",
+        none: "Không có",
+      },
+      action: {
+        html: "HTML",
+        text: "Văn bản thuần túy",
+        download_attachment: "Tải tệp đính kèm",
+      },
+    },
     signup: {
       title: "Chào mừng bạn đến với %{title}",
       subtitle: "Tạo tài khoản người dùng đầu tiên để hoàn tất thiết lập.",

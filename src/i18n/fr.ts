@@ -845,6 +845,43 @@ export const frMessages = {
       },
       alt: "Contenu modifiable",
     },
+    document_viewer: {
+      error: {
+        docx: "Échec du rendu du contenu DOCX.",
+        too_large: "Fichier trop volumineux (max 50Mo). Taille : %{size}Mo",
+        not_available: "Aperçu non disponible pour ce type de fichier.",
+        access: "Impossible d'accéder au fichier. Cela peut être dû à un problème réseau, une restriction CORS ou un lien expiré.",
+        load: "Échec du chargement de l'aperçu du document.",
+      },
+      action: {
+        download: "Télécharger le fichier",
+        open_new_tab: "Ouvrir dans un nouvel onglet",
+      },
+    },
+    email_viewer: {
+      error: {
+        parse: "Échec de l'analyse du fichier e-mail",
+        load: "Échec du chargement de l'e-mail",
+      },
+      field: {
+        from: "De",
+        to: "À",
+        cc: "Cc",
+        date: "Date",
+        subject_none: "(Sans objet)",
+        content_none: "(Aucun contenu)",
+        attachment: "Pièce jointe",
+        attachments: "Pièces jointes",
+        unknown: "Inconnu",
+        unknown_type: "Type inconnu",
+        none: "Aucun",
+      },
+      action: {
+        html: "HTML",
+        text: "Texte brut",
+        download_attachment: "Télécharger la pièce jointe",
+      },
+    },
     signup: {
       title: "Bienvenue sur %{title}",
       subtitle: "Créez le premier compte utilisateur pour terminer la configuration.",

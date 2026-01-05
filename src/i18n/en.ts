@@ -841,6 +841,43 @@ export const enMessages = {
       },
       alt: "Editable content",
     },
+    document_viewer: {
+      error: {
+        docx: "Failed to render DOCX content.",
+        too_large: "File too large (max 50MB). Size: %{size}MB",
+        not_available: "Preview not available for this file type.",
+        access: "Could not access the file. This may be due to a network issue, CORS restriction, or an expired link.",
+        load: "Failed to load document preview.",
+      },
+      action: {
+        download: "Download File",
+        open_new_tab: "Open in new tab",
+      },
+    },
+    email_viewer: {
+      error: {
+        parse: "Failed to parse email file",
+        load: "Failed to load email",
+      },
+      field: {
+        from: "From",
+        to: "To",
+        cc: "CC",
+        date: "Date",
+        subject_none: "(No Subject)",
+        content_none: "(No content)",
+        attachment: "Attachment",
+        attachments: "Attachments",
+        unknown: "Unknown",
+        unknown_type: "Unknown type",
+        none: "None",
+      },
+      action: {
+        html: "HTML",
+        text: "Plain Text",
+        download_attachment: "Download attachment",
+      },
+    },
     signup: {
       title: "Welcome to %{title}",
       subtitle: "Create the first user account to complete the setup.",

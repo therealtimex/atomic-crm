@@ -4,6 +4,7 @@ import DOMPurify from "dompurify";
 import { Mail, User, Calendar, Paperclip, Download, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useTranslate } from "ra-core";
 
 interface EmailViewerProps {
     content: ArrayBuffer | string;
@@ -35,6 +36,7 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
     const [email, setEmail] = useState<ParsedEmail | null>(null);
     const [loading, setLoading] = useState(true);
     const [showHtml, setShowHtml] = useState(true);
+    const translate = useTranslate();
 
     useEffect(() => {
         const parseEmail = async () => {
@@ -70,7 +72,7 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
                 });
             } catch (err) {
                 console.error("Failed to parse email:", err);
-                const errorMsg = err instanceof Error ? err.message : "Failed to parse email file";
+                const errorMsg = err instanceof Error ? err.message : translate("crm.email_viewer.error.parse");
                 onError?.(errorMsg);
             } finally {
                 setLoading(false);
@@ -78,20 +80,20 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
         };
 
         parseEmail();
-    }, [content, onError]);
+    }, [content, onError, translate]);
 
     const formatEmailAddress = (addr?: EmailAddress) => {
-        if (!addr) return "Unknown";
+        if (!addr) return translate("crm.email_viewer.field.unknown");
         return addr.name ? `${addr.name} <${addr.address}>` : addr.address;
     };
 
     const formatEmailAddressList = (addrs?: EmailAddress[]) => {
-        if (!addrs || addrs.length === 0) return "None";
+        if (!addrs || addrs.length === 0) return translate("crm.email_viewer.field.none");
         return addrs.map(formatEmailAddress).join(", ");
     };
 
     const formatDate = (dateStr?: string) => {
-        if (!dateStr) return "Unknown";
+        if (!dateStr) return translate("crm.email_viewer.field.unknown");
         try {
             return new Date(dateStr).toLocaleString();
         } catch {
@@ -132,7 +134,7 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
     if (!email) {
         return (
             <div className="flex items-center justify-center h-full text-muted-foreground">
-                <p>Failed to load email</p>
+                <p>{translate("crm.email_viewer.error.load")}</p>
             </div>
         );
     }
@@ -145,7 +147,7 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
                     <Mail className="w-5 h-5 text-primary mt-1 shrink-0" />
                     <div className="flex-1 min-w-0">
                         <h2 className="text-xl font-semibold break-words">
-                            {email.subject || "(No Subject)"}
+                            {email.subject || translate("crm.email_viewer.field.subject_none")}
                         </h2>
                     </div>
                 </div>
@@ -156,7 +158,7 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
                     <div className="flex gap-2">
                         <User className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
                         <div className="flex-1 min-w-0">
-                            <span className="font-medium">From:</span>{" "}
+                            <span className="font-medium">{translate("crm.email_viewer.field.from")}:</span>{" "}
                             <span className="text-muted-foreground break-words">
                                 {formatEmailAddress(email.from)}
                             </span>
@@ -167,7 +169,7 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
                         <div className="flex gap-2">
                             <User className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
                             <div className="flex-1 min-w-0">
-                                <span className="font-medium">To:</span>{" "}
+                                <span className="font-medium">{translate("crm.email_viewer.field.to")}:</span>{" "}
                                 <span className="text-muted-foreground break-words">
                                     {formatEmailAddressList(email.to)}
                                 </span>
@@ -179,7 +181,7 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
                         <div className="flex gap-2">
                             <User className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
                             <div className="flex-1 min-w-0">
-                                <span className="font-medium">CC:</span>{" "}
+                                <span className="font-medium">{translate("crm.email_viewer.field.cc")}:</span>{" "}
                                 <span className="text-muted-foreground break-words">
                                     {formatEmailAddressList(email.cc)}
                                 </span>
@@ -190,7 +192,7 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
                     <div className="flex gap-2">
                         <Calendar className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
                         <div className="flex-1 min-w-0">
-                            <span className="font-medium">Date:</span>{" "}
+                            <span className="font-medium">{translate("crm.email_viewer.field.date")}:</span>{" "}
                             <span className="text-muted-foreground">
                                 {formatDate(email.date)}
                             </span>
@@ -206,14 +208,14 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
                             size="sm"
                             onClick={() => setShowHtml(true)}
                         >
-                            HTML
+                            {translate("crm.email_viewer.action.html")}
                         </Button>
                         <Button
                             variant={!showHtml ? "secondary" : "ghost"}
                             size="sm"
                             onClick={() => setShowHtml(false)}
                         >
-                            Plain Text
+                            {translate("crm.email_viewer.action.text")}
                         </Button>
                     </div>
                 )}
@@ -237,7 +239,7 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
                     </pre>
                 ) : (
                     <p className="text-muted-foreground italic">
-                        (No content)
+                        {translate("crm.email_viewer.field.content_none")}
                     </p>
                 )}
             </div>
@@ -248,7 +250,7 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
                     <div className="flex items-center gap-2 mb-3">
                         <Paperclip className="w-4 h-4 text-muted-foreground" />
                         <span className="text-sm font-medium">
-                            {email.attachments.length} Attachment{email.attachments.length !== 1 ? 's' : ''}
+                            {email.attachments.length} {translate(email.attachments.length !== 1 ? "crm.email_viewer.field.attachments" : "crm.email_viewer.field.attachment")}
                         </span>
                     </div>
                     <div className="space-y-2">
@@ -264,7 +266,7 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
                                             {attachment.filename || `attachment-${index + 1}`}
                                         </p>
                                         <p className="text-xs text-muted-foreground">
-                                            {attachment.mimeType || 'Unknown type'} • {formatFileSize(attachment.size)}
+                                            {attachment.mimeType || translate("crm.email_viewer.field.unknown_type")} • {formatFileSize(attachment.size)}
                                         </p>
                                     </div>
                                 </div>
@@ -273,7 +275,7 @@ export const EmailViewer = ({ content, onError }: EmailViewerProps) => {
                                     size="icon"
                                     className="h-8 w-8 shrink-0"
                                     onClick={() => downloadAttachment(attachment)}
-                                    title="Download attachment"
+                                    title={translate("crm.email_viewer.action.download_attachment")}
                                 >
                                     <Download className="h-4 w-4" />
                                 </Button>

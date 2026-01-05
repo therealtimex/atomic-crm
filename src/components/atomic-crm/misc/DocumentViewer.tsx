@@ -7,6 +7,7 @@ import { renderAsync } from "docx-preview";
 import { PPTXViewer, parsePPTX } from "@kandiforge/pptx-renderer";
 import { Button } from "@/components/ui/button";
 import { EmailViewer } from "./EmailViewer";
+import { useTranslate } from "ra-core";
 
 // Maximum file size: 50MB
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
@@ -27,6 +28,7 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
     const [docxBuffer, setDocxBuffer] = useState<ArrayBuffer | null>(null);
     const [emlBuffer, setEmlBuffer] = useState<ArrayBuffer | null>(null);
     const docxRef = useRef<HTMLDivElement>(null);
+    const translate = useTranslate();
 
     // Effect for DOCX content rendering
     useEffect(() => {
@@ -41,12 +43,12 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
                     }
                 } catch (err) {
                     console.error("Failed to render DOCX:", err);
-                    setError("Failed to render DOCX content.");
+                    setError(translate("crm.document_viewer.error.docx"));
                 }
             };
             renderDocx();
         }
-    }, [docxBuffer]);
+    }, [docxBuffer, translate]);
 
     useEffect(() => {
         if (!open) {
@@ -87,7 +89,9 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
                 // Check file size before downloading
                 const contentLength = response.headers.get('content-length');
                 if (contentLength && parseInt(contentLength) > MAX_FILE_SIZE) {
-                    throw new Error(`File too large (max 50MB). Size: ${(parseInt(contentLength) / 1024 / 1024).toFixed(1)}MB`);
+                    throw new Error(translate("crm.document_viewer.error.too_large", { 
+                        size: (parseInt(contentLength) / 1024 / 1024).toFixed(1) 
+                    }));
                 }
 
                 return await response.arrayBuffer();
@@ -113,7 +117,9 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
                 // Check file size before downloading
                 const contentLength = response.headers.get('content-length');
                 if (contentLength && parseInt(contentLength) > MAX_FILE_SIZE) {
-                    throw new Error(`File too large (max 50MB). Size: ${(parseInt(contentLength) / 1024 / 1024).toFixed(1)}MB`);
+                    throw new Error(translate("crm.document_viewer.error.too_large", { 
+                        size: (parseInt(contentLength) / 1024 / 1024).toFixed(1) 
+                    }));
                 }
 
                 return await response.text();
@@ -166,11 +172,14 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
                             <FileArchive className="w-16 h-16 text-muted-foreground" />
                             <div>
                                 <h3 className="text-xl font-semibold">{title}</h3>
-                                <p className="text-muted-foreground">Preview not available for this file type.</p>
+                                <p className="text-muted-foreground">
+                                    {translate("crm.document_viewer.error.not_available")}
+                                </p>
                             </div>
                             <Button asChild>
                                 <a href={url} download={title}>
-                                    <Download className="mr-2 h-4 w-4" /> Download File
+                                    <Download className="mr-2 h-4 w-4" /> 
+                                    {translate("crm.document_viewer.action.download")}
                                 </a>
                             </Button>
                         </div>
@@ -185,8 +194,8 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
                 console.error("Failed to load document:", err);
                 const isFetchError = err instanceof TypeError && err.message.includes("Failed to fetch");
                 const msg = isFetchError
-                    ? "Could not access the file. This may be due to a network issue, CORS restriction, or an expired link."
-                    : (err instanceof Error ? err.message : "Failed to load document preview.");
+                    ? translate("crm.document_viewer.error.access")
+                    : (err instanceof Error ? err.message : translate("crm.document_viewer.error.load"));
                 setError(msg);
             } finally {
                 setLoading(false);
@@ -197,7 +206,7 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
 
         // Cleanup: abort pending requests when component unmounts or URL changes
         return () => abortController.abort();
-    }, [url, title, type, open, file]);
+    }, [url, title, type, open, file, translate]);
 
     return (
         <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -212,7 +221,7 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
                             </Dialog.Title>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="icon" asChild title="Download">
+                            <Button variant="ghost" size="icon" asChild title={translate("crm.document_viewer.action.download")}>
                                 <a href={url} download={title}>
                                     <Download className="h-4 w-4" />
                                 </a>
@@ -235,7 +244,7 @@ export const DocumentViewer = ({ url, title, type, file, open, onOpenChange }: D
                             <div className="absolute inset-0 flex flex-col items-center justify-center text-destructive">
                                 <p>{error}</p>
                                 <Button variant="link" onClick={() => window.open(url, "_blank")}>
-                                    Open in new tab
+                                    {translate("crm.document_viewer.action.open_new_tab")}
                                 </Button>
                             </div>
                         )}

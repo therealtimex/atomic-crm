@@ -831,6 +831,43 @@ export const jaMessages = {
       },
       alt: "編集可能なコンテンツ",
     },
+    document_viewer: {
+      error: {
+        docx: "DOCXコンテンツのレンダリングに失敗しました。",
+        too_large: "ファイルが大きすぎます (最大 50MB)。サイズ: %{size}MB",
+        not_available: "このファイル形式のプレビューは利用できません。",
+        access: "ファイルにアクセスできませんでした。ネットワークの問題、CORSの制限、またはリンクの期限切れの可能性があります。",
+        load: "ドキュメントプレビューの読み込みに失敗しました。",
+      },
+      action: {
+        download: "ファイルをダウンロード",
+        open_new_tab: "新しいタブで開く",
+      },
+    },
+    email_viewer: {
+      error: {
+        parse: "メールファイルの解析に失敗しました",
+        load: "メールの読み込みに失敗しました",
+      },
+      field: {
+        from: "差出人",
+        to: "宛先",
+        cc: "CC",
+        date: "日付",
+        subject_none: "(件名なし)",
+        content_none: "(コンテンツなし)",
+        attachment: "添付ファイル",
+        attachments: "添付ファイル",
+        unknown: "不明",
+        unknown_type: "不明なタイプ",
+        none: "なし",
+      },
+      action: {
+        html: "HTML",
+        text: "プレーンテキスト",
+        download_attachment: "添付ファイルをダウンロード",
+      },
+    },
     signup: {
       title: "%{title}へようこそ",
       subtitle: "セットアップを完了するために、最初のユーザーアカウントを作成してください。",
