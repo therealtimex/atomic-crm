@@ -181,6 +181,7 @@ const Logo = ({
 
 const BackButton = () => {
   const navigate = useNavigate();
+  const translate = useTranslate();
 
   return (
     <Button
@@ -191,7 +192,7 @@ const BackButton = () => {
       aria-label="Go back to previous page"
     >
       <ArrowLeft className="h-4 w-4" />
-      <span className="hidden sm:inline">Back</span>
+      <span className="hidden sm:inline">{translate("crm.nav.back")}</span>
     </Button>
   );
 };
@@ -219,11 +220,12 @@ const NavigationTab = ({
 
 const UsersMenu = () => {
   const { onClose } = useUserMenu() ?? {};
+  const translate = useTranslate();
   return (
     <DropdownMenuItem asChild onClick={onClose}>
       <Link to="/sales" className="flex items-center gap-2">
         <User className="h-4 w-4" />
-        Users
+        {translate("crm.nav.users")}
       </Link>
     </DropdownMenuItem>
   );
@@ -231,11 +233,12 @@ const UsersMenu = () => {
 
 const ConfigurationMenu = () => {
   const { onClose } = useUserMenu() ?? {};
+  const translate = useTranslate();
   return (
     <DropdownMenuItem asChild onClick={onClose}>
       <Link to="/settings" className="flex items-center gap-2">
         <Settings className="h-4 w-4" />
-        My info
+        {translate("crm.nav.settings")}
       </Link>
     </DropdownMenuItem>
   );
@@ -243,11 +246,12 @@ const ConfigurationMenu = () => {
 
 const DatabaseMenu = () => {
   const { onClose } = useUserMenu() ?? {};
+  const translate = useTranslate();
   return (
     <DropdownMenuItem asChild onClick={onClose}>
       <Link to="/database" className="flex items-center gap-2">
         <Database className="h-4 w-4" />
-        Database
+        {translate("crm.nav.database")}
       </Link>
     </DropdownMenuItem>
   );
@@ -255,11 +259,12 @@ const DatabaseMenu = () => {
 
 const IntegrationsMenu = () => {
   const { onClose } = useUserMenu() ?? {};
+  const translate = useTranslate();
   return (
     <DropdownMenuItem asChild onClick={onClose}>
       <Link to="/integrations" className="flex items-center gap-2">
         <Webhook className="h-4 w-4" />
-        Integrations
+        {translate("crm.nav.integrations")}
       </Link>
     </DropdownMenuItem>
   );

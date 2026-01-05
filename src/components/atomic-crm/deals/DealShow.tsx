@@ -1,4 +1,4 @@
-import { ShowBase, useShowContext } from "ra-core";
+import { ShowBase, useShowContext, useTranslate } from "ra-core";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { ReferenceManyField } from "@/components/admin/reference-many-field";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,6 +17,7 @@ export const DealShow = () => (
 
 const DealShowContent = () => {
   const { record, isPending } = useShowContext<Deal>();
+  const translate = useTranslate();
 
   if (isPending || !record) return null;
 
@@ -40,7 +41,9 @@ const DealShowContent = () => {
             {/* Description */}
             {record.description && (
               <div className="mb-6 whitespace-pre-line">
-                <h3 className="text-lg font-semibold mb-2">Description</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  {translate("crm.deal.field.description")}
+                </h3>
                 <p className="text-sm leading-6 text-muted-foreground">
                   {record.description}
                 </p>
@@ -49,9 +52,11 @@ const DealShowContent = () => {
 
             {/* Notes Section */}
             <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-4">Notes</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                {translate("crm.deal.section.notes")}
+              </h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Track conversations, decisions, and updates for this deal
+                {translate("crm.deal.section.notes_description")}
               </p>
               <ReferenceManyField
                 target="deal_id"

@@ -22,13 +22,19 @@ export const ContactListFilter = () => {
   return (
     <div className="w-52 min-w-52 order-first pt-0.75 flex flex-col gap-4">
       <FilterLiveForm>
-        <SearchInput source="q" placeholder="Search name, company..." />
+        <SearchInput
+          source="q"
+          placeholder={translate("crm.contact.filter.search_placeholder")}
+        />
       </FilterLiveForm>
 
-      <FilterCategory label="Last activity" icon={<Clock />}>
+      <FilterCategory
+        label={translate("crm.contact.filter.last_activity")}
+        icon={<Clock />}
+      >
         <ToggleFilterButton
           className="w-full justify-between"
-          label="Today"
+          label={translate("crm.contact.filter.today")}
           value={{
             "last_seen@gte": endOfYesterday().toISOString(),
             "last_seen@lte": undefined,
@@ -36,7 +42,7 @@ export const ContactListFilter = () => {
         />
         <ToggleFilterButton
           className="w-full justify-between"
-          label="This week"
+          label={translate("crm.contact.filter.this_week")}
           value={{
             "last_seen@gte": startOfWeek(new Date()).toISOString(),
             "last_seen@lte": undefined,
@@ -44,7 +50,7 @@ export const ContactListFilter = () => {
         />
         <ToggleFilterButton
           className="w-full justify-between"
-          label="Before this week"
+          label={translate("crm.contact.filter.before_this_week")}
           value={{
             "last_seen@gte": undefined,
             "last_seen@lte": startOfWeek(new Date()).toISOString(),
@@ -52,7 +58,7 @@ export const ContactListFilter = () => {
         />
         <ToggleFilterButton
           className="w-full justify-between"
-          label="Before this month"
+          label={translate("crm.contact.filter.before_this_month")}
           value={{
             "last_seen@gte": undefined,
             "last_seen@lte": startOfMonth(new Date()).toISOString(),
@@ -60,7 +66,7 @@ export const ContactListFilter = () => {
         />
         <ToggleFilterButton
           className="w-full justify-between"
-          label="Before last month"
+          label={translate("crm.contact.filter.before_last_month")}
           value={{
             "last_seen@gte": undefined,
             "last_seen@lte": subMonths(
@@ -71,53 +77,62 @@ export const ContactListFilter = () => {
         />
       </FilterCategory>
 
-      <FilterCategory label="Engagement" icon={<Activity />}>
+      <FilterCategory
+        label={translate("crm.contact.filter.engagement")}
+        icon={<Activity />}
+      >
         <ToggleFilterButton
           className="w-full justify-between"
-          label="Strong"
+          label={translate("crm.contact.filter.engagement_status.strong")}
           value={{ internal_heartbeat_status: "strong" }}
         />
         <ToggleFilterButton
           className="w-full justify-between"
-          label="Active"
+          label={translate("crm.contact.filter.engagement_status.active")}
           value={{ internal_heartbeat_status: "active" }}
         />
         <ToggleFilterButton
           className="w-full justify-between"
-          label="Cooling"
+          label={translate("crm.contact.filter.engagement_status.cooling")}
           value={{ internal_heartbeat_status: "cooling" }}
         />
         <ToggleFilterButton
           className="w-full justify-between"
-          label="Cold"
+          label={translate("crm.contact.filter.engagement_status.cold")}
           value={{ internal_heartbeat_status: "cold" }}
         />
         <ToggleFilterButton
           className="w-full justify-between"
-          label="Dormant"
+          label={translate("crm.contact.filter.engagement_status.dormant")}
           value={{ internal_heartbeat_status: "dormant" }}
         />
       </FilterCategory>
 
-      <FilterCategory label="Validation" icon={<HeartPulse />}>
+      <FilterCategory
+        label={translate("crm.contact.filter.validation")}
+        icon={<HeartPulse />}
+      >
         <ToggleFilterButton
           className="w-full justify-between"
-          label="Valid Email"
+          label={translate("crm.contact.filter.validation_status.valid")}
           value={{ email_validation_status: "valid" }}
         />
         <ToggleFilterButton
           className="w-full justify-between"
-          label="Risky Email"
+          label={translate("crm.contact.filter.validation_status.risky")}
           value={{ email_validation_status: "risky" }}
         />
         <ToggleFilterButton
           className="w-full justify-between"
-          label="Invalid Email"
+          label={translate("crm.contact.filter.validation_status.invalid")}
           value={{ email_validation_status: "invalid" }}
         />
       </FilterCategory>
 
-      <FilterCategory label="Status" icon={<TrendingUp />}>
+      <FilterCategory
+        label={translate("crm.filter.status")}
+        icon={<TrendingUp />}
+      >
         {noteStatuses.map((status) => (
           <ToggleFilterButton
             key={status.value}
@@ -138,7 +153,10 @@ export const ContactListFilter = () => {
         ))}
       </FilterCategory>
 
-      <FilterCategory label="Tags" icon={<Tag />}>
+      <FilterCategory
+        label={translate("crm.contact.filter.tags")}
+        icon={<Tag />}
+      >
         {data &&
           data.map((record) => (
             <ToggleFilterButton
@@ -160,18 +178,24 @@ export const ContactListFilter = () => {
           ))}
       </FilterCategory>
 
-      <FilterCategory icon={<CheckSquare />} label="Tasks">
+      <FilterCategory
+        icon={<CheckSquare />}
+        label={translate("crm.contact.filter.tasks")}
+      >
         <ToggleFilterButton
           className="w-full justify-between"
-          label={"With pending tasks"}
+          label={translate("crm.contact.filter.with_pending_tasks")}
           value={{ "nb_tasks@gt": 0 }}
         />
       </FilterCategory>
 
-      <FilterCategory icon={<Users />} label="Account Manager">
+      <FilterCategory
+        icon={<Users />}
+        label={translate("crm.contact.filter.account_manager")}
+      >
         <ToggleFilterButton
           className="w-full justify-between"
-          label={"Me"}
+          label={translate("crm.contact.filter.me")}
           value={{ sales_id: identity?.id }}
         />
       </FilterCategory>

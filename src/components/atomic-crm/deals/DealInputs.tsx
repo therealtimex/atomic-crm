@@ -33,15 +33,22 @@ export const DealInputs = () => {
 };
 
 const DealInfoInputs = () => {
+  const translate = useTranslate();
   return (
     <div className="flex flex-col gap-4 flex-1">
       <TextInput
         source="name"
-        label="Deal name"
+        label={translate("crm.deal.field.name")}
         validate={required()}
         helperText={false}
       />
-      <TextInput source="description" multiline rows={3} helperText={false} />
+      <TextInput
+        source="description"
+        label={translate("crm.deal.field.description")}
+        multiline
+        rows={3}
+        helperText={false}
+      />
     </div>
   );
 };
@@ -50,6 +57,7 @@ const DealLinkedToInputs = () => {
   const company_id = useWatch({ name: "company_id" });
   const { setValue } = useFormContext();
   const previousCompanyId = useRef(company_id);
+  const translate = useTranslate();
 
   // Clear selected contacts when company changes
   useEffect(() => {
@@ -64,9 +72,14 @@ const DealLinkedToInputs = () => {
 
   return (
     <div className="flex flex-col gap-4 flex-1">
-      <h3 className="text-base font-medium">Linked to</h3>
+      <h3 className="text-base font-medium">
+        {translate("crm.deal.section.linked_to")}
+      </h3>
       <ReferenceInput source="company_id" reference="companies">
-        <AutocompleteCompanyInput validate={required()} />
+        <AutocompleteCompanyInput
+          label={translate("crm.deal.section.company")}
+          validate={required()}
+        />
       </ReferenceInput>
 
       <ReferenceArrayInput
@@ -75,12 +88,12 @@ const DealLinkedToInputs = () => {
         filter={company_id ? { company_id } : undefined}
       >
         <AutocompleteArrayInput
-          label="Contacts"
+          label={translate("crm.deal.section.contacts")}
           optionText={contactOptionText}
           helperText={
             company_id
               ? false
-              : "Please select a company first to see its contacts"
+              : translate("crm.deal.placeholder.select_company")
           }
         />
       </ReferenceArrayInput>
@@ -94,35 +107,28 @@ const DealMiscInputs = () => {
 
   const translatedDealCategories = dealCategories.map((category) => ({
     id: category,
-    name: translateChoice(
-      translate,
-      "crm.deal.category",
-      category,
-      category,
-    ),
+    name: translateChoice(translate, "crm.deal.category", category, category),
   }));
 
   const translatedDealStages = dealStages.map((stage) => ({
     id: stage.value,
-    name: translateChoice(
-      translate,
-      "crm.deal.stage",
-      stage.value,
-      stage.label,
-    ),
+    name: translateChoice(translate, "crm.deal.stage", stage.value, stage.label),
   }));
   return (
     <div className="flex flex-col gap-4 flex-1">
-      <h3 className="text-base font-medium">Misc</h3>
+      <h3 className="text-base font-medium">
+        {translate("crm.deal.section.misc")}
+      </h3>
 
       <SelectInput
         source="category"
-        label="Category"
+        label={translate("crm.deal.field.category")}
         choices={translatedDealCategories}
         helperText={false}
       />
       <NumberInput
         source="amount"
+        label={translate("crm.deal.field.amount")}
         defaultValue={0}
         helperText={false}
         validate={required()}
@@ -130,11 +136,13 @@ const DealMiscInputs = () => {
       <DateInput
         validate={required()}
         source="expected_closing_date"
+        label={translate("crm.deal.field.expected_closing_date")}
         helperText={false}
         defaultValue={new Date().toISOString().split("T")[0]}
       />
       <SelectInput
         source="stage"
+        label={translate("crm.deal.field.stage")}
         choices={translatedDealStages}
         defaultValue="opportunity"
         helperText={false}

@@ -1,4 +1,4 @@
-import { ShowBase, useShowContext } from "ra-core";
+import { ShowBase, useShowContext, useTranslate } from "ra-core";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { ReferenceManyField } from "@/components/admin/reference-many-field";
 import { TextField } from "@/components/admin/text-field";
@@ -19,6 +19,7 @@ export const ContactShow = () => (
 
 const ContactShowContent = () => {
   const { record, isPending } = useShowContext<Contact>();
+  const translate = useTranslate();
   if (isPending || !record) return null;
 
   return (
@@ -34,7 +35,9 @@ const ContactShowContent = () => {
                 </h5>
                 <div className="inline-flex text-sm text-muted-foreground">
                   {record.title}
-                  {record.title && record.company_id != null && " at "}
+                  {record.title &&
+                    record.company_id != null &&
+                    ` ${translate("crm.contact.field.at")} `}
                   {record.company_id != null && (
                     <ReferenceField
                       source="company_id"
@@ -61,29 +64,37 @@ const ContactShowContent = () => {
 
             {/* Activity Timeline - Shows processing status (temporary) */}
             <div className="mt-6">
-                <h3 className="text-lg font-semibold mb-4">Activity Timeline</h3>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Real-time processing status of incoming activities
-                </p>
-                <ActivityFeed contactId={record.id as number} />
+              <h3 className="text-lg font-semibold mb-4">
+                {translate("crm.contact.section.activity_timeline")}
+              </h3>
+              <p className="text-sm text-muted-foreground mb-3">
+                {translate("crm.contact.section.activity_timeline_description")}
+              </p>
+              <ActivityFeed contactId={record.id as number} />
             </div>
 
             {/* Notes - Permanent record of outcomes */}
             <div className="mt-8">
-                <h3 className="text-lg font-semibold mb-4">Notes</h3>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Permanent record of interactions and outcomes
-                </p>
-                <ReferenceManyField
-                  target="contact_id"
-                  reference="contactNotes"
-                  sort={{ field: "date", order: "DESC" }}
-                  empty={
-                    <NoteCreate reference="contacts" showStatus className="mt-4" />
-                  }
-                >
-                  <NotesIterator reference="contacts" showStatus />
-                </ReferenceManyField>
+              <h3 className="text-lg font-semibold mb-4">
+                {translate("crm.contact.section.notes")}
+              </h3>
+              <p className="text-sm text-muted-foreground mb-3">
+                {translate("crm.contact.section.notes_description")}
+              </p>
+              <ReferenceManyField
+                target="contact_id"
+                reference="contactNotes"
+                sort={{ field: "date", order: "DESC" }}
+                empty={
+                  <NoteCreate
+                    reference="contacts"
+                    showStatus
+                    className="mt-4"
+                  />
+                }
+              >
+                <NotesIterator reference="contacts" showStatus />
+              </ReferenceManyField>
             </div>
           </CardContent>
         </Card>

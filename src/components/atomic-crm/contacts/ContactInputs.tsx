@@ -21,6 +21,7 @@ import { translateChoice } from "@/i18n/utils";
 export const ContactInputs = () => {
   const isMobile = useIsMobile();
   const record = useRecordContext<Contact>();
+  const translate = useTranslate();
 
   return (
     <div className="flex flex-col gap-2 p-1">
@@ -66,7 +67,9 @@ const ContactIdentityInputs = () => {
   }));
   return (
     <div className="flex flex-col gap-4">
-      <h6 className="text-lg font-semibold">Identity</h6>
+      <h6 className="text-lg font-semibold">
+        {translate("crm.contact.section.identity")}
+      </h6>
       <RadioButtonGroupInput
         label={false}
         row
@@ -77,19 +80,35 @@ const ContactIdentityInputs = () => {
         optionValue="value"
         defaultValue={contactGender[0].value}
       />
-      <TextInput source="first_name" validate={required()} helperText={false} />
-      <TextInput source="last_name" helperText={false} />
+      <TextInput
+        source="first_name"
+        label={translate("crm.contact.field.first_name")}
+        validate={required()}
+        helperText={false}
+      />
+      <TextInput
+        source="last_name"
+        label={translate("crm.contact.field.last_name")}
+        helperText={false}
+      />
     </div>
   );
 };
 
 const ContactPositionInputs = () => {
+  const translate = useTranslate();
   return (
     <div className="flex flex-col gap-4">
-      <h6 className="text-lg font-semibold">Position</h6>
-      <TextInput source="title" helperText={false} />
+      <h6 className="text-lg font-semibold">
+        {translate("crm.contact.section.position")}
+      </h6>
+      <TextInput
+        source="title"
+        label={translate("crm.contact.field.title")}
+        helperText={false}
+      />
       <ReferenceInput source="company_id" reference="companies" perPage={10}>
-        <AutocompleteCompanyInput />
+        <AutocompleteCompanyInput label={translate("crm.contact.field.company")} />
       </ReferenceInput>
     </div>
   );
@@ -97,6 +116,12 @@ const ContactPositionInputs = () => {
 
 const ContactPersonalInformationInputs = () => {
   const { getValues, setValue } = useFormContext();
+  const translate = useTranslate();
+
+  const translatedPersonalInfoTypes = personalInfoTypes.map((type) => ({
+    id: type.id,
+    name: translate(`crm.contact.type.${type.id.toLowerCase()}`),
+  }));
 
   // set first and last name based on email
   const handleEmailChange = (email: string) => {
@@ -126,10 +151,12 @@ const ContactPersonalInformationInputs = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h6 className="text-lg font-semibold">Personal info</h6>
+      <h6 className="text-lg font-semibold">
+        {translate("crm.contact.section.personal_info")}
+      </h6>
       <ArrayInput
         source="email_jsonb"
-        label="Email addresses"
+        label={translate("crm.contact.field.email_addresses")}
         helperText={false}
       >
         <SimpleFormIterator
@@ -143,7 +170,7 @@ const ContactPersonalInformationInputs = () => {
             className="w-full"
             helperText={false}
             label={false}
-            placeholder="Email"
+            placeholder={translate("crm.contact.field.email")}
             validate={email()}
             onPaste={handleEmailPaste}
             onBlur={handleEmailBlur}
@@ -152,14 +179,18 @@ const ContactPersonalInformationInputs = () => {
             source="type"
             helperText={false}
             label={false}
-            optionText="id"
-            choices={personalInfoTypes}
+            optionText="name"
+            choices={translatedPersonalInfoTypes}
             defaultValue="Work"
             className="w-24 min-w-24"
           />
         </SimpleFormIterator>
       </ArrayInput>
-      <ArrayInput source="phone_jsonb" label="Phone numbers" helperText={false}>
+      <ArrayInput
+        source="phone_jsonb"
+        label={translate("crm.contact.field.phone_numbers")}
+        helperText={false}
+      >
         <SimpleFormIterator
           inline
           disableReordering
@@ -171,14 +202,14 @@ const ContactPersonalInformationInputs = () => {
             className="w-full"
             helperText={false}
             label={false}
-            placeholder="Phone number"
+            placeholder={translate("crm.contact.field.phone_number")}
           />
           <SelectInput
             source="type"
             helperText={false}
             label={false}
-            optionText="id"
-            choices={personalInfoTypes}
+            optionText="name"
+            choices={translatedPersonalInfoTypes}
             defaultValue="Work"
             className="w-24 min-w-24"
           />
@@ -186,7 +217,7 @@ const ContactPersonalInformationInputs = () => {
       </ArrayInput>
       <TextInput
         source="linkedin_url"
-        label="Linkedin URL"
+        label={translate("crm.contact.field.linkedin_url")}
         helperText={false}
         validate={isLinkedinUrl}
       />
@@ -197,16 +228,23 @@ const ContactPersonalInformationInputs = () => {
 const personalInfoTypes = [{ id: "Work" }, { id: "Home" }, { id: "Other" }];
 
 const ContactMiscInputs = () => {
+  const translate = useTranslate();
   return (
     <div className="flex flex-col gap-4">
-      <h6 className="text-lg font-semibold">Misc</h6>
+      <h6 className="text-lg font-semibold">
+        {translate("crm.contact.section.misc")}
+      </h6>
       <TextInput
         source="background"
-        label="Background info (bio, how you met, etc)"
+        label={translate("crm.contact.field.background")}
         multiline
         helperText={false}
       />
-      <BooleanInput source="has_newsletter" helperText={false} />
+      <BooleanInput
+        source="has_newsletter"
+        label={translate("crm.contact.field.has_newsletter")}
+        helperText={false}
+      />
       <ReferenceInput
         reference="sales"
         source="sales_id"
@@ -217,7 +255,7 @@ const ContactMiscInputs = () => {
       >
         <SelectInput
           helperText={false}
-          label="Account manager"
+          label={translate("crm.contact.field.account_manager")}
           optionText={saleOptionRenderer}
           validate={required()}
         />

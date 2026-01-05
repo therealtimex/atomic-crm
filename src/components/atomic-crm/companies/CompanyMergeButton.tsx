@@ -9,6 +9,7 @@ import {
   Form,
   useNotify,
   useRedirect,
+  useTranslate,
 } from "ra-core";
 import type { Identifier } from "ra-core";
 import { useMutation } from "@tanstack/react-query";
@@ -28,6 +29,7 @@ import type { Company } from "../types";
 
 export const CompanyMergeButton = () => {
   const [mergeDialogOpen, setMergeDialogOpen] = useState(false);
+  const translate = useTranslate();
   return (
     <>
       <Button
@@ -37,7 +39,7 @@ export const CompanyMergeButton = () => {
         onClick={() => setMergeDialogOpen(true)}
       >
         <Merge className="w-4 h-4" />
-        Merge with another company
+        {translate("crm.company.action.merge_with_another")}
       </Button>
       <CompanyMergeDialog
         open={mergeDialogOpen}
@@ -57,6 +59,7 @@ const CompanyMergeDialog = ({ open, onClose }: CompanyMergeDialogProps) => {
   const notify = useNotify();
   const redirect = useRedirect();
   const dataProvider = useDataProvider();
+  const translate = useTranslate();
   const [winnerId, setWinnerId] = useState<Identifier | null>(null);
   const [suggestedWinnerId, setSuggestedWinnerId] = useState<Identifier | null>(
     null,
@@ -114,7 +117,9 @@ const CompanyMergeDialog = ({ open, onClose }: CompanyMergeDialogProps) => {
 
   const handleMerge = async () => {
     if (!winnerId || !loserCompany) {
-      notify("Please select a company to merge with", { type: "warning" });
+      notify(translate("crm.company.merge.select_company"), {
+        type: "warning",
+      });
       return;
     }
 
@@ -122,12 +127,12 @@ const CompanyMergeDialog = ({ open, onClose }: CompanyMergeDialogProps) => {
       setIsMerging(true);
       await mutateAsync();
       setIsMerging(false);
-      notify("Companies merged successfully", { type: "success" });
+      notify(translate("crm.company.merge.success"), { type: "success" });
       redirect(`/companies/${winnerId}/show`);
       onClose();
     } catch (error) {
       setIsMerging(false);
-      notify("Failed to merge companies", { type: "error" });
+      notify(translate("crm.company.merge.error"), { type: "error" });
       console.error("Merge failed:", error);
     }
   };
@@ -138,16 +143,16 @@ const CompanyMergeDialog = ({ open, onClose }: CompanyMergeDialogProps) => {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="md:min-w-lg max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Merge Company</DialogTitle>
+          <DialogTitle>{translate("crm.company.merge.title")}</DialogTitle>
           <DialogDescription>
-            Merge this company with another one.
+            {translate("crm.company.merge.description")}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
             <p className="font-medium text-sm">
-              Current Company (will be deleted)
+              {translate("crm.company.merge.current_company")}
             </p>
             <div className="font-medium text-sm mt-4">{loserCompany.name}</div>
 
@@ -156,7 +161,7 @@ const CompanyMergeDialog = ({ open, onClose }: CompanyMergeDialogProps) => {
             </div>
 
             <p className="font-medium text-sm mb-2">
-              Target Company (will be kept)
+              {translate("crm.company.merge.target_contact")}
             </p>
             <Form>
               <ReferenceInput
@@ -179,42 +184,50 @@ const CompanyMergeDialog = ({ open, onClose }: CompanyMergeDialogProps) => {
           {winnerId && (
             <>
               <div className="space-y-2">
-                <p className="font-medium text-sm">What will be merged:</p>
+                <p className="font-medium text-sm">
+                  {translate("crm.company.merge.what_will_be_merged")}
+                </p>
                 <ul className="text-sm text-muted-foreground space-y-1 ml-4">
                   {contactsCount != null && contactsCount > 0 && (
                     <li>
-                      • {contactsCount} contact
-                      {contactsCount !== 1 ? "s" : ""} will be reassigned
+                      •{" "}
+                      {translate("crm.company.merge.contacts_to_merge", {
+                        smart_count: contactsCount,
+                      })}
                     </li>
                   )}
                   {dealsCount != null && dealsCount > 0 && (
                     <li>
-                      • {dealsCount} deal
-                      {dealsCount !== 1 ? "s" : ""} will be reassigned
+                      •{" "}
+                      {translate("crm.company.merge.deals_to_merge", {
+                        smart_count: dealsCount,
+                      })}
                     </li>
                   )}
                   {loserCompany.context_links?.length > 0 && (
                     <li>
-                      • {loserCompany.context_links.length} context link
-                      {loserCompany.context_links.length !== 1 ? "s" : ""} will
-                      be added
+                      •{" "}
+                      {translate("crm.company.merge.links_to_merge", {
+                        smart_count: loserCompany.context_links.length,
+                      })}
                     </li>
                   )}
                   {!contactsCount &&
                     !dealsCount &&
                     !loserCompany.context_links?.length && (
                       <li className="text-muted-foreground/60">
-                        No additional data to merge
+                        {translate("crm.company.merge.no_data")}
                       </li>
                     )}
                 </ul>
               </div>
               <Alert variant="destructive">
                 <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Warning: Destructive Operation</AlertTitle>
+                <AlertTitle>
+                  {translate("crm.company.merge.warning_title")}
+                </AlertTitle>
                 <AlertDescription>
-                  All data will be transferred to the second company. This
-                  action cannot be undone.
+                  {translate("crm.company.merge.warning_message")}
                 </AlertDescription>
               </Alert>
             </>
@@ -224,11 +237,13 @@ const CompanyMergeDialog = ({ open, onClose }: CompanyMergeDialogProps) => {
         <DialogFooter>
           <Button variant="ghost" onClick={onClose} disabled={isMerging}>
             <CircleX />
-            Cancel
+            {translate("crm.activity.cancel")}
           </Button>
           <Button onClick={handleMerge} disabled={!winnerId || isMerging}>
             <Merge />
-            {isMerging ? "Merging..." : "Merge Companies"}
+            {isMerging
+              ? translate("crm.company.merge.merging")
+              : translate("crm.company.merge.merge_companies")}
           </Button>
         </DialogFooter>
       </DialogContent>

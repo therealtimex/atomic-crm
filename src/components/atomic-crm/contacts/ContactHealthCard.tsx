@@ -1,6 +1,6 @@
 import { formatDistance } from "date-fns";
 import { Activity, HeartPulse, Mail, Linkedin } from "lucide-react";
-import { useRecordContext } from "ra-core";
+import { useRecordContext, useTranslate } from "ra-core";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
@@ -8,6 +8,7 @@ import { AsideSection } from "../misc/AsideSection";
 import type { Contact } from "../types";
 
 const InternalStatusBadge = ({ status }: { status: string }) => {
+  const translate = useTranslate();
   let variant: "default" | "secondary" | "destructive" | "outline" = "outline";
   let className = "";
 
@@ -16,7 +17,7 @@ const InternalStatusBadge = ({ status }: { status: string }) => {
       variant = "default";
       break;
     case "active":
-      variant = "secondary"; 
+      variant = "secondary";
       className = "bg-green-100 text-green-800 hover:bg-green-100";
       break;
     case "cooling":
@@ -34,12 +35,15 @@ const InternalStatusBadge = ({ status }: { status: string }) => {
 
   return (
     <Badge variant={variant} className={className}>
-      {status.charAt(0).toUpperCase() + status.slice(1)}
+      {translate(`crm.contact.filter.engagement_status.${status}`, {
+        _: status,
+      })}
     </Badge>
   );
 };
 
 const EmailStatusBadge = ({ status }: { status: string }) => {
+  const translate = useTranslate();
   let variant: "default" | "secondary" | "destructive" | "outline" = "outline";
   let className = "";
 
@@ -59,12 +63,13 @@ const EmailStatusBadge = ({ status }: { status: string }) => {
 
   return (
     <Badge variant={variant} className={className}>
-      {status.charAt(0).toUpperCase() + status.slice(1)}
+      {translate(`crm.contact.health.status.${status}`, { _: status })}
     </Badge>
   );
 };
 
 const LinkedInStatusBadge = ({ status }: { status: string }) => {
+  const translate = useTranslate();
   let variant: "default" | "secondary" | "destructive" | "outline" = "outline";
   let className = "";
 
@@ -83,13 +88,20 @@ const LinkedInStatusBadge = ({ status }: { status: string }) => {
 
   return (
     <Badge variant={variant} className={className}>
-      {status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+      {translate(`crm.contact.health.status.${status}`, {
+        _: status
+          .split("_")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" "),
+      })}
     </Badge>
   );
 };
 
 export const ContactHealthCard = () => {
   const record = useRecordContext<Contact>();
+  const translate = useTranslate();
+
   if (!record) return null;
 
   const daysSince = record.days_since_last_activity ?? 
@@ -106,10 +118,10 @@ export const ContactHealthCard = () => {
     record.linkedin_profile_status != null;
 
   return (
-    <AsideSection title="Contact Health">
+    <AsideSection title={translate("crm.contact.health.title")}>
       {!hasInternalHealth && !hasExternalHealth && (
         <div className="text-xs text-muted-foreground italic">
-          No health data calculated yet.
+          {translate("crm.contact.health.no_data")}
         </div>
       )}
 
@@ -118,14 +130,16 @@ export const ContactHealthCard = () => {
         <div className="mb-4">
           <div className="flex items-center gap-2 mb-2">
             <Activity className="w-4 h-4 text-muted-foreground" />
-            <span className="font-medium text-sm">Relationship Strength</span>
+            <span className="font-medium text-sm">
+              {translate("crm.contact.health.relationship_strength")}
+            </span>
           </div>
 
           {record.internal_heartbeat_score != null && (
             <div className="mb-2">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs text-muted-foreground">
-                  Engagement Score
+                  {translate("crm.contact.health.engagement_score")}
                 </span>
                 <span className="text-xs font-medium">
                   {record.internal_heartbeat_score}/100
@@ -146,12 +160,14 @@ export const ContactHealthCard = () => {
 
           {daysSince != null && (
             <div className="text-xs text-muted-foreground">
-              Last activity:{" "}
+              {translate("crm.contact.health.last_activity")}
               {daysSince === 0
-                ? "Today"
+                ? translate("crm.contact.health.today")
                 : daysSince === 1
-                  ? "Yesterday"
-                  : `${daysSince} days ago`}
+                  ? translate("crm.contact.health.yesterday")
+                  : translate("crm.contact.health.days_ago", {
+                      days: daysSince,
+                    })}
             </div>
           )}
         </div>
@@ -162,7 +178,9 @@ export const ContactHealthCard = () => {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <HeartPulse className="w-4 h-4 text-muted-foreground" />
-            <span className="font-medium text-sm">Contact Validation</span>
+            <span className="font-medium text-sm">
+              {translate("crm.contact.health.contact_validation")}
+            </span>
           </div>
 
           {record.email_validation_status && (
@@ -171,7 +189,7 @@ export const ContactHealthCard = () => {
               <EmailStatusBadge status={record.email_validation_status} />
               {record.email_last_bounced_at && (
                 <span className="text-xs text-destructive">
-                  (bounced)
+                  {translate("crm.contact.health.bounced")}
                 </span>
               )}
             </div>
@@ -186,7 +204,7 @@ export const ContactHealthCard = () => {
 
           {record.external_heartbeat_checked_at && (
             <div className="text-xs text-muted-foreground">
-              Validated{" "}
+              {translate("crm.contact.health.validated")}{" "}
               {formatDistance(
                 new Date(record.external_heartbeat_checked_at),
                 new Date(),

@@ -1,5 +1,5 @@
 import { Linkedin, Mail, Phone } from "lucide-react";
-import { useRecordContext, WithRecord } from "ra-core";
+import { useRecordContext, WithRecord, useTranslate } from "ra-core";
 import type { ReactNode } from "react";
 import { ArrayField } from "@/components/admin/array-field";
 import { EditButton } from "@/components/admin/edit-button";
@@ -22,25 +22,27 @@ import type { Contact } from "../types";
 import { ContactMergeButton } from "./ContactMergeButton";
 import { ExportVCardButton } from "./ExportVCardButton";
 import { ContactHealthCard } from "./ContactHealthCard";
+import { translateChoice } from "@/i18n/utils";
 
 export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
   const { contactGender } = useConfigurationContext();
   const record = useRecordContext<Contact>();
+  const translate = useTranslate();
 
   if (!record) return null;
   return (
     <div className="hidden sm:block w-64 min-w-64 text-sm">
       <div className="mb-4 -ml-1">
         {link === "edit" ? (
-          <EditButton label="Edit Contact" />
+          <EditButton label={translate("crm.contact.action.edit")} />
         ) : (
-          <ShowButton label="Show Contact" />
+          <ShowButton label={translate("crm.contact.action.show")} />
         )}
       </div>
 
       <ContactHealthCard />
 
-      <AsideSection title="Personal info">
+      <AsideSection title={translate("crm.contact.section.personal_info")}>
         <ArrayField source="email_jsonb">
           <SingleFieldList className="flex-col">
             <PersonalInfoRow
@@ -52,7 +54,7 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
 
         {record.has_newsletter && (
           <p className="pl-6 text-sm text-muted-foreground">
-            Subscribed to newsletter
+            {translate("crm.contact.field.subscribed_to_newsletter")}
           </p>
         )}
 
@@ -67,7 +69,7 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
                 rel="noopener noreferrer"
                 title={record.linkedin_url}
               >
-                LinkedIn
+                {translate("crm.contact.field.linkedin")}
               </a>
             }
           />
@@ -90,7 +92,16 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
                   icon={
                     <genderOption.icon className="w-4 h-4 text-muted-foreground" />
                   }
-                  primary={<span>{genderOption.label}</span>}
+                  primary={
+                    <span>
+                      {translateChoice(
+                        translate,
+                        "crm.contact.gender",
+                        genderOption.value,
+                        genderOption.label,
+                      )}
+                    </span>
+                  }
                 />
               );
             }
@@ -98,7 +109,7 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
           })
           .filter(Boolean)}
       </AsideSection>
-      <AsideSection title="Background info">
+      <AsideSection title={translate("crm.contact.section.background_info")}>
         <WithRecord<Contact>
           render={(record) =>
             record?.background ? (
@@ -107,7 +118,9 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
           }
         />
         <div className="text-muted-foreground">
-          <span className="text-sm">Added on</span>{" "}
+          <span className="text-sm">
+            {translate("crm.contact.field.first_seen")}
+          </span>{" "}
           <DateField
             source="first_seen"
             options={{ year: "numeric", month: "long", day: "numeric" }}
@@ -115,7 +128,9 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
         </div>
 
         <div className="text-muted-foreground">
-          <span className="text-sm">Last activity on</span>{" "}
+          <span className="text-sm">
+            {translate("crm.contact.field.last_seen_on")}
+          </span>{" "}
           <DateField
             source="last_seen"
             options={{ year: "numeric", month: "long", day: "numeric" }}
@@ -123,18 +138,18 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
         </div>
 
         <div className="inline-flex text-muted-foreground">
-          Followed by&nbsp;
+          {translate("crm.contact.field.followed_by")}&nbsp;
           <ReferenceField source="sales_id" reference="sales">
             <SaleName />
           </ReferenceField>
         </div>
       </AsideSection>
 
-      <AsideSection title="Tags">
+      <AsideSection title={translate("crm.contact.section.tags")}>
         <TagsListEdit />
       </AsideSection>
 
-      <AsideSection title="Tasks">
+      <AsideSection title={translate("crm.contact.section.tasks")}>
         <ReferenceManyField
           target="contact_id"
           reference="tasks"
@@ -171,20 +186,27 @@ const PersonalInfoRow = ({
   icon: ReactNode;
   primary: ReactNode;
   showType?: boolean;
-}) => (
-  <div className="flex flex-row items-center gap-2 min-h-6">
-    {icon}
-    <div className="flex flex-wrap gap-x-2 gap-y-0">
-      {primary}
-      {showType ? (
-        <WithRecord
-          render={(row) =>
-            row.type !== "Other" && (
-              <TextField source="type" className="text-muted-foreground" />
-            )
-          }
-        />
-      ) : null}
+}) => {
+  const translate = useTranslate();
+  return (
+    <div className="flex flex-row items-center gap-2 min-h-6">
+      {icon}
+      <div className="flex flex-wrap gap-x-2 gap-y-0">
+        {primary}
+        {showType ? (
+          <WithRecord
+            render={(row) =>
+              row.type !== "Other" && (
+                <span className="text-muted-foreground">
+                  {translate(`crm.contact.type.${row.type.toLowerCase()}`, {
+                    _: row.type,
+                  })}
+                </span>
+              )
+            }
+          />
+        ) : null}
+      </div>
     </div>
-  </div>
-);
+  );
+};

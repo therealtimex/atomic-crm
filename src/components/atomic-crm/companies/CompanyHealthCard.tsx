@@ -9,6 +9,7 @@ import type { Company } from "../types";
 
 export const CompanyHealthCard = () => {
   const record = useRecordContext<Company>();
+  const translate = useTranslate();
   if (!record) return null;
 
   const hasInternalHealth =
@@ -24,20 +25,22 @@ export const CompanyHealthCard = () => {
   }
 
   return (
-    <AsideSection title="Company Health">
+    <AsideSection title={translate("crm.company.health.title")}>
       {/* Internal Heartbeat (Engagement) */}
       {hasInternalHealth && (
         <div className="mb-4">
           <div className="flex items-center gap-2 mb-2">
             <Activity className="w-4 h-4 text-muted-foreground" />
-            <span className="font-medium text-sm">Internal Engagement</span>
+            <span className="font-medium text-sm">
+              {translate("crm.company.health.internal_engagement")}
+            </span>
           </div>
 
           {record.internal_heartbeat_score !== undefined && (
             <div className="mb-2">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs text-muted-foreground">
-                  Engagement Score
+                  {translate("crm.company.health.engagement_score")}
                 </span>
                 <span className="text-xs font-medium">
                   {record.internal_heartbeat_score}/100
@@ -58,18 +61,20 @@ export const CompanyHealthCard = () => {
 
           {record.days_since_last_activity !== undefined && (
             <div className="text-xs text-muted-foreground">
-              Last activity:{" "}
+              {translate("crm.company.health.last_activity")}{" "}
               {record.days_since_last_activity === 0
-                ? "Today"
+                ? translate("crm.company.health.today")
                 : record.days_since_last_activity === 1
-                  ? "Yesterday"
-                  : `${record.days_since_last_activity} days ago`}
+                  ? translate("crm.company.health.yesterday")
+                  : translate("crm.company.health.days_ago", {
+                      days: record.days_since_last_activity,
+                    })}
             </div>
           )}
 
           {record.internal_heartbeat_updated_at && (
             <div className="text-xs text-muted-foreground mt-1">
-              Updated{" "}
+              {translate("crm.company.health.updated")}{" "}
               {formatDistance(
                 new Date(record.internal_heartbeat_updated_at),
                 new Date(),
@@ -85,7 +90,9 @@ export const CompanyHealthCard = () => {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <HeartPulse className="w-4 h-4 text-muted-foreground" />
-            <span className="font-medium text-sm">External Health</span>
+            <span className="font-medium text-sm">
+              {translate("crm.company.health.external_health")}
+            </span>
           </div>
 
           {record.external_heartbeat_status && (
@@ -96,7 +103,7 @@ export const CompanyHealthCard = () => {
 
           {record.external_heartbeat_checked_at && (
             <div className="text-xs text-muted-foreground">
-              Last checked{" "}
+              {translate("crm.company.health.last_checked")}{" "}
               {formatDistance(
                 new Date(record.external_heartbeat_checked_at),
                 new Date(),
@@ -111,14 +118,30 @@ export const CompanyHealthCard = () => {
 };
 
 const InternalStatusBadge = ({ status }: { status: string }) => {
+  const translate = useTranslate();
   const statusConfig: Record<
     string,
-    { variant: "default" | "secondary" | "outline" | "destructive"; label: string }
+    {
+      variant: "default" | "secondary" | "outline" | "destructive";
+      label: string;
+    }
   > = {
-    engaged: { variant: "default", label: "Engaged" },
-    quiet: { variant: "secondary", label: "Quiet" },
-    at_risk: { variant: "outline", label: "At Risk" },
-    unresponsive: { variant: "destructive", label: "Unresponsive" },
+    engaged: {
+      variant: "default",
+      label: translate("crm.company.health.status.engaged"),
+    },
+    quiet: {
+      variant: "secondary",
+      label: translate("crm.company.health.status.quiet"),
+    },
+    at_risk: {
+      variant: "outline",
+      label: translate("crm.company.health.status.at_risk"),
+    },
+    unresponsive: {
+      variant: "destructive",
+      label: translate("crm.company.health.status.unresponsive"),
+    },
   };
 
   const config = statusConfig[status] || {
@@ -134,14 +157,30 @@ const InternalStatusBadge = ({ status }: { status: string }) => {
 };
 
 const ExternalStatusBadge = ({ status }: { status: string }) => {
+  const translate = useTranslate();
   const statusConfig: Record<
     string,
-    { variant: "default" | "secondary" | "outline" | "destructive"; label: string }
+    {
+      variant: "default" | "secondary" | "outline" | "destructive";
+      label: string;
+    }
   > = {
-    healthy: { variant: "default", label: "Healthy" },
-    risky: { variant: "outline", label: "Risky" },
-    dead: { variant: "destructive", label: "Dead" },
-    unknown: { variant: "secondary", label: "Unknown" },
+    healthy: {
+      variant: "default",
+      label: translate("crm.company.health.status.healthy"),
+    },
+    risky: {
+      variant: "outline",
+      label: translate("crm.company.health.status.risky"),
+    },
+    dead: {
+      variant: "destructive",
+      label: translate("crm.company.health.status.dead"),
+    },
+    unknown: {
+      variant: "secondary",
+      label: translate("crm.company.health.status.unknown"),
+    },
   };
 
   const config = statusConfig[status] || {

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import type { DataProvider } from "ra-core";
-import { checkDatabaseHealth, DatabaseHealthStatus } from "@/lib/database-health-check";
+import { type DataProvider, useTranslate } from "ra-core";
+import {
+  checkDatabaseHealth,
+  DatabaseHealthStatus,
+} from "@/lib/database-health-check";
 import { getSupabaseConfig } from "@/lib/supabase-config";
 import { DatabaseSetupGuide } from "../setup/DatabaseSetupGuide";
 
@@ -9,9 +12,14 @@ interface DatabaseHealthCheckProps {
   dataProvider: DataProvider;
 }
 
-export function DatabaseHealthCheck({ children, dataProvider }: DatabaseHealthCheckProps) {
-  const [healthStatus, setHealthStatus] = useState<DatabaseHealthStatus | null>(null);
+export function DatabaseHealthCheck({
+  children,
+  dataProvider,
+}: DatabaseHealthCheckProps) {
+  const [healthStatus, setHealthStatus] =
+    useState<DatabaseHealthStatus | null>(null);
   const [isChecking, setIsChecking] = useState(true);
+  const translate = useTranslate();
 
   useEffect(() => {
     let cancelled = false;
@@ -24,7 +32,10 @@ export function DatabaseHealthCheck({ children, dataProvider }: DatabaseHealthCh
           setIsChecking(false);
         }
       } catch (error) {
-        console.error("[DatabaseHealthCheck] Failed to check database health:", error);
+        console.error(
+          "[DatabaseHealthCheck] Failed to check database health:",
+          error,
+        );
         if (!cancelled) {
           setIsChecking(false);
         }
@@ -44,7 +55,9 @@ export function DatabaseHealthCheck({ children, dataProvider }: DatabaseHealthCh
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="text-muted-foreground">Checking database connection...</p>
+          <p className="text-muted-foreground">
+            {translate("crm.root.database_checking")}
+          </p>
         </div>
       </div>
     );
