@@ -300,7 +300,11 @@ const CompanyAdditionalInformationInputs = () => {
         multiline
         helperText={false}
       />
-      <ArrayInput source="context_links" helperText={false}>
+      <ArrayInput
+        source="context_links"
+        label={translate("crm.company.field.context_links")}
+        helperText={false}
+      >
         <SimpleFormIterator disableReordering fullWidth getItemLabel={false}>
           <TextInput
             source=""

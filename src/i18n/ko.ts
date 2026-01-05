@@ -513,6 +513,7 @@ export const koMessages = {
         size: "규모",
         revenue: "매출",
         sector: "섹터",
+        context_links: "컨텍스트 링크",
       },
       section: {
         contact: "연락처",
@@ -599,6 +600,12 @@ export const koMessages = {
         select_company: "병합할 회사를 선택하세요",
         success: "회사가 성공적으로 병합되었습니다",
         error: "회사 병합에 실패했습니다",
+      },
+    },
+    tag: {
+      action: {
+        add: "태그 추가",
+        create: "새 태그 만들기",
       },
     },
     integrations: {
@@ -1046,6 +1053,7 @@ export const koMessages = {
         nb_contacts: "연락처 수",
         nb_deals: "딜 수",
         created_at: "추가일",
+        context_links: "컨텍스트 링크",
       },
     },
     deals: {

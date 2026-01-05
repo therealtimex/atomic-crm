@@ -1,4 +1,4 @@
-import { CreateBase, Form, useGetIdentity } from "ra-core";
+import { CreateBase, Form, useGetIdentity, useTranslate } from "ra-core";
 import { Card, CardContent } from "@/components/ui/card";
 import { CancelButton } from "@/components/admin/cancel-button";
 import { SaveButton } from "@/components/admin/form";
@@ -8,6 +8,7 @@ import { CompanyInputs } from "./CompanyInputs";
 
 export const CompanyCreate = () => {
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
   return (
     <CreateBase
       redirect="show"
@@ -28,7 +29,7 @@ export const CompanyCreate = () => {
                 <FormToolbar>
                   <div className="flex flex-row gap-2 justify-end">
                     <CancelButton />
-                    <SaveButton label="Create Company" />
+                    <SaveButton label={translate("crm.company.action.create")} />
                   </div>
                 </FormToolbar>
               </CardContent>

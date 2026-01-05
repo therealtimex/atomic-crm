@@ -516,6 +516,7 @@ export const enMessages = {
         size: "Size",
         revenue: "Revenue",
         sector: "Sector",
+        context_links: "Context links",
       },
       section: {
         contact: "Contact",
@@ -602,6 +603,12 @@ export const enMessages = {
         select_company: "Please select a company to merge with",
         success: "Companies merged successfully",
         error: "Failed to merge companies",
+      },
+    },
+    tag: {
+      action: {
+        add: "Add tag",
+        create: "Create new tag",
       },
     },
     integrations: {
@@ -1061,6 +1068,7 @@ export const enMessages = {
         nb_contacts: "Contacts",
         nb_deals: "Deals",
         created_at: "Added on",
+        context_links: "Context links",
       },
     },
     deals: {

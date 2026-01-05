@@ -514,6 +514,7 @@ export const jaMessages = {
         size: "規模",
         revenue: "売上",
         sector: "セクター",
+        context_links: "コンテキストリンク",
       },
       section: {
         contact: "連絡先",
@@ -600,6 +601,12 @@ export const jaMessages = {
         select_company: "統合する会社を選択してください",
         success: "会社を正常に統合しました",
         error: "会社の統合に失敗しました",
+      },
+    },
+    tag: {
+      action: {
+        add: "タグを追加",
+        create: "新しいタグを作成",
       },
     },
     integrations: {
@@ -1050,6 +1057,7 @@ export const jaMessages = {
         nb_contacts: "連絡先数",
         nb_deals: "案件数",
         created_at: "追加日",
+        context_links: "コンテキストリンク",
       },
     },
     deals: {

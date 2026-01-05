@@ -515,6 +515,7 @@ export const viMessages = {
         size: "Quy mô",
         revenue: "Doanh thu",
         sector: "Lĩnh vực",
+        context_links: "Liên kết ngữ cảnh",
       },
       section: {
         contact: "Liên hệ",
@@ -601,6 +602,12 @@ export const viMessages = {
         select_company: "Vui lòng chọn một công ty để hợp nhất",
         success: "Hợp nhất công ty thành công",
         error: "Hợp nhất công ty thất bại",
+      },
+    },
+    tag: {
+      action: {
+        add: "Thêm thẻ",
+        create: "Tạo thẻ mới",
       },
     },
     integrations: {
@@ -1056,6 +1063,7 @@ export const viMessages = {
         nb_contacts: "Liên hệ",
         nb_deals: "Giao dịch",
         created_at: "Ngày thêm",
+        context_links: "Liên kết ngữ cảnh",
       },
     },
     deals: {

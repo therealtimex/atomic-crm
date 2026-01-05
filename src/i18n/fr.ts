@@ -520,6 +520,7 @@ export const frMessages = {
         size: "Taille",
         revenue: "Revenus",
         sector: "Secteur",
+        context_links: "Liens de contexte",
       },
       section: {
         contact: "Contact",
@@ -606,6 +607,12 @@ export const frMessages = {
         select_company: "Veuillez sélectionner une entreprise à fusionner",
         success: "Entreprises fusionnées avec succès",
         error: "Échec de la fusion des entreprises",
+      },
+    },
+    tag: {
+      action: {
+        add: "Ajouter une étiquette",
+        create: "Créer une nouvelle étiquette",
       },
     },
     integrations: {
@@ -1066,6 +1073,7 @@ export const frMessages = {
         nb_contacts: "Contacts",
         nb_deals: "Affaires",
         created_at: "Ajouté le",
+        context_links: "Liens de contexte",
       },
     },
     deals: {

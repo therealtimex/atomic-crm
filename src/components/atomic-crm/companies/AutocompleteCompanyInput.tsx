@@ -4,7 +4,8 @@ import type { InputProps } from "ra-core";
 
 export const AutocompleteCompanyInput = ({
   validate,
-}: Pick<InputProps, "validate">) => {
+  label,
+}: Pick<InputProps, "validate" | "label">) => {
   const [create] = useCreate();
   const { identity } = useGetIdentity();
   const notify = useNotify();
@@ -39,6 +40,7 @@ export const AutocompleteCompanyInput = ({
       createItemLabel="Create %{item}"
       createLabel={translate("crm.company.placeholder.create_hint")}
       validate={validate}
+      label={label}
     />
   );
 };

@@ -519,6 +519,7 @@ export const esMessages = {
         size: "Tamaño",
         revenue: "Ingresos",
         sector: "Sector",
+        context_links: "Enlaces de contexto",
       },
       section: {
         contact: "Contacto",
@@ -605,6 +606,12 @@ export const esMessages = {
         select_company: "Por favor, selecciona una empresa para fusionar",
         success: "Empresas fusionadas con éxito",
         error: "Error al fusionar empresas",
+      },
+    },
+    tag: {
+      action: {
+        add: "Añadir etiqueta",
+        create: "Crear nueva etiqueta",
       },
     },
     integrations: {
@@ -1064,6 +1071,7 @@ export const esMessages = {
         nb_contacts: "Contactos",
         nb_deals: "Negocios",
         created_at: "Añadido el",
+        context_links: "Enlaces de contexto",
       },
     },
     deals: {
