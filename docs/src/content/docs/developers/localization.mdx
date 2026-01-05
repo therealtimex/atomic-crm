@@ -1,0 +1,69 @@
+---
+title: Localization
+description: Learn how to add new languages and customize translations in RealTimeX CRM.
+---
+
+RealTimeX CRM uses **React-Admin's i18n system** powered by [Polyglot.js](https://airbnb.io/polyglot.js/) for internationalization.
+
+## Current Setup
+
+- **Supported Locales**: English (`en`), French (`fr`), Spanish (`es`), Vietnamese (`vi`), Japanese (`ja`), Korean (`ko`)
+- **i18n Provider**: `src/components/atomic-crm/root/i18nProvider.tsx`
+- **Framework**: `ra-i18n-polyglot`
+- **Translation Hook**: `useTranslate()` from `ra-core`
+- **Language Switcher**: `LocalesMenuButton` component (appears in the header)
+- **Locale Persistence**: Stored per user in `sales.locale`
+
+## How to Add New Languages
+
+### 1. Install Language Package
+
+React-Admin provides official translation packages for many languages:
+
+```bash
+npm install ra-language-french  # French
+npm install ra-language-german  # German
+# See full list: https://marmelab.com/react-admin/Translation.html
+```
+
+### 2. Update i18nProvider
+
+Edit `src/components/atomic-crm/root/i18nProvider.tsx` to include the new locale and its corresponding messages.
+
+### 3. Add Custom Translations
+
+If you have CRM-specific terms that aren't covered by the official packages, you can create custom translation files (e.g., `src/i18n/en.ts`) and merge them into the `i18nProvider`.
+
+## Using Translations in Components
+
+### Basic Usage
+
+```typescript
+import { useTranslate } from "ra-core";
+
+function MyComponent() {
+  const translate = useTranslate();
+
+  return (
+    <div>
+      <h1>{translate("crm.menu.dashboard")}</h1>
+    </div>
+  );
+}
+```
+
+### With Interpolation
+
+```typescript
+translate("ra.message.created", { name: "Contact" });
+```
+
+## Language Switcher
+
+The language switcher automatically detects supported locales from your `i18nProvider`. When a user changes their language, it is immediately persisted to their profile in the database, ensuring their preference is remembered across devices.
+
+## Best Practices
+
+1. **Never hardcode user-facing text**: Always use translation keys.
+2. **Namespace your keys**: Use prefixes like `crm.` to avoid collisions.
+3. **Test with long strings**: Languages like French and German often have longer text than English, which can affect your layout.
