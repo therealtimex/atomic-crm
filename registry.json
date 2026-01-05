@@ -481,6 +481,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/misc/AnimatedCircuitSVG.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/migration/index.ts",
           "type": "registry:component"
         },
