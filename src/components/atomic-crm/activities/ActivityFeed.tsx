@@ -20,7 +20,6 @@ export const ActivityFeed = ({ contactId, salesId, className }: ActivityFeedProp
   const queryClient = useQueryClient();
   const queryKey = useMemo(() => ["activities", contactId, salesId], [contactId, salesId]);
   const translate = useTranslate();
-  const locale = useLocale();
 
   // 1. Initial Fetch
   const { data: activities, isLoading } = useQuery({
