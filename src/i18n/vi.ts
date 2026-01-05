@@ -370,7 +370,7 @@ export const viMessages = {
         show: "Xem liên hệ",
         create: "Thêm liên hệ",
         export_vcard: "Xuất vCard",
-        merge_with_another: "Hợp nhất với liên hệ khác",
+        merge_with_another: "Hợp nhất with liên hệ khác",
         import: "Nhập",
       },
       type: {
@@ -732,7 +732,6 @@ export const viMessages = {
         notification: {
           created: "Đã tạo mã API thành công",
           deleted: "Đã xóa mã API thành công",
-          error_creating: "Tạo mã API thất bại",
           error_deleting: "Xóa mã API thất bại",
           error_copying: "Sao chép mã API thất bại",
         },
@@ -823,6 +822,18 @@ export const viMessages = {
           error_creating: "Tạo kênh thất bại: %{message}",
           error_deleting: "Xóa kênh thất bại",
         },
+      },
+    },
+    signup: {
+      title: "Chào mừng bạn đến với %{title}",
+      subtitle: "Tạo tài khoản người dùng đầu tiên để hoàn tất thiết lập.",
+      action: {
+        create: "Tạo tài khoản",
+        creating: "Đang tạo...",
+      },
+      notification: {
+        success: "Người dùng đầu tiên đã được tạo thành công",
+        error: "Đã xảy ra lỗi. Vui lòng thử lại.",
       },
     },
     settings: {

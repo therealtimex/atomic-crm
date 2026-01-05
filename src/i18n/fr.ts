@@ -784,7 +784,7 @@ export const frMessages = {
           select_channel: "Veuillez sélectionner un canal d'ingestion",
           success: "Fichier téléchargé : %{name}",
           error: "Échec du téléchargement : %{name}",
-          error_network: "Error de réseau",
+          error_network: "Erreur réseau",
           error_status: "Le téléchargement a échoué avec le statut %{status}",
           error_dangerous:
             "Les fichiers exécutables ne sont pas autorisés pour des raisons de sécurité",
@@ -831,6 +831,18 @@ export const frMessages = {
           error_creating: "Échec de la création du canal : %{message}",
           error_deleting: "Échec de la suppression du canal",
         },
+      },
+    },
+    signup: {
+      title: "Bienvenue sur %{title}",
+      subtitle: "Créez le premier compte utilisateur pour terminer la configuration.",
+      action: {
+        create: "Créer un compte",
+        creating: "Création...",
+      },
+      notification: {
+        success: "Utilisateur initial créé avec succès",
+        error: "Une erreur est survenue. Veuillez réessayer.",
       },
     },
     settings: {

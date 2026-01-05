@@ -819,6 +819,18 @@ export const jaMessages = {
         },
       },
     },
+    signup: {
+      title: "%{title}へようこそ",
+      subtitle: "セットアップを完了するために、最初のユーザーアカウントを作成してください。",
+      action: {
+        create: "アカウントを作成",
+        creating: "作成中...",
+      },
+      notification: {
+        success: "最初のユーザーが正常に作成されました",
+        error: "エラーが発生しました。もう一度お試しください。",
+      },
+    },
     settings: {
       notification: {
         profile_updated: "プロフィールを更新しました",

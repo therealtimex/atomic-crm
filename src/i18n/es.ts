@@ -142,7 +142,8 @@ export const esMessages = {
         related: "Relacionado",
         assignment: "Asignación",
         activity_timeline: "Cronología de actividad",
-        activity_description: "Seguimiento de cambios de estado y actualizaciones de esta tarea",
+        activity_description:
+          "Seguimiento de cambios de estado y actualizaciones de esta tarea",
         notes: "Notas",
         notes_description: "Añade notas y actualizaciones a esta tarea",
       },
@@ -179,18 +180,21 @@ export const esMessages = {
         reopened: "reabrió esta tarea",
         duplicated: "duplicó esta tarea",
         archived: "archivó esta tarea",
-        truncated: "Mostrando %{count} de %{total} actividades. Las más antiguas no se muestran.",
+        truncated:
+          "Mostrando %{count} de %{total} actividades. Las más antiguas no se muestran.",
       },
       dialog: {
         edit: {
           title: "Editar tarea",
-          description: "Actualiza los detalles de la tarea, la asignación y la entidad relacionada",
+          description:
+            "Actualiza los detalles de la tarea, la asignación y la entidad relacionada",
         },
         create: {
           title: "Crear una nueva tarea",
           title_for: "Crear una nueva tarea para %{name}",
           this_record: "este registro",
-          description: "Añade una nueva tarea con descripción, fecha de vencimiento y asignación",
+          description:
+            "Añade una nueva tarea con descripción, fecha de vencimiento y asignación",
         },
       },
       status: {
@@ -271,7 +275,8 @@ export const esMessages = {
         contacts: "Contactos",
         assignment: "Asignación",
         notes: "Notas",
-        notes_description: "Seguimiento de conversaciones, decisiones y actualizaciones para este negocio",
+        notes_description:
+          "Seguimiento de conversaciones, decisiones y actualizaciones para este negocio",
       },
       action: {
         edit: "Editar negocio",
@@ -299,7 +304,8 @@ export const esMessages = {
         invalid_date: "Fecha inválida",
       },
       placeholder: {
-        select_company: "Por favor, selecciona una empresa primero para ver sus contactos",
+        select_company:
+          "Por favor, selecciona una empresa primero para ver sus contactos",
       },
       filter: {
         only_companies_i_manage: "Solo empresas que gestiono",
@@ -355,7 +361,8 @@ export const esMessages = {
         personal_info: "Información personal",
         misc: "Varios",
         activity_timeline: "Cronología de actividad",
-        activity_timeline_description: "Estado de procesamiento en tiempo real de las actividades entrantes",
+        activity_timeline_description:
+          "Estado de procesamiento en tiempo real de las actividades entrantes",
         notes: "Notas",
         notes_description: "Registro permanente de interacciones y resultados",
         background_info: "Información de contexto",
@@ -434,14 +441,20 @@ export const esMessages = {
         current_contact: "Contacto actual (será eliminado)",
         target_contact: "Contacto de destino (se mantendrá)",
         what_will_be_merged: "Qué se fusionará:",
-        notes_to_merge: "%{count} nota será reasignada |||| %{count} notas serán reasignadas",
-        tasks_to_merge: "%{count} tarea será reasignada |||| %{count} tareas serán reasignadas",
-        deals_to_merge: "%{count} negocio será actualizado |||| %{count} negocios serán actualizados",
-        emails_to_merge: "%{count} dirección de email será añadida |||| %{count} direcciones de email serán añadidas",
-        phones_to_merge: "%{count} número de teléfono será añadido |||| %{count} números de teléfono serán añadidos",
+        notes_to_merge:
+          "%{count} nota será reasignada |||| %{count} notas serán reasignadas",
+        tasks_to_merge:
+          "%{count} tarea será reasignada |||| %{count} tareas serán reasignadas",
+        deals_to_merge:
+          "%{count} negocio será actualizado |||| %{count} negocios serán actualizados",
+        emails_to_merge:
+          "%{count} dirección de email será añadida |||| %{count} direcciones de email serán añadidas",
+        phones_to_merge:
+          "%{count} número de teléfono será añadido |||| %{count} números de teléfono serán añadidos",
         no_data: "No hay datos adicionales para fusionar",
         warning_title: "Advertencia: Operación destructiva",
-        warning_message: "Todos los datos se transferirán al segundo contacto. Esta acción no se puede deshacer.",
+        warning_message:
+          "Todos los datos se transferirán al segundo contacto. Esta acción no se puede deshacer.",
         merging: "Fusionando...",
         merge_contacts: "Fusionar contactos",
         select_contact: "Por favor, selecciona un contacto para fusionar",
@@ -455,8 +468,10 @@ export const esMessages = {
         status: "Importados %{count} / %{total} contactos, con %{errors} errores.",
         remaining_time: "Tiempo restante estimado: %{time}.",
         stop: "Detener importación",
-        error: "Error al importar este archivo, por favor asegúrate de haber proporcionado un archivo CSV válido.",
-        complete: "Importación de contactos completada. Importados %{count} contactos, con %{errors} errores",
+        error:
+          "Error al importar este archivo, por favor asegúrate de haber proporcionado un archivo CSV válido.",
+        complete:
+          "Importación de contactos completada. Importados %{count} contactos, con %{errors} errores",
         template_hint: "Aquí tienes un archivo CSV de ejemplo que puedes usar como plantilla",
         download_sample: "Descargar ejemplo CSV",
         csv_file: "Archivo CSV",
@@ -571,12 +586,16 @@ export const esMessages = {
         current_contact: "Empresa actual (será eliminada)",
         target_contact: "Empresa de destino (se mantendrá)",
         what_will_be_merged: "Qué se fusionará:",
-        contacts_to_merge: "%{count} contacto será reasignado |||| %{count} contactos serán reasignados",
-        deals_to_merge: "%{count} negocio será reasignado |||| %{count} negocios serán reasignados",
-        links_to_merge: "%{count} enlace de contexto será añadido |||| %{count} enlaces de contexto serán añadidos",
+        contacts_to_merge:
+          "%{count} contacto será reasignado |||| %{count} contactos serán reasignados",
+        deals_to_merge:
+          "%{count} negocio será reasignado |||| %{count} negocios serán reasignados",
+        links_to_merge:
+          "%{count} enlace de contexto será añadido |||| %{count} enlaces de contexto serán añadidos",
         no_data: "No hay datos adicionales para fusionar",
         warning_title: "Advertencia: Operación destructiva",
-        warning_message: "Todos los datos se transferirán a la segunda empresa. Esta acción no se puede deshacer.",
+        warning_message:
+          "Todos los datos se transferirán a la segunda empresa. Esta acción no se puede deshacer.",
         merging: "Fusionando...",
         merge_companies: "Fusionar empresas",
         select_company: "Por favor, selecciona una empresa para fusionar",
@@ -586,7 +605,8 @@ export const esMessages = {
     },
     integrations: {
       title: "Integraciones",
-      description: "Administre claves de API, webhooks y canales de ingesta para integrar Atomic CRM con sistemas externos.",
+      description:
+        "Administre claves de API, webhooks y canales de ingesta para integrar Atomic CRM con sistemas externos.",
       tabs: {
         ingestion: "Canales de ingesta",
         file_upload: "Carga de archivos",
@@ -594,7 +614,8 @@ export const esMessages = {
         webhooks: "Webhooks (Salientes)",
       },
       webhooks: {
-        description: "Los webhooks notifican a los sistemas externos cuando ocurren eventos en su CRM.",
+        description:
+          "Los webhooks notifican a los sistemas externos cuando ocurren eventos en su CRM.",
         action: {
           create: "Crear Webhook",
           create_first: "Cree su primer webhook",
@@ -619,11 +640,13 @@ export const esMessages = {
         },
         dialog: {
           create_title: "Crear Webhook",
-          create_description: "Cree un nuevo webhook para recibir notificaciones de eventos",
+          create_description:
+            "Cree un nuevo webhook para recibir notificaciones de eventos",
           edit_title: "Editar Webhook",
           edit_description: "Actualizar la configuración del webhook",
           delete_title: "¿Eliminar Webhook?",
-          delete_description: "Esto eliminará permanentemente este webhook. No se enviarán más eventos a este punto final. Esta acción no se puede deshacer.",
+          delete_description:
+            "Esto eliminará permanentemente este webhook. No se enviarán más eventos a este punto final. Esta acción no se puede deshacer.",
         },
         placeholder: {
           name: "ej., Notificaciones de Slack",
@@ -666,7 +689,8 @@ export const esMessages = {
         },
       },
       api_keys: {
-        description: "Las claves de API permiten que las aplicaciones externas accedan a los datos de su CRM mediante programación.",
+        description:
+          "Las claves de API permiten que las aplicaciones externas accedan a los datos de su CRM mediante programación.",
         action: {
           create: "Crear clave de API",
           create_first: "Cree su primera clave de API",
@@ -693,8 +717,10 @@ export const esMessages = {
           created_title: "Clave de API creada",
           created_description: "¡Copie esta clave ahora - no se volverá a mostrar!",
           delete_title: "¿Eliminar clave de API?",
-          delete_description: "Esto eliminará permanentemente esta clave de API. Cualquier aplicación que use esta clave dejará de funcionar inmediatamente. Esta acción no se puede deshacer.",
-          warning_copy: "Asegúrese de copiar su clave de API ahora. ¡No podrá volver a verla!",
+          delete_description:
+            "Esto eliminará permanentemente esta clave de API. Cualquier aplicación que use esta clave dejará de funcionar inmediatamente. Esta acción no se puede deshacer.",
+          warning_copy:
+            "Asegúrese de copiar su clave de API ahora. ¡No podrá volver a verla!",
         },
         placeholder: {
           name: "ej., Clave de API de Producción",
@@ -720,14 +746,16 @@ export const esMessages = {
       },
       file_upload: {
         title: "Cargar archivos",
-        description: "Cargue documentos, imágenes, archivos de audio o video para crear actividades. Los archivos se almacenan y vinculan automáticamente a su cuenta.",
+        description:
+          "Cargue documentos, imágenes, archivos de audio o video para crear actividades. Los archivos se almacenan y vinculan automáticamente a su cuenta.",
         action: {
           upload: "Cargar",
           upload_all: "Cargar todo",
           clear_completed: "Limpiar completados",
           drop_files: "Suelte los archivos aquí...",
           drag_and_drop: "Arrastre y suelte archivos aquí, o haga clic para seleccionar",
-          supports_all: "Admite todos los tipos de archivos (ejecutables bloqueados por seguridad)",
+          supports_all:
+            "Admite todos los tipos de archivos (ejecutables bloqueados por seguridad)",
         },
         fields: {
           ingestion_channel: "Canal de ingesta",
@@ -744,7 +772,8 @@ export const esMessages = {
         },
         how_it_works: {
           title: "Cómo funciona",
-          step_1: "Los archivos se cargan directamente en un almacenamiento seguro (sin saturar la base de datos)",
+          step_1:
+            "Los archivos se cargan directamente en un almacenamiento seguro (sin saturar la base de datos)",
           step_2: "Cada archivo crea un registro de actividad para seguimiento y búsqueda",
           step_3: "Los archivos grandes se manejan automáticamente (sin límites de tamaño)",
           step_4: "Los archivos se vinculan al canal de ingesta seleccionado",
@@ -756,12 +785,14 @@ export const esMessages = {
           error: "Carga fallida: %{name}",
           error_network: "Error de red",
           error_status: "La carga falló con el estado %{status}",
-          error_dangerous: "Los archivos ejecutables no están permitidos por razones de seguridad",
+          error_dangerous:
+            "Los archivos ejecutables no están permitidos por razones de seguridad",
         },
       },
       ingestion: {
         title: "Canales de ingesta",
-        description: "Configure canales entrantes (correo electrónico, voz, SMS) para ingerir actividades en su CRM.",
+        description:
+          "Configure canales entrantes (correo electrónico, voz, SMS) para ingerir actividades en su CRM.",
         action: {
           create: "Crear canal",
           add: "Añadir canal de ingesta",
@@ -785,7 +816,8 @@ export const esMessages = {
           placeholder_token: "Token de autenticación de Twilio",
           select_provider: "Seleccionar proveedor",
           delete_title: "¿Eliminar canal?",
-          delete_description: "Esto detendrá toda la ingesta desde esta fuente. Esta acción no se puede deshacer.",
+          delete_description:
+            "Esto detendrá toda la ingesta desde esta fuente. Esta acción no se puede deshacer.",
         },
         providers: {
           twilio: "Twilio (Voz/SMS)",
@@ -800,6 +832,18 @@ export const esMessages = {
         },
       },
     },
+    signup: {
+      title: "Bienvenido a %{title}",
+      subtitle: "Cree la primera cuenta de usuario para completar la configuración.",
+      action: {
+        create: "Crear cuenta",
+        creating: "Creando...",
+      },
+      notification: {
+        success: "Usuario inicial creado con éxito",
+        error: "Ocurrió un error. Por favor, inténtelo de nuevo.",
+      },
+    },
     settings: {
       notification: {
         profile_updated: "Tu perfil ha sido actualizado",
@@ -810,7 +854,8 @@ export const esMessages = {
       },
       inbound_email: {
         title: "Correo entrante",
-        description: "Puedes comenzar a enviar correos electrónicos a la dirección de correo entrante de tu servidor, por ejemplo, agregándola al campo Cc:. Atomic CRM procesará los correos y añadirá notas a los contactos correspondientes.",
+        description:
+          "Puedes comenzar a enviar correos electrónicos a la dirección de correo entrante de tu servidor, por ejemplo, agregándola al campo Cc:. Atomic CRM procesará los correos y añadirá notas a los contactos correspondientes.",
       },
       database: {
         title: "Conexión a la base de datos",
@@ -819,10 +864,13 @@ export const esMessages = {
         not_connected: "No conectado",
         no_config: "No hay ninguna base de datos Supabase configurada",
         configured_on: "Configurado el %{date}",
-        env_hint: "Usando la configuración de las variables de entorno. Puede anular esto configurando una nueva conexión a través de la interfaz de usuario.",
-        setup_hint: "Conéctese a una base de datos Supabase para comenzar a usar Atomic CRM. Puede crear un proyecto gratuito en",
+        env_hint:
+          "Usando la configuración de las variables de entorno. Puede anular esto configurando una nueva conexión a través de la interfaz de usuario.",
+        setup_hint:
+          "Conéctese a una base de datos Supabase para comenzar a usar Atomic CRM. Puede crear un proyecto gratuito en",
         anon_key: "Clave anónima (Anon Key)",
-        confirm_clear: "¿Está seguro de que desea borrar la configuración de la base de datos? La aplicación deberá volver a configurarse en el próximo inicio.",
+        confirm_clear:
+          "¿Está seguro de que desea borrar la configuración de la base de datos? La aplicación deberá volver a configurarse en el próximo inicio.",
         action: {
           change: "Cambiar conexión",
           clear: "Borrar configuración",
@@ -841,7 +889,8 @@ export const esMessages = {
       },
       modal: {
         title: "Se requiere migración de base de datos",
-        description: "El esquema de tu base de datos debe actualizarse a v%{version}. Sigue los pasos a continuación para completar la migración.",
+        description:
+          "El esquema de tu base de datos debe actualizarse a v%{version}. Sigue los pasos a continuación para completar la migración.",
         overview: {
           title: "Qué ocurrirá:",
           update_schema: "El esquema de la base se actualizará a v%{version}",
@@ -877,19 +926,22 @@ export const esMessages = {
         },
         refresh: {
           title: "Actualizar la aplicación",
-          description: "Cuando la migración termine, actualiza esta página para acceder a las nuevas funciones.",
+          description:
+            "Cuando la migración termine, actualiza esta página para acceder a las nuevas funciones.",
         },
         troubleshooting: {
           title: "Solución de problemas:",
           logout_prefix: "Si falla el inicio de sesión, ejecuta",
           logout_suffix: "y vuelve a intentarlo",
-          password: "Asegúrate de que la contraseña de la base sea correcta (en el panel de Supabase)",
+          password:
+            "Asegúrate de que la contraseña de la base sea correcta (en el panel de Supabase)",
           report: "Si el problema continúa, repórtalo en",
           report_link: "GitHub Issues",
         },
         close: "Cerrar",
         copy: {
-          unsupported: "La copia no está disponible en este entorno — copia manualmente.",
+          unsupported:
+            "La copia no está disponible en este entorno — copia manualmente.",
           success: "¡Copiado al portapapeles!",
           error: "No se pudo copiar — copia manualmente.",
           copy_label: "Copiar",
@@ -943,22 +995,34 @@ export const esMessages = {
       },
     },
     message: {
-      access_denied: "No tienes permisos para acceder a esta página",
-      authentication_error: "El servidor de autenticación devolvió un error y no se pudieron verificar tus credenciales.",
-      auth_error: "Ocurrió un error al validar el token de autenticación.",
-      bulk_update_content: "¿Seguro que deseas actualizar %{name} %{recordRepresentation}? |||| ¿Seguro que deseas actualizar estos %{smart_count} elementos?",
-      bulk_update_title: "Actualizar %{name} %{recordRepresentation} |||| Actualizar %{smart_count} %{name}",
-      clear_array_input: "¿Seguro que deseas borrar toda la lista?",
+      access_denied:
+        "No tienes permisos para acceder a esta página",
+      authentication_error:
+        "El servidor de autenticación devolvió un error y no se pudieron verificar tus credenciales.",
+      auth_error:
+        "Ocurrió un error al validar el token de autenticación.",
+      bulk_update_content:
+        "¿Seguro que deseas actualizar %{name} %{recordRepresentation}? |||| ¿Seguro que deseas actualizar estos %{smart_count} elementos?",
+      bulk_update_title:
+        "Actualizar %{name} %{recordRepresentation} |||| Actualizar %{smart_count} %{name}",
+      clear_array_input:
+        "¿Seguro que deseas borrar toda la lista?",
       details: "Detalles",
-      error: "Se produjo un error del cliente y no se pudo completar tu solicitud.",
-      select_all_limit_reached: "Hay demasiados elementos para seleccionarlos todos. Solo se seleccionaron los primeros %{max} elementos.",
-      unsaved_changes: "Algunos cambios no se guardaron. ¿Seguro que quieres ignorarlos?",
-      placeholder_data_warning: "Problema de red: la actualización de datos falló.",
+      error:
+        "Se produjo un error del cliente y no se pudo completar tu solicitud.",
+      select_all_limit_reached:
+        "Hay demasiados elementos para seleccionarlos todos. Solo se seleccionaron los primeros %{max} elementos.",
+      unsaved_changes:
+        "Algunos cambios no se guardaron. ¿Seguro que quieres ignorarlos?",
+      placeholder_data_warning:
+        "Problema de red: la actualización de datos falló.",
     },
     navigation: {
       clear_filters: "Limpiar filtros",
-      no_filtered_results: "No se encontraron %{name} con los filtros actuales.",
-      partial_page_range_info: "%{offsetBegin}-%{offsetEnd} de más de %{offsetEnd}",
+      no_filtered_results:
+        "No se encontraron %{name} con los filtros actuales.",
+      partial_page_range_info:
+        "%{offsetBegin}-%{offsetEnd} de más de %{offsetEnd}",
       current_page: "Página %{page}",
       page: "Ir a la página %{page}",
       first: "Ir a la primera página",
@@ -978,10 +1042,14 @@ export const esMessages = {
       email: "Correo electrónico",
     },
     notification: {
-      data_provider_error: "Error del dataProvider. Revisa la consola para más detalles.",
-      i18n_error: "No se pueden cargar las traducciones para el idioma especificado",
-      logged_out: "Tu sesión ha finalizado, por favor vuelve a iniciar sesión.",
-      not_authorized: "No estás autorizado para acceder a este recurso.",
+      data_provider_error:
+        "Error del dataProvider. Revisa la consola para más detalles.",
+      i18n_error:
+        "No se pueden cargar las traducciones para el idioma especificado",
+      logged_out:
+        "Tu sesión ha finalizado, por favor vuelve a iniciar sesión.",
+      not_authorized:
+        "No estás autorizado para acceder a este recurso.",
       application_update_available: "Hay una nueva versión disponible.",
       offline: "Sin conectividad. No se pudieron obtener los datos.",
     },
@@ -996,7 +1064,8 @@ export const esMessages = {
       remove_label: "Eliminar consulta guardada",
       remove_label_with_name: "Eliminar consulta \"%{name}\"",
       remove_dialog_title: "¿Eliminar consulta guardada?",
-      remove_message: "¿Seguro que quieres eliminar ese elemento de tu lista de consultas guardadas?",
+      remove_message:
+        "¿Seguro que quieres eliminar ese elemento de tu lista de consultas guardadas?",
       help: "Filtra la lista y guarda esta consulta para más tarde",
     },
     configurable: {
@@ -1004,7 +1073,8 @@ export const esMessages = {
       configureMode: "Configurar esta página",
       inspector: {
         title: "Inspector",
-        content: "Pasa el cursor sobre los elementos de la interfaz para configurarlos",
+        content:
+          "Pasa el cursor sobre los elementos de la interfaz para configurarlos",
         reset: "Restablecer configuración",
         hideAll: "Ocultar todo",
         showAll: "Mostrar todo",
@@ -1027,7 +1097,8 @@ export const esMessages = {
   },
   "ra-supabase": {
     auth: {
-      password_reset: "Revisa tu correo para el mensaje de restablecimiento de contraseña.",
+      password_reset:
+        "Revisa tu correo para el mensaje de restablecimiento de contraseña.",
     },
   },
 };

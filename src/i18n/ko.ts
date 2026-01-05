@@ -816,6 +816,18 @@ export const koMessages = {
         },
       },
     },
+    signup: {
+      title: "%{title}에 오신 것을 환영합니다",
+      subtitle: "설정을 완료하려면 첫 번째 사용자 계정을 만드십시오.",
+      action: {
+        create: "계정 만들기",
+        creating: "생성 중...",
+      },
+      notification: {
+        success: "첫 번째 사용자가 성공적으로 생성되었습니다",
+        error: "오류가 발생했습니다. 다시 시도하십시오.",
+      },
+    },
     settings: {
       notification: {
         profile_updated: "프로필을 업데이트했습니다",

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslate } from "ra-core";
 import {
   Card,
   CardContent,

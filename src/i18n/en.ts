@@ -829,6 +829,18 @@ export const enMessages = {
         },
       },
     },
+    signup: {
+      title: "Welcome to %{title}",
+      subtitle: "Create the first user account to complete the setup.",
+      action: {
+        create: "Create account",
+        creating: "Creating...",
+      },
+      notification: {
+        success: "Initial user successfully created",
+        error: "An error occurred. Please try again.",
+      },
+    },
     settings: {
       notification: {
         profile_updated: "Your profile has been updated",
