@@ -1300,5 +1300,9 @@ export const jaMessages = {
     auth: {
       password_reset: "パスワード再設定のメールを確認してください。",
     },
+    reset_password: {
+      forgot_password: "パスワードをお忘れですか？",
+      forgot_password_details: "6桁のコードを受け取るには、メールアドレスを入力してください。",
+    },
   },
 };

@@ -1287,5 +1287,9 @@ export const viMessages = {
       password_reset:
         "Vui lòng kiểm tra email để nhận thông báo đặt lại mật khẩu.",
     },
+    reset_password: {
+      forgot_password: "Quên mật khẩu?",
+      forgot_password_details: "Nhập email của bạn để nhận mã 6 chữ số.",
+    },
   },
 };

@@ -1295,5 +1295,9 @@ export const koMessages = {
     auth: {
       password_reset: "비밀번호 재설정 메일을 확인하세요.",
     },
+    reset_password: {
+      forgot_password: "비밀번호를 잊으셨나요?",
+      forgot_password_details: "6자리 코드를 받으려면 이메일을 입력하세요.",
+    },
   },
 };

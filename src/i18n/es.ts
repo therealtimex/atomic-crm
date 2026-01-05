@@ -1335,5 +1335,9 @@ export const esMessages = {
       password_reset:
         "Revisa tu correo para el mensaje de restablecimiento de contraseña.",
     },
+    reset_password: {
+      forgot_password: "¿Olvidó su contraseña?",
+      forgot_password_details: "Ingrese su correo electrónico para recibir un código de 6 dígitos.",
+    },
   },
 };

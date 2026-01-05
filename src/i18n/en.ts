@@ -1182,4 +1182,13 @@ export const enMessages = {
       },
     },
   },
+  "ra-supabase": {
+    auth: {
+      password_reset: "Check your emails for a Reset Password message.",
+    },
+    reset_password: {
+      forgot_password: "Forgot password?",
+      forgot_password_details: "Enter your email to receive a 6-digit code.",
+    },
+  },
 };

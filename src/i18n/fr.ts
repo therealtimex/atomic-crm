@@ -1192,5 +1192,9 @@ export const frMessages = {
       password_reset:
         "Vérifiez vos e-mails pour le message de réinitialisation du mot de passe.",
     },
+    reset_password: {
+      forgot_password: "Mot de passe oublié ?",
+      forgot_password_details: "Entrez votre e-mail pour recevoir un code à 6 chiffres.",
+    },
   },
 };
