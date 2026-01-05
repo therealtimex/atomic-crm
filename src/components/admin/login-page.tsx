@@ -20,7 +20,7 @@ import { AnimatedCircuitSVG } from "@/components/atomic-crm/misc/AnimatedCircuit
  * @see {@link https://marmelab.com/shadcn-admin-kit/docs/security Security documentation}
  */
 export const LoginPage = (props: { redirectTo?: string }) => {
-  const { darkModeLogo, title } = useConfigurationContext();
+  const { darkModeLogo, lightModeLogo, title } = useConfigurationContext();
   const { redirectTo } = props;
   const [loading, setLoading] = useState(false);
   const login = useLogin();
@@ -57,20 +57,20 @@ export const LoginPage = (props: { redirectTo?: string }) => {
   };
 
   return (
-    <div className="min-h-screen flex text-foreground">
+    <div className="min-h-screen flex text-foreground bg-background">
       <div className="container relative grid flex-col items-center justify-center sm:max-w-none lg:grid-cols-2 lg:px-0">
-        <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex overflow-hidden">
-          <div className="absolute inset-0 bg-zinc-900" />
+        <div className="relative hidden h-full flex-col bg-muted p-10 dark:border-r lg:flex overflow-hidden">
           <div className="relative z-20 flex items-center text-lg font-medium">
-            <img className="h-6 mr-2" src={darkModeLogo} alt={title} />
+            <img className="[.dark_&]:hidden h-6 mr-2" src={lightModeLogo} alt={title} />
+            <img className="[.light_&]:hidden h-6 mr-2" src={darkModeLogo} alt={title} />
             {title}
           </div>
           <div className="relative z-10 flex-1 flex items-center justify-center">
             <AnimatedCircuitSVG />
           </div>
         </div>
-        <div className="lg:p-8 relative">
-          <div className="absolute top-4 right-4 flex items-center gap-2 z-20">
+        <div className="lg:p-10 relative flex flex-col h-full justify-center">
+          <div className="absolute top-10 right-10 flex items-center gap-2 z-20">
             <LocalesMenuButton />
             <ThemeModeToggle />
           </div>
