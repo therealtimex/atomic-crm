@@ -18,7 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { getRelativeDueDate } from "@/lib/date-utils";
+import { getRelativeDueDate, parseLocalDate } from "@/lib/date-utils";
 
 import type { Task, TaskSummary } from "../types";
 import { TaskPriorityBadge } from "./TaskPriorityBadge";
@@ -101,13 +101,10 @@ const DueDateField = ({
   });
 
   // Parse date as local date to avoid timezone shift (same logic as getRelativeDueDate)
-  let formattedDate = "";
-  if (record.due_date) {
-    const datePart = record.due_date.split('T')[0];
-    const [year, month, day] = datePart.split('-').map(Number);
-    const dueDate = new Date(year, month - 1, day);
-    formattedDate = dueDate.toLocaleDateString(locale);
-  }
+  const dueDate = record.due_date ? parseLocalDate(record.due_date) : null;
+  const formattedDate = dueDate
+    ? dueDate.toLocaleDateString(locale)
+    : "";
 
   return (
     <div className="flex flex-col gap-0.5">
@@ -122,7 +119,7 @@ const DueDateField = ({
       >
         {text}
       </span>
-      {record.due_date && !isCompleted && (
+      {dueDate && !isCompleted && (
         <span className="text-xs text-muted-foreground">
           {formattedDate}
         </span>
@@ -219,29 +216,33 @@ const TaskActions = ({
       });
       notificationText = translate("crm.task.notification.snoozed_tomorrow");
     } else {
-      // Parse the date safely (handles both YYYY-MM-DD and full ISO 8601)
-      // We extract only the date part to avoid timezone shifts when parsing
-      const datePart = record.due_date.split("T")[0];
-      const [year, month, day] = datePart.split("-").map(Number);
-      const dueDate = new Date(year, month - 1, day);
+      const dueDate = parseLocalDate(record.due_date);
 
-      const isOverdueOrDueToday = dueDate <= today;
-
-      if (isOverdueOrDueToday) {
+      if (!dueDate) {
         newDueDateString = tomorrow.toISOString().slice(0, 10);
         noteText = translate("crm.task.note.snoozed_to_date", {
           date: tomorrow.toLocaleDateString(locale),
         });
         notificationText = translate("crm.task.notification.snoozed_tomorrow");
       } else {
-        // Add 1 day to the due date
-        const newDueDate = new Date(dueDate);
-        newDueDate.setDate(newDueDate.getDate() + 1);
-        newDueDateString = newDueDate.toISOString().slice(0, 10);
-        noteText = translate("crm.task.note.postponed_to_date", {
-          date: newDueDate.toLocaleDateString(locale),
-        });
-        notificationText = translate("crm.task.notification.postponed_day");
+        const isOverdueOrDueToday = dueDate <= today;
+
+        if (isOverdueOrDueToday) {
+          newDueDateString = tomorrow.toISOString().slice(0, 10);
+          noteText = translate("crm.task.note.snoozed_to_date", {
+            date: tomorrow.toLocaleDateString(locale),
+          });
+          notificationText = translate("crm.task.notification.snoozed_tomorrow");
+        } else {
+          // Add 1 day to the due date
+          const newDueDate = new Date(dueDate);
+          newDueDate.setDate(newDueDate.getDate() + 1);
+          newDueDateString = newDueDate.toISOString().slice(0, 10);
+          noteText = translate("crm.task.note.postponed_to_date", {
+            date: newDueDate.toLocaleDateString(locale),
+          });
+          notificationText = translate("crm.task.notification.postponed_day");
+        }
       }
     }
 
@@ -271,10 +272,10 @@ const TaskActions = ({
   today.setHours(0, 0, 0, 0);
   let isOverdueOrDueToday = true;
   if (record.due_date) {
-    const datePart = record.due_date.split("T")[0];
-    const [year, month, day] = datePart.split("-").map(Number);
-    const labelDueDate = new Date(year, month - 1, day);
-    isOverdueOrDueToday = labelDueDate <= today;
+    const labelDueDate = parseLocalDate(record.due_date);
+    if (labelDueDate) {
+      isOverdueOrDueToday = labelDueDate <= today;
+    }
   }
   const snoozeLabel = isOverdueOrDueToday
     ? translate("crm.task.action.snooze_tomorrow")

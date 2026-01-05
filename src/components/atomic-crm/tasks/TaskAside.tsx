@@ -6,6 +6,7 @@ import { DeleteButton } from "@/components/admin/delete-button";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { TextField } from "@/components/admin/text-field";
 import { DateField } from "@/components/admin/date-field";
+import { parseLocalDate } from "@/lib/date-utils";
 
 import { AsideSection } from "../misc/AsideSection";
 import type { Task } from "../types";
@@ -91,29 +92,33 @@ export const TaskAside = () => {
       });
       notificationText = translate("crm.task.notification.snoozed_tomorrow");
     } else {
-      // Parse the date safely (handles both YYYY-MM-DD and full ISO 8601)
-      // We extract only the date part to avoid timezone shifts when parsing
-      const datePart = record.due_date.split("T")[0];
-      const [year, month, day] = datePart.split("-").map(Number);
-      const dueDate = new Date(year, month - 1, day);
+      const dueDate = parseLocalDate(record.due_date);
 
-      const isOverdueOrDueToday = dueDate <= today;
-
-      if (isOverdueOrDueToday) {
+      if (!dueDate) {
         newDueDateString = tomorrow.toISOString().slice(0, 10);
         noteText = translate("crm.task.note.snoozed_to_date", {
           date: tomorrow.toLocaleDateString(locale),
         });
         notificationText = translate("crm.task.notification.snoozed_tomorrow");
       } else {
-        // Add 1 day to the due date
-        const newDueDate = new Date(dueDate);
-        newDueDate.setDate(newDueDate.getDate() + 1);
-        newDueDateString = newDueDate.toISOString().slice(0, 10);
-        noteText = translate("crm.task.note.postponed_to_date", {
-          date: newDueDate.toLocaleDateString(locale),
-        });
-        notificationText = translate("crm.task.notification.postponed_day");
+        const isOverdueOrDueToday = dueDate <= today;
+
+        if (isOverdueOrDueToday) {
+          newDueDateString = tomorrow.toISOString().slice(0, 10);
+          noteText = translate("crm.task.note.snoozed_to_date", {
+            date: tomorrow.toLocaleDateString(locale),
+          });
+          notificationText = translate("crm.task.notification.snoozed_tomorrow");
+        } else {
+          // Add 1 day to the due date
+          const newDueDate = new Date(dueDate);
+          newDueDate.setDate(newDueDate.getDate() + 1);
+          newDueDateString = newDueDate.toISOString().slice(0, 10);
+          noteText = translate("crm.task.note.postponed_to_date", {
+            date: newDueDate.toLocaleDateString(locale),
+          });
+          notificationText = translate("crm.task.notification.postponed_day");
+        }
       }
     }
 
@@ -141,10 +146,10 @@ export const TaskAside = () => {
   today.setHours(0, 0, 0, 0);
   let isOverdueOrDueToday = true;
   if (record.due_date) {
-    const datePart = record.due_date.split("T")[0];
-    const [year, month, day] = datePart.split("-").map(Number);
-    const labelDueDate = new Date(year, month - 1, day);
-    isOverdueOrDueToday = labelDueDate <= today;
+    const labelDueDate = parseLocalDate(record.due_date);
+    if (labelDueDate) {
+      isOverdueOrDueToday = labelDueDate <= today;
+    }
   }
   const snoozeLabel = isOverdueOrDueToday
     ? translate("crm.task.action.snooze_tomorrow")

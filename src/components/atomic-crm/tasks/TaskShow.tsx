@@ -5,6 +5,7 @@ import { Calendar } from "lucide-react";
 import { formatDistance } from "date-fns";
 import { getDateFnsLocale } from "@/i18n/date-fns";
 import { translateChoice } from "@/i18n/utils";
+import { parseLocalDate } from "@/lib/date-utils";
 
 import { NoteCreate, NotesIterator } from "../notes";
 import type { Task } from "../types";
@@ -43,10 +44,8 @@ const TaskShowContent = () => {
                 <TaskPriorityBadge priority={record.priority} />
               </div>
               {record.due_date && (() => {
-                // Parse date as local date to avoid timezone shift
-                const datePart = record.due_date.split('T')[0];
-                const [year, month, day] = datePart.split('-').map(Number);
-                const dueDate = new Date(year, month - 1, day);
+                const dueDate = parseLocalDate(record.due_date);
+                if (!dueDate) return null;
                 const relativeDue = formatDistance(dueDate, new Date(), {
                   addSuffix: true,
                   locale: dateFnsLocale,

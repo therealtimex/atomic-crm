@@ -49,6 +49,21 @@ type RelativeDueDateOptions = {
   locale?: string;
 };
 
+export function parseLocalDate(
+  dateString: string | null | undefined,
+): Date | null {
+  if (!dateString) return null;
+  const datePart = dateString.split("T")[0];
+  const [year, month, day] = datePart.split("-").map(Number);
+  if ([year, month, day].some((value) => Number.isNaN(value))) {
+    return null;
+  }
+  const localDate = new Date(year, month - 1, day);
+  if (Number.isNaN(localDate.getTime())) return null;
+  localDate.setHours(0, 0, 0, 0);
+  return localDate;
+}
+
 export function getRelativeDueDate(
   dateString: string | null | undefined,
   isCompleted: boolean = false,
@@ -56,8 +71,20 @@ export function getRelativeDueDate(
 ): { text: string; isOverdue: boolean } {
   const translate = options.translate;
   const locale = options.locale;
+  const formatFallback = (
+    fallback: string,
+    params?: Record<string, unknown>,
+  ) => {
+    if (!params) return fallback;
+    return fallback.replace(/%\{(\w+)\}/g, (_, key) => {
+      const value = params[key];
+      return value === undefined ? `%{${key}}` : String(value);
+    });
+  };
   const t = (key: string, fallback: string, params?: Record<string, unknown>) =>
-    translate ? translateWithFallback(translate, key, fallback, params) : fallback;
+    translate
+      ? translateWithFallback(translate, key, fallback, params)
+      : formatFallback(fallback, params);
   if (!dateString) {
     return {
       text: t("crm.task.due.no_date", "No due date"),
@@ -65,12 +92,13 @@ export function getRelativeDueDate(
     };
   }
 
-  // Parse date as local date to avoid timezone shift
-  // Extract date part (handles both "YYYY-MM-DD" and "YYYY-MM-DDTHH:MM:SS" formats)
-  const datePart = dateString.split('T')[0];
-  const [year, month, day] = datePart.split('-').map(Number);
-  const dueDate = new Date(year, month - 1, day);
-  dueDate.setHours(0, 0, 0, 0);
+  const dueDate = parseLocalDate(dateString);
+  if (!dueDate) {
+    return {
+      text: t("crm.task.due.no_date", "No due date"),
+      isOverdue: false,
+    };
+  }
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
