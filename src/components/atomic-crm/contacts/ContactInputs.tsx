@@ -110,9 +110,10 @@ const ContactPositionInputs = () => {
         source="company_id"
         reference="companies"
         perPage={10}
-        label={translate("crm.contact.field.company")}
       >
-        <AutocompleteCompanyInput label={translate("crm.contact.field.company")} />
+        <AutocompleteCompanyInput
+          label={translate("crm.contact.field.company")}
+        />
       </ReferenceInput>
     </div>
   );
