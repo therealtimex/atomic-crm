@@ -1,6 +1,6 @@
 # RealTimeX CRM
 
-A full-featured CRM built with React, shadcn-admin-kit, and Supabase. Fork of [Atomic CRM](https://github.com/marmelab/atomic-crm) with enhanced "Bring Your Own Database" configuration.
+A full-featured CRM with zero cloud costs and complete privacy. Fork of [Atomic CRM](https://github.com/marmelab/atomic-crm) with enhanced "Bring Your Own Database" configuration.
 
 https://github.com/user-attachments/assets/0d7554b5-49ef-41c6-bcc9-a76214fc5c99
 
