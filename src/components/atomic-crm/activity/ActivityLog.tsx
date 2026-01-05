@@ -2,7 +2,7 @@ import { Alert } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
-import { type Identifier, useDataProvider } from "ra-core";
+import { type Identifier, useDataProvider, useTranslate } from "ra-core";
 
 import type { CrmDataProvider } from "../providers/types";
 import { ActivityLogContext } from "./ActivityLogContext";
@@ -19,6 +19,7 @@ export function ActivityLog({
   pageSize = 20,
   context = "all",
 }: ActivityLogProps) {
+  const translate = useTranslate();
   const dataProvider = useDataProvider<CrmDataProvider>();
   const { data, isPending, error } = useQuery({
     queryKey: ["activityLog", companyId],
@@ -43,7 +44,7 @@ export function ActivityLog({
   }
 
   if (error) {
-    return <Alert>Failed to load activity log</Alert>;
+    return <Alert>{translate("crm.activity.error_load")}</Alert>;
   }
 
   return (

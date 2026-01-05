@@ -7,6 +7,7 @@ import {
   useRecordContext,
   useResourceContext,
   useUpdate,
+  useTranslate,
   type Identifier,
   type RaRecord,
 } from "ra-core";
@@ -63,6 +64,7 @@ const NoteCreateButton = ({
   const { identity } = useGetIdentity();
   const { reset } = useFormContext();
   const { refetch } = useListContext();
+  const translate = useTranslate();
 
   if (!record || !identity) return null;
 
@@ -102,14 +104,14 @@ const NoteCreateButton = ({
         previousData: record,
       });
     }
-    notify("Note added");
+    notify(translate("crm.note.added"));
   };
 
   return (
     <div className="flex justify-end">
       <SaveButton
         type="button"
-        label="Add this note"
+        label={translate("crm.note.action.add")}
         transform={(data) => ({
           ...data,
           [foreignKeyMapping[reference]]: record.id,
@@ -120,7 +122,7 @@ const NoteCreateButton = ({
           onSuccess: handleSuccess,
         }}
       >
-        Add this note
+        {translate("crm.note.action.add")}
       </SaveButton>
     </div>
   );

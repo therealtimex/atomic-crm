@@ -6,6 +6,7 @@ import {
   useResourceContext,
   useUpdate,
   WithRecord,
+  useTranslate,
 } from "ra-core";
 import { useState } from "react";
 import type { FieldValues, SubmitHandler } from "react-hook-form";
@@ -41,6 +42,7 @@ export const Note = ({
   const [isEditing, setEditing] = useState(false);
   const resource = useResourceContext();
   const notify = useNotify();
+  const translate = useTranslate();
 
   const [update, { isPending }] = useUpdate();
 
@@ -50,7 +52,10 @@ export const Note = ({
     {
       mutationMode: "undoable",
       onSuccess: () => {
-        notify("Note deleted", { type: "info", undoable: true });
+        notify(translate("crm.activity.note_deleted"), {
+          type: "info",
+          undoable: true,
+        });
       },
     },
   );
@@ -104,7 +109,7 @@ export const Note = ({
           >
             <WithRecord render={(record) => <SaleName sale={record} />} />
           </ReferenceField>{" "}
-          added a note{" "}
+          {translate("crm.activity.added_note")}{" "}
           {showStatus && note.status && (
             <Status className="ml-2" status={note.status} />
           )}
@@ -123,7 +128,7 @@ export const Note = ({
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Edit note</p>
+                <p>{translate("crm.activity.edit_note")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -140,7 +145,7 @@ export const Note = ({
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Delete note</p>
+                <p>{translate("crm.activity.delete_note")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -161,7 +166,7 @@ export const Note = ({
               className="cursor-pointer"
             >
               <CircleX className="w-4 h-4" />
-              Cancel
+              {translate("crm.activity.cancel")}
             </Button>
             <Button
               type="submit"
@@ -169,7 +174,7 @@ export const Note = ({
               className="flex items-center gap-2 cursor-pointer"
             >
               <Save className="w-4 h-4" />
-              Update note
+              {translate("crm.activity.update_note")}
             </Button>
           </div>
         </Form>

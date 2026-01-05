@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import type { RaRecord } from "ra-core";
+import { useTranslate, type RaRecord } from "ra-core";
 
 import { RelativeDate } from "../misc/RelativeDate";
 import type { ActivityDealCreated } from "../types";
@@ -12,6 +12,7 @@ type ActivityLogDealCreatedProps = {
 export function ActivityLogDealCreated({
   activity,
 }: ActivityLogDealCreatedProps) {
+  const translate = useTranslate();
   const context = useActivityLogContext();
   const { deal } = activity;
   return (
@@ -22,10 +23,10 @@ export function ActivityLogDealCreated({
           <span className="text-muted-foreground text-sm">
             Sales ID: {activity.sales_id}
           </span>{" "}
-          added deal <Link to={`/deals/${deal.id}/show`}>{deal.name}</Link>{" "}
+          {translate("crm.activity.added_deal")} <Link to={`/deals/${deal.id}/show`}>{deal.name}</Link>{" "}
           {context !== "company" && (
             <>
-              to company {activity.company_id}{" "}
+              {translate("crm.activity.to_company")} {activity.company_id}{" "}
               <RelativeDate date={activity.date} />
             </>
           )}

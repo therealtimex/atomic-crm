@@ -213,12 +213,37 @@ export const koMessages = {
       },
     },
     note: {
+      placeholder: "노트 추가",
+      show_options: "옵션 표시",
+      options_hint: "(파일 첨부 또는 세부 정보 변경)",
+      date: "날짜",
+      added: "노트가 추가되었습니다",
+      action: {
+        add: "이 노트 추가",
+      },
       status: {
         cold: "콜드",
         warm: "웜",
         hot: "핫",
         in_contract: "계약 중",
       },
+    },
+    activity: {
+      added_note: "노트를 추가했습니다",
+      added_note_about: "에 대한 노트를 추가했습니다",
+      added_note_about_deal: "딜에 대한 노트를 추가했습니다",
+      at: "회사:",
+      edit_note: "노트 편집",
+      delete_note: "노트 삭제",
+      note_deleted: "노트가 삭제되었습니다",
+      cancel: "취소",
+      update_note: "노트 업데이트",
+      added_deal: "딜을 추가했습니다",
+      to_company: "회사:",
+      added_company: "회사를 추가했습니다",
+      added: "추가했습니다",
+      pagination: "%{total}개 활동 중 %{from}-%{to} 표시",
+      error_load: "활동 로그를 불러오지 못했습니다",
     },
     deal: {
       field: {

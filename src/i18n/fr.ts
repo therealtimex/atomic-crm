@@ -217,12 +217,37 @@ export const frMessages = {
       },
     },
     note: {
+      placeholder: "Ajouter une note",
+      show_options: "Afficher les options",
+      options_hint: "(joindre des fichiers ou modifier les détails)",
+      date: "Date",
+      added: "Note ajoutée",
+      action: {
+        add: "Ajouter cette note",
+      },
       status: {
         cold: "Froid",
         warm: "Tiède",
         hot: "Chaud",
         in_contract: "Sous contrat",
       },
+    },
+    activity: {
+      added_note: "a ajouté une note",
+      added_note_about: "a ajouté une note sur",
+      added_note_about_deal: "a ajouté une note sur l'affaire",
+      at: "chez",
+      edit_note: "Modifier la note",
+      delete_note: "Supprimer la note",
+      note_deleted: "Note supprimée",
+      cancel: "Annuler",
+      update_note: "Mettre à jour la note",
+      added_deal: "a ajouté l'affaire",
+      to_company: "à l'entreprise",
+      added_company: "a ajouté l'entreprise",
+      added: "a ajouté",
+      pagination: "Affichage de %{from}-%{to} sur %{total} activités",
+      error_load: "Échec du chargement du journal d'activité",
     },
     deal: {
       field: {

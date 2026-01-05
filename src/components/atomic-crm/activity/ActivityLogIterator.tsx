@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import { useTranslate } from "ra-core";
 
 import {
   Pagination,
@@ -35,6 +36,7 @@ export function ActivityLogIterator({
   activities,
   pageSize,
 }: ActivityLogIteratorProps) {
+  const translate = useTranslate();
   const [currentPage, setCurrentPage] = useState(1);
 
   const totalPages = Math.ceil(activities.length / pageSize);
@@ -99,8 +101,11 @@ export function ActivityLogIterator({
       {totalPages > 1 && (
         <div className="flex flex-col items-center gap-2 mt-6">
           <div className="text-sm text-muted-foreground">
-            Showing {startIndex + 1}-{Math.min(endIndex, activities.length)} of{" "}
-            {activities.length} activities
+            {translate("crm.activity.pagination", {
+              from: startIndex + 1,
+              to: Math.min(endIndex, activities.length),
+              total: activities.length,
+            })}
           </div>
           <Pagination>
             <PaginationContent>

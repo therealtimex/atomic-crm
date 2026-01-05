@@ -216,12 +216,37 @@ export const esMessages = {
       },
     },
     note: {
+      placeholder: "Añadir una nota",
+      show_options: "Mostrar opciones",
+      options_hint: "(adjuntar archivos o cambiar detalles)",
+      date: "Fecha",
+      added: "Nota añadida",
+      action: {
+        add: "Añadir esta nota",
+      },
       status: {
         cold: "Frío",
         warm: "Cálido",
         hot: "Caliente",
         in_contract: "En contrato",
       },
+    },
+    activity: {
+      added_note: "añadió una nota",
+      added_note_about: "añadió una nota sobre",
+      added_note_about_deal: "añadió una nota sobre el negocio",
+      at: "en",
+      edit_note: "Editar nota",
+      delete_note: "Eliminar nota",
+      note_deleted: "Nota eliminada",
+      cancel: "Cancelar",
+      update_note: "Actualizar nota",
+      added_deal: "añadió el negocio",
+      to_company: "a la empresa",
+      added_company: "añadió la empresa",
+      added: "añadió",
+      pagination: "Mostrando %{from}-%{to} de %{total} actividades",
+      error_load: "Error al cargar el registro de actividad",
     },
     deal: {
       field: {

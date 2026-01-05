@@ -1,4 +1,4 @@
-import type { RaRecord } from "ra-core";
+import { RaRecord, useTranslate } from "ra-core";
 
 import { ReferenceField } from "@/components/admin/reference-field";
 import { CompanyAvatar } from "../companies/CompanyAvatar";
@@ -15,6 +15,7 @@ type ActivityLogDealNoteCreatedProps = {
 export function ActivityLogDealNoteCreated({
   activity,
 }: ActivityLogDealNoteCreatedProps) {
+  const translate = useTranslate();
   const context = useActivityLogContext();
   const { dealNote } = activity;
   return (
@@ -45,7 +46,7 @@ export function ActivityLogDealNoteCreated({
             >
               <SaleName />
             </ReferenceField>
-            &nbsp;added a note about deal&nbsp;
+            &nbsp;{translate("crm.activity.added_note_about_deal")}&nbsp;
             <ReferenceField
               source="deal_id"
               reference="deals"
@@ -54,7 +55,7 @@ export function ActivityLogDealNoteCreated({
             />
             {context !== "company" && (
               <>
-                {" at "}
+                {` ${translate("crm.activity.at")} `}
                 <ReferenceField
                   source="deal_id"
                   reference="deals"

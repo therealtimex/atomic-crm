@@ -213,12 +213,37 @@ export const jaMessages = {
       },
     },
     note: {
+      placeholder: "ノートを追加",
+      show_options: "オプションを表示",
+      options_hint: "(ファイルを添付、または詳細を変更)",
+      date: "日付",
+      added: "ノートを追加しました",
+      action: {
+        add: "このノートを追加",
+      },
       status: {
         cold: "コールド",
         warm: "ウォーム",
         hot: "ホット",
         in_contract: "契約中",
       },
+    },
+    activity: {
+      added_note: "がノートを追加しました",
+      added_note_about: "がノートを追加しました: ",
+      added_note_about_deal: "が案件についてノートを追加しました",
+      at: "会社:",
+      edit_note: "ノートを編集",
+      delete_note: "ノートを削除",
+      note_deleted: "ノートを削除しました",
+      cancel: "キャンセル",
+      update_note: "ノートを更新",
+      added_deal: "が案件を追加しました",
+      to_company: "会社:",
+      added_company: "が会社を追加しました",
+      added: "が追加しました",
+      pagination: "%{total}件中 %{from}-%{to}件を表示",
+      error_load: "アクティビティログの読み込みに失敗しました",
     },
     deal: {
       field: {

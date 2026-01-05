@@ -38,7 +38,7 @@ export const NoteInputs = ({ showStatus }: { showStatus?: boolean }) => {
         label={false}
         multiline
         helperText={false}
-        placeholder="Add a note"
+        placeholder={translate("crm.note.placeholder")}
         rows={6}
       />
 
@@ -53,10 +53,10 @@ export const NoteInputs = ({ showStatus }: { showStatus?: boolean }) => {
             }}
             className="text-sm text-muted-foreground underline hover:no-underline p-0 h-auto cursor-pointer"
           >
-            Show options
+            {translate("crm.note.show_options")}
           </Button>
           <span className="text-sm text-muted-foreground">
-            (attach files, or change details)
+            {translate("crm.note.options_hint")}
           </span>
         </div>
       )}
@@ -79,7 +79,7 @@ export const NoteInputs = ({ showStatus }: { showStatus?: boolean }) => {
           )}
           <DateTimeInput
             source="date"
-            label="Date"
+            label={translate("crm.note.date")}
             helperText={false}
             className="text-primary"
             defaultValue={getCurrentDate()}

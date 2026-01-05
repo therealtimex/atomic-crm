@@ -214,12 +214,37 @@ export const enMessages = {
       },
     },
     note: {
+      placeholder: "Add a note",
+      show_options: "Show options",
+      options_hint: "(attach files, or change details)",
+      date: "Date",
+      added: "Note added",
+      action: {
+        add: "Add this note",
+      },
       status: {
         cold: "Cold",
         warm: "Warm",
         hot: "Hot",
         in_contract: "In Contract",
       },
+    },
+    activity: {
+      added_note: "added a note",
+      added_note_about: "added a note about",
+      added_note_about_deal: "added a note about deal",
+      at: "at",
+      edit_note: "Edit note",
+      delete_note: "Delete note",
+      note_deleted: "Note deleted",
+      cancel: "Cancel",
+      update_note: "Update note",
+      added_deal: "added deal",
+      to_company: "to company",
+      added_company: "added company",
+      added: "added",
+      pagination: "Showing %{from}-%{to} of %{total} activities",
+      error_load: "Failed to load activity log",
     },
     deal: {
       field: {

@@ -1,4 +1,4 @@
-import { useRecordContext } from "ra-core";
+import { useRecordContext, useTranslate } from "ra-core";
 
 import { ReferenceField } from "@/components/admin/reference-field";
 import { TextField } from "@/components/admin/text-field";
@@ -21,6 +21,7 @@ function ContactAvatar() {
 export function ActivityLogContactNoteCreated({
   activity,
 }: ActivityLogContactNoteCreatedProps) {
+  const translate = useTranslate();
   const context = useActivityLogContext();
   const { contactNote } = activity;
   return (
@@ -50,7 +51,7 @@ export function ActivityLogContactNoteCreated({
                   reference="contacts"
                   record={activity.contactNote}
                 >
-                  &nbsp;added a note about <TextField source="first_name" />
+                  &nbsp;{translate("crm.activity.added_note_about")} <TextField source="first_name" />
                   &nbsp;
                   <TextField source="last_name" />
                 </ReferenceField>

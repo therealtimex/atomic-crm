@@ -214,12 +214,37 @@ export const viMessages = {
       },
     },
     note: {
+      placeholder: "Thêm ghi chú",
+      show_options: "Hiện tùy chọn",
+      options_hint: "(đính kèm tệp, hoặc thay đổi chi tiết)",
+      date: "Ngày",
+      added: "Đã thêm ghi chú",
+      action: {
+        add: "Thêm ghi chú này",
+      },
       status: {
         cold: "Lạnh",
         warm: "Ấm",
         hot: "Nóng",
         in_contract: "Đang ký hợp đồng",
       },
+    },
+    activity: {
+      added_note: "đã thêm ghi chú",
+      added_note_about: "đã thêm ghi chú về",
+      added_note_about_deal: "đã thêm ghi chú về giao dịch",
+      at: "tại",
+      edit_note: "Sửa ghi chú",
+      delete_note: "Xóa ghi chú",
+      note_deleted: "Đã xóa ghi chú",
+      cancel: "Hủy",
+      update_note: "Cập nhật ghi chú",
+      added_deal: "đã thêm giao dịch",
+      to_company: "vào công ty",
+      added_company: "đã thêm công ty",
+      added: "đã thêm",
+      pagination: "Hiển thị %{from}-%{to} trong %{total} hoạt động",
+      error_load: "Không thể tải nhật ký hoạt động",
     },
     deal: {
       field: {
