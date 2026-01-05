@@ -304,6 +304,9 @@ export const enMessages = {
       placeholder: {
         select_company: "Please select a company first to see its contacts",
       },
+      filter: {
+        only_companies_i_manage: "Only companies I manage",
+      },
       list: {
         archived_title: "Archived Deals",
       },
@@ -595,6 +598,269 @@ export const enMessages = {
         select_company: "Please select a company to merge with",
         success: "Companies merged successfully",
         error: "Failed to merge companies",
+      },
+    },
+    integrations: {
+      title: "Integrations",
+      description:
+        "Manage API keys, webhooks, and ingestion channels to integrate Atomic CRM with external systems.",
+      tabs: {
+        ingestion: "Ingestion Channels",
+        file_upload: "File Upload",
+        api_keys: "API Keys",
+        webhooks: "Webhooks (Outbound)",
+      },
+      webhooks: {
+        description:
+          "Webhooks notify external systems when events occur in your CRM.",
+        action: {
+          create: "Create Webhook",
+          create_first: "Create your first webhook",
+          edit: "Edit Webhook",
+          delete: "Delete",
+          update: "Update",
+        },
+        empty: "No webhooks yet",
+        loading: "Loading...",
+        status: {
+          active: "Active",
+          inactive: "Inactive",
+          more: "+%{count} more",
+        },
+        fields: {
+          name: "Name",
+          url: "Webhook URL",
+          events: "Events to Subscribe",
+          created: "Created: %{date}",
+          last_triggered: "Last triggered: %{date}",
+          failed_deliveries: "Failed deliveries: %{count}",
+        },
+        dialog: {
+          create_title: "Create Webhook",
+          create_description:
+            "Create a new webhook to receive event notifications",
+          edit_title: "Edit Webhook",
+          edit_description: "Update webhook configuration",
+          delete_title: "Delete Webhook?",
+          delete_description:
+            "This will permanently delete this webhook. No more events will be sent to this endpoint. This action cannot be undone.",
+        },
+        placeholder: {
+          name: "e.g., Slack Notifications",
+          url: "https://example.com/webhook",
+        },
+        notification: {
+          created: "Webhook created successfully",
+          updated: "Webhook updated successfully",
+          deleted: "Webhook deleted successfully",
+          error_creating: "Failed to create webhook",
+          error_updating: "Failed to update webhook",
+          error_deleting: "Failed to delete webhook",
+        },
+        categories: {
+          contacts: "Contacts",
+          companies: "Companies",
+          deals: "Deals",
+          tasks: "Tasks",
+        },
+        events: {
+          "contact.created": "Contact Created",
+          "contact.updated": "Contact Updated",
+          "contact.deleted": "Contact Deleted",
+          "company.created": "Company Created",
+          "company.updated": "Company Updated",
+          "company.deleted": "Company Deleted",
+          "deal.created": "Deal Created",
+          "deal.updated": "Deal Updated",
+          "deal.deleted": "Deal Deleted",
+          "deal.stage_changed": "Deal Stage Changed",
+          "deal.won": "Deal Won",
+          "deal.lost": "Deal Lost",
+          "task.created": "Task Created",
+          "task.updated": "Task Updated",
+          "task.assigned": "Task Assigned",
+          "task.completed": "Task Completed",
+          "task.priority_changed": "Task Priority Changed",
+          "task.archived": "Task Archived",
+          "task.deleted": "Task Deleted",
+        },
+      },
+      api_keys: {
+        description:
+          "API keys allow external applications to access your CRM data programmatically.",
+        action: {
+          create: "Create API Key",
+          create_first: "Create your first API key",
+          copy: "Copy",
+          copied: "Full API key copied to clipboard",
+          done: "Done",
+        },
+        empty: "No API keys yet",
+        loading: "Loading...",
+        fields: {
+          name: "Name",
+          created: "Created: %{date}",
+          last_used: "Last used: %{date}",
+          expires: "Expires: %{date}",
+          key_hint: "Click copy to get the full unmasked key",
+          not_available: "API key not available for copying",
+          scopes: "Scopes",
+          expiration: "Expiration (optional)",
+          your_api_key: "Your API Key",
+        },
+        dialog: {
+          create_title: "Create API Key",
+          create_description: "Create a new API key to access the CRM API",
+          created_title: "API Key Created",
+          created_description: "Copy this key now - it won't be shown again!",
+          delete_title: "Delete API Key?",
+          delete_description:
+            "This will permanently delete this API key. Any applications using this key will stop working immediately. This action cannot be undone.",
+          warning_copy:
+            "Make sure to copy your API key now. You won't be able to see it again!",
+        },
+        placeholder: {
+          name: "e.g., Production API Key",
+        },
+        scopes: {
+          "contacts:read": "Contacts: Read",
+          "contacts:write": "Contacts: Write",
+          "companies:read": "Companies: Read",
+          "companies:write": "Companies: Write",
+          "deals:read": "Deals: Read",
+          "deals:write": "Deals: Write",
+          "tasks:read": "Tasks: Read",
+          "tasks:write": "Tasks: Write",
+          "activities:write": "Activities: Write (Notes)",
+        },
+        notification: {
+          created: "API key created successfully",
+          deleted: "API key deleted successfully",
+          error_creating: "Failed to create API key",
+          error_deleting: "Failed to delete API key",
+          error_copying: "Failed to copy API key",
+        },
+      },
+      file_upload: {
+        title: "Upload Files",
+        description:
+          "Upload documents, images, audio, or video files to create activities. Files are automatically stored and linked to your account.",
+        action: {
+          upload: "Upload",
+          upload_all: "Upload All",
+          clear_completed: "Clear Completed",
+          drop_files: "Drop files here...",
+          drag_and_drop: "Drag & drop files here, or click to select",
+          supports_all:
+            "Supports all file types (executables blocked for security)",
+        },
+        fields: {
+          ingestion_channel: "Ingestion Channel",
+          activity_type: "Activity Type",
+          select_channel: "Select channel...",
+          files_count: "Files (%{count})",
+        },
+        types: {
+          note: "Note",
+          email: "Email",
+          call: "Call Recording",
+          meeting: "Meeting Recording",
+          other: "Other",
+        },
+        how_it_works: {
+          title: "How it works",
+          step_1:
+            "Files are uploaded directly to secure storage (no database bloat)",
+          step_2: "Each file creates an activity record for tracking and search",
+          step_3: "Large files are handled automatically (no size limits)",
+          step_4: "Files are linked to your selected ingestion channel",
+          step_5: "Activities appear in the Activity Feed immediately",
+        },
+        notification: {
+          select_channel: "Please select an ingestion channel",
+          success: "File uploaded: %{name}",
+          error: "Upload failed: %{name}",
+          error_network: "Network error",
+          error_status: "Upload failed with status %{status}",
+          error_dangerous:
+            "Executable files are not allowed for security reasons",
+        },
+      },
+      ingestion: {
+        title: "Ingestion Channels",
+        description:
+          "Configure inbound channels (Email, Voice, SMS) to ingest activities into your CRM.",
+        action: {
+          create: "Create Channel",
+          add: "Add Ingestion Channel",
+          add_first: "Add your first channel",
+          copy_url: "Copy Webhook URL",
+          url_copied: "Webhook URL copied to clipboard",
+        },
+        empty: "No ingestion channels configured",
+        loading: "Loading...",
+        fields: {
+          webhook_url: "Webhook URL",
+          created: "Created: %{date}",
+        },
+        dialog: {
+          create_description: "Configure a new source for incoming activities.",
+          name_label: "Channel Name",
+          provider_label: "Provider",
+          token_label: "Auth Token (Validation)",
+          token_hint: "Required to validate inbound requests.",
+          placeholder_name: "e.g. US Support Line",
+          placeholder_token: "Twilio Auth Token",
+          select_provider: "Select provider",
+          delete_title: "Delete Channel?",
+          delete_description:
+            "This will stop all ingestion from this source. This action cannot be undone.",
+        },
+        providers: {
+          twilio: "Twilio (Voice/SMS)",
+          postmark: "Postmark (Email)",
+          generic: "Generic / Internal",
+        },
+        notification: {
+          created: "Ingestion Channel created successfully",
+          deleted: "Channel deleted successfully",
+          error_creating: "Failed to create channel: %{message}",
+          error_deleting: "Failed to delete channel",
+        },
+      },
+    },
+    settings: {
+      notification: {
+        profile_updated: "Your profile has been updated",
+        error: "An error occurred. Please try again",
+      },
+      action: {
+        change_password: "Change password",
+      },
+      inbound_email: {
+        title: "Inbound email",
+        description:
+          "You can start sending emails to your server's inbound email address, e.g. by adding it to the Cc: field. Atomic CRM will process the emails and add notes to the corresponding contacts.",
+      },
+      database: {
+        title: "Database Connection",
+        description: "Manage your Supabase database connection settings",
+        connected: "Connected",
+        not_connected: "Not Connected",
+        no_config: "No Supabase database is configured",
+        configured_on: "Configured on %{date}",
+        env_hint:
+          "Using configuration from environment variables. You can override this by setting up a new connection via the UI.",
+        setup_hint:
+          "Connect to a Supabase database to start using Atomic CRM. You can create a free project at",
+        anon_key: "Anonymous Key",
+        confirm_clear:
+          "Are you sure you want to clear the database configuration? The app will need to be reconfigured on next launch.",
+        action: {
+          change: "Change Connection",
+          clear: "Clear Configuration",
+          connect: "Connect to Supabase",
+        },
       },
     },
     migration: {

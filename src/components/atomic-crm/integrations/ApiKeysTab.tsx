@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useDataProvider, useNotify } from "ra-core";
+import { useDataProvider, useNotify, useTranslate } from "ra-core";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Trash2, Copy } from "lucide-react";
@@ -25,6 +25,7 @@ export const ApiKeysTab = () => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const queryClient = useQueryClient();
+  const translate = useTranslate();
 
   const { data: apiKeys, isLoading } = useQuery({
     queryKey: ["api_keys"],
@@ -44,11 +45,13 @@ export const ApiKeysTab = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["api_keys"] });
-      notify("API key deleted successfully");
+      notify(translate("crm.integrations.api_keys.notification.deleted"));
       setKeyToDelete(null);
     },
     onError: () => {
-      notify("Failed to delete API key", { type: "error" });
+      notify(translate("crm.integrations.api_keys.notification.error_deleting"), {
+        type: "error",
+      });
     },
   });
 
@@ -56,19 +59,18 @@ export const ApiKeysTab = () => {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <p className="text-sm text-muted-foreground">
-          API keys allow external applications to access your CRM data
-          programmatically.
+          {translate("crm.integrations.api_keys.description")}
         </p>
         <Button onClick={() => setShowCreateDialog(true)}>
           <Plus className="h-4 w-4 mr-2" />
-          Create API Key
+          {translate("crm.integrations.api_keys.action.create")}
         </Button>
       </div>
 
       {isLoading ? (
         <Card>
           <CardContent className="py-8 text-center text-muted-foreground">
-            Loading...
+            {translate("crm.integrations.api_keys.loading")}
           </CardContent>
         </Card>
       ) : apiKeys && apiKeys.length > 0 ? (
@@ -84,10 +86,12 @@ export const ApiKeysTab = () => {
       ) : (
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground mb-4">No API keys yet</p>
+            <p className="text-muted-foreground mb-4">
+              {translate("crm.integrations.api_keys.empty")}
+            </p>
             <Button onClick={() => setShowCreateDialog(true)}>
               <Plus className="h-4 w-4 mr-2" />
-              Create your first API key
+              {translate("crm.integrations.api_keys.action.create_first")}
             </Button>
           </CardContent>
         </Card>
@@ -104,20 +108,22 @@ export const ApiKeysTab = () => {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete API Key?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {translate("crm.integrations.api_keys.dialog.delete_title")}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this API key. Any applications using
-              this key will stop working immediately. This action cannot be
-              undone.
+              {translate("crm.integrations.api_keys.dialog.delete_description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>
+              {translate("crm.activity.cancel")}
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={() => keyToDelete && deleteMutation.mutate(keyToDelete)}
               className="bg-destructive hover:bg-destructive/90"
             >
-              Delete
+              {translate("crm.integrations.webhooks.action.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -134,18 +140,24 @@ const ApiKeyCard = ({
   onDelete: () => void;
 }) => {
   const notify = useNotify();
+  const translate = useTranslate();
 
   const copyFullKey = async () => {
     try {
       if (apiKey.encrypted_key) {
         const fullKey = await decryptValue(apiKey.encrypted_key);
         await navigator.clipboard.writeText(fullKey);
-        notify("Full API key copied to clipboard");
+        notify(translate("crm.integrations.api_keys.action.copied"));
       } else {
-        notify("API key not available for copying", { type: "warning" });
+        notify(translate("crm.integrations.api_keys.fields.not_available"), {
+          type: "warning",
+        });
       }
     } catch {
-      notify("Failed to copy API key", { type: "error" });
+      notify(
+        translate("crm.integrations.api_keys.notification.error_copying"),
+        { type: "error" }
+      );
     }
   };
 
@@ -157,9 +169,13 @@ const ApiKeyCard = ({
             <CardTitle className="text-lg">{apiKey.name}</CardTitle>
             <div className="flex gap-2 mt-2">
               {apiKey.is_active ? (
-                <Badge variant="default">Active</Badge>
+                <Badge variant="default">
+                  {translate("crm.integrations.webhooks.status.active")}
+                </Badge>
               ) : (
-                <Badge variant="secondary">Inactive</Badge>
+                <Badge variant="secondary">
+                  {translate("crm.integrations.webhooks.status.inactive")}
+                </Badge>
               )}
               {apiKey.scopes && apiKey.scopes.length > 0 && (
                 <Badge variant="outline">{apiKey.scopes.join(", ")}</Badge>
@@ -174,22 +190,36 @@ const ApiKeyCard = ({
       <CardContent className="space-y-2">
         <div>
           <div className="flex items-center gap-2 font-mono text-sm bg-muted p-2 rounded">
-            <span className="flex-1">{apiKey.key_prefix}••••••••••••••••••••</span>
+            <span className="flex-1">
+              {apiKey.key_prefix}••••••••••••••••••••
+            </span>
             <Button variant="ghost" size="icon" onClick={copyFullKey}>
               <Copy className="h-4 w-4" />
             </Button>
           </div>
           <p className="text-xs text-muted-foreground mt-1">
-            Click copy to get the full unmasked key
+            {translate("crm.integrations.api_keys.fields.key_hint")}
           </p>
         </div>
         <div className="text-xs text-muted-foreground space-y-1">
-          <p>Created: {format(new Date(apiKey.created_at), "PPP")}</p>
+          <p>
+            {translate("crm.integrations.api_keys.fields.created", {
+              date: format(new Date(apiKey.created_at), "PPP"),
+            })}
+          </p>
           {apiKey.last_used_at && (
-            <p>Last used: {format(new Date(apiKey.last_used_at), "PPp")}</p>
+            <p>
+              {translate("crm.integrations.api_keys.fields.last_used", {
+                date: format(new Date(apiKey.last_used_at), "PPp"),
+              })}
+            </p>
           )}
           {apiKey.expires_at && (
-            <p>Expires: {format(new Date(apiKey.expires_at), "PPP")}</p>
+            <p>
+              {translate("crm.integrations.api_keys.fields.expires", {
+                date: format(new Date(apiKey.expires_at), "PPP"),
+              })}
+            </p>
           )}
         </div>
       </CardContent>

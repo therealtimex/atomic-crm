@@ -1,10 +1,11 @@
-import { useGetIdentity, useListFilterContext } from "ra-core";
+import { useGetIdentity, useListFilterContext, useTranslate } from "ra-core";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
 export const OnlyMineInput = (_: { alwaysOn: boolean; source: string }) => {
   const { filterValues, displayedFilters, setFilters } = useListFilterContext();
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
 
   const handleChange = () => {
     const newFilterValues = { ...filterValues };
@@ -23,7 +24,9 @@ export const OnlyMineInput = (_: { alwaysOn: boolean; source: string }) => {
           checked={typeof filterValues.sales_id !== "undefined"}
           onCheckedChange={handleChange}
         />
-        <Label htmlFor="only-mine">Only companies I manage</Label>
+        <Label htmlFor="only-mine">
+          {translate("crm.deal.filter.only_companies_i_manage")}
+        </Label>
       </div>
     </div>
   );

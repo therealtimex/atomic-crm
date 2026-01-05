@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useDataProvider, useNotify, useGetIdentity } from "ra-core";
+import { useDataProvider, useNotify, useGetIdentity, useTranslate } from "ra-core";
 import { useForm } from "react-hook-form";
 import { generateApiKey } from "@/lib/api-key-utils";
 import { Button } from "@/components/ui/button";
@@ -30,33 +30,25 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const AVAILABLE_EVENTS = [
-  { value: "contact.created", label: "Contact Created", category: "Contacts" },
-  { value: "contact.updated", label: "Contact Updated", category: "Contacts" },
-  { value: "contact.deleted", label: "Contact Deleted", category: "Contacts" },
-  { value: "company.created", label: "Company Created", category: "Companies" },
-  { value: "company.updated", label: "Company Updated", category: "Companies" },
-  { value: "company.deleted", label: "Company Deleted", category: "Companies" },
-  { value: "deal.created", label: "Deal Created", category: "Deals" },
-  { value: "deal.updated", label: "Deal Updated", category: "Deals" },
-  { value: "deal.deleted", label: "Deal Deleted", category: "Deals" },
-  {
-    value: "deal.stage_changed",
-    label: "Deal Stage Changed",
-    category: "Deals",
-  },
-  { value: "deal.won", label: "Deal Won", category: "Deals" },
-  { value: "deal.lost", label: "Deal Lost", category: "Deals" },
-  { value: "task.created", label: "Task Created", category: "Tasks" },
-  { value: "task.updated", label: "Task Updated", category: "Tasks" },
-  { value: "task.assigned", label: "Task Assigned", category: "Tasks" },
-  { value: "task.completed", label: "Task Completed", category: "Tasks" },
-  {
-    value: "task.priority_changed",
-    label: "Task Priority Changed",
-    category: "Tasks",
-  },
-  { value: "task.archived", label: "Task Archived", category: "Tasks" },
-  { value: "task.deleted", label: "Task Deleted", category: "Tasks" },
+  { value: "contact.created", category: "contacts" },
+  { value: "contact.updated", category: "contacts" },
+  { value: "contact.deleted", category: "contacts" },
+  { value: "company.created", category: "companies" },
+  { value: "company.updated", category: "companies" },
+  { value: "company.deleted", category: "companies" },
+  { value: "deal.created", category: "deals" },
+  { value: "deal.updated", category: "deals" },
+  { value: "deal.deleted", category: "deals" },
+  { value: "deal.stage_changed", category: "deals" },
+  { value: "deal.won", category: "deals" },
+  { value: "deal.lost", category: "deals" },
+  { value: "task.created", category: "tasks" },
+  { value: "task.updated", category: "tasks" },
+  { value: "task.assigned", category: "tasks" },
+  { value: "task.completed", category: "tasks" },
+  { value: "task.priority_changed", category: "tasks" },
+  { value: "task.archived", category: "tasks" },
+  { value: "task.deleted", category: "tasks" },
 ];
 
 export const WebhooksTab = () => {
@@ -66,6 +58,7 @@ export const WebhooksTab = () => {
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const queryClient = useQueryClient();
+  const translate = useTranslate();
 
   const { data: webhooks, isLoading } = useQuery({
     queryKey: ["webhooks"],
@@ -85,11 +78,13 @@ export const WebhooksTab = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["webhooks"] });
-      notify("Webhook deleted successfully");
+      notify(translate("crm.integrations.webhooks.notification.deleted"));
       setWebhookToDelete(null);
     },
     onError: () => {
-      notify("Failed to delete webhook", { type: "error" });
+      notify(translate("crm.integrations.webhooks.notification.error_deleting"), {
+        type: "error",
+      });
     },
   });
 
@@ -103,10 +98,12 @@ export const WebhooksTab = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["webhooks"] });
-      notify("Webhook updated successfully");
+      notify(translate("crm.integrations.webhooks.notification.updated"));
     },
     onError: () => {
-      notify("Failed to update webhook", { type: "error" });
+      notify(translate("crm.integrations.webhooks.notification.error_updating"), {
+        type: "error",
+      });
     },
   });
 
@@ -114,18 +111,18 @@ export const WebhooksTab = () => {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <p className="text-sm text-muted-foreground">
-          Webhooks notify external systems when events occur in your CRM.
+          {translate("crm.integrations.webhooks.description")}
         </p>
         <Button onClick={() => setShowCreateDialog(true)}>
           <Plus className="h-4 w-4 mr-2" />
-          Create Webhook
+          {translate("crm.integrations.webhooks.action.create")}
         </Button>
       </div>
 
       {isLoading ? (
         <Card>
           <CardContent className="py-8 text-center text-muted-foreground">
-            Loading...
+            {translate("crm.integrations.webhooks.loading")}
           </CardContent>
         </Card>
       ) : webhooks && webhooks.length > 0 ? (
@@ -148,10 +145,12 @@ export const WebhooksTab = () => {
       ) : (
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground mb-4">No webhooks yet</p>
+            <p className="text-muted-foreground mb-4">
+              {translate("crm.integrations.webhooks.empty")}
+            </p>
             <Button onClick={() => setShowCreateDialog(true)}>
               <Plus className="h-4 w-4 mr-2" />
-              Create your first webhook
+              {translate("crm.integrations.webhooks.action.create_first")}
             </Button>
           </CardContent>
         </Card>
@@ -174,21 +173,24 @@ export const WebhooksTab = () => {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Webhook?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {translate("crm.integrations.webhooks.dialog.delete_title")}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this webhook. No more events will be
-              sent to this endpoint. This action cannot be undone.
+              {translate("crm.integrations.webhooks.dialog.delete_description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>
+              {translate("crm.activity.cancel")}
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={() =>
                 webhookToDelete && deleteMutation.mutate(webhookToDelete)
               }
               className="bg-destructive hover:bg-destructive/90"
             >
-              Delete
+              {translate("crm.integrations.webhooks.action.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -208,6 +210,7 @@ const WebhookCard = ({
   onDelete: () => void;
   onToggle: () => void;
 }) => {
+  const translate = useTranslate();
   return (
     <Card>
       <CardHeader className="pb-3">
@@ -219,18 +222,28 @@ const WebhookCard = ({
             </p>
             <div className="flex flex-wrap gap-1 mt-2">
               {webhook.is_active ? (
-                <Badge variant="default">Active</Badge>
+                <Badge variant="default">
+                  {translate("crm.integrations.webhooks.status.active")}
+                </Badge>
               ) : (
-                <Badge variant="secondary">Inactive</Badge>
+                <Badge variant="secondary">
+                  {translate("crm.integrations.webhooks.status.inactive")}
+                </Badge>
               )}
               {webhook.events &&
                 webhook.events.slice(0, 3).map((event: string) => (
                   <Badge key={event} variant="outline">
-                    {event}
+                    {translate(`crm.integrations.webhooks.events.${event}`, {
+                      _: event,
+                    })}
                   </Badge>
                 ))}
               {webhook.events && webhook.events.length > 3 && (
-                <Badge variant="outline">+{webhook.events.length - 3} more</Badge>
+                <Badge variant="outline">
+                  {translate("crm.integrations.webhooks.status.more", {
+                    count: webhook.events.length - 3,
+                  })}
+                </Badge>
               )}
             </div>
           </div>
@@ -253,16 +266,23 @@ const WebhookCard = ({
       </CardHeader>
       <CardContent>
         <div className="text-xs text-muted-foreground space-y-1">
-          <p>Created: {format(new Date(webhook.created_at), "PPP")}</p>
+          <p>
+            {translate("crm.integrations.webhooks.fields.created", {
+              date: format(new Date(webhook.created_at), "PPP"),
+            })}
+          </p>
           {webhook.last_triggered_at && (
             <p>
-              Last triggered:{" "}
-              {format(new Date(webhook.last_triggered_at), "PPp")}
+              {translate("crm.integrations.webhooks.fields.last_triggered", {
+                date: format(new Date(webhook.last_triggered_at), "PPp"),
+              })}
             </p>
           )}
           {webhook.failure_count > 0 && (
             <p className="text-destructive">
-              Failed deliveries: {webhook.failure_count}
+              {translate("crm.integrations.webhooks.fields.failed_deliveries", {
+                count: webhook.failure_count,
+              })}
             </p>
           )}
         </div>
@@ -282,6 +302,7 @@ const CreateWebhookDialog = ({
   const notify = useNotify();
   const queryClient = useQueryClient();
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
 
   const { register, handleSubmit, watch, setValue, reset } = useForm({
     defaultValues: {
@@ -310,12 +331,14 @@ const CreateWebhookDialog = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["webhooks"] });
-      notify("Webhook created successfully");
+      notify(translate("crm.integrations.webhooks.notification.created"));
       reset();
       onClose();
     },
     onError: () => {
-      notify("Failed to create webhook", { type: "error" });
+      notify(translate("crm.integrations.webhooks.notification.error_creating"), {
+        type: "error",
+      });
     },
   });
 
@@ -349,9 +372,11 @@ const CreateWebhookDialog = ({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Create Webhook</DialogTitle>
+          <DialogTitle>
+            {translate("crm.integrations.webhooks.dialog.create_title")}
+          </DialogTitle>
           <DialogDescription>
-            Create a new webhook to receive event notifications
+            {translate("crm.integrations.webhooks.dialog.create_description")}
           </DialogDescription>
         </DialogHeader>
 
@@ -360,30 +385,40 @@ const CreateWebhookDialog = ({
         >
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">
+                {translate("crm.integrations.webhooks.fields.name")}
+              </Label>
               <Input
                 id="name"
-                placeholder="e.g., Slack Notifications"
+                placeholder={translate(
+                  "crm.integrations.webhooks.placeholder.name"
+                )}
                 {...register("name", { required: true })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="url">Webhook URL</Label>
+              <Label htmlFor="url">
+                {translate("crm.integrations.webhooks.fields.url")}
+              </Label>
               <Input
                 id="url"
                 type="url"
-                placeholder="https://example.com/webhook"
+                placeholder={translate(
+                  "crm.integrations.webhooks.placeholder.url"
+                )}
                 {...register("url", { required: true })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Events to Subscribe</Label>
+              <Label>{translate("crm.integrations.webhooks.fields.events")}</Label>
               <div className="space-y-3 max-h-60 overflow-y-auto border rounded-md p-3">
                 {Object.entries(eventsByCategory).map(([category, events]) => (
                   <div key={category}>
-                    <p className="text-sm font-semibold mb-2">{category}</p>
+                    <p className="text-sm font-semibold mb-2">
+                      {translate(`crm.integrations.webhooks.categories.${category}`)}
+                    </p>
                     <div className="space-y-2 ml-2">
                       {events.map((event) => (
                         <div
@@ -399,7 +434,9 @@ const CreateWebhookDialog = ({
                             htmlFor={event.value}
                             className="text-sm cursor-pointer"
                           >
-                            {event.label}
+                            {translate(
+                              `crm.integrations.webhooks.events.${event.value}`
+                            )}
                           </label>
                         </div>
                       ))}
@@ -411,10 +448,10 @@ const CreateWebhookDialog = ({
 
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={handleClose}>
-                Cancel
+                {translate("crm.activity.cancel")}
               </Button>
               <Button type="submit" disabled={createMutation.isPending}>
-                Create
+                {translate("crm.integrations.webhooks.action.create")}
               </Button>
             </div>
           </div>
@@ -436,6 +473,7 @@ const EditWebhookDialog = ({
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const queryClient = useQueryClient();
+  const translate = useTranslate();
 
   const { register, handleSubmit, watch, setValue, reset } = useForm({
     defaultValues: {
@@ -468,12 +506,14 @@ const EditWebhookDialog = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["webhooks"] });
-      notify("Webhook updated successfully");
+      notify(translate("crm.integrations.webhooks.notification.updated"));
       reset();
       onClose();
     },
     onError: () => {
-      notify("Failed to update webhook", { type: "error" });
+      notify(translate("crm.integrations.webhooks.notification.error_updating"), {
+        type: "error",
+      });
     },
   });
 
@@ -509,9 +549,11 @@ const EditWebhookDialog = ({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit Webhook</DialogTitle>
+          <DialogTitle>
+            {translate("crm.integrations.webhooks.dialog.edit_title")}
+          </DialogTitle>
           <DialogDescription>
-            Update webhook configuration
+            {translate("crm.integrations.webhooks.dialog.edit_description")}
           </DialogDescription>
         </DialogHeader>
 
@@ -520,30 +562,40 @@ const EditWebhookDialog = ({
         >
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="edit-name">Name</Label>
+              <Label htmlFor="edit-name">
+                {translate("crm.integrations.webhooks.fields.name")}
+              </Label>
               <Input
                 id="edit-name"
-                placeholder="e.g., Slack Notifications"
+                placeholder={translate(
+                  "crm.integrations.webhooks.placeholder.name"
+                )}
                 {...register("name", { required: true })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edit-url">Webhook URL</Label>
+              <Label htmlFor="edit-url">
+                {translate("crm.integrations.webhooks.fields.url")}
+              </Label>
               <Input
                 id="edit-url"
                 type="url"
-                placeholder="https://example.com/webhook"
+                placeholder={translate(
+                  "crm.integrations.webhooks.placeholder.url"
+                )}
                 {...register("url", { required: true })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Events to Subscribe</Label>
+              <Label>{translate("crm.integrations.webhooks.fields.events")}</Label>
               <div className="space-y-3 max-h-60 overflow-y-auto border rounded-md p-3">
                 {Object.entries(eventsByCategory).map(([category, events]) => (
                   <div key={category}>
-                    <p className="text-sm font-semibold mb-2">{category}</p>
+                    <p className="text-sm font-semibold mb-2">
+                      {translate(`crm.integrations.webhooks.categories.${category}`)}
+                    </p>
                     <div className="space-y-2 ml-2">
                       {events.map((event) => (
                         <div
@@ -559,7 +611,9 @@ const EditWebhookDialog = ({
                             htmlFor={`edit-${event.value}`}
                             className="text-sm cursor-pointer"
                           >
-                            {event.label}
+                            {translate(
+                              `crm.integrations.webhooks.events.${event.value}`
+                            )}
                           </label>
                         </div>
                       ))}
@@ -571,10 +625,10 @@ const EditWebhookDialog = ({
 
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={handleClose}>
-                Cancel
+                {translate("crm.activity.cancel")}
               </Button>
               <Button type="submit" disabled={updateMutation.isPending}>
-                Update
+                {translate("crm.integrations.webhooks.action.update")}
               </Button>
             </div>
           </div>

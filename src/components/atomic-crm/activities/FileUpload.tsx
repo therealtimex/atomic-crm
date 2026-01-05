@@ -1,17 +1,29 @@
-import { useState, useCallback, useEffect } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { useNotify, useGetIdentity, useGetList } from 'ra-core';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Upload, FileIcon, CheckCircle, XCircle, Loader2 } from 'lucide-react';
-import { getSupabaseConfig } from '@/lib/supabase-config';
+import { useState, useCallback, useEffect } from "react";
+import { useDropzone } from "react-dropzone";
+import { useNotify, useGetIdentity, useGetList, useTranslate } from "ra-core";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Upload, FileIcon, CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { getSupabaseConfig } from "@/lib/supabase-config";
 
 interface UploadFile {
   file: File;
-  status: 'pending' | 'uploading' | 'success' | 'error';
+  status: "pending" | "uploading" | "success" | "error";
   progress: number;
   activityId?: string;
   error?: string;
@@ -26,18 +38,22 @@ interface IngestionProvider {
 
 export const FileUpload = () => {
   const [files, setFiles] = useState<UploadFile[]>([]);
-  const [activityType, setActivityType] = useState<string>('note');
-  const [selectedProvider, setSelectedProvider] = useState<string>('');
+  const [activityType, setActivityType] = useState<string>("note");
+  const [selectedProvider, setSelectedProvider] = useState<string>("");
 
   const notify = useNotify();
   const { data: identity } = useGetIdentity();
+  const translate = useTranslate();
 
   // Load ingestion providers using React-Admin hook (cleaner than manual useEffect)
-  const { data: providers = [] } = useGetList<IngestionProvider>('ingestion_providers', {
-    filter: { is_active: true },
-    pagination: { page: 1, perPage: 100 },
-    sort: { field: 'created_at', order: 'DESC' }
-  });
+  const { data: providers = [] } = useGetList<IngestionProvider>(
+    "ingestion_providers",
+    {
+      filter: { is_active: true },
+      pagination: { page: 1, perPage: 100 },
+      sort: { field: "created_at", order: "DESC" },
+    }
+  );
 
   // Auto-select first provider when data loads
   useEffect(() => {
@@ -47,13 +63,13 @@ export const FileUpload = () => {
   }, [providers, selectedProvider]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    const newFiles = acceptedFiles.map(file => ({
+    const newFiles = acceptedFiles.map((file) => ({
       file,
-      status: 'pending' as const,
-      progress: 0
+      status: "pending" as const,
+      progress: 0,
     }));
 
-    setFiles(prev => [...prev, ...newFiles]);
+    setFiles((prev) => [...prev, ...newFiles]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -66,9 +82,18 @@ export const FileUpload = () => {
         return null; // Allow files without names (edge case)
       }
 
-      const dangerous = ['.exe', '.bat', '.cmd', '.com', '.scr', '.vbs', '.ps1', '.msi'];
+      const dangerous = [
+        ".exe",
+        ".bat",
+        ".cmd",
+        ".com",
+        ".scr",
+        ".vbs",
+        ".ps1",
+        ".msi",
+      ];
       const fileName = file.name.toLowerCase();
-      const dotIndex = fileName.lastIndexOf('.');
+      const dotIndex = fileName.lastIndexOf(".");
 
       // If no extension, allow the file
       if (dotIndex === -1) {
@@ -79,20 +104,24 @@ export const FileUpload = () => {
 
       if (dangerous.includes(ext)) {
         return {
-          code: 'dangerous-file',
-          message: 'Executable files are not allowed for security reasons'
+          code: "dangerous-file",
+          message: translate(
+            "crm.integrations.file_upload.notification.error_dangerous"
+          ),
         };
       }
       return null;
-    }
+    },
   });
 
   const uploadFile = async (index: number) => {
     const fileToUpload = files[index];
-    const provider = providers.find(p => p.id === selectedProvider);
+    const provider = providers.find((p) => p.id === selectedProvider);
 
     if (!provider) {
-      notify('Please select an ingestion channel', { type: 'error' });
+      notify(translate("crm.integrations.file_upload.notification.select_channel"), {
+        type: "error",
+      });
       return;
     }
 
@@ -100,106 +129,141 @@ export const FileUpload = () => {
     const webhookUrl = `${config.url}/functions/v1/ingest-activity`;
 
     // Update status to uploading
-    setFiles(prev => prev.map((f, i) =>
-      i === index ? { ...f, status: 'uploading', progress: 0 } : f
-    ));
+    setFiles((prev) =>
+      prev.map((f, i) =>
+        i === index ? { ...f, status: "uploading", progress: 0 } : f
+      )
+    );
 
     try {
       const formData = new FormData();
-      formData.append('file', fileToUpload.file);
-      formData.append('type', activityType);
-      formData.append('from', identity?.email || 'manual-upload');
-      formData.append('subject', `File Upload: ${fileToUpload.file.name}`);
+      formData.append("file", fileToUpload.file);
+      formData.append("type", activityType);
+      formData.append("from", identity?.email || "manual-upload");
+      formData.append("subject", `File Upload: ${fileToUpload.file.name}`);
 
       const xhr = new XMLHttpRequest();
 
       // Track upload progress
-      xhr.upload.addEventListener('progress', (e) => {
+      xhr.upload.addEventListener("progress", (e) => {
         if (e.lengthComputable) {
           const progress = Math.round((e.loaded / e.total) * 100);
-          setFiles(prev => prev.map((f, i) =>
-            i === index ? { ...f, progress } : f
-          ));
+          setFiles((prev) =>
+            prev.map((f, i) => (i === index ? { ...f, progress } : f))
+          );
         }
       });
 
-      xhr.addEventListener('load', () => {
+      xhr.addEventListener("load", () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           const response = JSON.parse(xhr.responseText);
-          setFiles(prev => prev.map((f, i) =>
-            i === index ? { ...f, status: 'success', progress: 100, activityId: response.id } : f
-          ));
-          notify(`File uploaded: ${fileToUpload.file.name}`, { type: 'success' });
+          setFiles((prev) =>
+            prev.map((f, i) =>
+              i === index
+                ? { ...f, status: "success", progress: 100, activityId: response.id }
+                : f
+            )
+          );
+          notify(
+            translate("crm.integrations.file_upload.notification.success", {
+              name: fileToUpload.file.name,
+            }),
+            { type: "success" }
+          );
         } else {
           throw new Error(`Upload failed with status ${xhr.status}`);
         }
       });
 
-      xhr.addEventListener('error', () => {
-        setFiles(prev => prev.map((f, i) =>
-          i === index ? { ...f, status: 'error', error: 'Network error' } : f
-        ));
-        notify(`Upload failed: ${fileToUpload.file.name}`, { type: 'error' });
+      xhr.addEventListener("error", () => {
+        setFiles((prev) =>
+          prev.map((f, i) =>
+            i === index
+              ? {
+                  ...f,
+                  status: "error",
+                  error: translate(
+                    "crm.integrations.file_upload.notification.error_network"
+                  ),
+                }
+              : f
+          )
+        );
+        notify(
+          translate("crm.integrations.file_upload.notification.error", {
+            name: fileToUpload.file.name,
+          }),
+          { type: "error" }
+        );
       });
 
-      xhr.open('POST', webhookUrl);
+      xhr.open("POST", webhookUrl);
       // Security: Move ingestion key from URL to header (prevents key leakage in logs)
-      xhr.setRequestHeader('x-ingestion-key', provider.ingestion_key);
+      xhr.setRequestHeader("x-ingestion-key", provider.ingestion_key);
       xhr.send(formData);
-
     } catch (error) {
-      setFiles(prev => prev.map((f, i) =>
-        i === index ? { ...f, status: 'error', error: String(error) } : f
-      ));
-      notify(`Upload failed: ${fileToUpload.file.name}`, { type: 'error' });
+      setFiles((prev) =>
+        prev.map((f, i) =>
+          i === index ? { ...f, status: "error", error: String(error) } : f
+        )
+      );
+      notify(
+        translate("crm.integrations.file_upload.notification.error", {
+          name: fileToUpload.file.name,
+        }),
+        { type: "error" }
+      );
     }
   };
 
   const uploadAll = async () => {
     const pendingFiles = files
       .map((f, index) => ({ file: f, index }))
-      .filter(({ file }) => file.status === 'pending');
+      .filter(({ file }) => file.status === "pending");
 
     // Upload all files in parallel for better performance
     // Browsers manage connection limits automatically (usually 6 concurrent)
-    await Promise.all(
-      pendingFiles.map(({ index }) => uploadFile(index))
-    );
+    await Promise.all(pendingFiles.map(({ index }) => uploadFile(index)));
   };
 
   const clearCompleted = () => {
-    setFiles(prev => prev.filter(f => f.status !== 'success'));
+    setFiles((prev) => prev.filter((f) => f.status !== "success"));
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
   };
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Upload Files</CardTitle>
+          <CardTitle>{translate("crm.integrations.file_upload.title")}</CardTitle>
           <CardDescription>
-            Upload documents, images, audio, or video files to create activities.
-            Files are automatically stored and linked to your account.
+            {translate("crm.integrations.file_upload.description")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Configuration */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="provider">Ingestion Channel</Label>
+              <Label htmlFor="provider">
+                {translate("crm.integrations.file_upload.fields.ingestion_channel")}
+              </Label>
               <Select value={selectedProvider} onValueChange={setSelectedProvider}>
                 <SelectTrigger id="provider">
-                  <SelectValue placeholder="Select channel..." />
+                  <SelectValue
+                    placeholder={translate(
+                      "crm.integrations.file_upload.fields.select_channel"
+                    )}
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  {providers.map(provider => (
+                  {providers.map((provider) => (
                     <SelectItem key={provider.id} value={provider.id}>
                       {provider.name} ({provider.provider_code})
                     </SelectItem>
@@ -209,17 +273,29 @@ export const FileUpload = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="type">Activity Type</Label>
+              <Label htmlFor="type">
+                {translate("crm.integrations.file_upload.fields.activity_type")}
+              </Label>
               <Select value={activityType} onValueChange={setActivityType}>
                 <SelectTrigger id="type">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="note">Note</SelectItem>
-                  <SelectItem value="email">Email</SelectItem>
-                  <SelectItem value="call">Call Recording</SelectItem>
-                  <SelectItem value="meeting">Meeting Recording</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="note">
+                    {translate("crm.integrations.file_upload.types.note")}
+                  </SelectItem>
+                  <SelectItem value="email">
+                    {translate("crm.integrations.file_upload.types.email")}
+                  </SelectItem>
+                  <SelectItem value="call">
+                    {translate("crm.integrations.file_upload.types.call")}
+                  </SelectItem>
+                  <SelectItem value="meeting">
+                    {translate("crm.integrations.file_upload.types.meeting")}
+                  </SelectItem>
+                  <SelectItem value="other">
+                    {translate("crm.integrations.file_upload.types.other")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -231,23 +307,26 @@ export const FileUpload = () => {
             className={`
               border-2 border-dashed rounded-lg p-12 text-center cursor-pointer
               transition-all duration-200
-              ${isDragActive
-                ? 'border-green-500 bg-green-50 scale-[1.02] shadow-lg'
-                : 'border-gray-300 hover:border-primary/50 hover:bg-gray-50'
+              ${
+                isDragActive
+                  ? "border-green-500 bg-green-50 scale-[1.02] shadow-lg"
+                  : "border-gray-300 hover:border-primary/50 hover:bg-gray-50"
               }
             `}
           >
             <input {...getInputProps()} />
             <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400" />
             {isDragActive ? (
-              <p className="text-lg font-medium">Drop files here...</p>
+              <p className="text-lg font-medium">
+                {translate("crm.integrations.file_upload.action.drop_files")}
+              </p>
             ) : (
               <>
                 <p className="text-lg font-medium mb-2">
-                  Drag & drop files here, or click to select
+                  {translate("crm.integrations.file_upload.action.drag_and_drop")}
                 </p>
                 <p className="text-sm text-gray-500">
-                  Supports all file types (executables blocked for security)
+                  {translate("crm.integrations.file_upload.action.supports_all")}
                 </p>
               </>
             )}
@@ -257,32 +336,35 @@ export const FileUpload = () => {
           {files.length > 0 && (
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <h3 className="font-medium">Files ({files.length})</h3>
+                <h3 className="font-medium">
+                  {translate("crm.integrations.file_upload.fields.files_count", {
+                    count: files.length,
+                  })}
+                </h3>
                 <div className="space-x-2">
                   <Button
                     size="sm"
                     onClick={uploadAll}
-                    disabled={!files.some(f => f.status === 'pending')}
+                    disabled={!files.some((f) => f.status === "pending")}
                   >
-                    Upload All
+                    {translate("crm.integrations.file_upload.action.upload_all")}
                   </Button>
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={clearCompleted}
-                    disabled={!files.some(f => f.status === 'success')}
+                    disabled={!files.some((f) => f.status === "success")}
                   >
-                    Clear Completed
+                    {translate(
+                      "crm.integrations.file_upload.action.clear_completed"
+                    )}
                   </Button>
                 </div>
               </div>
 
               <div className="space-y-2">
                 {files.map((fileItem, index) => (
-                  <div
-                    key={index}
-                    className="border rounded-lg p-4 space-y-2"
-                  >
+                  <div key={index} className="border rounded-lg p-4 space-y-2">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-start gap-3 flex-1 min-w-0">
                         <FileIcon className="w-5 h-5 mt-0.5 flex-shrink-0 text-gray-400" />
@@ -302,33 +384,30 @@ export const FileUpload = () => {
                       </div>
 
                       <div className="flex items-center gap-2 flex-shrink-0">
-                        {fileItem.status === 'pending' && (
-                          <Button
-                            size="sm"
-                            onClick={() => uploadFile(index)}
-                          >
-                            Upload
+                        {fileItem.status === "pending" && (
+                          <Button size="sm" onClick={() => uploadFile(index)}>
+                            {translate("crm.integrations.file_upload.action.upload")}
                           </Button>
                         )}
-                        {fileItem.status === 'uploading' && (
+                        {fileItem.status === "uploading" && (
                           <Loader2 className="w-5 h-5 animate-spin text-primary" />
                         )}
-                        {fileItem.status === 'success' && (
+                        {fileItem.status === "success" && (
                           <CheckCircle className="w-5 h-5 text-green-500" />
                         )}
-                        {fileItem.status === 'error' && (
+                        {fileItem.status === "error" && (
                           <XCircle className="w-5 h-5 text-red-500" />
                         )}
                       </div>
                     </div>
 
                     {/* Progress bar */}
-                    {fileItem.status === 'uploading' && (
+                    {fileItem.status === "uploading" && (
                       <Progress value={fileItem.progress} className="h-1" />
                     )}
 
                     {/* Error message */}
-                    {fileItem.status === 'error' && fileItem.error && (
+                    {fileItem.status === "error" && fileItem.error && (
                       <p className="text-sm text-red-500">
                         Error: {fileItem.error}
                       </p>
@@ -344,14 +423,26 @@ export const FileUpload = () => {
       {/* Info Card */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">How it works</CardTitle>
+          <CardTitle className="text-base">
+            {translate("crm.integrations.file_upload.how_it_works.title")}
+          </CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-gray-600 space-y-2">
-          <p>• Files are uploaded directly to secure storage (no database bloat)</p>
-          <p>• Each file creates an activity record for tracking and search</p>
-          <p>• Large files are handled automatically (no size limits)</p>
-          <p>• Files are linked to your selected ingestion channel</p>
-          <p>• Activities appear in the Activity Feed immediately</p>
+          <p>
+            • {translate("crm.integrations.file_upload.how_it_works.step_1")}
+          </p>
+          <p>
+            • {translate("crm.integrations.file_upload.how_it_works.step_2")}
+          </p>
+          <p>
+            • {translate("crm.integrations.file_upload.how_it_works.step_3")}
+          </p>
+          <p>
+            • {translate("crm.integrations.file_upload.how_it_works.step_4")}
+          </p>
+          <p>
+            • {translate("crm.integrations.file_upload.how_it_works.step_5")}
+          </p>
         </CardContent>
       </Card>
     </div>

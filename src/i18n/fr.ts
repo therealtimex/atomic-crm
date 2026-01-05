@@ -308,6 +308,9 @@ export const frMessages = {
         select_company:
           "Veuillez d'abord sélectionner une entreprise pour voir ses contacts",
       },
+      filter: {
+        only_companies_i_manage: "Seulement les entreprises que je gère",
+      },
       list: {
         archived_title: "Affaires archivées",
       },
@@ -332,6 +335,57 @@ export const frMessages = {
         male: "Il/Lui",
         female: "Elle/Elle",
         nonbinary: "Iel/Elle",
+      },
+      field: {
+        first_name: "Prénom",
+        last_name: "Nom",
+        title: "Titre",
+        company: "Entreprise",
+        email: "E-mail",
+        email_addresses: "Adresses e-mail",
+        phone_number: "Numéro de téléphone",
+        phone_numbers: "Numéros de téléphone",
+        linkedin_url: "URL LinkedIn",
+        background: "Infos de contexte (bio, rencontre, etc.)",
+        has_newsletter: "Abonné newsletter",
+        account_manager: "Gestionnaire de compte",
+        first_seen: "Ajouté le",
+        last_seen_on: "Dernière activité le",
+        followed_by: "Suivi par",
+        subscribed_to_newsletter: "Abonné à la newsletter",
+        linkedin: "LinkedIn",
+        at: "chez",
+      },
+      section: {
+        identity: "Identité",
+        position: "Poste",
+        personal_info: "Infos personnelles",
+        misc: "Divers",
+        activity_timeline: "Historique d'activité",
+        activity_timeline_description:
+          "État du traitement en temps réel des activités entrantes",
+        notes: "Notes",
+        notes_description: "Registre permanent des interactions et résultats",
+        background_info: "Infos de contexte",
+        tags: "Étiquettes",
+        tasks: "Tâches",
+      },
+      action: {
+        edit: "Modifier le contact",
+        show: "Voir le contact",
+        create: "Nouveau contact",
+        export_vcard: "Exporter en vCard",
+        merge_with_another: "Fusionner avec un autre contact",
+        import: "Importer",
+      },
+      type: {
+        work: "Travail",
+        home: "Domicile",
+        other: "Autre",
+      },
+      empty: {
+        title: "Aucun contact trouvé",
+        description: "Il semble que votre liste de contacts soit vide.",
       },
       filter: {
         last_activity: "Dernière activité",
@@ -381,6 +435,47 @@ export const frMessages = {
           inactive: "Inactif",
           not_found: "Non trouvé",
         },
+      },
+      merge: {
+        title: "Fusionner le contact",
+        description: "Fusionner ce contact avec un autre.",
+        current_contact: "Contact actuel (sera supprimé)",
+        target_contact: "Contact cible (sera conservé)",
+        what_will_be_merged: "Ce qui sera fusionné :",
+        notes_to_merge:
+          "%{count} note sera réattribuée |||| %{count} notes seront réattribuées",
+        tasks_to_merge:
+          "%{count} tâche sera réattribuée |||| %{count} tâches seront réattribuées",
+        deals_to_merge:
+          "%{count} affaire sera mise à jour |||| %{count} affaires seront mises à jour",
+        emails_to_merge:
+          "%{count} adresse e-mail sera ajoutée |||| %{count} adresses e-mail seront ajoutées",
+        phones_to_merge:
+          "%{count} numéro de téléphone sera ajouté |||| %{count} numéros de téléphone seront ajoutés",
+        no_data: "Aucune donnée supplémentaire à fusionner",
+        warning_title: "Attention : Opération destructive",
+        warning_message:
+          "Toutes les données seront transférées vers le second contact. Cette action est irréversible.",
+        merging: "Fusion en cours...",
+        merge_contacts: "Fusionner les contacts",
+        select_contact: "Veuillez sélectionner un contact à fusionner",
+        success: "Contacts fusionnés avec succès",
+        error: "Échec de la fusion des contacts",
+      },
+      import: {
+        title: "Importer",
+        description: "Importer des contacts depuis un fichier CSV",
+        running: "L'importation est en cours, veuillez ne pas fermer cet onglet.",
+        status: "Importé %{count} / %{total} contacts, avec %{errors} erreurs.",
+        remaining_time: "Temps restant estimé : %{time}.",
+        stop: "Arrêter l'importation",
+        error:
+          "Échec de l'importation de ce fichier, veuillez vous assurer d'avoir fourni un fichier CSV valide.",
+        complete:
+          "Importation des contacts terminée. %{count} contacts importés, avec %{errors} erreurs",
+        template_hint: "Voici un exemple de fichier CSV que vous pouvez utiliser comme modèle",
+        download_sample: "Télécharger l'exemple CSV",
+        csv_file: "Fichier CSV",
       },
     },
     company: {
@@ -507,6 +602,269 @@ export const frMessages = {
         select_company: "Veuillez sélectionner une entreprise à fusionner",
         success: "Entreprises fusionnées avec succès",
         error: "Échec de la fusion des entreprises",
+      },
+    },
+    integrations: {
+      title: "Intégrations",
+      description:
+        "Gérez les clés API, les webhooks et les canaux d'ingestion pour intégrer Atomic CRM à des systèmes externes.",
+      tabs: {
+        ingestion: "Canaux d'ingestion",
+        file_upload: "Téléchargement de fichiers",
+        api_keys: "Clés API",
+        webhooks: "Webhooks (Sortants)",
+      },
+      webhooks: {
+        description:
+          "Les webhooks informent les systèmes externes lorsque des événements se produisent dans votre CRM.",
+        action: {
+          create: "Créer un webhook",
+          create_first: "Créez votre premier webhook",
+          edit: "Modifier le webhook",
+          delete: "Supprimer",
+          update: "Mettre à jour",
+        },
+        empty: "Pas encore de webhooks",
+        loading: "Chargement...",
+        status: {
+          active: "Actif",
+          inactive: "Inactif",
+          more: "+%{count} de plus",
+        },
+        fields: {
+          name: "Nom",
+          url: "URL du webhook",
+          events: "Événements à s'abonner",
+          created: "Créé le : %{date}",
+          last_triggered: "Dernier déclenchement : %{date}",
+          failed_deliveries: "Échecs de livraison : %{count}",
+        },
+        dialog: {
+          create_title: "Créer un webhook",
+          create_description:
+            "Créer un nouveau webhook pour recevoir des notifications d'événements",
+          edit_title: "Modifier le webhook",
+          edit_description: "Mettre à jour la configuration du webhook",
+          delete_title: "Supprimer le webhook ?",
+          delete_description:
+            "Ceci supprimera définitivement ce webhook. Plus aucun événement ne sera envoyé à ce point de terminaison. Cette action est irréversible.",
+        },
+        placeholder: {
+          name: "ex : Notifications Slack",
+          url: "https://exemple.com/webhook",
+        },
+        notification: {
+          created: "Webhook créé avec succès",
+          updated: "Webhook mis à jour avec succès",
+          deleted: "Webhook supprimé avec succès",
+          error_creating: "Échec de la création du webhook",
+          error_updating: "Échec de la mise à jour du webhook",
+          error_deleting: "Échec de la suppression du webhook",
+        },
+        categories: {
+          contacts: "Contacts",
+          companies: "Entreprises",
+          deals: "Affaires",
+          tasks: "Tâches",
+        },
+        events: {
+          "contact.created": "Contact créé",
+          "contact.updated": "Contact mis à jour",
+          "contact.deleted": "Contact supprimé",
+          "company.created": "Entreprise créée",
+          "company.updated": "Entreprise mise à jour",
+          "company.deleted": "Entreprise supprimée",
+          "deal.created": "Affaire créée",
+          "deal.updated": "Affaire mise à jour",
+          "deal.deleted": "Affaire supprimée",
+          "deal.stage_changed": "Étape de l'affaire modifiée",
+          "deal.won": "Affaire gagnée",
+          "deal.lost": "Affaire perdue",
+          "task.created": "Tâche créée",
+          "task.updated": "Tâche mise à jour",
+          "task.assigned": "Tâche assignée",
+          "task.completed": "Tâche terminée",
+          "task.priority_changed": "Priorité de la tâche modifiée",
+          "task.archived": "Tâche archivée",
+          "task.deleted": "Tâche supprimée",
+        },
+      },
+      api_keys: {
+        description:
+          "Les clés API permettent aux applications externes d'accéder aux données de votre CRM par programmation.",
+        action: {
+          create: "Créer une clé API",
+          create_first: "Créez votre première clé API",
+          copy: "Copier",
+          copied: "Clé API complète copiée dans le presse-papiers",
+          done: "Terminé",
+        },
+        empty: "Pas encore de clés API",
+        loading: "Chargement...",
+        fields: {
+          name: "Nom",
+          created: "Créée le : %{date}",
+          last_used: "Dernière utilisation : %{date}",
+          expires: "Expire le : %{date}",
+          key_hint: "Cliquez sur copier pour obtenir la clé complète non masquée",
+          not_available: "Clé API non disponible pour la copie",
+          scopes: "Portées",
+          expiration: "Expiration (facultatif)",
+          your_api_key: "Votre clé API",
+        },
+        dialog: {
+          create_title: "Créer une clé API",
+          create_description: "Créer une nouvelle clé API pour accéder à l'API CRM",
+          created_title: "Clé API créée",
+          created_description: "Copiez cette clé maintenant - elle ne sera plus affichée !",
+          delete_title: "Supprimer la clé API ?",
+          delete_description:
+            "Ceci supprimera définitivement cette clé API. Toutes les applications utilisant cette clé cesseront de fonctionner immédiatement. Cette action est irréversible.",
+          warning_copy:
+            "Assurez-vous de copier votre clé API maintenant. Vous ne pourrez plus la voir !",
+        },
+        placeholder: {
+          name: "ex : Clé API de production",
+        },
+        scopes: {
+          "contacts:read": "Contacts : Lecture",
+          "contacts:write": "Contacts : Écriture",
+          "companies:read": "Entreprises : Lecture",
+          "companies:write": "Entreprises : Écriture",
+          "deals:read": "Affaires : Lecture",
+          "deals:write": "Affaires : Écriture",
+          "tasks:read": "Tâches : Lecture",
+          "tasks:write": "Tâches : Écriture",
+          "activities:write": "Activités : Écriture (Notes)",
+        },
+        notification: {
+          created: "Clé API créée avec succès",
+          deleted: "Clé API supprimée avec succès",
+          error_creating: "Échec de la création de la clé API",
+          error_deleting: "Échec de la suppression de la clé API",
+          error_copying: "Échec de la copie de la clé API",
+        },
+      },
+      file_upload: {
+        title: "Télécharger des fichiers",
+        description:
+          "Téléchargez des documents, des images, des fichiers audio ou vidéo pour créer des activités. Les fichiers sont automatiquement stockés et liés à votre compte.",
+        action: {
+          upload: "Télécharger",
+          upload_all: "Tout télécharger",
+          clear_completed: "Effacer les terminés",
+          drop_files: "Déposez les fichiers ici...",
+          drag_and_drop: "Faites glisser et déposez des fichiers ici, ou cliquez pour sélectionner",
+          supports_all:
+            "Prend en charge tous les types de fichiers (exécutables bloqués pour la sécurité)",
+        },
+        fields: {
+          ingestion_channel: "Canal d'ingestion",
+          activity_type: "Type d'activité",
+          select_channel: "Sélectionner un canal...",
+          files_count: "Fichiers (%{count})",
+        },
+        types: {
+          note: "Note",
+          email: "E-mail",
+          call: "Enregistrement d'appel",
+          meeting: "Enregistrement de réunion",
+          other: "Autre",
+        },
+        how_it_works: {
+          title: "Comment ça marche",
+          step_1:
+            "Les fichiers sont téléchargés directement sur un stockage sécurisé (pas d'encombrement de la base de données)",
+          step_2: "Chaque fichier crée un enregistrement d'activité pour le suivi et la recherche",
+          step_3: "Les fichiers volumineux sont gérés automatiquement (aucune limite de taille)",
+          step_4: "Les fichiers sont liés au canal d'ingestion sélectionné",
+          step_5: "Les activités apparaissent immédiatement dans le flux d'activité",
+        },
+        notification: {
+          select_channel: "Veuillez sélectionner un canal d'ingestion",
+          success: "Fichier téléchargé : %{name}",
+          error: "Échec du téléchargement : %{name}",
+          error_network: "Error de réseau",
+          error_status: "Le téléchargement a échoué avec le statut %{status}",
+          error_dangerous:
+            "Les fichiers exécutables ne sont pas autorisés pour des raisons de sécurité",
+        },
+      },
+      ingestion: {
+        title: "Canaux d'ingestion",
+        description:
+          "Configurez les canaux entrants (e-mail, voix, SMS) pour ingérer des activités dans votre CRM.",
+        action: {
+          create: "Créer un canal",
+          add: "Ajouter un canal d'ingestion",
+          add_first: "Ajoutez votre premier canal",
+          copy_url: "Copier l'URL du Webhook",
+          url_copied: "URL du Webhook copiée dans le presse-papiers",
+        },
+        empty: "Aucun canal d'ingestion configuré",
+        loading: "Chargement...",
+        fields: {
+          webhook_url: "URL du Webhook",
+          created: "Créé le : %{date}",
+        },
+        dialog: {
+          create_description: "Configurer une nouvelle source pour les activités entrantes.",
+          name_label: "Nom du canal",
+          provider_label: "Fournisseur",
+          token_label: "Jeton d'authentification (Validation)",
+          token_hint: "Requis pour valider les requêtes entrantes.",
+          placeholder_name: "ex : Ligne de support US",
+          placeholder_token: "Jeton d'authentification Twilio",
+          select_provider: "Sélectionner un fournisseur",
+          delete_title: "Supprimer le canal ?",
+          delete_description:
+            "Ceci arrêtera toute ingestion provenant de cette source. Cette action est irréversible.",
+        },
+        providers: {
+          twilio: "Twilio (Voix/SMS)",
+          postmark: "Postmark (E-mail)",
+          generic: "Générique / Interne",
+        },
+        notification: {
+          created: "Canal d'ingestion créé avec succès",
+          deleted: "Canal supprimé avec succès",
+          error_creating: "Échec de la création du canal : %{message}",
+          error_deleting: "Échec de la suppression du canal",
+        },
+      },
+    },
+    settings: {
+      notification: {
+        profile_updated: "Votre profil a été mis à jour",
+        error: "Une erreur est survenue. Veuillez réessayer",
+      },
+      action: {
+        change_password: "Changer le mot de passe",
+      },
+      inbound_email: {
+        title: "E-mail entrant",
+        description:
+          "Vous pouvez commencer à envoyer des e-mails à l'adresse e-mail entrante de votre serveur, par exemple en l'ajoutant au champ Cc :. Atomic CRM traitera les e-mails et ajoutera des notes aux contacts correspondants.",
+      },
+      database: {
+        title: "Connexion à la base de données",
+        description: "Gérez les paramètres de connexion à votre base de données Supabase",
+        connected: "Connecté",
+        not_connected: "Non connecté",
+        no_config: "Aucune base de données Supabase n'est configurée",
+        configured_on: "Configuré le %{date}",
+        env_hint:
+          "Utilisation de la configuration à partir des variables d'environnement. Vous pouvez outrepasser cela en configurant une nouvelle connexion via l'interface utilisateur.",
+        setup_hint:
+          "Connectez-vous à une base de données Supabase pour commencer à utiliser Atomic CRM. Vous pouvez créer un projet gratuit sur",
+        anon_key: "Clé anonyme (Anon Key)",
+        confirm_clear:
+          "Êtes-vous sûr de vouloir effacer la configuration de la base de données ? L'application devra être reconfigurée lors du prochain lancement.",
+        action: {
+          change: "Modifier la connexion",
+          clear: "Effacer la configuration",
+          connect: "Se connecter à Supabase",
+        },
       },
     },
     migration: {

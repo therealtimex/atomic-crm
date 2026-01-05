@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useDataProvider, useNotify } from "ra-core";
+import { useDataProvider, useNotify, useTranslate } from "ra-core";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -36,15 +36,16 @@ export const CreateChannelDialog = ({
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const queryClient = useQueryClient();
+  const translate = useTranslate();
 
   const createMutation = useMutation({
     mutationFn: async () => {
       // Generate a cryptographically secure random ingestion key
-      const ingestionKey = "ik_live_" + crypto.randomUUID().replace(/-/g, '');
+      const ingestionKey = "ik_live_" + crypto.randomUUID().replace(/-/g, "");
 
       const config: any = {};
       if (authToken) {
-          config.auth_token = authToken;
+        config.auth_token = authToken;
       }
 
       await dataProvider.create("ingestion_providers", {
@@ -53,13 +54,13 @@ export const CreateChannelDialog = ({
           provider_code: providerCode,
           is_active: true,
           config,
-          ingestion_key: ingestionKey
+          ingestion_key: ingestionKey,
         },
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ingestion_providers"] });
-      notify("Ingestion Channel created successfully");
+      notify(translate("crm.integrations.ingestion.notification.created"));
       onClose();
       // Reset form
       setName("");
@@ -67,7 +68,12 @@ export const CreateChannelDialog = ({
       setProviderCode("twilio");
     },
     onError: (error: Error) => {
-      notify(`Failed to create channel: ${error.message}`, { type: "error" });
+      notify(
+        translate("crm.integrations.ingestion.notification.error_creating", {
+          message: error.message,
+        }),
+        { type: "error" }
+      );
     },
   });
 
@@ -75,53 +81,76 @@ export const CreateChannelDialog = ({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Ingestion Channel</DialogTitle>
+          <DialogTitle>
+            {translate("crm.integrations.ingestion.action.add")}
+          </DialogTitle>
           <DialogDescription>
-            Configure a new source for incoming activities.
+            {translate("crm.integrations.ingestion.dialog.create_description")}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="name">Channel Name</Label>
+            <Label htmlFor="name">
+              {translate("crm.integrations.ingestion.dialog.name_label")}
+            </Label>
             <Input
               id="name"
-              placeholder="e.g. US Support Line"
+              placeholder={translate(
+                "crm.integrations.ingestion.dialog.placeholder_name"
+              )}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="provider">Provider</Label>
+            <Label htmlFor="provider">
+              {translate("crm.integrations.ingestion.dialog.provider_label")}
+            </Label>
             <Select value={providerCode} onValueChange={setProviderCode}>
               <SelectTrigger>
-                <SelectValue placeholder="Select provider" />
+                <SelectValue
+                  placeholder={translate(
+                    "crm.integrations.ingestion.dialog.select_provider"
+                  )}
+                />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="twilio">Twilio (Voice/SMS)</SelectItem>
-                <SelectItem value="postmark">Postmark (Email)</SelectItem>
-                <SelectItem value="generic">Generic / Internal</SelectItem>
+                <SelectItem value="twilio">
+                  {translate("crm.integrations.ingestion.providers.twilio")}
+                </SelectItem>
+                <SelectItem value="postmark">
+                  {translate("crm.integrations.ingestion.providers.postmark")}
+                </SelectItem>
+                <SelectItem value="generic">
+                  {translate("crm.integrations.ingestion.providers.generic")}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
-          
+
           {providerCode === "twilio" && (
-              <div className="grid gap-2">
-                <Label htmlFor="token">Auth Token (Validation)</Label>
-                <Input
-                  id="token"
-                  type="password"
-                  placeholder="Twilio Auth Token"
-                  value={authToken}
-                  onChange={(e) => setAuthToken(e.target.value)}
-                />
-                <p className="text-xs text-muted-foreground">Required to validate inbound requests.</p>
-              </div>
+            <div className="grid gap-2">
+              <Label htmlFor="token">
+                {translate("crm.integrations.ingestion.dialog.token_label")}
+              </Label>
+              <Input
+                id="token"
+                type="password"
+                placeholder={translate(
+                  "crm.integrations.ingestion.dialog.placeholder_token"
+                )}
+                value={authToken}
+                onChange={(e) => setAuthToken(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">
+                {translate("crm.integrations.ingestion.dialog.token_hint")}
+              </p>
+            </div>
           )}
-          
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {translate("crm.activity.cancel")}
           </Button>
           <Button
             onClick={() => createMutation.mutate()}
@@ -130,7 +159,7 @@ export const CreateChannelDialog = ({
             {createMutation.isPending && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Create Channel
+            {translate("crm.integrations.ingestion.action.create")}
           </Button>
         </DialogFooter>
       </DialogContent>

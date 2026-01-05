@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useDataProvider, useNotify, useGetIdentity } from "ra-core";
+import { useDataProvider, useNotify, useGetIdentity, useTranslate } from "ra-core";
 import { generateApiKey, hashApiKey } from "@/lib/api-key-utils";
 import { encryptValue } from "@/lib/encryption-utils";
 import {
@@ -24,15 +24,15 @@ interface CreateApiKeyDialogProps {
 }
 
 const AVAILABLE_SCOPES = [
-  { value: "contacts:read", label: "Contacts: Read" },
-  { value: "contacts:write", label: "Contacts: Write" },
-  { value: "companies:read", label: "Companies: Read" },
-  { value: "companies:write", label: "Companies: Write" },
-  { value: "deals:read", label: "Deals: Read" },
-  { value: "deals:write", label: "Deals: Write" },
-  { value: "tasks:read", label: "Tasks: Read" },
-  { value: "tasks:write", label: "Tasks: Write" },
-  { value: "activities:write", label: "Activities: Write (Notes)" },
+  "contacts:read",
+  "contacts:write",
+  "companies:read",
+  "companies:write",
+  "deals:read",
+  "deals:write",
+  "tasks:read",
+  "tasks:write",
+  "activities:write",
 ];
 
 export const CreateApiKeyDialog = ({
@@ -45,6 +45,7 @@ export const CreateApiKeyDialog = ({
   const notify = useNotify();
   const queryClient = useQueryClient();
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
 
   const { register, handleSubmit, watch, setValue, reset } = useForm({
     defaultValues: {
@@ -80,10 +81,12 @@ export const CreateApiKeyDialog = ({
     onSuccess: ({ apiKey }) => {
       setCreatedKey(apiKey);
       queryClient.invalidateQueries({ queryKey: ["api_keys"] });
-      notify("API key created successfully");
+      notify(translate("crm.integrations.api_keys.notification.created"));
     },
     onError: () => {
-      notify("Failed to create API key", { type: "error" });
+      notify(translate("crm.integrations.api_keys.notification.error_creating"), {
+        type: "error",
+      });
     },
   });
 
@@ -119,12 +122,14 @@ export const CreateApiKeyDialog = ({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {createdKey ? "API Key Created" : "Create API Key"}
+            {createdKey
+              ? translate("crm.integrations.api_keys.dialog.created_title")
+              : translate("crm.integrations.api_keys.dialog.create_title")}
           </DialogTitle>
           <DialogDescription>
             {createdKey
-              ? "Copy this key now - it won't be shown again!"
-              : "Create a new API key to access the CRM API"}
+              ? translate("crm.integrations.api_keys.dialog.created_description")
+              : translate("crm.integrations.api_keys.dialog.create_description")}
           </DialogDescription>
         </DialogHeader>
 
@@ -132,13 +137,14 @@ export const CreateApiKeyDialog = ({
           <div className="space-y-4">
             <Alert>
               <AlertDescription>
-                Make sure to copy your API key now. You won't be able to see it
-                again!
+                {translate("crm.integrations.api_keys.dialog.warning_copy")}
               </AlertDescription>
             </Alert>
 
             <div className="space-y-2">
-              <Label>Your API Key</Label>
+              <Label>
+                {translate("crm.integrations.api_keys.fields.your_api_key")}
+              </Label>
               <div className="flex gap-2">
                 <Input
                   value={createdKey}
@@ -161,7 +167,9 @@ export const CreateApiKeyDialog = ({
             </div>
 
             <div className="flex justify-end">
-              <Button onClick={handleClose}>Done</Button>
+              <Button onClick={handleClose}>
+                {translate("crm.integrations.api_keys.action.done")}
+              </Button>
             </div>
           </div>
         ) : (
@@ -170,26 +178,34 @@ export const CreateApiKeyDialog = ({
           >
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">
+                  {translate("crm.integrations.api_keys.fields.name")}
+                </Label>
                 <Input
                   id="name"
-                  placeholder="e.g., Production API Key"
+                  placeholder={translate(
+                    "crm.integrations.api_keys.placeholder.name"
+                  )}
                   {...register("name", { required: true })}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label>Scopes</Label>
+                <Label>
+                  {translate("crm.integrations.api_keys.fields.scopes")}
+                </Label>
                 <div className="space-y-2">
                   {AVAILABLE_SCOPES.map((scope) => (
-                    <div key={scope.value} className="flex items-center space-x-2">
+                    <div key={scope} className="flex items-center space-x-2">
                       <Checkbox
-                        id={scope.value}
-                        checked={watch("scopes").includes(scope.value)}
-                        onCheckedChange={() => toggleScope(scope.value)}
+                        id={scope}
+                        checked={watch("scopes").includes(scope)}
+                        onCheckedChange={() => toggleScope(scope)}
                       />
-                      <label htmlFor={scope.value} className="text-sm cursor-pointer">
-                        {scope.label}
+                      <label htmlFor={scope} className="text-sm cursor-pointer">
+                        {translate(`crm.integrations.api_keys.scopes.${scope}`, {
+                          _: scope,
+                        })}
                       </label>
                     </div>
                   ))}
@@ -197,7 +213,9 @@ export const CreateApiKeyDialog = ({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="expires_at">Expiration (optional)</Label>
+                <Label htmlFor="expires_at">
+                  {translate("crm.integrations.api_keys.fields.expiration")}
+                </Label>
                 <Input
                   id="expires_at"
                   type="date"
@@ -207,10 +225,10 @@ export const CreateApiKeyDialog = ({
 
               <div className="flex justify-end gap-2">
                 <Button type="button" variant="outline" onClick={handleClose}>
-                  Cancel
+                  {translate("crm.activity.cancel")}
                 </Button>
                 <Button type="submit" disabled={createMutation.isPending}>
-                  Create
+                  {translate("crm.integrations.api_keys.action.create")}
                 </Button>
               </div>
             </div>

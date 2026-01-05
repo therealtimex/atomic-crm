@@ -33,6 +33,7 @@ export const SettingsPage = () => {
     id: identity?.id,
   });
   const notify = useNotify();
+  const translate = useTranslate();
   const dataProvider = useDataProvider<CrmDataProvider>();
 
   const { mutate } = useMutation({
@@ -47,10 +48,10 @@ export const SettingsPage = () => {
       refetchIdentity();
       refetchUser();
       setEditMode(false);
-      notify("Your profile has been updated");
+      notify(translate("crm.settings.notification.profile_updated"));
     },
     onError: (_) => {
-      notify("An error occurred. Please try again", {
+      notify(translate("crm.settings.notification.error"), {
         type: "error",
       });
     },
@@ -79,6 +80,7 @@ const SettingsForm = ({
   setEditMode: (value: boolean) => void;
 }) => {
   const notify = useNotify();
+  const translate = useTranslate();
   const navigate = useNavigate();
   const record = useRecordContext<Sale>();
   const { identity, refetch } = useGetIdentity();
@@ -98,18 +100,18 @@ const SettingsForm = ({
     },
     onSuccess: () => {
       refetch();
-      notify("Your profile has been updated");
+      notify(translate("crm.settings.notification.profile_updated"));
     },
     onError: () => {
-      notify("An error occurred. Please try again.");
+      notify(translate("crm.settings.notification.error"));
     },
   });
   if (!identity) return null;
 
-      const handleClickOpenPasswordChange = () => {
-        // Navigate directly to the change password page for authenticated users
-        navigate('/change-password');
-      };
+  const handleClickOpenPasswordChange = () => {
+    // Navigate directly to the change password page for authenticated users
+    navigate("/change-password");
+  };
   const handleAvatarUpdate = async (values: any) => {
     mutateSale(values);
   };
@@ -120,7 +122,7 @@ const SettingsForm = ({
         <CardContent>
           <div className="mb-4 flex flex-row justify-between">
             <h2 className="text-xl font-semibold text-muted-foreground">
-              My info
+              {translate("crm.nav.settings")}
             </h2>
           </div>
 
@@ -131,9 +133,21 @@ const SettingsForm = ({
               onSave={handleAvatarUpdate}
               linkPosition="right"
             />
-            <TextRender source="first_name" isEditMode={isEditMode} />
-            <TextRender source="last_name" isEditMode={isEditMode} />
-            <TextRender source="email" isEditMode={isEditMode} />
+            <TextRender
+              source="first_name"
+              label={translate("crm.contact.field.first_name")}
+              isEditMode={isEditMode}
+            />
+            <TextRender
+              source="last_name"
+              label={translate("crm.contact.field.last_name")}
+              isEditMode={isEditMode}
+            />
+            <TextRender
+              source="email"
+              label={translate("ra.auth.email")}
+              isEditMode={isEditMode}
+            />
           </div>
 
           <div className="flex flex-row justify-end gap-2">
@@ -144,7 +158,7 @@ const SettingsForm = ({
                   type="button"
                   onClick={handleClickOpenPasswordChange}
                 >
-                  Change password
+                  {translate("crm.settings.action.change_password")}
                 </Button>
               </>
             )}
@@ -156,13 +170,13 @@ const SettingsForm = ({
               className="flex items-center"
             >
               {isEditMode ? <CircleX /> : <Pencil />}
-              {isEditMode ? "Cancel" : "Edit"}
+              {isEditMode ? translate("crm.activity.cancel") : translate("crm.task.action.edit")}
             </Button>
 
             {isEditMode && (
               <Button type="submit" disabled={!isDirty} variant="outline">
                 <Save />
-                Save
+                {translate("ra.action.save")}
               </Button>
             )}
           </div>
@@ -173,13 +187,10 @@ const SettingsForm = ({
           <CardContent>
             <div className="space-y-4 justify-between">
               <h2 className="text-xl font-semibold text-muted-foreground">
-                Inbound email
+                {translate("crm.settings.inbound_email.title")}
               </h2>
               <p className="text-sm text-muted-foreground">
-                You can start sending emails to your server's inbound email
-                address, e.g. by adding it to the
-                <b> Cc: </b> field. Atomic CRM will process the emails and add
-                notes to the corresponding contacts.
+                {translate("crm.settings.inbound_email.description")}
               </p>
               <CopyPaste />
             </div>
@@ -192,23 +203,26 @@ const SettingsForm = ({
 
 const TextRender = ({
   source,
+  label,
   isEditMode,
 }: {
   source: string;
+  label: string;
   isEditMode: boolean;
 }) => {
   if (isEditMode) {
-    return <TextInput source={source} helperText={false} />;
+    return <TextInput source={source} label={label} helperText={false} />;
   }
   return (
     <div className="m-2">
-      <RecordField source={source} />
+      <RecordField source={source} label={label} />
     </div>
   );
 };
 
 const CopyPaste = () => {
   const [copied, setCopied] = useState(false);
+  const translate = useTranslate();
   const handleCopy = () => {
     setCopied(true);
     navigator.clipboard.writeText(import.meta.env.VITE_INBOUND_EMAIL);
@@ -233,7 +247,11 @@ const CopyPaste = () => {
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>{copied ? "Copied!" : "Copy"}</p>
+          <p>
+            {copied
+              ? translate("crm.integrations.api_keys.action.copy")
+              : translate("crm.integrations.api_keys.action.copy")}
+          </p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

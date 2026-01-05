@@ -20,13 +20,10 @@ export function DatabaseSettings() {
   const [showWizard, setShowWizard] = useState(false);
   const config = getSupabaseConfig();
   const source = getConfigSource();
+  const translate = useTranslate();
 
   const handleClearConfig = () => {
-    if (
-      confirm(
-        "Are you sure you want to clear the database configuration? The app will need to be reconfigured on next launch.",
-      )
-    ) {
+    if (confirm(translate("crm.settings.database.confirm_clear"))) {
       clearSupabaseConfig();
       window.location.reload();
     }
@@ -38,10 +35,10 @@ export function DatabaseSettings() {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Database className="h-5 w-5" />
-            <CardTitle>Database Connection</CardTitle>
+            <CardTitle>{translate("crm.settings.database.title")}</CardTitle>
           </div>
           <CardDescription>
-            Manage your Supabase database connection settings
+            {translate("crm.settings.database.description")}
           </CardDescription>
         </CardHeader>
 
@@ -52,12 +49,15 @@ export function DatabaseSettings() {
               <div className="flex items-start gap-3 p-4 border rounded-lg">
                 <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
                 <div className="flex-1 space-y-1">
-                  <p className="font-medium">Connected</p>
+                  <p className="font-medium">
+                    {translate("crm.settings.database.connected")}
+                  </p>
                   <p className="text-sm text-muted-foreground">{config.url}</p>
                   {config.configuredAt && (
                     <p className="text-xs text-muted-foreground">
-                      Configured on{" "}
-                      {new Date(config.configuredAt).toLocaleDateString()}
+                      {translate("crm.settings.database.configured_on", {
+                        date: new Date(config.configuredAt).toLocaleDateString(),
+                      })}
                     </p>
                   )}
                 </div>
@@ -68,8 +68,7 @@ export function DatabaseSettings() {
                 <Alert>
                   <Settings className="h-4 w-4" />
                   <AlertDescription>
-                    Using configuration from environment variables. You can
-                    override this by setting up a new connection via the UI.
+                    {translate("crm.settings.database.env_hint")}
                   </AlertDescription>
                 </Alert>
               )}
@@ -82,7 +81,7 @@ export function DatabaseSettings() {
                   className="flex-1"
                 >
                   <Settings className="h-4 w-4 mr-2" />
-                  Change Connection
+                  {translate("crm.settings.database.action.change")}
                 </Button>
                 {source === "ui" && (
                   <Button
@@ -91,14 +90,16 @@ export function DatabaseSettings() {
                     className="flex-1"
                   >
                     <Trash2 className="h-4 w-4 mr-2" />
-                    Clear Configuration
+                    {translate("crm.settings.database.action.clear")}
                   </Button>
                 )}
               </div>
 
               {/* Anon Key Display (masked) */}
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Anonymous Key</Label>
+                <Label className="text-sm font-medium">
+                  {translate("crm.settings.database.anon_key")}
+                </Label>
                 <div className="font-mono text-sm p-2 bg-muted rounded">
                   {config.anonKey.substring(0, 20)}...
                   {config.anonKey.substring(config.anonKey.length - 10)}
@@ -110,17 +111,18 @@ export function DatabaseSettings() {
               <div className="flex items-start gap-3 p-4 border border-dashed rounded-lg">
                 <XCircle className="h-5 w-5 text-destructive mt-0.5" />
                 <div className="flex-1 space-y-1">
-                  <p className="font-medium">Not Connected</p>
+                  <p className="font-medium">
+                    {translate("crm.settings.database.not_connected")}
+                  </p>
                   <p className="text-sm text-muted-foreground">
-                    No Supabase database is configured
+                    {translate("crm.settings.database.no_config")}
                   </p>
                 </div>
               </div>
 
               <Alert>
                 <AlertDescription>
-                  Connect to a Supabase database to start using Atomic CRM. You
-                  can create a free project at{" "}
+                  {translate("crm.settings.database.setup_hint")}{" "}
                   <a
                     href="https://supabase.com"
                     target="_blank"
@@ -134,7 +136,7 @@ export function DatabaseSettings() {
 
               <Button onClick={() => setShowWizard(true)} className="w-full">
                 <Database className="h-4 w-4 mr-2" />
-                Connect to Supabase
+                {translate("crm.settings.database.action.connect")}
               </Button>
             </>
           )}
