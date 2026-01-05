@@ -5,6 +5,12 @@ All notable changes to Atomic CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.45.7] - 2026-01-04
+
+### Fixed
+
+- **Code Quality**: Removed unused `locale` variables in `ActivityFeed` and `CompanyShow` to resolve linter warnings.
+
 ## [0.45.6] - 2026-01-04
 
 ### Added
