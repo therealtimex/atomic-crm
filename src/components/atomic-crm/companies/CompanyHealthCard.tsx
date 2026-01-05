@@ -1,6 +1,6 @@
 import { formatDistance } from "date-fns";
 import { Activity, HeartPulse } from "lucide-react";
-import { useRecordContext } from "ra-core";
+import { useRecordContext, useTranslate } from "ra-core";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
