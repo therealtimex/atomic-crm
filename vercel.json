@@ -1,0 +1,12 @@
+{
+    "version": 2,
+    "framework": "vite",
+    "buildCommand": "NODE_OPTIONS=--max-old-space-size=4096 npx vite build --config vite.demo.config",
+    "outputDirectory": "dist",
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
+}

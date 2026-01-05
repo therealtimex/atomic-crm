@@ -6,6 +6,17 @@ https://github.com/user-attachments/assets/0d7554b5-49ef-41c6-bcc9-a76214fc5c99
 
 RealTimeX CRM is free and open-source.
 
+## Live Demo
+
+Experience RealTimeX CRM immediately: [realtimex-crm.vercel.app](https://realtimex-crm.vercel.app/)
+
+**Admin Credentials:**
+- **Email**: `janedoe@atomic.dev`
+- **Password**: `demo`
+
+> [!NOTE]
+> This demo uses an in-memory database. All changes are local to your browser session and will reset upon refreshing the page.
+
 ## Features
 
 - 📇 **Organize Contacts**: Keep all your contacts in one easily accessible place.

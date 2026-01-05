@@ -41,3 +41,4 @@ supabase/.temp
 
 # Shadcn Registry
 public/r/
+.vercel

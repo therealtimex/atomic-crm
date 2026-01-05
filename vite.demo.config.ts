@@ -25,10 +25,6 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    visualizer({
-      open: process.env.NODE_ENV !== "CI",
-      filename: "./dist/stats.html",
-    }),
     createHtmlPlugin({
       minify: true,
       inject: {
@@ -49,12 +45,12 @@ export default defineConfig({
       process.env.VITE_SUPABASE_ANON_KEY ?? "https://demo.example.org",
     ),
   },
-  base: "./",
+  base: "/",
   esbuild: {
     keepNames: true,
   },
   build: {
-    sourcemap: true,
+    sourcemap: false,
   },
   resolve: {
     preserveSymlinks: true,
