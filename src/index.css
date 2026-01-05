@@ -169,3 +169,24 @@ input[type="time"] {
     @apply bg-background text-foreground;
   }
 }
+
+/* Ensure Office iframe previews fill the document viewer container. */
+#react-doc-viewer {
+  min-height: 0;
+}
+
+#proxy-renderer {
+  flex: 1;
+  min-height: 0;
+}
+
+#msdoc-renderer {
+  height: 100%;
+  min-height: 0;
+}
+
+#msdoc-iframe {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
