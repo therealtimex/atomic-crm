@@ -819,6 +819,18 @@ export const jaMessages = {
         },
       },
     },
+    image_editor: {
+      action: {
+        change: "変更",
+        update: "画像を更新",
+        delete: "削除",
+      },
+      dialog: {
+        title: "画像をアップロードしてサイズ変更",
+        dropzone: "ファイルをドロップしてアップロード、またはクリックして選択してください。",
+      },
+      alt: "編集可能なコンテンツ",
+    },
     signup: {
       title: "%{title}へようこそ",
       subtitle: "セットアップを完了するために、最初のユーザーアカウントを作成してください。",

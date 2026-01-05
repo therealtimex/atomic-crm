@@ -829,6 +829,18 @@ export const enMessages = {
         },
       },
     },
+    image_editor: {
+      action: {
+        change: "Change",
+        update: "Update Image",
+        delete: "Delete",
+      },
+      dialog: {
+        title: "Upload and resize image",
+        dropzone: "Drop a file to upload, or click to select it.",
+      },
+      alt: "Editable content",
+    },
     signup: {
       title: "Welcome to %{title}",
       subtitle: "Create the first user account to complete the setup.",

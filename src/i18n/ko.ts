@@ -816,6 +816,18 @@ export const koMessages = {
         },
       },
     },
+    image_editor: {
+      action: {
+        change: "변경",
+        update: "이미지 업데이트",
+        delete: "삭제",
+      },
+      dialog: {
+        title: "이미지 업로드 및 크기 조정",
+        dropzone: "파일을 드래그하여 업로드하거나 클릭하여 선택하세요.",
+      },
+      alt: "편집 가능한 콘텐츠",
+    },
     signup: {
       title: "%{title}에 오신 것을 환영합니다",
       subtitle: "설정을 완료하려면 첫 번째 사용자 계정을 만드십시오.",

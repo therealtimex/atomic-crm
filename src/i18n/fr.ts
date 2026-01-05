@@ -833,6 +833,18 @@ export const frMessages = {
         },
       },
     },
+    image_editor: {
+      action: {
+        change: "Modifier",
+        update: "Mettre à jour l'image",
+        delete: "Supprimer",
+      },
+      dialog: {
+        title: "Télécharger et redimensionner l'image",
+        dropzone: "Déposez un fichier pour le télécharger, ou cliquez pour le sélectionner.",
+      },
+      alt: "Contenu modifiable",
+    },
     signup: {
       title: "Bienvenue sur %{title}",
       subtitle: "Créez le premier compte utilisateur pour terminer la configuration.",

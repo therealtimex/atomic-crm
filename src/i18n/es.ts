@@ -832,6 +832,18 @@ export const esMessages = {
         },
       },
     },
+    image_editor: {
+      action: {
+        change: "Cambiar",
+        update: "Actualizar imagen",
+        delete: "Eliminar",
+      },
+      dialog: {
+        title: "Subir y redimensionar imagen",
+        dropzone: "Arrastra un archivo para subirlo, o haz clic para seleccionarlo.",
+      },
+      alt: "Contenido editable",
+    },
     signup: {
       title: "Bienvenido a %{title}",
       subtitle: "Cree la primera cuenta de usuario para completar la configuración.",

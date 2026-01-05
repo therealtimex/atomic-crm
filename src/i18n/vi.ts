@@ -824,6 +824,18 @@ export const viMessages = {
         },
       },
     },
+    image_editor: {
+      action: {
+        change: "Thay đổi",
+        update: "Cập nhật ảnh",
+        delete: "Xóa",
+      },
+      dialog: {
+        title: "Tải lên và thay đổi kích thước ảnh",
+        dropzone: "Kéo thả tệp vào đây để tải lên, hoặc nhấp để chọn tệp.",
+      },
+      alt: "Nội dung có thể chỉnh sửa",
+    },
     signup: {
       title: "Chào mừng bạn đến với %{title}",
       subtitle: "Tạo tài khoản người dùng đầu tiên để hoàn tất thiết lập.",
