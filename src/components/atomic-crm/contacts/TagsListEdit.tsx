@@ -3,6 +3,7 @@ import {
   useGetList,
   useGetMany,
   useRecordContext,
+  useTranslate,
   useUpdate,
   type Identifier,
 } from "ra-core";
@@ -23,6 +24,7 @@ import type { Contact, Tag } from "../types";
 export const TagsListEdit = () => {
   const record = useRecordContext<Contact>();
   const [open, setOpen] = useState(false);
+  const translate = useTranslate();
 
   const { data: allTags, isPending: isPendingAllTags } = useGetList<Tag>(
     "tags",
@@ -111,7 +113,7 @@ export const TagsListEdit = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="h-6 cursor-pointer">
               <Plus className="h-3 w-3 mr-1" />
-              Add tag
+              {translate("crm.tag.action.add")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -138,7 +140,7 @@ export const TagsListEdit = () => {
                 className="w-full justify-start p-0 cursor-pointer"
               >
                 <Edit className="h-3 w-3 mr-2" />
-                Create new tag
+                {translate("crm.tag.action.create")}
               </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
