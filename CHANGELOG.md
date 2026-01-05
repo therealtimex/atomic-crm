@@ -5,6 +5,21 @@ All notable changes to Atomic CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.45.8] - 2026-01-04
+
+### Added
+
+- **Localization**: Added full translation support for authentication pages (`LoginPage`, `OtpLoginPage`, `ForgotPasswordPage`, `ChangePasswordPage`).
+- **Localization**: Added missing localization for "Add tag", "Create new tag", "Create Company", and task "Type" labels.
+
+### Changed
+
+- **Localization**: Improved localization for Company resource field names and related action buttons.
+
+### Fixed
+
+- **Core**: Corrected several invalid translation keys and missing imports across the application.
+
 ## [0.45.7] - 2026-01-04
 
 ### Fixed
