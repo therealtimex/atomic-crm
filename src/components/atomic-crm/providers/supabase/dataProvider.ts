@@ -387,14 +387,7 @@ export const dataProvider = withLifecycleCallbacks(
     {
       resource: "companies",
       beforeGetList: async (params) => {
-        return applyFullTextSearch([
-          "name",
-          "phone_number",
-          "website",
-          "zipcode",
-          "city",
-          "stateAbbr",
-        ])(params);
+        return applyFullTextSearch(["search_text"])(params);
       },
       beforeCreate: async (params) => {
         const createParams = await processCompanyLogo(params);
