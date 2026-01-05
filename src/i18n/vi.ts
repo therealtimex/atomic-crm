@@ -910,6 +910,52 @@ export const viMessages = {
         note: "Ghi chú",
       },
     },
+    user: {
+      action: {
+        create: "Người dùng mới",
+        edit: "Chỉnh sửa %{name}",
+        resend_invite: "Gửi lại lời mời",
+        send_password_reset: "Đặt lại mật khẩu",
+        send_reset_link: "Gửi liên kết đặt lại",
+        cancel: "Hủy",
+        sending: "Đang gửi...",
+        send_invitation: "Gửi lời mời",
+      },
+      field: {
+        administrator: "Admin",
+        disabled: "Đã vô hiệu hóa",
+        email_actions: "Thao tác Email",
+      },
+      section: {
+        create_title: "Tạo người dùng mới",
+      },
+      empty: {
+        title: "Không tìm thấy người dùng",
+        description: "Có vẻ như danh sách người dùng của bạn đang trống.",
+      },
+      notification: {
+        invite_sent: "Đã gửi lại email mời thành công",
+        invite_error: "Gửi lại email mời thất bại",
+        reset_sent: "Đã gửi email đặt lại mật khẩu thành công",
+        reset_error: "Gửi email đặt lại mật khẩu thất bại",
+        created: "Đã tạo người dùng. Họ sẽ sớm nhận được email để thiết lập mật khẩu.",
+        create_error: "Đã xảy ra lỗi khi tạo người dùng.",
+        updated: "Cập nhật người dùng thành công",
+        error: "Đã xảy ra lỗi. Vui lòng thử lại.",
+      },
+      dialog: {
+        resend_invitation: {
+          title: "Gửi lại lời mời",
+          description: "Gửi email mời mới đến %{email}?",
+          fresh_link: "Thao tác này sẽ gửi cho họ một liên kết mời mới để thiết lập tài khoản.",
+        },
+        reset_password: {
+          title: "Đặt lại mật khẩu",
+          description: "Gửi email đặt lại mật khẩu đến %{email}?",
+          reset_link: "Thao tác này sẽ gửi cho họ một liên kết để đặt lại mật khẩu.",
+        },
+      },
+    },
     signup: {
       title: "Chào mừng bạn đến với %{title}",
       subtitle: "Tạo tài khoản người dùng đầu tiên để hoàn tất thiết lập.",
@@ -1091,6 +1137,16 @@ export const viMessages = {
         contact_id: "Liên hệ",
         company_id: "Công ty",
         deal_id: "Giao dịch",
+      },
+    },
+    sales: {
+      name: "Người dùng |||| Người dùng",
+      fields: {
+        first_name: "Tên",
+        last_name: "Họ",
+        email: "Email",
+        administrator: "Admin",
+        disabled: "Đã vô hiệu hóa",
       },
     },
   },

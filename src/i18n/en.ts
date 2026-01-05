@@ -915,6 +915,52 @@ export const enMessages = {
         note: "Note",
       },
     },
+    user: {
+      action: {
+        create: "New user",
+        edit: "Edit %{name}",
+        resend_invite: "Resend Invite",
+        send_password_reset: "Send Password Reset",
+        send_reset_link: "Send Reset Link",
+        cancel: "Cancel",
+        sending: "Sending...",
+        send_invitation: "Send Invitation",
+      },
+      field: {
+        administrator: "Admin",
+        disabled: "Disabled",
+        email_actions: "Email Actions",
+      },
+      section: {
+        create_title: "Create a new user",
+      },
+      empty: {
+        title: "No users found",
+        description: "It seems your user list is empty.",
+      },
+      notification: {
+        invite_sent: "Invitation email resent successfully",
+        invite_error: "Failed to resend invitation email",
+        reset_sent: "Password reset email sent successfully",
+        reset_error: "Failed to send password reset email",
+        created: "User created. They will soon receive an email to set their password.",
+        create_error: "An error occurred while creating the user.",
+        updated: "User updated successfully",
+        error: "An error occurred. Please try again.",
+      },
+      dialog: {
+        resend_invitation: {
+          title: "Resend Invitation",
+          description: "Send a new invitation email to %{email}?",
+          fresh_link: "This will send them a fresh invitation link to set up their account.",
+        },
+        reset_password: {
+          title: "Send Password Reset",
+          description: "Send a password reset email to %{email}?",
+          reset_link: "This will send them a link to reset their password.",
+        },
+      },
+    },
     signup: {
       title: "Welcome to %{title}",
       subtitle: "Create the first user account to complete the setup.",
@@ -1096,6 +1142,16 @@ export const enMessages = {
         contact_id: "Contact",
         company_id: "Company",
         deal_id: "Deal",
+      },
+    },
+    sales: {
+      name: "User |||| Users",
+      fields: {
+        first_name: "First name",
+        last_name: "Last name",
+        email: "Email",
+        administrator: "Admin",
+        disabled: "Disabled",
       },
     },
   },

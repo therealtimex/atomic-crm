@@ -902,6 +902,52 @@ export const koMessages = {
         note: "노트",
       },
     },
+    user: {
+      action: {
+        create: "새 사용자",
+        edit: "%{name} 수정",
+        resend_invite: "초대장 재발송",
+        send_password_reset: "비밀번호 재설정",
+        send_reset_link: "재설정 링크 전송",
+        cancel: "취소",
+        sending: "전송 중...",
+        send_invitation: "초대장 전송",
+      },
+      field: {
+        administrator: "관리자",
+        disabled: "비활성화됨",
+        email_actions: "이메일 동작",
+      },
+      section: {
+        create_title: "새 사용자 만들기",
+      },
+      empty: {
+        title: "사용자를 찾을 수 없음",
+        description: "사용자 목록이 비어 있는 것 같습니다.",
+      },
+      notification: {
+        invite_sent: "초대 이메일이 성공적으로 재전송되었습니다",
+        invite_error: "초대 이메일 재전송에 실패했습니다",
+        reset_sent: "비밀번호 재설정 이메일이 성공적으로 전송되었습니다",
+        reset_error: "비밀번호 재설정 이메일 전송에 실패했습니다",
+        created: "사용자가 생성되었습니다. 곧 비밀번호 설정을 위한 이메일이 전송됩니다.",
+        create_error: "사용자 생성 중 오류가 발생했습니다.",
+        updated: "사용자가 성공적으로 업데이트되었습니다",
+        error: "오류가 발생했습니다. 다시 시도해 주세요.",
+      },
+      dialog: {
+        resend_invitation: {
+          title: "초대장 재발송",
+          description: "%{email}에게 새 초대 이메일을 보내시겠습니까?",
+          fresh_link: "계정 설정을 위한 새로운 초대 링크가 전송됩니다.",
+        },
+        reset_password: {
+          title: "비밀번호 재설정 전송",
+          description: "%{email}에게 비밀번호 재설정 이메일을 보내시겠습니까?",
+          reset_link: "비밀번호를 재설정할 수 있는 링크가 전송됩니다.",
+        },
+      },
+    },
     signup: {
       title: "%{title}에 오신 것을 환영합니다",
       subtitle: "설정을 완료하려면 첫 번째 사용자 계정을 만드십시오.",
@@ -1081,6 +1127,16 @@ export const koMessages = {
         contact_id: "연락처",
         company_id: "회사",
         deal_id: "딜",
+      },
+    },
+    sales: {
+      name: "사용자 |||| 사용자",
+      fields: {
+        first_name: "이름",
+        last_name: "성",
+        email: "이메일",
+        administrator: "관리자",
+        disabled: "비활성화됨",
       },
     },
   },

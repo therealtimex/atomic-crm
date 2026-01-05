@@ -918,6 +918,52 @@ export const esMessages = {
         note: "Nota",
       },
     },
+    user: {
+      action: {
+        create: "Nuevo usuario",
+        edit: "Editar %{name}",
+        resend_invite: "Reenviar invitación",
+        send_password_reset: "Restablecer contraseña",
+        send_reset_link: "Enviar enlace de restablecimiento",
+        cancel: "Cancelar",
+        sending: "Enviando...",
+        send_invitation: "Enviar invitación",
+      },
+      field: {
+        administrator: "Admin",
+        disabled: "Desactivado",
+        email_actions: "Acciones de correo",
+      },
+      section: {
+        create_title: "Crear un nuevo usuario",
+      },
+      empty: {
+        title: "No se encontraron usuarios",
+        description: "Parece que tu lista de usuarios está vacía.",
+      },
+      notification: {
+        invite_sent: "Invitación reenviada correctamente",
+        invite_error: "Error al reenviar la invitación",
+        reset_sent: "Correo de restablecimiento enviado correctamente",
+        reset_error: "Error al enviar el correo de restablecimiento",
+        created: "Usuario creado. Pronto recibirá un correo para establecer su contraseña.",
+        create_error: "Ocurrió un error al crear el usuario.",
+        updated: "Usuario actualizado correctamente",
+        error: "Ocurrió un error. Por favor, inténtelo de nuevo.",
+      },
+      dialog: {
+        resend_invitation: {
+          title: "Reenviar invitación",
+          description: "¿Enviar un nuevo correo de invitación a %{email}?",
+          fresh_link: "Esto le enviará un nuevo enlace de invitación para configurar su cuenta.",
+        },
+        reset_password: {
+          title: "Restablecer contraseña",
+          description: "¿Enviar un correo de restablecimiento de contraseña a %{email}?",
+          reset_link: "Esto le enviará un enlace para restablecer su contraseña.",
+        },
+      },
+    },
     signup: {
       title: "Bienvenido a %{title}",
       subtitle: "Cree la primera cuenta de usuario para completar la configuración.",
@@ -1099,6 +1145,16 @@ export const esMessages = {
         contact_id: "Contacto",
         company_id: "Empresa",
         deal_id: "Negocio",
+      },
+    },
+    sales: {
+      name: "Usuario |||| Usuarios",
+      fields: {
+        first_name: "Nombre",
+        last_name: "Apellido",
+        email: "Correo",
+        administrator: "Admin",
+        disabled: "Desactivado",
       },
     },
   },

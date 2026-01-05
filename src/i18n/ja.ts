@@ -905,6 +905,52 @@ export const jaMessages = {
         note: "ノート",
       },
     },
+    user: {
+      action: {
+        create: "新規ユーザー",
+        edit: "%{name} を編集",
+        resend_invite: "招待を再送",
+        send_password_reset: "パスワードをリセット",
+        send_reset_link: "リセットリンクを送信",
+        cancel: "キャンセル",
+        sending: "送信中...",
+        send_invitation: "招待を送信",
+      },
+      field: {
+        administrator: "管理者",
+        disabled: "無効",
+        email_actions: "メール操作",
+      },
+      section: {
+        create_title: "新規ユーザーを作成",
+      },
+      empty: {
+        title: "ユーザーが見つかりません",
+        description: "ユーザーリストが空のようです。",
+      },
+      notification: {
+        invite_sent: "招待メールを再送信しました",
+        invite_error: "招待メールの再送信に失敗しました",
+        reset_sent: "パスワードリセットメールを送信しました",
+        reset_error: "パスワードリセットメールの送信に失敗しました",
+        created: "ユーザーを作成しました。パスワード設定用のメールがまもなく送信されます。",
+        create_error: "ユーザーの作成中にエラーが発生しました。",
+        updated: "ユーザーを更新しました",
+        error: "エラーが発生しました。もう一度お試しください。",
+      },
+      dialog: {
+        resend_invitation: {
+          title: "招待を再送",
+          description: "%{email} に新しい招待メールを送信しますか？",
+          fresh_link: "アカウント設定用の新しい招待リンクが送信されます。",
+        },
+        reset_password: {
+          title: "パスワードをリセット",
+          description: "%{email} にパスワードリセットメールを送信しますか？",
+          reset_link: "パスワードリセット用のリンクが送信されます。",
+        },
+      },
+    },
     signup: {
       title: "%{title}へようこそ",
       subtitle: "セットアップを完了するために、最初のユーザーアカウントを作成してください。",
@@ -1085,6 +1131,16 @@ export const jaMessages = {
         contact_id: "連絡先",
         company_id: "会社",
         deal_id: "案件",
+      },
+    },
+    sales: {
+      name: "ユーザー |||| ユーザー",
+      fields: {
+        first_name: "名",
+        last_name: "姓",
+        email: "メールアドレス",
+        administrator: "管理者",
+        disabled: "無効",
       },
     },
   },

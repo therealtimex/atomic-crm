@@ -919,6 +919,52 @@ export const frMessages = {
         note: "Note",
       },
     },
+    user: {
+      action: {
+        create: "Nouvel utilisateur",
+        edit: "Modifier %{name}",
+        resend_invite: "Renvoyer l'invitation",
+        send_password_reset: "Réinitialiser le mot de passe",
+        send_reset_link: "Envoyer le lien de réinitialisation",
+        cancel: "Annuler",
+        sending: "Envoi en cours...",
+        send_invitation: "Envoyer l'invitation",
+      },
+      field: {
+        administrator: "Admin",
+        disabled: "Désactivé",
+        email_actions: "Actions e-mail",
+      },
+      section: {
+        create_title: "Créer un nouvel utilisateur",
+      },
+      empty: {
+        title: "Aucun utilisateur trouvé",
+        description: "Il semble que votre liste d'utilisateurs soit vide.",
+      },
+      notification: {
+        invite_sent: "E-mail d'invitation renvoyé avec succès",
+        invite_error: "Échec du renvoi de l'e-mail d'invitation",
+        reset_sent: "E-mail de réinitialisation envoyé avec succès",
+        reset_error: "Échec de l'envoi de l'e-mail de réinitialisation",
+        created: "Utilisateur créé. Il recevra bientôt un e-mail pour définir son mot de passe.",
+        create_error: "Une erreur est survenue lors de la création de l'utilisateur.",
+        updated: "Utilisateur mis à jour avec succès",
+        error: "Une erreur est survenue. Veuillez réessayer.",
+      },
+      dialog: {
+        resend_invitation: {
+          title: "Renvoyer l'invitation",
+          description: "Envoyer un nouvel e-mail d'invitation à %{email} ?",
+          fresh_link: "Cela lui enverra un nouveau lien d'invitation pour configurer son compte.",
+        },
+        reset_password: {
+          title: "Réinitialiser le mot de passe",
+          description: "Envoyer un e-mail de réinitialisation à %{email} ?",
+          reset_link: "Cela lui enverra un lien pour réinitialiser son mot de passe.",
+        },
+      },
+    },
     signup: {
       title: "Bienvenue sur %{title}",
       subtitle: "Créez le premier compte utilisateur pour terminer la configuration.",
@@ -1101,6 +1147,16 @@ export const frMessages = {
         contact_id: "Contact",
         company_id: "Entreprise",
         deal_id: "Affaire",
+      },
+    },
+    sales: {
+      name: "Utilisateur |||| Utilisateurs",
+      fields: {
+        first_name: "Prénom",
+        last_name: "Nom",
+        email: "E-mail",
+        administrator: "Admin",
+        disabled: "Désactivé",
       },
     },
   },

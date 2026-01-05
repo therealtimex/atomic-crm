@@ -8,6 +8,7 @@ import {
   useNotify,
   useRecordContext,
   useRefresh,
+  useTranslate,
 } from "ra-core";
 import { CreateButton } from "@/components/admin/create-button";
 import { DataTable } from "@/components/admin/data-table";
@@ -39,17 +40,21 @@ import { TopToolbar } from "../layout/TopToolbar";
 import useAppBarHeight from "../misc/useAppBarHeight";
 import type { CrmDataProvider } from "../providers/types";
 
-const SalesListActions = () => (
-  <TopToolbar>
-    <ExportButton />
-    <CreateButton label="New user" />
-  </TopToolbar>
-);
+const SalesListActions = () => {
+  const translate = useTranslate();
+  return (
+    <TopToolbar>
+      <ExportButton />
+      <CreateButton label={translate("crm.user.action.create")} />
+    </TopToolbar>
+  );
+};
 
 const filters = [<SearchInput source="q" alwaysOn />];
 
 const OptionsField = (_props: { label?: string | boolean }) => {
   const record = useRecordContext();
+  const translate = useTranslate();
   if (!record) return null;
   return (
     <div className="flex flex-row gap-1">
@@ -58,7 +63,7 @@ const OptionsField = (_props: { label?: string | boolean }) => {
           variant="outline"
           className="border-blue-300 dark:border-blue-700"
         >
-          Admin
+          {translate("crm.user.field.administrator")}
         </Badge>
       )}
       {record.disabled && (
@@ -66,7 +71,7 @@ const OptionsField = (_props: { label?: string | boolean }) => {
           variant="outline"
           className="border-orange-300 dark:border-orange-700"
         >
-          Disabled
+          {translate("crm.user.field.disabled")}
         </Badge>
       )}
     </div>
@@ -78,6 +83,7 @@ const RowActions = () => {
   const dataProvider = useDataProvider<CrmDataProvider>();
   const notify = useNotify();
   const refresh = useRefresh();
+  const translate = useTranslate();
   const [inviteDialogOpen, setInviteDialogOpen] = React.useState(false);
   const [resetDialogOpen, setResetDialogOpen] = React.useState(false);
 
@@ -86,12 +92,12 @@ const RowActions = () => {
       return dataProvider.resendInvite(record.id);
     },
     onSuccess: () => {
-      notify("Invitation email resent successfully");
+      notify(translate("crm.user.notification.invite_sent"));
       setInviteDialogOpen(false);
       refresh();
     },
     onError: () => {
-      notify("Failed to resend invitation email", { type: "error" });
+      notify(translate("crm.user.notification.invite_error"), { type: "error" });
       setInviteDialogOpen(false);
     },
   });
@@ -101,12 +107,12 @@ const RowActions = () => {
       return dataProvider.resetPassword(record.id);
     },
     onSuccess: () => {
-      notify("Password reset email sent successfully");
+      notify(translate("crm.user.notification.reset_sent"));
       setResetDialogOpen(false);
       refresh();
     },
     onError: () => {
-      notify("Failed to send password reset email", { type: "error" });
+      notify(translate("crm.user.notification.reset_error"), { type: "error" });
       setResetDialogOpen(false);
     },
   });
@@ -117,44 +123,36 @@ const RowActions = () => {
   const isConfirmed = record.email_confirmed_at !== null;
   const isDisabled = record.disabled === true;
 
-  console.log("[RowActions] Record:", {
-    email: record.email,
-    email_confirmed_at: record.email_confirmed_at,
-    isConfirmed,
-    isDisabled,
-    inviteDialogOpen,
-    resetDialogOpen,
-  });
-
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">{translate("ra.action.open_menu")}</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Email Actions</DropdownMenuLabel>
+          <DropdownMenuLabel>
+            {translate("crm.user.field.email_actions")}
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {!isConfirmed && (
             <DropdownMenuItem
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log("[Menu] Clicked Resend Invite");
                 setInviteDialogOpen(true);
               }}
             >
               <RefreshCw className="mr-2 h-4 w-4" />
-              Resend Invite
+              {translate("crm.user.action.resend_invite")}
             </DropdownMenuItem>
           )}
           {isConfirmed && !isDisabled && (
             <DropdownMenuItem onClick={() => setResetDialogOpen(true)}>
               <KeyRound className="mr-2 h-4 w-4" />
-              Send Password Reset
+              {translate("crm.user.action.send_password_reset")}
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>
@@ -167,12 +165,16 @@ const RowActions = () => {
           onPointerDown={(e) => e.stopPropagation()}
         >
           <DialogHeader>
-            <DialogTitle>Resend Invitation</DialogTitle>
+            <DialogTitle>
+              {translate("crm.user.dialog.resend_invitation.title")}
+            </DialogTitle>
             <DialogDescription>
-              Send a new invitation email to <strong>{record.email}</strong>?
+              {translate("crm.user.dialog.resend_invitation.description", {
+                email: record.email,
+              })}
               <br />
               <br />
-              This will send them a fresh invitation link to set up their account.
+              {translate("crm.user.dialog.resend_invitation.fresh_link")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -184,7 +186,7 @@ const RowActions = () => {
               }}
               disabled={isInvitePending}
             >
-              Cancel
+              {translate("crm.user.action.cancel")}
             </Button>
             <Button
               onClick={(e) => {
@@ -193,7 +195,9 @@ const RowActions = () => {
               }}
               disabled={isInvitePending}
             >
-              {isInvitePending ? "Sending..." : "Send Invitation"}
+              {isInvitePending
+                ? translate("crm.user.action.sending")
+                : translate("crm.user.action.send_invitation")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -206,12 +210,16 @@ const RowActions = () => {
           onPointerDown={(e) => e.stopPropagation()}
         >
           <DialogHeader>
-            <DialogTitle>Send Password Reset</DialogTitle>
+            <DialogTitle>
+              {translate("crm.user.dialog.reset_password.title")}
+            </DialogTitle>
             <DialogDescription>
-              Send a password reset email to <strong>{record.email}</strong>?
+              {translate("crm.user.dialog.reset_password.description", {
+                email: record.email,
+              })}
               <br />
               <br />
-              This will send them a link to reset their password.
+              {translate("crm.user.dialog.reset_password.reset_link")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -223,7 +231,7 @@ const RowActions = () => {
               }}
               disabled={isResetPending}
             >
-              Cancel
+              {translate("crm.user.action.cancel")}
             </Button>
             <Button
               onClick={(e) => {
@@ -232,7 +240,9 @@ const RowActions = () => {
               }}
               disabled={isResetPending}
             >
-              {isResetPending ? "Sending..." : "Send Reset Link"}
+              {isResetPending
+                ? translate("crm.user.action.sending")
+                : translate("crm.user.action.send_reset_link")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -296,6 +306,7 @@ const SalesListLayout = () => {
 
 const SalesEmpty = () => {
   const appbarHeight = useAppBarHeight();
+  const translate = useTranslate();
   return (
     <div
       className="flex flex-col justify-center items-center gap-3"
@@ -303,15 +314,15 @@ const SalesEmpty = () => {
         height: `calc(100dvh - ${appbarHeight}px)`,
       }}
     >
-      <img src="./img/empty.svg" alt="No users found" />
+      <img src="./img/empty.svg" alt={translate("crm.user.empty.title")} />
       <div className="flex flex-col gap-0 items-center">
-        <h6 className="text-lg font-bold">No users found</h6>
+        <h6 className="text-lg font-bold">{translate("crm.user.empty.title")}</h6>
         <p className="text-sm text-muted-foreground text-center mb-4">
-          It seems your user list is empty.
+          {translate("crm.user.empty.description")}
         </p>
       </div>
       <div className="flex flex-row gap-2">
-        <CreateButton label="New user" />
+        <CreateButton label={translate("crm.user.action.create")} />
       </div>
     </div>
   );
