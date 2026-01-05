@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Mail, Phone, MessageSquare, StickyNote, Play, Calendar, User, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { Button } from "@/components/ui/button";
+import { useTranslate } from "ra-core";
 
 interface ActivityFeedProps {
   contactId?: number;
@@ -17,6 +18,7 @@ interface ActivityFeedProps {
 export const ActivityFeed = ({ contactId, salesId, className }: ActivityFeedProps) => {
   const queryClient = useQueryClient();
   const queryKey = useMemo(() => ["activities", contactId, salesId], [contactId, salesId]);
+  const translate = useTranslate();
 
   // 1. Initial Fetch
   const { data: activities, isLoading } = useQuery({
@@ -82,7 +84,7 @@ export const ActivityFeed = ({ contactId, salesId, className }: ActivityFeedProp
   if (!activities || activities.length === 0) {
     return (
       <div className={`text-center py-8 text-muted-foreground bg-muted/20 rounded-lg border border-dashed ${className}`}>
-        No activities yet.
+        {translate("crm.activity_feed.empty")}
       </div>
     );
   }
@@ -99,6 +101,7 @@ export const ActivityFeed = ({ contactId, salesId, className }: ActivityFeedProp
 const ActivityCard = ({ activity }: { activity: any }) => {
   const isPending = activity.processing_status === "raw" || activity.processing_status === "processing";
   const isFailed = activity.processing_status === "failed";
+  const translate = useTranslate();
 
   return (
     <Card className={`relative overflow-hidden transition-all ${isPending ? 'border-blue-200 bg-blue-50/30 dark:bg-blue-950/10' : ''}`}>
@@ -113,12 +116,16 @@ const ActivityCard = ({ activity }: { activity: any }) => {
           <ActivityIcon type={activity.type} />
           <div>
             <CardTitle className="text-base font-medium flex items-center gap-2">
-              <span className="capitalize">{activity.type}</span>
+              <span>{translate(`crm.activity_feed.type.${activity.type}`, { _: activity.type })}</span>
               {activity.direction === "inbound" && (
-                  <Badge variant="outline" className="text-[10px] h-5">Inbound</Badge>
+                  <Badge variant="outline" className="text-[10px] h-5">
+                    {translate("crm.activity_feed.direction.inbound")}
+                  </Badge>
               )}
                {activity.direction === "outbound" && (
-                  <Badge variant="secondary" className="text-[10px] h-5">Outbound</Badge>
+                  <Badge variant="secondary" className="text-[10px] h-5">
+                    {translate("crm.activity_feed.direction.outbound")}
+                  </Badge>
               )}
             </CardTitle>
             <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
@@ -146,10 +153,10 @@ const ActivityCard = ({ activity }: { activity: any }) => {
                     <div className="h-2 w-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                     <div className="h-2 w-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
                     <div className="h-2 w-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                    <span>Processing content...</span>
+                    <span>{translate("crm.activity_feed.label.processing_content")}</span>
                 </div>
             ) : isFailed ? (
-                 <p className="text-destructive">Processing failed.</p>
+                 <p className="text-destructive">{translate("crm.activity_feed.label.processing_failed")}</p>
             ) : (
                 <div className="space-y-2">
                     {/* Transcript / Text */}
@@ -167,14 +174,16 @@ const ActivityCard = ({ activity }: { activity: any }) => {
                              <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full">
                                  <Play className="h-4 w-4" />
                              </Button>
-                             <span className="text-xs font-mono">Audio Recording</span>
+                             <span className="text-xs font-mono">{translate("crm.activity_feed.label.audio_recording")}</span>
                          </div>
                     )}
                     
                     {/* Atomic Facts / Summary */}
                     {activity.processed_data?.summary && (
                         <div className="bg-yellow-50 dark:bg-yellow-950/20 p-2 rounded border border-yellow-200 dark:border-yellow-800 text-xs">
-                            <span className="font-semibold text-yellow-700 dark:text-yellow-500 block mb-1">Summary:</span>
+                            <span className="font-semibold text-yellow-700 dark:text-yellow-500 block mb-1">
+                                {translate("crm.activity_feed.label.summary")}
+                            </span>
                             {activity.processed_data.summary}
                         </div>
                     )}
@@ -198,10 +207,13 @@ const ActivityIcon = ({ type }: { type: string }) => {
 };
 
 const StatusBadge = ({ status }: { status: string }) => {
+    const translate = useTranslate();
     switch (status) {
         case "raw":
         case "processing":
-            return <Badge variant="outline" className="border-blue-200 text-blue-600 bg-blue-50">Processing</Badge>;
+            return <Badge variant="outline" className="border-blue-200 text-blue-600 bg-blue-50">
+                {translate("crm.activity_feed.status.processing")}
+            </Badge>;
         case "completed":
             return <CheckCircle2 className="h-4 w-4 text-green-500" />;
         case "failed":

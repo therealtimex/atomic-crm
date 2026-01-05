@@ -885,6 +885,31 @@ export const esMessages = {
         download_attachment: "Descargar adjunto",
       },
     },
+    activity_feed: {
+      empty: "Aún no hay actividades.",
+      direction: {
+        inbound: "Entrante",
+        outbound: "Saliente",
+      },
+      status: {
+        processing: "Procesando",
+        failed: "Fallido",
+        completed: "Completado",
+      },
+      label: {
+        processing_content: "Procesando contenido...",
+        processing_failed: "Error al procesar.",
+        audio_recording: "Grabación de audio",
+        summary: "Resumen:",
+      },
+      type: {
+        email: "Correo",
+        call: "Llamada",
+        sms: "SMS",
+        meeting: "Reunión",
+        note: "Nota",
+      },
+    },
     signup: {
       title: "Bienvenido a %{title}",
       subtitle: "Cree la primera cuenta de usuario para completar la configuración.",

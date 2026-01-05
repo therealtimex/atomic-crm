@@ -872,6 +872,31 @@ export const jaMessages = {
         download_attachment: "添付ファイルをダウンロード",
       },
     },
+    activity_feed: {
+      empty: "アクティビティはまだありません。",
+      direction: {
+        inbound: "受信",
+        outbound: "送信",
+      },
+      status: {
+        processing: "処理中",
+        failed: "失敗",
+        completed: "完了",
+      },
+      label: {
+        processing_content: "コンテンツを処理中...",
+        processing_failed: "処理に失敗しました。",
+        audio_recording: "音声録音",
+        summary: "要約:",
+      },
+      type: {
+        email: "メール",
+        call: "通話",
+        sms: "SMS",
+        meeting: "会議",
+        note: "ノート",
+      },
+    },
     signup: {
       title: "%{title}へようこそ",
       subtitle: "セットアップを完了するために、最初のユーザーアカウントを作成してください。",

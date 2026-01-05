@@ -886,6 +886,31 @@ export const frMessages = {
         download_attachment: "Télécharger la pièce jointe",
       },
     },
+    activity_feed: {
+      empty: "Aucune activité pour le moment.",
+      direction: {
+        inbound: "Entrant",
+        outbound: "Sortant",
+      },
+      status: {
+        processing: "Traitement en cours",
+        failed: "Échoué",
+        completed: "Terminé",
+      },
+      label: {
+        processing_content: "Traitement du contenu...",
+        processing_failed: "Échec du traitement.",
+        audio_recording: "Enregistrement audio",
+        summary: "Résumé :",
+      },
+      type: {
+        email: "E-mail",
+        call: "Appel",
+        sms: "SMS",
+        meeting: "Réunion",
+        note: "Note",
+      },
+    },
     signup: {
       title: "Bienvenue sur %{title}",
       subtitle: "Créez le premier compte utilisateur pour terminer la configuration.",

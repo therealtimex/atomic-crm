@@ -877,6 +877,31 @@ export const viMessages = {
         download_attachment: "Tải tệp đính kèm",
       },
     },
+    activity_feed: {
+      empty: "Chưa có hoạt động nào.",
+      direction: {
+        inbound: "Đến",
+        outbound: "Đi",
+      },
+      status: {
+        processing: "Đang xử lý",
+        failed: "Thất bại",
+        completed: "Hoàn thành",
+      },
+      label: {
+        processing_content: "Đang xử lý nội dung...",
+        processing_failed: "Xử lý thất bại.",
+        audio_recording: "Ghi âm cuộc gọi",
+        summary: "Tóm tắt:",
+      },
+      type: {
+        email: "Email",
+        call: "Cuộc gọi",
+        sms: "SMS",
+        meeting: "Cuộc họp",
+        note: "Ghi chú",
+      },
+    },
     signup: {
       title: "Chào mừng bạn đến với %{title}",
       subtitle: "Tạo tài khoản người dùng đầu tiên để hoàn tất thiết lập.",

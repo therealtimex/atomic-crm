@@ -869,6 +869,31 @@ export const koMessages = {
         download_attachment: "첨부 파일 다운로드",
       },
     },
+    activity_feed: {
+      empty: "활동이 아직 없습니다.",
+      direction: {
+        inbound: "수신",
+        outbound: "발신",
+      },
+      status: {
+        processing: "처리 중",
+        failed: "실패",
+        completed: "완료",
+      },
+      label: {
+        processing_content: "콘텐츠 처리 중...",
+        processing_failed: "처리 실패.",
+        audio_recording: "음성 녹음",
+        summary: "요약:",
+      },
+      type: {
+        email: "이메일",
+        call: "전화",
+        sms: "SMS",
+        meeting: "회의",
+        note: "노트",
+      },
+    },
     signup: {
       title: "%{title}에 오신 것을 환영합니다",
       subtitle: "설정을 완료하려면 첫 번째 사용자 계정을 만드십시오.",

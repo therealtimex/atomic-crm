@@ -882,6 +882,31 @@ export const enMessages = {
         download_attachment: "Download attachment",
       },
     },
+    activity_feed: {
+      empty: "No activities yet.",
+      direction: {
+        inbound: "Inbound",
+        outbound: "Outbound",
+      },
+      status: {
+        processing: "Processing",
+        failed: "Failed",
+        completed: "Completed",
+      },
+      label: {
+        processing_content: "Processing content...",
+        processing_failed: "Processing failed.",
+        audio_recording: "Audio Recording",
+        summary: "Summary:",
+      },
+      type: {
+        email: "Email",
+        call: "Call",
+        sms: "SMS",
+        meeting: "Meeting",
+        note: "Note",
+      },
+    },
     signup: {
       title: "Welcome to %{title}",
       subtitle: "Create the first user account to complete the setup.",
