@@ -64,15 +64,15 @@ export const AnimatedCircuitSVG = () => {
 
             @keyframes scan {
               0% { opacity: 0; transform: scale(0.5); }
-              50% { opacity: 0.5; transform: scale(1.2); }
-              100% { opacity: 0; transform: scale(1.5); }
+              50% { opacity: 0.3; transform: scale(1.5); }
+              100% { opacity: 0; transform: scale(2.5); }
             }
           `}
         </style>
 
         {/* --- Background Radar Ripples --- */}
-        <circle cx="400" cy="300" r="100" stroke="#312e81" strokeWidth="1" className="scanner" style={{ animationDelay: '0s' }} />
-        <circle cx="400" cy="300" r="100" stroke="#312e81" strokeWidth="1" className="scanner" style={{ animationDelay: '1.5s' }} />
+        <circle cx="400" cy="300" r="120" stroke="#4338ca" strokeWidth="1.5" className="scanner" style={{ animationDelay: '0s' }} />
+        <circle cx="400" cy="300" r="120" stroke="#4338ca" strokeWidth="1.5" className="scanner" style={{ animationDelay: '2s' }} />
 
         {/* --- Connecting Lines (The "Wires") --- */}
         {/* Left Wire */}
