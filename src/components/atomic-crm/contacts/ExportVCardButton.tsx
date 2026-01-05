@@ -14,7 +14,21 @@ export const ExportVCardButton = () => {
     { id: contact?.company_id },
     { enabled: !!contact?.company_id },
   );
-// ...
+
+  const handleExport = () => {
+    if (!contact) return;
+    const vCard = exportToVCard(contact, company);
+    const blob = new Blob([vCard], { type: "text/vcard" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `${contact.first_name}_${contact.last_name}.vcf`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  };
+
   if (!contact) return null;
 
   return (

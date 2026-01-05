@@ -21,7 +21,6 @@ import { translateChoice } from "@/i18n/utils";
 export const ContactInputs = () => {
   const isMobile = useIsMobile();
   const record = useRecordContext<Contact>();
-  const translate = useTranslate();
 
   return (
     <div className="flex flex-col gap-2 p-1">
