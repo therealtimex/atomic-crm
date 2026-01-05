@@ -199,6 +199,7 @@ const TaskEditForm = ({
             choices={translatedTaskTypes}
             helperText={false}
             validate={required()}
+            label={translate("crm.task.field.type")}
           />
           <SelectInput
             source="priority"

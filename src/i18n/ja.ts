@@ -97,6 +97,7 @@ export const jaMessages = {
       },
       field: {
         task: "タスク",
+        type: "タイプ",
         related_to: "関連先",
         description: "説明",
         due_date: "期限",
@@ -1076,6 +1077,7 @@ export const jaMessages = {
       fields: {
         title: "タイトル",
         description: "説明",
+        type: "タイプ",
         due_date: "期限",
         status: "ステータス",
         priority: "優先度",

@@ -97,6 +97,7 @@ export const viMessages = {
       },
       field: {
         task: "Công việc",
+        type: "Loại",
         related_to: "Liên quan đến",
         description: "Mô tả",
         due_date: "Ngày đến hạn",
@@ -1082,6 +1083,7 @@ export const viMessages = {
       fields: {
         title: "Tiêu đề",
         description: "Mô tả",
+        type: "Loại",
         due_date: "Ngày đến hạn",
         status: "Trạng thái",
         priority: "Ưu tiên",

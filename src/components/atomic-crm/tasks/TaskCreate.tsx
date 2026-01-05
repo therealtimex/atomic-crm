@@ -158,6 +158,7 @@ export const TaskCreate = () => {
                   source="type"
                   validate={required()}
                   choices={translatedTaskTypes}
+                  label={translate("crm.task.field.type")}
                 />
                 <SelectInput
                   source="priority"

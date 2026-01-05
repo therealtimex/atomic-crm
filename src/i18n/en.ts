@@ -97,6 +97,7 @@ export const enMessages = {
       },
       field: {
         task: "Task",
+        type: "Type",
         related_to: "Related To",
         description: "Description",
         due_date: "Due Date",
@@ -1087,6 +1088,7 @@ export const enMessages = {
       fields: {
         title: "Title",
         description: "Description",
+        type: "Type",
         due_date: "Due date",
         status: "Status",
         priority: "Priority",

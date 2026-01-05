@@ -98,6 +98,7 @@ export const frMessages = {
       },
       field: {
         task: "Tâche",
+        type: "Type",
         related_to: "Lié à",
         description: "Description",
         due_date: "Date d'échéance",
@@ -1092,6 +1093,7 @@ export const frMessages = {
       fields: {
         title: "Titre",
         description: "Description",
+        type: "Type",
         due_date: "Date d'échéance",
         status: "Statut",
         priority: "Priorité",

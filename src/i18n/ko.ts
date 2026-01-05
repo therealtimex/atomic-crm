@@ -97,6 +97,7 @@ export const koMessages = {
       },
       field: {
         task: "작업",
+        type: "유형",
         related_to: "관련",
         description: "설명",
         due_date: "마감일",
@@ -1072,6 +1073,7 @@ export const koMessages = {
       fields: {
         title: "제목",
         description: "설명",
+        type: "유형",
         due_date: "마감일",
         status: "상태",
         priority: "우선순위",

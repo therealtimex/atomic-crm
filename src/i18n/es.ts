@@ -97,6 +97,7 @@ export const esMessages = {
       },
       field: {
         task: "Tarea",
+        type: "Tipo",
         related_to: "Relacionado con",
         description: "Descripción",
         due_date: "Fecha de vencimiento",
@@ -1090,6 +1091,7 @@ export const esMessages = {
       fields: {
         title: "Título",
         description: "Descripción",
+        type: "Tipo",
         due_date: "Fecha de vencimiento",
         status: "Estado",
         priority: "Prioridad",
