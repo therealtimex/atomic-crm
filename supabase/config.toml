@@ -383,3 +383,31 @@ s3_secret_key = "env(S3_SECRET_KEY)"
 
 [functions.setup]
 verify_jwt = false
+
+[functions.api-v1-contacts]
+verify_jwt = false
+
+[functions.api-v1-companies]
+verify_jwt = false
+
+[functions.api-v1-deals]
+verify_jwt = false
+
+[functions.api-v1-tasks]
+verify_jwt = false
+
+[functions.api-v1-activities]
+verify_jwt = false
+
+[functions.ingest-activity]
+verify_jwt = false
+
+[functions.validate-contact-emails]
+verify_jwt = false
+
+[functions.validate-linkedin-profiles]
+verify_jwt = false
+
+[functions.webhook-dispatcher]
+verify_jwt = false
+
