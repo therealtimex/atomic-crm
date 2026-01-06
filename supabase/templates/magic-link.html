@@ -17,14 +17,6 @@
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
-      .header {
-        text-align: center;
-        padding: 10px 0;
-      }
-      .header h2 {
-        margin: 0;
-        color: #333333;
-      }
       .content {
         padding: 20px;
         line-height: 1.6;
@@ -33,37 +25,33 @@
       .content p {
         margin: 0 0 10px;
       }
-      .button {
-        display: block;
-        width: 200px;
-        margin: 20px auto;
-        padding: 10px;
+      h2 {
+        color: #333333;
+      }
+      .otp-code {
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        color: #007bff;
+        margin: 20px 0;
         text-align: center;
-        background-color: #007bff;
-        color: #ffffff !important;
-        text-decoration: none;
-        border-radius: 5px;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <div class="header">
-        <h2>Log in to RealTimeX CRM</h2>
-      </div>
       <div class="content">
-        <p>Hello,</p>
-        <p>
-          Click the button below to sign in to your RealTimeX CRM account. This
-          link will only work once.
-        </p>
-        <p>
-          <a href="{{ .ConfirmationURL }}auth-callback.html" class="button"
-            >Log in to CRM</a
-          >
-        </p>
-        <p>If you didn't request this email, you can safely ignore it.</p>
-        <p>The RealTimeX CRM team</p>
+        <h2>RealTimeX CRM Magic OTP</h2>
+
+        <p>Hi there,</p>
+
+        <p>Use the following verification code to log in to your account:</p>
+
+        <div class="otp-code">{{ .Token }}</div>
+
+        <p>This code will expire in 1 hour.</p>
+
+        <p>If you didn't request this code, you can safely ignore this email.</p>
       </div>
     </div>
   </body>

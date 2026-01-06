@@ -17,14 +17,6 @@
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
-      .header {
-        text-align: center;
-        padding: 10px 0;
-      }
-      .header h2 {
-        margin: 0;
-        color: #333333;
-      }
       .content {
         padding: 20px;
         line-height: 1.6;
@@ -33,58 +25,39 @@
       .content p {
         margin: 0 0 10px;
       }
-      .button {
-        display: block;
-        width: 200px;
-        margin: 20px auto;
-        padding: 10px;
-        text-align: center;
-        background-color: #007bff;
-        color: #ffffff !important;
-        text-decoration: none;
-        border-radius: 5px;
-      }
-      .steps {
-        background-color: #f9f9f9;
-        padding: 15px;
-        border-radius: 5px;
-        margin: 15px 0;
+      h2, h3 {
+        color: #333333;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <div class="header">
-        <h2>Welcome to RealTimeX CRM</h2>
-      </div>
       <div class="content">
-        <p>Hello {{ .Data.first_name }},</p>
-        <p>
-          You've been invited to join RealTimeX CRM. Your account has been
-          successfully created!
-        </p>
+        <h2>Welcome to RealTimeX CRM</h2>
 
-        <div class="steps">
-          <p><strong>How to Access Your Account:</strong></p>
-          <ol>
-            <li>Click the button below to open the application.</li>
-            <li>Select <strong>“Login with Email Code (OTP)”</strong>.</li>
-            <li>Enter your email: <strong>{{ .Email }}</strong>.</li>
-            <li>Check your inbox for a 6-digit verification code.</li>
-          </ol>
-        </div>
+        <p>Hi there,</p>
 
-        <p>
-          <a href="{{ .ConfirmationURL }}auth-callback.html" class="button"
-            >Open RealTimeX CRM</a
-          >
-        </p>
+        <p>Your RealTimeX CRM account has been successfully created!</p>
 
-        <p>
-          If you have any questions, please contact your administrator. See you
-          soon!
+        <h3>How to Access Your Account</h3>
+
+        <ol style="line-height: 1.8;">
+          <li>Open the RealTimeX CRM application.</li>
+          <li>Select <strong>“Login with Email Code (OTP)”</strong>.</li>
+          <li>Enter your email address: <strong>{{ .Email }}</strong>.</li>
+          <li>Check your inbox for a 6-digit verification code.</li>
+          <li>Enter the code in the app when prompted.</li>
+          <li>Create a password to complete setup.</li>
+        </ol>
+
+        <h3>Need Help?</h3>
+
+        <p>If you have any questions, please contact your administrator.</p>
+
+        <p style="color: #666; font-size: 12px;">
+          If you didn’t request this account, please reach out to your
+          administrator immediately.
         </p>
-        <p>The RealTimeX CRM team</p>
       </div>
     </div>
   </body>
