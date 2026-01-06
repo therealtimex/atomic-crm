@@ -5,6 +5,12 @@ All notable changes to Atomic CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.46.2] - 2026-01-05
+
+### Fixed
+
+- **Build**: Removed unused `visualizer` variable in `vite.demo.config.ts` that was preventing successful publishing.
+
 ## [0.46.1] - 2026-01-05
 
 ### Fixed
