@@ -391,7 +391,7 @@ export const dataProvider = withLifecycleCallbacks(
       },
       beforeUpdate: async (params) => {
         const { data, previousData } = params;
-        if (previousData.done_date !== data.done_date) {
+        if (previousData && previousData.done_date !== data.done_date) {
           taskUpdateType = data.done_date
             ? TASK_MARKED_AS_DONE
             : TASK_MARKED_AS_UNDONE;
