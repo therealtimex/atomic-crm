@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { I18nContextProvider } from 'ra-core';
 import { CRM } from '@/components/atomic-crm/root/CRM';
 import { SupabaseSetupWizard } from '@/components/atomic-crm/setup/SupabaseSetupWizard';
 import { isSupabaseConfigured } from '@/lib/supabase-config';
@@ -10,6 +11,7 @@ import {
 } from '@/lib/migration-check';
 import { supabase } from '@/components/atomic-crm/providers/supabase/supabase';
 import { MigrationProvider } from '@/contexts/MigrationContext';
+import { i18nProvider } from '@/components/atomic-crm/root/i18nProvider';
 
 /**
  * Application entry point
@@ -134,56 +136,60 @@ const App = () => {
   // If Supabase is not configured, only show the setup wizard
   if (needsSetup) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <SupabaseSetupWizard
-          open={true}
-          onComplete={() => {
-            setNeedsSetup(false);
-            // Will reload anyway, but update state for clarity
-          }}
-          canClose={false}
-        />
-      </div>
+      <I18nContextProvider value={i18nProvider}>
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <SupabaseSetupWizard
+            open={true}
+            onComplete={() => {
+              setNeedsSetup(false);
+              // Will reload anyway, but update state for clarity
+            }}
+            canClose={false}
+          />
+        </div>
+      </I18nContextProvider>
     );
   }
 
   return (
-    <MigrationProvider
-      value={{
-        migrationStatus,
-        showMigrationBanner,
-        showMigrationModal,
-        openMigrationModal: () => setShowMigrationModal(true),
-      }}
-    >
-      {/* Migration Notification (floating, top-right) */}
-      {showMigrationBanner && migrationStatus && (
-        <MigrationBanner
-          status={migrationStatus}
-          onDismiss={() => setShowMigrationBanner(false)}
-          onLearnMore={() => setShowMigrationModal(true)}
-        />
-      )}
+    <I18nContextProvider value={i18nProvider}>
+      <MigrationProvider
+        value={{
+          migrationStatus,
+          showMigrationBanner,
+          showMigrationModal,
+          openMigrationModal: () => setShowMigrationModal(true),
+        }}
+      >
+        {/* Migration Notification (floating, top-right) */}
+        {showMigrationBanner && migrationStatus && (
+          <MigrationBanner
+            status={migrationStatus}
+            onDismiss={() => setShowMigrationBanner(false)}
+            onLearnMore={() => setShowMigrationModal(true)}
+          />
+        )}
 
-      {/* Migration Modal */}
-      {migrationStatus && (
-        <MigrationModal
-          open={showMigrationModal}
-          onOpenChange={setShowMigrationModal}
-          status={migrationStatus}
-        />
-      )}
+        {/* Migration Modal */}
+        {migrationStatus && (
+          <MigrationModal
+            open={showMigrationModal}
+            onOpenChange={setShowMigrationModal}
+            status={migrationStatus}
+          />
+        )}
 
-      {/* Main CRM App */}
-      <CRM
-        companyLifecycleStages={companyLifecycleStages}
-        companyTypes={companyTypes}
-        companyQualificationStatuses={companyQualificationStatuses}
-        companyRevenueRanges={companyRevenueRanges}
-        externalHeartbeatStatuses={externalHeartbeatStatuses}
-        internalHeartbeatStatuses={internalHeartbeatStatuses}
-      />
-    </MigrationProvider>
+        {/* Main CRM App */}
+        <CRM
+          companyLifecycleStages={companyLifecycleStages}
+          companyTypes={companyTypes}
+          companyQualificationStatuses={companyQualificationStatuses}
+          companyRevenueRanges={companyRevenueRanges}
+          externalHeartbeatStatuses={externalHeartbeatStatuses}
+          internalHeartbeatStatuses={internalHeartbeatStatuses}
+        />
+      </MigrationProvider>
+    </I18nContextProvider>
   );
 };
 

@@ -4,7 +4,6 @@ import {
   Resource,
   type AuthProvider,
   type DataProvider,
-  I18nContextProvider,
 } from "ra-core";
 import { useEffect } from "react";
 import { Route } from "react-router";
@@ -156,53 +155,51 @@ export const CRM = ({
       externalHeartbeatStatuses={externalHeartbeatStatuses}
       internalHeartbeatStatuses={internalHeartbeatStatuses}
     >
-      <I18nContextProvider value={i18nProvider}>
-        <DatabaseHealthCheck dataProvider={dataProvider}>
-          <Admin
-            dataProvider={dataProvider}
-            authProvider={authProvider}
-            store={localStorageStore(undefined, "CRM")}
-            layout={Layout}
-            loginPage={StartPage}
-            i18nProvider={i18nProvider}
-            dashboard={Dashboard}
-            requireAuth
-            disableTelemetry
-            {...rest}
-          >
-            <CustomRoutes noLayout>
-              <Route path={SignupPage.path} element={<SignupPage />} />
-              <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
-              <Route
-                path={ForgotPasswordPage.path}
-                element={<ForgotPasswordPage />}
-              />
-              <Route
-                path={ChangePasswordPage.path}
-                element={<ChangePasswordPage />}
-              />
-              <Route path={OtpLoginPage.path} element={<OtpLoginPage />} />
-            </CustomRoutes>
+      <DatabaseHealthCheck dataProvider={dataProvider}>
+        <Admin
+          dataProvider={dataProvider}
+          authProvider={authProvider}
+          store={localStorageStore(undefined, "CRM")}
+          layout={Layout}
+          loginPage={StartPage}
+          i18nProvider={i18nProvider}
+          dashboard={Dashboard}
+          requireAuth
+          disableTelemetry
+          {...rest}
+        >
+          <CustomRoutes noLayout>
+            <Route path={SignupPage.path} element={<SignupPage />} />
+            <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
+            <Route
+              path={ForgotPasswordPage.path}
+              element={<ForgotPasswordPage />}
+            />
+            <Route
+              path={ChangePasswordPage.path}
+              element={<ChangePasswordPage />}
+            />
+            <Route path={OtpLoginPage.path} element={<OtpLoginPage />} />
+          </CustomRoutes>
 
-            <CustomRoutes>
-              <Route path={SettingsPage.path} element={<SettingsPage />} />
-              <Route path={DatabasePage.path} element={<DatabasePage />} />
-              <Route path={IntegrationsPage.path} element={<IntegrationsPage />} />
-            </CustomRoutes>
-            <Resource name="deals" {...deals} />
-            <Resource name="contacts" {...contacts} />
-            <Resource name="companies" {...companies} />
-            <Resource name="companyNotes" />
-            <Resource name="contactNotes" />
-            <Resource name="dealNotes" />
-            <Resource name="taskNotes" />
-            <Resource name="task_activity" />
-            <Resource name="tasks" {...tasks} />
-            <Resource name="sales" {...sales} />
-            <Resource name="tags" />
-          </Admin>
-        </DatabaseHealthCheck>
-      </I18nContextProvider>
+          <CustomRoutes>
+            <Route path={SettingsPage.path} element={<SettingsPage />} />
+            <Route path={DatabasePage.path} element={<DatabasePage />} />
+            <Route path={IntegrationsPage.path} element={<IntegrationsPage />} />
+          </CustomRoutes>
+          <Resource name="deals" {...deals} />
+          <Resource name="contacts" {...contacts} />
+          <Resource name="companies" {...companies} />
+          <Resource name="companyNotes" />
+          <Resource name="contactNotes" />
+          <Resource name="dealNotes" />
+          <Resource name="taskNotes" />
+          <Resource name="task_activity" />
+          <Resource name="tasks" {...tasks} />
+          <Resource name="sales" {...sales} />
+          <Resource name="tags" />
+        </Admin>
+      </DatabaseHealthCheck>
     </ConfigurationProvider>
   );
 };

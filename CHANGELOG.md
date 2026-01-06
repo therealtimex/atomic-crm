@@ -5,6 +5,12 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.46.9] - 2026-01-05
+
+### Fixed
+
+- **Localization**: Resolved an issue where migration banner and modal strings appeared as raw translation keys (e.g., `crm.migration.banner.title`) by moving the translation context provider to the root `App` component.
+
 ## [0.46.8] - 2026-01-05
 
 ### Fixed
