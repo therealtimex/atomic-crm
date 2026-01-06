@@ -118,6 +118,11 @@ echo "📂 Pushing Database Schema Changes..."
 supabase db push
 
 echo "---------------------------------------------------------"
+echo "⚙️  Pushing Project Configuration..."
+# Pushes Auth, Storage, and other project settings from config.toml
+supabase config push
+
+echo "---------------------------------------------------------"
 echo "⚡ Deploying Edge Functions..."
 # Deploys API logic (contacts, deals, etc).
 # verify_jwt is configured in supabase/config.toml
