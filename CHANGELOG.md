@@ -5,6 +5,19 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.46.3] - 2026-01-05
+
+### Added
+
+- **Automation**: New `npm run supabase:configure:project` script to automatically set up auth settings (OTP, email templates) via Supabase Management API.
+- **Templates**: Added branded email templates for `invite`, `confirmation`, `magic-link`, `recovery`, and `email-change` actions.
+- **Configuration**: Added `verify_jwt = false` to `supabase/config.toml` for public edge functions, removing the need for manual deploy flags.
+
+### Changed
+
+- **Branding**: Comprehensive rebranding from "Atomic CRM" to "RealTimeX CRM" across all email templates, code comments, and documentation.
+- **Deployment**: Simplified `scripts/migrate.sh` to leverage `supabase/config.toml` settings instead of hardcoded flags.
+
 ## [0.46.2] - 2026-01-05
 
 ### Fixed
