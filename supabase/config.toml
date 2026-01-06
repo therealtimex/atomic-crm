@@ -222,23 +222,23 @@ otp_expiry = 3600
 
 [auth.email.template.invite]
 subject = "You have been invited to RealTimeX CRM"
-content_path = "./templates/invite.html"
+content_path = "supabase/templates/invite.html"
 
 [auth.email.template.confirmation]
 subject = "Confirm your RealTimeX CRM account"
-content_path = "./templates/confirmation.html"
+content_path = "supabase/templates/confirmation.html"
 
 [auth.email.template.recovery]
 subject = "Reset your RealTimeX CRM password"
-content_path = "./templates/recovery.html"
+content_path = "supabase/templates/recovery.html"
 
 [auth.email.template.magic_link]
 subject = "Login to RealTimeX CRM"
-content_path = "./templates/magic-link.html"
+content_path = "supabase/templates/magic-link.html"
 
 [auth.email.template.email_change]
 subject = "Confirm your new email for RealTimeX CRM"
-content_path = "./templates/email-change.html"
+content_path = "supabase/templates/email-change.html"
 
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]
