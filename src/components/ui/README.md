@@ -21,11 +21,11 @@ You can find the documentation for these components on the [shadcn/ui website](h
 
 ## Customization
 
-In Atomic CRM, these components are sometimes slightly modified to fit the look and feel of the application. You can customize them further by editing the source files in this directory.
+In RealTimeX CRM, these components are sometimes slightly modified to fit the look and feel of the application. You can customize them further by editing the source files in this directory.
 
 ## Updates
 
-Shadcn/ui components are actively maintained and updated. To add or update a UI component in Atomic CRM, type the following command:
+Shadcn/ui components are actively maintained and updated. To add or update a UI component in RealTimeX CRM, type the following command:
 
 ```
 npx shadcn@latest add [component-name]

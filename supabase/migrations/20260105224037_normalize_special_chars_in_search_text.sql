@@ -15,8 +15,10 @@ ALTER TABLE companies DROP COLUMN IF EXISTS search_text;
 ALTER TABLE contacts
 ADD COLUMN search_text TEXT
 GENERATED ALWAYS AS (
-  -- Normalize special characters to ASCII equivalents
-  REPLACE(REPLACE(REPLACE(
+  -- Normalize and remove special characters for fuzzy search
+  -- Step 1: Convert Unicode dashes to ASCII hyphen
+  -- Step 2: Remove all hyphens for maximum search flexibility
+  REPLACE(REPLACE(REPLACE(REPLACE(
     COALESCE(first_name, '') || ' ' ||
     COALESCE(last_name, '') || ' ' ||
     COALESCE(title, '') || ' ' ||
@@ -25,15 +27,18 @@ GENERATED ALWAYS AS (
     COALESCE(jsonb_path_query_array(phone_jsonb, '$[*].number')::text, ''),
     '‑', '-'),  -- Replace non-breaking hyphen (U+2011) with ASCII hyphen
     '–', '-'),  -- Replace en-dash (U+2013) with ASCII hyphen
-    '—', '-')   -- Replace em-dash (U+2014) with ASCII hyphen
+    '—', '-'),  -- Replace em-dash (U+2014) with ASCII hyphen
+    '-', '')    -- Remove all hyphens for fuzzy search
 ) STORED;
 
 -- Recreate companies.search_text with character normalization
 ALTER TABLE companies
 ADD COLUMN search_text TEXT
 GENERATED ALWAYS AS (
-  -- Normalize special characters to ASCII equivalents
-  REPLACE(REPLACE(REPLACE(
+  -- Normalize and remove special characters for fuzzy search
+  -- Step 1: Convert Unicode dashes to ASCII hyphen
+  -- Step 2: Remove all hyphens for maximum search flexibility
+  REPLACE(REPLACE(REPLACE(REPLACE(
     COALESCE(name, '') || ' ' ||
     COALESCE(phone_number, '') || ' ' ||
     COALESCE(website, '') || ' ' ||
@@ -43,7 +48,8 @@ GENERATED ALWAYS AS (
     COALESCE(description, ''),
     '‑', '-'),  -- Replace non-breaking hyphen (U+2011) with ASCII hyphen
     '–', '-'),  -- Replace en-dash (U+2013) with ASCII hyphen
-    '—', '-')   -- Replace em-dash (U+2014) with ASCII hyphen
+    '—', '-'),  -- Replace em-dash (U+2014) with ASCII hyphen
+    '-', '')    -- Remove all hyphens for fuzzy search
 ) STORED;
 
 -- Step 3: Recreate indexes
@@ -137,5 +143,5 @@ LEFT JOIN tasks t ON co.id = t.contact_id
 GROUP BY c.id;
 
 -- Step 6: Add helpful comments
-COMMENT ON COLUMN contacts.search_text IS 'Normalized searchable text (special chars converted to ASCII)';
-COMMENT ON COLUMN companies.search_text IS 'Normalized searchable text (special chars converted to ASCII)';
+COMMENT ON COLUMN contacts.search_text IS 'Normalized searchable text (hyphens removed for fuzzy search)';
+COMMENT ON COLUMN companies.search_text IS 'Normalized searchable text (hyphens removed for fuzzy search)';

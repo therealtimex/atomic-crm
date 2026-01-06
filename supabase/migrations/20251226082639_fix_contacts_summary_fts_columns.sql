@@ -25,15 +25,6 @@ SELECT
   c.company_id,
   c.sales_id,
   c.linkedin_url,
-  c.internal_heartbeat_score,
-  c.internal_heartbeat_status,
-  c.internal_heartbeat_updated_at,
-  c.external_heartbeat_status,
-  c.external_heartbeat_checked_at,
-  c.email_validation_status,
-  c.email_last_bounced_at,
-  c.linkedin_profile_status,
-  c.employment_verified_at,
 
   -- Computed full-text search columns
   jsonb_path_query_array(c.email_jsonb, '$[*].email')::text as email_fts,

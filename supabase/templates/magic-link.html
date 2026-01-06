@@ -49,25 +49,20 @@
   <body>
     <div class="container">
       <div class="header">
-        <h2>Reset Your RealTimeX CRM Password</h2>
+        <h2>Log in to RealTimeX CRM</h2>
       </div>
       <div class="content">
         <p>Hello,</p>
         <p>
-          We've received a request to reset the password for the RealTimeX CRM
-          account associated with the email {{ .Email }}. No changes have been
-          made to your account yet.
+          Click the button below to sign in to your RealTimeX CRM account. This
+          link will only work once.
         </p>
-        <p>You can reset your password by clicking the button below.</p>
         <p>
           <a href="{{ .ConfirmationURL }}auth-callback.html" class="button"
-            >Reset your password</a
+            >Log in to CRM</a
           >
         </p>
-        <p>
-          If you did not request a new password, please contact the RealTimeX CRM
-          administrator immediately.
-        </p>
+        <p>If you didn't request this email, you can safely ignore it.</p>
         <p>The RealTimeX CRM team</p>
       </div>
     </div>

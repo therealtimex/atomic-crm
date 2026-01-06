@@ -14,7 +14,7 @@ import { MigrationProvider } from '@/contexts/MigrationContext';
 /**
  * Application entry point
  *
- * Customize Atomic CRM by passing props to the CRM component:
+ * Customize RealTimeX CRM by passing props to the CRM component:
  *  - contactGender
  *  - companySectors
  *  - companyLifecycleStages (NEW)

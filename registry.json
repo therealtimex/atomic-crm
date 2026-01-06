@@ -1,13 +1,13 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "atomic-crm",
-  "homepage": "https://marmelab.com/atomic-crm/",
+  "name": "realtimex-crm",
+  "homepage": "https://github.com/therealtimex/realtimex-crm",
   "items": [
     {
-      "name": "atomic-crm",
+      "name": "realtimex-crm",
       "type": "registry:block",
-      "title": "Atomic CRM",
-      "description": "A fully fledged CRM application built with Shadcn Admin Kit",
+      "title": "RealTimeX CRM",
+      "description": "A fully fledged CRM application built with Shadcn Admin Kit and Supabase",
       "registryDependencies": [
         "progress",
         "tabs",

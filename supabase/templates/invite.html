@@ -44,26 +44,47 @@
         text-decoration: none;
         border-radius: 5px;
       }
+      .steps {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <h2>Confirm your account</h2>
+        <h2>Welcome to RealTimeX CRM</h2>
       </div>
       <div class="content">
         <p>Hello {{ .Data.first_name }},</p>
         <p>
-          You've been invited to join Atomic CRM. To confirm your account and
-          choose your password, please click the link below.
+          You've been invited to join RealTimeX CRM. Your account has been
+          successfully created!
         </p>
+
+        <div class="steps">
+          <p><strong>How to Access Your Account:</strong></p>
+          <ol>
+            <li>Click the button below to open the application.</li>
+            <li>Select <strong>“Login with Email Code (OTP)”</strong>.</li>
+            <li>Enter your email: <strong>{{ .Email }}</strong>.</li>
+            <li>Check your inbox for a 6-digit verification code.</li>
+          </ol>
+        </div>
+
         <p>
           <a href="{{ .ConfirmationURL }}auth-callback.html" class="button"
-            >Create my account</a
+            >Open RealTimeX CRM</a
           >
         </p>
-        <p>See you soon!</p>
-        <p>The Atomic CRM team</p>
+
+        <p>
+          If you have any questions, please contact your administrator. See you
+          soon!
+        </p>
+        <p>The RealTimeX CRM team</p>
       </div>
     </div>
   </body>

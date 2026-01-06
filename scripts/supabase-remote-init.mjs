@@ -6,7 +6,7 @@ import fs from "node:fs";
   await loginToSupabase();
   const projectName = await input({
     message: "Enter the name of the project:",
-    default: "Atomic CRM",
+    default: "RealTimeX CRM",
   });
   const databasePassword = await input({
     message: "Enter a database password:",
