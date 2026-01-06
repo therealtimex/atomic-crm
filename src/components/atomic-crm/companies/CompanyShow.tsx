@@ -76,20 +76,17 @@ const CompanyShowContent = () => {
                 </TabsTrigger>
                 <TabsTrigger value="contacts">
                   {translate("crm.common.contacts", {
-                    count: record.nb_contacts,
                     smart_count: record.nb_contacts,
                   })}
                 </TabsTrigger>
                 <TabsTrigger value="notes">
                   {translate("crm.common.notes", {
-                    count: record.nb_notes,
                     smart_count: record.nb_notes,
                   })}
                 </TabsTrigger>
                 {record.nb_deals ? (
                   <TabsTrigger value="deals">
                     {translate("crm.common.deals", {
-                      count: record.nb_deals,
                       smart_count: record.nb_deals,
                     })}
                   </TabsTrigger>
