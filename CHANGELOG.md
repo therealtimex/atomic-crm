@@ -5,6 +5,12 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.46.5] - 2026-01-05
+
+### Fixed
+
+- **Deployment**: Correctly configured email templates in `supabase/config.toml` to ensure they are synchronized during `supabase config push`. This fixes an issue where default Supabase templates were still being used after migration.
+
 ## [0.46.4] - 2026-01-05
 
 ### Changed
