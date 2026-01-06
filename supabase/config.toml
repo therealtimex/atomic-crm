@@ -426,3 +426,18 @@ verify_jwt = false
 [functions.webhook-dispatcher]
 verify_jwt = false
 
+[functions.users]
+verify_jwt = false
+
+[functions.updatePassword]
+verify_jwt = false
+
+[functions.mergeContacts]
+verify_jwt = false
+
+[functions.mergeCompanies]
+verify_jwt = false
+
+[functions.postmark]
+verify_jwt = false
+
