@@ -5,6 +5,12 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.46.4] - 2026-01-05
+
+### Changed
+
+- **Deployment**: Updated `scripts/migrate.sh` to include `supabase config push`, automating the synchronization of project configuration (Auth, Storage, etc.) during deployment.
+
 ## [0.46.3] - 2026-01-05
 
 ### Added
