@@ -5,6 +5,31 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.47.0] - 2026-01-09
+
+### Added
+
+- **Migration API**: Implemented automatic in-browser database migration feature with HTTP endpoint `/api/migrate`
+- **Migration UI**: Enhanced DatabaseSetupGuide with automatic setup option, streaming logs, and collapsible manual instructions
+- **Unified Server**: Created Express.js server (`api/server.js`) that serves both static files and migration API on the same port
+- **Internationalization**: Added 47 new translation keys for setup wizard across all 6 supported languages (en, es, fr, ja, ko, vi)
+
+### Changed
+
+- **Production Server**: `npm run serve` now uses Express server instead of `serve` package, enabling both static file serving and migration API on same port
+- **Port Configuration**: Default port changed to 3002 (avoiding conflict with RealTimeX desktop app on 3001), configurable via `PORT` environment variable
+- **Setup Wizard**: Made setup wizard non-modal to allow interaction with other UI elements
+- **Setup Wizard**: Added theme toggle and locale selector to setup and signup pages
+- **Migration Context**: Added `suppressMigrationBanner` flag to prevent banner when showing full-page setup guide
+- **Vite Config**: Simplified migration endpoint middleware, removed complex `expect`-based login flow
+- **Edge Functions**: Modified `scripts/migrate.sh` to deploy edge functions individually for better reliability
+
+### Security
+
+- **Migration API**: Added comprehensive security documentation in `api/README.md`
+- **Migration API**: Implemented request validation, error handling, and security warnings
+- **Migration API**: Documented that migration API should only be used in trusted environments (localhost, private networks)
+
 ## [0.46.11] - 2026-01-06
 
 ### Changed

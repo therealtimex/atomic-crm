@@ -68,123 +68,164 @@ export default defineConfig(({ mode }) => {
             if (req.method !== 'POST') return next();
 
             try {
+              // Parse request body
               const buffers = [];
               for await (const chunk of req) {
                 buffers.push(chunk);
               }
-              
+
               let body = {};
               try {
                 body = JSON.parse(Buffer.concat(buffers).toString());
               } catch (e) {
-                // ignore
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Invalid JSON in request body' }));
+                return;
               }
 
               const { projectRef, dbPassword, accessToken } = body;
 
+              // Validation
+              if (!projectRef) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'projectRef is required' }));
+                return;
+              }
+
+              // Set up streaming response
               res.writeHead(200, {
                 "Content-Type": "text/plain",
                 "Transfer-Encoding": "chunked",
+                "Cache-Control": "no-cache",
                 "X-Content-Type-Options": "nosniff"
               });
 
               const log = (msg) => res.write(`${msg}\n`);
-              log("🚀 Starting migration (Dev Mode)...");
 
-              const runStreamedCommand = (cmd, args, env = process.env) => {
-                return new Promise((resolve, reject) => {
-                  let finalCmd = cmd;
-                  let finalArgs = args;
-                  
-                  // Login TTY Trick for macOS/Linux using 'expect'
-                  const isLogin = args.includes('login') && args.some(a => a.includes('supabase'));
-                  
-                  if (isLogin && !env.SUPABASE_ACCESS_TOKEN) {
-                      const fullCmd = `${cmd} ${args.join(' ')}`;
-                      const expectScript = `
-                        spawn ${fullCmd}
-                        expect "Press Enter"
-                        send "\r"
-                        set timeout -1
-                        expect eof
-                      `;
-                      finalCmd = 'expect';
-                      finalArgs = ['-c', expectScript];
-                  }
+              log("🚀 Starting migration (Development Mode)...");
+              log("");
 
-                  const proc = spawn(finalCmd, finalArgs, {
-                    cwd: process.cwd(),
-                    shell: true,
-                    env,
-                    // Use pipe to capture output
-                    stdio: ['ignore', 'pipe', 'pipe']
-                  });
-
-                  proc.stdout.on('data', (d) => {
-                    const str = d.toString();
-                    log(str.trim());
-                  });
-                  
-                  proc.stderr.on('data', (d) => log(d.toString().trim()));
-
-                  proc.on('close', (code) => {
-                    if (code === 0) resolve();
-                    else reject(new Error(`Command failed with code ${code}`));
-                  });
-                });
+              // Prepare environment
+              const env = {
+                ...process.env,
+                SUPABASE_PROJECT_ID: projectRef
               };
 
-              // Prepare ENV
-              const env = { ...process.env };
               if (accessToken) {
-                  env.SUPABASE_ACCESS_TOKEN = accessToken;
-                  log("🔑 Using provided Access Token.");
+                env.SUPABASE_ACCESS_TOKEN = accessToken;
+                log("🔑 Using provided access token for authentication");
+              } else if (dbPassword) {
+                env.SUPABASE_DB_PASSWORD = dbPassword;
+                log("🔑 Using provided database password");
+              } else {
+                log("⚠️  No credentials provided - checking existing Supabase login...");
+                log("");
+                log("💡 Tip: Provide an access token for more reliable authentication");
+                log("   Generate one at: https://supabase.com/dashboard/account/tokens");
               }
 
-              // 1. Check Login
-              // Skip if token provided
-              if (!accessToken) {
-                  log("Checking Supabase authentication...");
-                  try {
-                    await runStreamedCommand("npx", ["supabase", "projects", "list"]);
-                    log("✅ Authenticated.");
-                  } catch (e) {
-                    log("⚠️ Not authenticated. Launching login browser...");
-                    try {
-                      await runStreamedCommand("npx", ["supabase", "login"]);
-                      log("✅ Login successful!");
-                    } catch (err) {
-                      log("❌ Login failed.");
-                      res.end();
-                      return;
+              log("");
+              log("─".repeat(60));
+              log("");
+
+              // Path to migration script
+              const scriptPath = path.join(process.cwd(), "scripts", "migrate.sh");
+
+              // Execute migration script
+              const migrationProcess = spawn("bash", [scriptPath], {
+                env,
+                cwd: process.cwd(),
+                stdio: ['ignore', 'pipe', 'pipe']
+              });
+
+              let hasError = false;
+
+              // Stream stdout
+              migrationProcess.stdout.on('data', (data) => {
+                const lines = data.toString().split('\n');
+                lines.forEach(line => {
+                  if (line.trim()) {
+                    log(line);
+                  }
+                });
+              });
+
+              // Stream stderr
+              migrationProcess.stderr.on('data', (data) => {
+                const lines = data.toString().split('\n');
+                lines.forEach(line => {
+                  if (line.trim()) {
+                    if (line.toLowerCase().includes('error') || line.toLowerCase().includes('failed')) {
+                      log(`❌ ${line}`);
+                      hasError = true;
+                    } else {
+                      log(`⚠️  ${line}`);
                     }
                   }
-              }
+                });
+              });
 
-              // 2. Run Migrate
-              if (projectRef) {
-                log(`Running migration for ${projectRef}...`);
-                
-                env.SUPABASE_PROJECT_ID = projectRef;
-                if (dbPassword) env.SUPABASE_DB_PASSWORD = dbPassword;
-                
-                const migrateScript = "./scripts/migrate.sh";
-                try {
-                  await runStreamedCommand("chmod", ["+x", migrateScript]);
-                  await runStreamedCommand(migrateScript, [], env);
-                  log("✅ Migration completed!");
-                } catch (err) {
-                  log(`❌ Migration failed: ${err.message}`);
+              // Handle completion
+              migrationProcess.on('close', (code) => {
+                log("");
+                log("─".repeat(60));
+                log("");
+
+                if (code === 0 && !hasError) {
+                  log("✅ Migration completed successfully!");
+                  log("");
+                  log("🎉 Your database is now ready to use.");
+                  log("📝 The application will reload automatically...");
+                } else {
+                  log(`❌ Migration failed with exit code: ${code}`);
+                  log("");
+                  log("💡 Troubleshooting tips:");
+                  log("   1. Verify your Supabase credentials are correct");
+                  log("   2. Generate an access token at: https://supabase.com/dashboard/account/tokens");
+                  log("   3. Ensure Supabase CLI is installed: npm install -g supabase");
+                  log("   4. Try running: npx supabase login");
+                  log("");
+                  log("📚 Need help? https://github.com/therealtimex/realtimex-crm/issues");
                 }
-              } else {
-                log("❌ No project ref provided.");
-              }
 
-              res.end();
-            } catch (e) {
-              console.error(e);
-              res.statusCode = 500;
-              res.end(e.message);
+                res.end();
+              });
+
+              // Handle errors
+              migrationProcess.on('error', (error) => {
+                log("");
+                log(`❌ Failed to start migration: ${error.message}`);
+                log("");
+                log("💡 Common causes:");
+                log("   - Bash shell not available");
+                log("   - Migration script not found or not executable");
+                log("   - Permission issues");
+                log("");
+                log("Try running the migration manually:");
+                log("   bash scripts/migrate.sh");
+                res.end();
+              });
+
+              // Handle client disconnect
+              req.on('close', () => {
+                if (!migrationProcess.killed) {
+                  migrationProcess.kill();
+                  console.log('[Migration API] Process terminated - client disconnected');
+                }
+              });
+
+            } catch (error) {
+              console.error('[Migration API] Error:', error);
+              if (!res.headersSent) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({
+                  error: 'Internal server error',
+                  message: error.message
+                }));
+              } else {
+                res.write(`\n❌ Unexpected error: ${error.message}\n`);
+                res.end();
+              }
             }
           });
         }

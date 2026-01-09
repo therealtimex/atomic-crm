@@ -141,7 +141,10 @@ if [ -d "supabase/functions" ]; then
             # Skip _shared and hidden folders
             if [[ "$func_name" != "_shared" && "$func_name" != .* ]]; then
                 echo "   Deploying $func_name..."
-                $SUPABASE_CMD functions deploy "$func_name"
+                if ! $SUPABASE_CMD functions deploy "$func_name"; then
+                    echo "❌ Error: Failed to deploy function '$func_name'."
+                    exit 1
+                fi
             fi
         fi
     done

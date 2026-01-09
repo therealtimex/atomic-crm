@@ -85,6 +85,55 @@ npm run supabase:remote:init       # Automated remote Supabase setup (creates pr
 5. Pushing migrations
 6. Writing `.env.production.local` with credentials
 
+### Automatic Migration API
+
+The CRM includes an in-browser automatic migration feature that allows users to set up their database without using the command line.
+
+**How it works:**
+- When the app detects missing database tables, it shows a `DatabaseSetupGuide` component
+- Users can provide their Supabase project ID and access token
+- The migration runs automatically via the `/api/migrate` HTTP endpoint
+- Progress is streamed in real-time to the browser
+
+**Development Mode:**
+```bash
+npm run dev
+# Migration endpoint available at http://localhost:5173/api/migrate (via Vite middleware)
+```
+
+**Production Mode:**
+```bash
+npm run serve
+# Serves both static files AND migration API on the same port
+# Default: http://localhost:3002 (configurable via PORT env variable)
+# Avoids port 3001 conflict with RealTimeX desktop app
+```
+
+**Custom Port:**
+```bash
+# For RealTimeX desktop app integration, use the same PORT variable
+PORT=5000 npm run serve
+# Both frontend and /api/migrate available at http://localhost:5000
+```
+
+**Security Considerations:**
+- ⚠️ The migration API should ONLY be used in trusted environments (localhost, private networks)
+- Never expose the migration API to the public internet without authentication
+- In production, use HTTPS, IP whitelisting, rate limiting, and authentication
+- See `api/README.md` for detailed security guidelines
+
+**Alternative Migration Methods:**
+```bash
+# Manual CLI migration (most secure)
+npx realtimex-crm-migrate
+
+# Direct script execution
+bash scripts/migrate.sh
+
+# Supabase CLI
+npx supabase db push
+```
+
 ### Registry (Shadcn Components)
 
 ```bash

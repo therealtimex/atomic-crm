@@ -155,7 +155,7 @@ const App = () => {
 
   // If Supabase is not configured, only show the setup wizard
   if (needsSetup) {
-    const store = localStorageStore();
+    const store = useMemo(() => localStorageStore(), []);
     return (
       <CoreAdminContext i18nProvider={i18nProvider} store={store}>
         <ThemeProvider>
