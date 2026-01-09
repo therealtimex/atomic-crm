@@ -15,7 +15,7 @@
 #   6. Cleans up all temporary files automatically.
 #
 # PREREQUISITES:
-#   1. Supabase CLI installed (brew install supabase/tap/supabase).
+#   1. Supabase CLI installed (global or local via npm).
 #   2. You must be logged in (run: 'supabase login').
 #   3. You need your Supabase Project Reference ID (e.g., 'abcdefghijklm').
 #   4. You need your Database Password (to type when prompted).
@@ -44,9 +44,17 @@ echo "🚀 Starting RealtimeX CRM Migration Tool..."
 # 1. PRE-FLIGHT CHECKS
 # ------------------------------------------------------------------------------
 
-# Check if Supabase CLI is installed
-if ! command -v supabase &> /dev/null; then
-    echo "❌ Error: 'supabase' CLI is not installed."
+SUPABASE_CMD="supabase"
+
+# Check if global Supabase CLI is installed
+if command -v supabase &> /dev/null; then
+    echo "✅ Found global Supabase CLI."
+elif command -v npx &> /dev/null; then
+    # Fallback to npx if available
+    echo "ℹ️  Global 'supabase' not found. Trying local via npx..."
+    SUPABASE_CMD="npx supabase"
+else
+    echo "❌ Error: 'supabase' CLI is not installed and 'npx' is not available."
     echo "   Please install it via: brew install supabase/tap/supabase"
     echo "   Or visit: https://supabase.com/docs/guides/cli"
     exit 1
@@ -110,23 +118,23 @@ echo "🔗 Linking to Supabase Project: $SUPABASE_PROJECT_ID"
 echo "🔑 NOTE: If asked, please enter your DATABASE PASSWORD."
 # This connects the CLI to the remote project. 
 # It will pause and ask for the password if not found in env vars.
-supabase link --project-ref "$SUPABASE_PROJECT_ID"
+$SUPABASE_CMD link --project-ref "$SUPABASE_PROJECT_ID"
 
 echo "---------------------------------------------------------"
 echo "📂 Pushing Database Schema Changes..."
 # This compares local SQL migrations with the remote DB and applies differences.
-supabase db push
+$SUPABASE_CMD db push
 
 echo "---------------------------------------------------------"
 echo "⚙️  Pushing Project Configuration..."
 # Pushes Auth, Storage, and other project settings from config.toml
-supabase config push
+$SUPABASE_CMD config push
 
 echo "---------------------------------------------------------"
 echo "⚡ Deploying Edge Functions..."
 # Deploys API logic (contacts, deals, etc).
 # verify_jwt is configured in supabase/config.toml
-supabase functions deploy
+$SUPABASE_CMD functions deploy
 
 
 # ------------------------------------------------------------------------------

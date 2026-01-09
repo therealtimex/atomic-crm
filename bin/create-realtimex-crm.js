@@ -63,7 +63,7 @@ async function main() {
   // Get Supabase configuration
   const configureSupabase = await confirm({
     message: "Configure Supabase now?",
-    default: false,
+    default: true,
   });
 
   let supabaseUrl = "";
