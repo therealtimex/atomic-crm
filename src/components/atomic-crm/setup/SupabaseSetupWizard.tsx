@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Database, CheckCircle, AlertCircle, ExternalLink, Check } from "lucide-react";
+import { useTranslate } from "ra-core";
 import {
   saveSupabaseConfig,
   validateSupabaseConnection,
@@ -43,7 +44,7 @@ function normalizeSupabaseUrl(input: string): string {
 /**
  * Validates if input looks like a valid Supabase URL or project ID
  */
-function validateUrlFormat(input: string): { valid: boolean; message?: string } {
+function validateUrlFormat(input: string): { valid: boolean; messageKey?: string } {
   const trimmed = input.trim();
   if (!trimmed) return { valid: false };
 
@@ -52,26 +53,26 @@ function validateUrlFormat(input: string): { valid: boolean; message?: string } 
     try {
       const url = new URL(trimmed);
       if (url.hostname.endsWith(".supabase.co")) {
-        return { valid: true, message: "Valid Supabase URL" };
+        return { valid: true, messageKey: "crm.setup_wizard.credentials.url_valid" };
       }
-      return { valid: false, message: "URL must be a Supabase domain" };
+      return { valid: false, messageKey: "crm.setup_wizard.credentials.url_must_be_supabase" };
     } catch {
-      return { valid: false, message: "Invalid URL format" };
+      return { valid: false, messageKey: "crm.setup_wizard.credentials.url_invalid_format" };
     }
   }
 
   // Check if it's a project ID (alphanumeric, typically 20 chars)
   if (/^[a-z0-9]+$/.test(trimmed)) {
-    return { valid: true, message: "Valid project ID (will expand to full URL)" };
+    return { valid: true, messageKey: "crm.setup_wizard.credentials.url_project_id" };
   }
 
-  return { valid: false, message: "Enter full URL or project ID" };
+  return { valid: false, messageKey: "crm.setup_wizard.credentials.url_hint" };
 }
 
 /**
  * Validates if input looks like a valid Supabase API key
  */
-function validateKeyFormat(input: string): { valid: boolean; message?: string } {
+function validateKeyFormat(input: string): { valid: boolean; messageKey?: string } {
   const trimmed = input.trim();
   if (!trimmed) return { valid: false };
 
@@ -79,20 +80,20 @@ function validateKeyFormat(input: string): { valid: boolean; message?: string } 
   if (trimmed.startsWith("sb_publishable_")) {
     // Check that there's actual key content after the prefix (at least 20 chars)
     if (trimmed.length > "sb_publishable_".length + 20) {
-      return { valid: true, message: "Valid publishable key format" };
+      return { valid: true, messageKey: "crm.setup_wizard.credentials.key_valid_publishable" };
     }
-    return { valid: false, message: "Publishable key seems incomplete" };
+    return { valid: false, messageKey: "crm.setup_wizard.credentials.key_incomplete_publishable" };
   }
 
   // Legacy anon keys are JWT tokens starting with "eyJ"
   if (trimmed.startsWith("eyJ")) {
     if (trimmed.length > 100) {
-      return { valid: true, message: "Valid anon key format" };
+      return { valid: true, messageKey: "crm.setup_wizard.credentials.key_valid_anon" };
     }
-    return { valid: false, message: "Anon key seems incomplete" };
+    return { valid: false, messageKey: "crm.setup_wizard.credentials.key_incomplete_anon" };
   }
 
-  return { valid: false, message: "Must be a valid Supabase API key (anon or publishable)" };
+  return { valid: false, messageKey: "crm.setup_wizard.credentials.key_invalid" };
 }
 
 export function SupabaseSetupWizard({
@@ -106,6 +107,7 @@ export function SupabaseSetupWizard({
   const [error, setError] = useState<string | null>(null);
   const [urlTouched, setUrlTouched] = useState(false);
   const [keyTouched, setKeyTouched] = useState(false);
+  const translate = useTranslate();
 
   const handleValidateAndSave = async () => {
     setError(null);
@@ -127,7 +129,7 @@ export function SupabaseSetupWizard({
         window.location.href = window.location.origin;
       }, 1500);
     } else {
-      setError(result.error || "Connection failed");
+      setError(result.error || translate("crm.setup_wizard.credentials.error_failed"));
       setStep("credentials");
     }
   };
@@ -156,19 +158,19 @@ export function SupabaseSetupWizard({
             <DialogHeader>
               <div className="flex items-center gap-2 mb-2">
                 <Database className="h-6 w-6 text-primary" />
-                <DialogTitle>Welcome to CRM</DialogTitle>
+                <DialogTitle>{translate("crm.setup_wizard.welcome.title", { title: "CRM" })}</DialogTitle>
               </div>
               <DialogDescription>
-                To get started, you'll need to connect to a Supabase database.
+                {translate("crm.setup_wizard.welcome.description")}
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 py-4">
               <Alert>
                 <AlertDescription>
-                  <strong>Don't have a Supabase project?</strong>
+                  <strong>{translate("crm.setup_wizard.welcome.no_project")}</strong>
                   <br />
-                  Create one for free at{" "}
+                  {translate("crm.setup_wizard.welcome.create_free")}{" "}
                   <a
                     href="https://supabase.com"
                     target="_blank"
@@ -182,10 +184,10 @@ export function SupabaseSetupWizard({
               </Alert>
 
               <div className="space-y-2">
-                <h4 className="font-medium text-sm">What you'll need:</h4>
+                <h4 className="font-medium text-sm">{translate("crm.setup_wizard.welcome.need_title")}</h4>
                 <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                  <li>Your Supabase project URL or project ID</li>
-                  <li>Your API key (anon or publishable key)</li>
+                  <li>{translate("crm.setup_wizard.welcome.need_url")}</li>
+                  <li>{translate("crm.setup_wizard.welcome.need_key")}</li>
                 </ul>
               </div>
 
@@ -196,13 +198,13 @@ export function SupabaseSetupWizard({
                   rel="noopener noreferrer"
                   className="text-sm text-primary hover:underline inline-flex items-center gap-1"
                 >
-                  Where do I find these?
+                  {translate("crm.setup_wizard.welcome.find_hint")}
                   <ExternalLink className="h-3 w-3" />
                 </a>
               </div>
 
               <Button onClick={() => setStep("credentials")} className="w-full">
-                Continue
+                {translate("crm.setup_wizard.welcome.continue")}
               </Button>
             </div>
           </>
@@ -211,9 +213,9 @@ export function SupabaseSetupWizard({
         {step === "credentials" && (
           <>
             <DialogHeader>
-              <DialogTitle>Connect to Supabase</DialogTitle>
+              <DialogTitle>{translate("crm.setup_wizard.credentials.title")}</DialogTitle>
               <DialogDescription>
-                Enter your Supabase project credentials
+                {translate("crm.setup_wizard.credentials.description")}
               </DialogDescription>
             </DialogHeader>
 
@@ -226,11 +228,11 @@ export function SupabaseSetupWizard({
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="supabase-url">Project URL or ID</Label>
+                <Label htmlFor="supabase-url">{translate("crm.setup_wizard.credentials.url_label")}</Label>
                 <div className="relative">
                   <Input
                     id="supabase-url"
-                    placeholder="xxxxx or https://xxxxx.supabase.co"
+                    placeholder={translate("crm.setup_wizard.credentials.url_placeholder")}
                     value={url}
                     onChange={(e) => {
                       setUrl(e.target.value);
@@ -252,26 +254,26 @@ export function SupabaseSetupWizard({
                 {showUrlExpansion && (
                   <div className="flex items-start gap-1.5 text-xs text-green-600 dark:text-green-400">
                     <Check className="h-3 w-3 mt-0.5 flex-shrink-0" />
-                    <span>Will expand to: {normalizedUrl}</span>
+                    <span>{translate("crm.setup_wizard.credentials.url_expansion", { url: normalizedUrl })}</span>
                   </div>
                 )}
-                {urlTouched && url && urlValidation.message && !urlValidation.valid && (
-                  <p className="text-xs text-destructive">{urlValidation.message}</p>
+                {urlTouched && url && urlValidation.messageKey && !urlValidation.valid && (
+                  <p className="text-xs text-destructive">{translate(urlValidation.messageKey)}</p>
                 )}
                 {(!urlTouched || !url) && (
                   <p className="text-xs text-muted-foreground">
-                    Enter full URL or just the project ID (from Project Settings → API)
+                    {translate("crm.setup_wizard.credentials.url_default_hint")}
                   </p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="anon-key">API Key</Label>
+                <Label htmlFor="anon-key">{translate("crm.setup_wizard.credentials.key_label")}</Label>
                 <div className="relative">
                   <Input
                     id="anon-key"
                     type="password"
-                    placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    placeholder={translate("crm.setup_wizard.credentials.key_placeholder")}
                     value={anonKey}
                     onChange={(e) => {
                       setAnonKey(e.target.value);
@@ -290,14 +292,14 @@ export function SupabaseSetupWizard({
                     <Check className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-green-500" />
                   )}
                 </div>
-                {keyTouched && anonKey && keyValidation.message && (
+                {keyTouched && anonKey && keyValidation.messageKey && (
                   <p className={`text-xs ${keyValidation.valid ? "text-green-600 dark:text-green-400" : "text-destructive"}`}>
-                    {keyValidation.message}
+                    {translate(keyValidation.messageKey)}
                   </p>
                 )}
                 {(!keyTouched || !anonKey) && (
                   <p className="text-xs text-muted-foreground">
-                    Anon or publishable key (from Project Settings → API)
+                    {translate("crm.setup_wizard.credentials.key_default_hint")}
                   </p>
                 )}
               </div>
@@ -308,14 +310,14 @@ export function SupabaseSetupWizard({
                   onClick={() => setStep("welcome")}
                   className="flex-1"
                 >
-                  Back
+                  {translate("crm.setup_wizard.credentials.back")}
                 </Button>
                 <Button
                   onClick={handleValidateAndSave}
                   disabled={!urlValidation.valid || !keyValidation.valid}
                   className="flex-1"
                 >
-                  Connect
+                  {translate("crm.setup_wizard.credentials.connect")}
                 </Button>
               </div>
             </div>
@@ -325,15 +327,15 @@ export function SupabaseSetupWizard({
         {step === "validating" && (
           <>
             <DialogHeader>
-              <DialogTitle>Validating Connection</DialogTitle>
+              <DialogTitle>{translate("crm.setup_wizard.validating.title")}</DialogTitle>
               <DialogDescription>
-                Testing your Supabase credentials...
+                {translate("crm.setup_wizard.validating.description")}
               </DialogDescription>
             </DialogHeader>
 
             <div className="flex flex-col items-center justify-center py-8">
               <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-              <p className="text-sm text-muted-foreground">Please wait...</p>
+              <p className="text-sm text-muted-foreground">{translate("crm.setup_wizard.validating.wait")}</p>
             </div>
           </>
         )}
@@ -341,16 +343,16 @@ export function SupabaseSetupWizard({
         {step === "success" && (
           <>
             <DialogHeader>
-              <DialogTitle>Connection Successful!</DialogTitle>
+              <DialogTitle>{translate("crm.setup_wizard.success.title")}</DialogTitle>
               <DialogDescription>
-                Your Supabase database is now connected
+                {translate("crm.setup_wizard.success.description")}
               </DialogDescription>
             </DialogHeader>
 
             <div className="flex flex-col items-center justify-center py-8">
               <CheckCircle className="h-12 w-12 text-green-500 mb-4" />
               <p className="text-sm text-muted-foreground">
-                Reloading application...
+                {translate("crm.setup_wizard.success.reloading")}
               </p>
             </div>
           </>
