@@ -15,6 +15,7 @@ import { i18nProvider } from '@/components/atomic-crm/root/i18nProvider';
 import { ThemeProvider } from "@/components/admin/theme-provider";
 import { ThemeModeToggle } from "@/components/admin/theme-mode-toggle";
 import { LocalesMenuButton } from "@/components/admin/locales-menu-button";
+import { defaultDarkModeLogo, defaultLightModeLogo, defaultTitle } from './components/atomic-crm/root/defaultConfiguration';
 
 /**
  * Application entry point
@@ -159,6 +160,11 @@ const App = () => {
       <CoreAdminContext i18nProvider={i18nProvider} store={store}>
         <ThemeProvider>
             <div className="min-h-screen flex items-center justify-center bg-background relative">
+                <div className="fixed top-4 left-4 flex items-center gap-2 z-[100]">
+                    <img className="[.light_&]:hidden h-6" src={defaultDarkModeLogo} alt={defaultTitle} />
+                    <img className="[.dark_&]:hidden h-6" src={defaultLightModeLogo} alt={defaultTitle} />
+                    <h1 className="text-xl font-semibold text-foreground">{defaultTitle}</h1>
+                </div>
                 <div className="fixed top-4 right-4 flex items-center gap-2 z-[100]">
                     <LocalesMenuButton />
                     <ThemeModeToggle />
