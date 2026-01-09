@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { I18nContextProvider } from 'ra-core';
+import { I18nContextProvider, CoreAdminContext, localStorageStore } from 'ra-core';
 import { CRM } from '@/components/atomic-crm/root/CRM';
 import { SupabaseSetupWizard } from '@/components/atomic-crm/setup/SupabaseSetupWizard';
 import { isSupabaseConfigured } from '@/lib/supabase-config';
@@ -12,6 +12,9 @@ import {
 import { supabase } from '@/components/atomic-crm/providers/supabase/supabase';
 import { MigrationProvider } from '@/contexts/MigrationContext';
 import { i18nProvider } from '@/components/atomic-crm/root/i18nProvider';
+import { ThemeProvider } from "@/components/admin/theme-provider";
+import { ThemeModeToggle } from "@/components/admin/theme-mode-toggle";
+import { LocalesMenuButton } from "@/components/admin/locales-menu-button";
 
 /**
  * Application entry point
@@ -113,6 +116,21 @@ const App = () => {
   const [showMigrationModal, setShowMigrationModal] = useState(false);
   const [suppressMigrationBanner, setSuppressMigrationBanner] = useState(false);
 
+  // Memoize context value
+  const migrationContextValue = useMemo(() => ({
+    migrationStatus,
+    showMigrationBanner,
+    showMigrationModal,
+    openMigrationModal: () => setShowMigrationModal(true),
+    suppressMigrationBanner,
+    setSuppressMigrationBanner,
+  }), [
+    migrationStatus,
+    showMigrationBanner,
+    showMigrationModal,
+    suppressMigrationBanner
+  ]);
+
   // Check migration status after setup is complete
   useEffect(() => {
     if (needsSetup) return;
@@ -136,35 +154,28 @@ const App = () => {
 
   // If Supabase is not configured, only show the setup wizard
   if (needsSetup) {
+    const store = localStorageStore();
     return (
-      <I18nContextProvider value={i18nProvider}>
-        <div className="min-h-screen flex items-center justify-center bg-background">
-          <SupabaseSetupWizard
-            open={true}
-            onComplete={() => {
-              setNeedsSetup(false);
-              // Will reload anyway, but update state for clarity
-            }}
-            canClose={false}
-          />
-        </div>
-      </I18nContextProvider>
+      <CoreAdminContext i18nProvider={i18nProvider} store={store}>
+        <ThemeProvider>
+            <div className="min-h-screen flex items-center justify-center bg-background relative">
+                <div className="fixed top-4 right-4 flex items-center gap-2 z-[100]">
+                    <LocalesMenuButton />
+                    <ThemeModeToggle />
+                </div>
+                <SupabaseSetupWizard
+                    open={true}
+                    onComplete={() => {
+                        setNeedsSetup(false);
+                        // Will reload anyway, but update state for clarity
+                    }}
+                    canClose={false}
+                />
+            </div>
+        </ThemeProvider>
+      </CoreAdminContext>
     );
   }
-
-  const migrationContextValue = useMemo(() => ({
-    migrationStatus,
-    showMigrationBanner,
-    showMigrationModal,
-    openMigrationModal: () => setShowMigrationModal(true),
-    suppressMigrationBanner,
-    setSuppressMigrationBanner,
-  }), [
-    migrationStatus,
-    showMigrationBanner,
-    showMigrationModal,
-    suppressMigrationBanner
-  ]);
 
   return (
     <I18nContextProvider value={i18nProvider}>

@@ -145,7 +145,7 @@ export function SupabaseSetupWizard({
   };
 
   return (
-    <Dialog open={open} onOpenChange={canClose ? handleClose : undefined}>
+    <Dialog open={open} onOpenChange={canClose ? handleClose : undefined} modal={false}>
       <DialogContent
         className="sm:max-w-md"
         onPointerDownOutside={(e) => !canClose && e.preventDefault()}
