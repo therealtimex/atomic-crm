@@ -5,6 +5,15 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.47.1] - 2026-01-09
+
+### Fixed
+
+- **Code Quality**: Resolved React "Rules of Hooks" violation in `App.tsx`
+- **Linter**: Removed unused variables and imports in `DatabaseSetupGuide.tsx` and `vite.config.ts`
+- **Formatting**: Applied Prettier formatting across the entire codebase
+- **Dependencies**: Synchronized `package-lock.json` with recent changes
+
 ## [0.47.0] - 2026-01-09
 
 ### Added
