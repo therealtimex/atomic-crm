@@ -1160,7 +1160,9 @@ export const koMessages = {
       deals: "1 거래 |||| %{smart_count} 거래",
       tasks: "1 작업 |||| %{smart_count} 작업",
       last_activity: "마지막 활동 %{distance} 전",
+      invoices: "1개 송장 |||| %{smart_count} 송장",
       add_contact: "연락처 추가",
+      add_invoice: "송장 추가",
     },
   },
   resources: {

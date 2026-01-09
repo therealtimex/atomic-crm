@@ -1,11 +1,14 @@
 import { useTranslate, useGetIdentity, required } from "ra-core";
 import { useWatch, useFormContext } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { TextInput } from "@/components/admin/text-input";
 import { DateInput } from "@/components/admin/date-input";
 import { ReferenceInput } from "@/components/admin/reference-input";
 import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { SelectInput } from "@/components/admin/select-input";
+import { Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 import { InvoiceItemsInput } from "./InvoiceItemsInput";
 
@@ -13,7 +16,19 @@ export const InvoiceInputs = () => {
     const translate = useTranslate();
     const { identity } = useGetIdentity();
     const { setValue } = useFormContext();
+    const location = useLocation();
     const company_id = useWatch({ name: "company_id" });
+
+    // Pre-fill from router state (e.g. when coming from CompanyShow)
+    useEffect(() => {
+        const state = location.state as { record?: any };
+        if (state?.record) {
+            const { company_id, contact_id, deal_id } = state.record;
+            if (company_id) setValue("company_id", company_id);
+            if (contact_id) setValue("contact_id", contact_id);
+            if (deal_id) setValue("deal_id", deal_id);
+        }
+    }, [location.state, setValue]);
 
     // Clear dependent fields when company changes (optional but good UX)
     // We need a ref to track previous company_id if we want to avoid initial clear
@@ -24,6 +39,12 @@ export const InvoiceInputs = () => {
         // Ideally we check if current contact.company_id == new company_id
         // But simpler to just rely on the filter.
     }, [company_id]);
+
+    const suggestInvoiceNumber = () => {
+        const year = new Date().getFullYear();
+        const random = Math.floor(Math.random() * 9000) + 1000;
+        setValue("invoice_number", `INV-${year}-${random}`);
+    };
 
     const currencyChoices = [
         { id: "USD", name: "USD - US Dollar" },
@@ -48,12 +69,26 @@ export const InvoiceInputs = () => {
         <div className="space-y-6">
             {/* Invoice Number and Reference */}
             <div className="grid grid-cols-2 gap-4">
-                <TextInput
-                    source="invoice_number"
-                    label="resources.invoices.fields.invoice_number"
-                    validate={required()}
-                    helperText="resources.invoices.helper.invoice_number"
-                />
+                <div className="flex items-end gap-2">
+                    <div className="flex-1">
+                        <TextInput
+                            source="invoice_number"
+                            label="resources.invoices.fields.invoice_number"
+                            validate={required()}
+                            helperText="resources.invoices.helper.invoice_number"
+                        />
+                    </div>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={suggestInvoiceNumber}
+                        className="mb-6 h-10 w-10 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                        title={translate("resources.invoices.action.suggest_number") || "Suggest number"}
+                    >
+                        <Sparkles className="h-4 w-4" />
+                    </Button>
+                </div>
                 <TextInput
                     source="reference"
                     label="resources.invoices.fields.reference"

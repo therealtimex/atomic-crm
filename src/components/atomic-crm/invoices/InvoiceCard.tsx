@@ -22,7 +22,7 @@ export const InvoiceCard = ({ invoice }: { invoice: Invoice }) => {
                 <div className="space-y-1 text-sm">
                     <div className="flex justify-between">
                         <span className="text-muted-foreground">
-                            {translate("crm.invoice.field.total")}:
+                            {translate("resources.invoices.fields.total")}:
                         </span>
                         <span className="font-semibold">
                             {invoice.currency} {invoice.total.toFixed(2)}
@@ -31,7 +31,7 @@ export const InvoiceCard = ({ invoice }: { invoice: Invoice }) => {
 
                     {invoice.balance_due && invoice.balance_due > 0 && (
                         <div className="flex justify-between text-red-600">
-                            <span>{translate("crm.invoice.field.balance_due")}:</span>
+                            <span>{translate("resources.invoices.fields.balance_due")}:</span>
                             <span className="font-semibold">
                                 {invoice.currency} {invoice.balance_due.toFixed(2)}
                             </span>
@@ -40,12 +40,12 @@ export const InvoiceCard = ({ invoice }: { invoice: Invoice }) => {
 
                     <div className="flex justify-between text-xs text-muted-foreground pt-2">
                         <span>
-                            {translate("crm.invoice.field.due_date")}:{" "}
+                            {translate("resources.invoices.fields.due_date")}:{" "}
                             {new Date(invoice.due_date).toLocaleDateString()}
                         </span>
                         {invoice.days_overdue && invoice.days_overdue > 0 && (
                             <span className="text-red-600 font-medium">
-                                {invoice.days_overdue} {translate("crm.invoice.days_overdue")}
+                                {invoice.days_overdue} {translate("resources.invoices.days_overdue")}
                             </span>
                         )}
                     </div>
@@ -71,7 +71,7 @@ const InvoiceStatusBadge = ({ status }: { status: string }) => {
             className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${statusColors[status] || statusColors.draft
                 }`}
         >
-            {translate(`crm.invoice.status.${status}`)}
+            {translate(`resources.invoices.status.${status}`)}
         </span>
     );
 };

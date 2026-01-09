@@ -1165,8 +1165,10 @@ export const jaMessages = {
       notes: "1 ノート |||| %{smart_count} ノート",
       deals: "1 取引 |||| %{smart_count} 取引",
       tasks: "1 タスク |||| %{smart_count} タスク",
+      invoices: "1 請求書 |||| %{smart_count} 請求書",
       last_activity: "最後の活動 %{distance}前",
       add_contact: "連絡先を追加",
+      add_invoice: "請求서を追加",
     },
   },
   resources: {

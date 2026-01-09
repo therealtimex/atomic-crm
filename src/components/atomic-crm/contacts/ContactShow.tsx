@@ -1,4 +1,7 @@
-import { ShowBase, useShowContext, useTranslate } from "ra-core";
+import { ShowBase, useListContext, useRecordContext, useShowContext, useTranslate } from "ra-core";
+import { Link as RouterLink } from "react-router-dom";
+import { Receipt } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { ReferenceManyField } from "@/components/admin/reference-many-field";
 import { TextField } from "@/components/admin/text-field";
@@ -6,10 +9,11 @@ import { Card, CardContent } from "@/components/ui/card";
 
 import { CompanyAvatar } from "../companies/CompanyAvatar";
 import { NoteCreate, NotesIterator } from "../notes";
-import type { Contact } from "../types";
 import { Avatar } from "./Avatar";
 import { ContactAside } from "./ContactAside";
 import { ActivityFeed } from "../activities/ActivityFeed";
+import { InvoiceCard } from "../invoices";
+import type { Contact, Invoice } from "../types";
 
 export const ContactShow = () => (
   <ShowBase>
@@ -96,6 +100,25 @@ const ContactShowContent = () => {
                 <NotesIterator reference="contacts" showStatus />
               </ReferenceManyField>
             </div>
+
+            {/* Invoices Section */}
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold mb-4">
+                {translate("resources.invoices.name", { smart_count: 2 })}
+              </h3>
+              <ReferenceManyField
+                target="contact_id"
+                reference="invoices"
+                sort={{ field: "issue_date", order: "DESC" }}
+              >
+                <div className="flex flex-col gap-4">
+                  <div className="flex justify-end">
+                    <CreateRelatedInvoiceButton />
+                  </div>
+                  <InvoicesIterator />
+                </div>
+              </ReferenceManyField>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -103,3 +126,45 @@ const ContactShowContent = () => {
     </div>
   );
 };
+
+const InvoicesIterator = () => {
+  const { data: invoices, error, isPending } = useListContext<Invoice>();
+  if (isPending || error) return null;
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {invoices.map((invoice) => (
+        <RouterLink key={invoice.id} to={`/invoices/${invoice.id}/show`}>
+          <InvoiceCard invoice={invoice} />
+        </RouterLink>
+      ))}
+    </div>
+  );
+};
+
+const CreateRelatedInvoiceButton = () => {
+  const contact = useRecordContext<Contact>();
+  const translate = useTranslate();
+  return (
+    <Button variant="outline" asChild size="sm" className="h-9">
+      <RouterLink
+        to="/invoices/create"
+        state={
+          contact
+            ? {
+              record: {
+                contact_id: contact.id,
+                company_id: contact.company_id,
+              },
+            }
+            : undefined
+        }
+        className="flex items-center gap-2"
+      >
+        <Receipt className="h-4 w-4" />
+        {translate("crm.common.add_invoice")}
+      </RouterLink>
+    </Button>
+  );
+};
+

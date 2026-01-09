@@ -93,6 +93,9 @@ const dataProviderWithCustomMethods = {
     if (resource === "tasks") {
       return baseDataProvider.getList("tasks_summary", params);
     }
+    if (resource === "deals") {
+      return baseDataProvider.getList("deals_summary", params);
+    }
 
     return baseDataProvider.getList(resource, params);
   },
@@ -105,6 +108,9 @@ const dataProviderWithCustomMethods = {
     }
     if (resource === "tasks") {
       return baseDataProvider.getOne("tasks_summary", params);
+    }
+    if (resource === "deals") {
+      return baseDataProvider.getOne("deals_summary", params);
     }
 
     return baseDataProvider.getOne(resource, params);

@@ -73,6 +73,7 @@ export type Company = {
   nb_deals?: number;
   nb_notes?: number;
   nb_tasks?: number;
+  nb_invoices?: number;
   last_seen?: string;
 
   // Phase 1: Lifecycle & Classification
@@ -143,6 +144,7 @@ export type Contact = {
   background: string;
   phone_jsonb: PhoneNumberAndType[];
   nb_tasks?: number;
+  nb_invoices?: number;
   company_name?: string;
 
   // Internal Heartbeat
@@ -189,6 +191,7 @@ export type Deal = {
   expected_closing_date: string;
   sales_id: Identifier;
   index: number;
+  nb_invoices?: number;
 } & Pick<RaRecord, "id">;
 
 export type DealNote = {

@@ -4,6 +4,7 @@ import { InvoiceList } from "./InvoiceList";
 import { InvoiceShow } from "./InvoiceShow";
 import { InvoiceCreate } from "./InvoiceCreate";
 import { InvoiceEdit } from "./InvoiceEdit";
+import { InvoiceCard } from "./InvoiceCard";
 
 export default {
     list: InvoiceList,
@@ -14,4 +15,4 @@ export default {
     recordRepresentation: "invoice_number",
 };
 
-export { InvoiceList, InvoiceShow, InvoiceCreate, InvoiceEdit };
+export { InvoiceList, InvoiceShow, InvoiceCreate, InvoiceEdit, InvoiceCard };

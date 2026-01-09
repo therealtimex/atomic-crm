@@ -1168,8 +1168,10 @@ export const viMessages = {
       notes: "1 Ghi chú |||| %{smart_count} Ghi chú",
       deals: "1 Giao dịch |||| %{smart_count} Giao dịch",
       tasks: "1 Công việc |||| %{smart_count} Công việc",
+      invoices: "1 Hóa đơn |||| %{smart_count} Hóa đơn",
       last_activity: "hoạt động gần nhất %{distance} trước",
       add_contact: "Thêm liên hệ",
+      add_invoice: "Thêm hóa đơn",
     },
   },
   resources: {

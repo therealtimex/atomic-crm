@@ -1191,8 +1191,10 @@ export const esMessages = {
       notes: "1 Nota |||| %{smart_count} Notas",
       deals: "1 Trato |||| %{smart_count} Tratos",
       tasks: "1 Tarea |||| %{smart_count} Tareas",
+      invoices: "1 Factura |||| %{smart_count} Facturas",
       last_activity: "última actividad hace %{distance}",
       add_contact: "Añadir contacto",
+      add_invoice: "Añadir factura",
     },
   },
   resources: {
@@ -1324,6 +1326,14 @@ export const esMessages = {
         new_invoice: "Nueva Factura",
         add_item: "Añadir artículo",
         edit: "Editar factura",
+        mark_as_sent: "Marcar como enviada",
+        mark_as_paid: "Marcar como pagada",
+        mark_as_cancelled: "Marcar como cancelada",
+        print: "Imprimir",
+        suggest_number: "Sugerir número",
+      },
+      notification: {
+        status_updated: "Estado de la factura actualizado a %{status}",
       },
       helper: {
         invoice_number: "Identificador único de factura",

@@ -1194,8 +1194,10 @@ export const frMessages = {
       notes: "1 Note |||| %{smart_count} Notes",
       deals: "1 Affaire |||| %{smart_count} Affaires",
       tasks: "1 Tâche |||| %{smart_count} Tâches",
+      invoices: "1 Facture |||| %{smart_count} Factures",
       last_activity: "dernière activité il y a %{distance}",
       add_contact: "Ajouter un contact",
+      add_invoice: "Ajouter une facture",
     },
   },
   resources: {
@@ -1327,6 +1329,14 @@ export const frMessages = {
         new_invoice: "Nouvelle Facture",
         add_item: "Ajouter une ligne",
         edit: "Modifier la facture",
+        mark_as_sent: "Marquer comme envoyé",
+        mark_as_paid: "Marquer comme payé",
+        mark_as_cancelled: "Marquer comme annulé",
+        print: "Imprimer",
+        suggest_number: "Suggérer un numéro",
+      },
+      notification: {
+        status_updated: "Statut de la facture mis à jour à %{status}",
       },
       helper: {
         invoice_number: "Identifiant unique de la facture",

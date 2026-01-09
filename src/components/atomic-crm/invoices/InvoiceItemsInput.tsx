@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Trash2, Plus, GripVertical } from "lucide-react";
+import { TaxPresetSelector } from "./TaxPresetSelector";
 
 import type { InvoiceItem } from "../types";
 
@@ -178,19 +179,22 @@ export const InvoiceItemsInput = () => {
                                         />
                                     </div>
 
-                                    {/* Tax Rate */}
-                                    <div className="col-span-1">
+                                    <div className="col-span-1 flex items-center gap-1">
                                         <Input
                                             type="number"
                                             placeholder="Tax %"
                                             min="0"
                                             max="100"
                                             step="0.01"
+                                            className="pr-6"
                                             value={item.tax_rate || ""}
                                             onChange={(e) =>
                                                 updateItem(index, "tax_rate", parseFloat(e.target.value) || 0)
                                             }
                                         />
+                                        <div className="-ml-8 z-10">
+                                            <TaxPresetSelector onSelect={(rate) => updateItem(index, "tax_rate", rate)} />
+                                        </div>
                                     </div>
 
                                     {/* Line Total */}
