@@ -10,9 +10,12 @@ import packageJson from "./package.json";
 // Get latest migration timestamp at build time
 function getLatestMigrationTimestamp() {
   try {
-    const timestamp = execSync("node ./scripts/get-latest-migration-timestamp.mjs", {
-      encoding: "utf8",
-    }).trim();
+    const timestamp = execSync(
+      "node ./scripts/get-latest-migration-timestamp.mjs",
+      {
+        encoding: "utf8",
+      },
+    ).trim();
     return timestamp;
   } catch {
     console.warn("Warning: Could not determine latest migration timestamp");
@@ -27,7 +30,9 @@ export default defineConfig(({ mode }) => {
 
   const define = {
     "import.meta.env.VITE_APP_VERSION": JSON.stringify(packageJson.version),
-    "import.meta.env.VITE_LATEST_MIGRATION_TIMESTAMP": JSON.stringify(latestMigrationTimestamp),
+    "import.meta.env.VITE_LATEST_MIGRATION_TIMESTAMP": JSON.stringify(
+      latestMigrationTimestamp,
+    ),
   };
 
   if (mode === "production") {
@@ -62,10 +67,10 @@ export default defineConfig(({ mode }) => {
         },
       }),
       {
-        name: 'api-migrate',
+        name: "api-migrate",
         configureServer(server) {
-          server.middlewares.use('/api/migrate', async (req, res, next) => {
-            if (req.method !== 'POST') return next();
+          server.middlewares.use("/api/migrate", async (req, res, next) => {
+            if (req.method !== "POST") return next();
 
             try {
               // Parse request body
@@ -77,9 +82,11 @@ export default defineConfig(({ mode }) => {
               let body = {};
               try {
                 body = JSON.parse(Buffer.concat(buffers).toString());
-              } catch (e) {
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ error: 'Invalid JSON in request body' }));
+              } catch (_e) {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(
+                  JSON.stringify({ error: "Invalid JSON in request body" }),
+                );
                 return;
               }
 
@@ -87,8 +94,8 @@ export default defineConfig(({ mode }) => {
 
               // Validation
               if (!projectRef) {
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ error: 'projectRef is required' }));
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: "projectRef is required" }));
                 return;
               }
 
@@ -97,7 +104,7 @@ export default defineConfig(({ mode }) => {
                 "Content-Type": "text/plain",
                 "Transfer-Encoding": "chunked",
                 "Cache-Control": "no-cache",
-                "X-Content-Type-Options": "nosniff"
+                "X-Content-Type-Options": "nosniff",
               });
 
               const log = (msg) => res.write(`${msg}\n`);
@@ -108,7 +115,7 @@ export default defineConfig(({ mode }) => {
               // Prepare environment
               const env = {
                 ...process.env,
-                SUPABASE_PROJECT_ID: projectRef
+                SUPABASE_PROJECT_ID: projectRef,
               };
 
               if (accessToken) {
@@ -118,10 +125,16 @@ export default defineConfig(({ mode }) => {
                 env.SUPABASE_DB_PASSWORD = dbPassword;
                 log("🔑 Using provided database password");
               } else {
-                log("⚠️  No credentials provided - checking existing Supabase login...");
+                log(
+                  "⚠️  No credentials provided - checking existing Supabase login...",
+                );
                 log("");
-                log("💡 Tip: Provide an access token for more reliable authentication");
-                log("   Generate one at: https://supabase.com/dashboard/account/tokens");
+                log(
+                  "💡 Tip: Provide an access token for more reliable authentication",
+                );
+                log(
+                  "   Generate one at: https://supabase.com/dashboard/account/tokens",
+                );
               }
 
               log("");
@@ -129,21 +142,25 @@ export default defineConfig(({ mode }) => {
               log("");
 
               // Path to migration script
-              const scriptPath = path.join(process.cwd(), "scripts", "migrate.sh");
+              const scriptPath = path.join(
+                process.cwd(),
+                "scripts",
+                "migrate.sh",
+              );
 
               // Execute migration script
               const migrationProcess = spawn("bash", [scriptPath], {
                 env,
                 cwd: process.cwd(),
-                stdio: ['ignore', 'pipe', 'pipe']
+                stdio: ["ignore", "pipe", "pipe"],
               });
 
               let hasError = false;
 
               // Stream stdout
-              migrationProcess.stdout.on('data', (data) => {
-                const lines = data.toString().split('\n');
-                lines.forEach(line => {
+              migrationProcess.stdout.on("data", (data) => {
+                const lines = data.toString().split("\n");
+                lines.forEach((line) => {
                   if (line.trim()) {
                     log(line);
                   }
@@ -151,11 +168,14 @@ export default defineConfig(({ mode }) => {
               });
 
               // Stream stderr
-              migrationProcess.stderr.on('data', (data) => {
-                const lines = data.toString().split('\n');
-                lines.forEach(line => {
+              migrationProcess.stderr.on("data", (data) => {
+                const lines = data.toString().split("\n");
+                lines.forEach((line) => {
                   if (line.trim()) {
-                    if (line.toLowerCase().includes('error') || line.toLowerCase().includes('failed')) {
+                    if (
+                      line.toLowerCase().includes("error") ||
+                      line.toLowerCase().includes("failed")
+                    ) {
                       log(`❌ ${line}`);
                       hasError = true;
                     } else {
@@ -166,7 +186,7 @@ export default defineConfig(({ mode }) => {
               });
 
               // Handle completion
-              migrationProcess.on('close', (code) => {
+              migrationProcess.on("close", (code) => {
                 log("");
                 log("─".repeat(60));
                 log("");
@@ -181,18 +201,24 @@ export default defineConfig(({ mode }) => {
                   log("");
                   log("💡 Troubleshooting tips:");
                   log("   1. Verify your Supabase credentials are correct");
-                  log("   2. Generate an access token at: https://supabase.com/dashboard/account/tokens");
-                  log("   3. Ensure Supabase CLI is installed: npm install -g supabase");
+                  log(
+                    "   2. Generate an access token at: https://supabase.com/dashboard/account/tokens",
+                  );
+                  log(
+                    "   3. Ensure Supabase CLI is installed: npm install -g supabase",
+                  );
                   log("   4. Try running: npx supabase login");
                   log("");
-                  log("📚 Need help? https://github.com/therealtimex/realtimex-crm/issues");
+                  log(
+                    "📚 Need help? https://github.com/therealtimex/realtimex-crm/issues",
+                  );
                 }
 
                 res.end();
               });
 
               // Handle errors
-              migrationProcess.on('error', (error) => {
+              migrationProcess.on("error", (error) => {
                 log("");
                 log(`❌ Failed to start migration: ${error.message}`);
                 log("");
@@ -207,29 +233,32 @@ export default defineConfig(({ mode }) => {
               });
 
               // Handle client disconnect
-              req.on('close', () => {
+              req.on("close", () => {
                 if (!migrationProcess.killed) {
                   migrationProcess.kill();
-                  console.log('[Migration API] Process terminated - client disconnected');
+                  console.log(
+                    "[Migration API] Process terminated - client disconnected",
+                  );
                 }
               });
-
             } catch (error) {
-              console.error('[Migration API] Error:', error);
+              console.error("[Migration API] Error:", error);
               if (!res.headersSent) {
-                res.writeHead(500, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({
-                  error: 'Internal server error',
-                  message: error.message
-                }));
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(
+                  JSON.stringify({
+                    error: "Internal server error",
+                    message: error.message,
+                  }),
+                );
               } else {
                 res.write(`\n❌ Unexpected error: ${error.message}\n`);
                 res.end();
               }
             }
           });
-        }
-      }
+        },
+      },
     ],
     define,
     base: "./",

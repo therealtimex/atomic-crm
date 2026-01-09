@@ -107,13 +107,16 @@ export const mergeCompanies = async (
       context_links: mergedContextLinks,
 
       // Phase 1: Lifecycle & Classification (prefer winner's values)
-      lifecycle_stage: winnerCompany.lifecycle_stage ?? loserCompany.lifecycle_stage,
+      lifecycle_stage:
+        winnerCompany.lifecycle_stage ?? loserCompany.lifecycle_stage,
       company_type: winnerCompany.company_type ?? loserCompany.company_type,
-      qualification_status: winnerCompany.qualification_status ?? loserCompany.qualification_status,
+      qualification_status:
+        winnerCompany.qualification_status ?? loserCompany.qualification_status,
 
       // Phase 1: External Integration (prefer winner's values)
       external_id: winnerCompany.external_id ?? loserCompany.external_id,
-      external_system: winnerCompany.external_system ?? loserCompany.external_system,
+      external_system:
+        winnerCompany.external_system ?? loserCompany.external_system,
 
       // Phase 1: Contact Information (prefer winner's email)
       email: winnerCompany.email ?? loserCompany.email,
@@ -121,7 +124,8 @@ export const mergeCompanies = async (
       // Phase 1: Firmographics (prefer winner's values)
       industry: winnerCompany.industry ?? loserCompany.industry,
       revenue_range: winnerCompany.revenue_range ?? loserCompany.revenue_range,
-      employee_count: winnerCompany.employee_count ?? loserCompany.employee_count,
+      employee_count:
+        winnerCompany.employee_count ?? loserCompany.employee_count,
       founded_year: winnerCompany.founded_year ?? loserCompany.founded_year,
 
       // Phase 1: Social & Enrichment (merge social profiles, prefer winner's logo_url)
@@ -129,21 +133,27 @@ export const mergeCompanies = async (
       logo_url: winnerCompany.logo_url ?? loserCompany.logo_url,
 
       // Phase 2: Heartbeat (take the better/higher heartbeat score)
-      external_heartbeat_status: winnerCompany.external_heartbeat_status ?? loserCompany.external_heartbeat_status,
+      external_heartbeat_status:
+        winnerCompany.external_heartbeat_status ??
+        loserCompany.external_heartbeat_status,
       external_heartbeat_checked_at:
-        winnerCompany.external_heartbeat_checked_at ?? loserCompany.external_heartbeat_checked_at,
+        winnerCompany.external_heartbeat_checked_at ??
+        loserCompany.external_heartbeat_checked_at,
 
       // For internal heartbeat, take the higher score (better engagement)
-      internal_heartbeat_score: Math.max(
-        winnerCompany.internal_heartbeat_score ?? 0,
-        loserCompany.internal_heartbeat_score ?? 0
-      ) || undefined,
+      internal_heartbeat_score:
+        Math.max(
+          winnerCompany.internal_heartbeat_score ?? 0,
+          loserCompany.internal_heartbeat_score ?? 0,
+        ) || undefined,
       internal_heartbeat_status:
-        (winnerCompany.internal_heartbeat_score ?? 0) >= (loserCompany.internal_heartbeat_score ?? 0)
+        (winnerCompany.internal_heartbeat_score ?? 0) >=
+        (loserCompany.internal_heartbeat_score ?? 0)
           ? winnerCompany.internal_heartbeat_status
           : loserCompany.internal_heartbeat_status,
       internal_heartbeat_updated_at:
-        winnerCompany.internal_heartbeat_updated_at ?? loserCompany.internal_heartbeat_updated_at,
+        winnerCompany.internal_heartbeat_updated_at ??
+        loserCompany.internal_heartbeat_updated_at,
     },
     previousData: winnerCompany,
   });

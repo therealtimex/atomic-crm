@@ -8,8 +8,8 @@ function Textarea({
   alwaysOn: _alwaysOn,
   ...props
 }: React.ComponentProps<"textarea"> & {
-  helperText?: string;
-  alwaysOn?: boolean;
+  helperText?: string
+  alwaysOn?: boolean
 }) {
   return (
     <textarea

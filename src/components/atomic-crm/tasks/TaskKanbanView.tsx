@@ -37,8 +37,7 @@ export const TaskKanbanView = () => {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   const collapseStorageKey = useMemo(
-    () =>
-      `realtimex_crm_tasks_kanban_collapsed_${identity?.id ?? "anonymous"}`,
+    () => `realtimex_crm_tasks_kanban_collapsed_${identity?.id ?? "anonymous"}`,
     [identity?.id],
   );
 
@@ -138,7 +137,10 @@ export const TaskKanbanView = () => {
       return;
     }
 
-    if (isOtherBucketReadOnly && destination.droppableId === OTHER_TASK_STATUS_ID) {
+    if (
+      isOtherBucketReadOnly &&
+      destination.droppableId === OTHER_TASK_STATUS_ID
+    ) {
       return;
     }
 
@@ -149,7 +151,9 @@ export const TaskKanbanView = () => {
       return;
     }
 
-    const destinationTask = tasksByStatus[destinationStatus]?.[destination.index] ?? {
+    const destinationTask = tasksByStatus[destinationStatus]?.[
+      destination.index
+    ] ?? {
       status: destinationStatus,
       index: undefined,
     };
@@ -179,7 +183,9 @@ export const TaskKanbanView = () => {
       })
       .catch(() => {
         setTasksByStatus(previousTasksByStatus);
-        notify(translate("crm.task.notification.move_failed"), { type: "error" });
+        notify(translate("crm.task.notification.move_failed"), {
+          type: "error",
+        });
       });
   };
 
@@ -328,8 +334,8 @@ const updateTaskStatus = async (
   }
 
   // moving task across columns
-  const [{ data: sourceTasks }, { data: destinationTasks }] =
-    await Promise.all([
+  const [{ data: sourceTasks }, { data: destinationTasks }] = await Promise.all(
+    [
       dataProvider.getList("tasks", {
         sort: { field: "index", order: "ASC" },
         pagination: { page: 1, perPage: TASKS_UPDATE_PAGE_SIZE },
@@ -340,7 +346,8 @@ const updateTaskStatus = async (
         pagination: { page: 1, perPage: TASKS_UPDATE_PAGE_SIZE },
         filter: { status: destination.status },
       }),
-    ]);
+    ],
+  );
   const destinationIndex = destination.index ?? destinationTasks.length + 1;
 
   await Promise.all([

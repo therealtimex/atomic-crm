@@ -21,7 +21,7 @@ interface ApiKey {
  * Returns api key record or error response
  */
 export async function validateApiKey(
-  req: Request
+  req: Request,
 ): Promise<{ apiKey: ApiKey } | Response> {
   const authHeader = req.headers.get("Authorization");
 
@@ -40,9 +40,9 @@ export async function validateApiKey(
   const data = encoder.encode(apiKeyValue);
   const hashBuffer = await crypto.subtle.digest("SHA-256", data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const keyHash = hashArray.map((b) => b.toString(16).padStart(2, "0")).join(
-    ""
-  );
+  const keyHash = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 
   // Lookup API key in database
   const { data: apiKey, error } = await supabaseAdmin
@@ -111,7 +111,7 @@ export function checkRateLimit(apiKeyId: number): Response | null {
           "X-RateLimit-Remaining": "0",
           "X-RateLimit-Reset": bucket.resetAt.toString(),
         },
-      }
+      },
     );
   }
 
@@ -153,7 +153,7 @@ export async function logApiRequest(
   statusCode: number,
   responseTimeMs: number,
   req: Request,
-  errorMessage?: string
+  errorMessage?: string,
 ) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
   const userAgent = req.headers.get("user-agent");

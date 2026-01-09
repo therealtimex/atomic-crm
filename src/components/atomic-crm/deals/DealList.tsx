@@ -27,18 +27,16 @@ const DealList = () => {
 
   const translatedDealCategories = dealCategories.map((category) => ({
     id: category,
-    name: translateChoice(
-      translate,
-      "crm.deal.category",
-      category,
-      category,
-    ),
+    name: translateChoice(translate, "crm.deal.category", category, category),
   }));
 
   const dealFilters = [
     <SearchInput source="q" alwaysOn />,
     <ReferenceInput source="company_id" reference="companies">
-      <AutocompleteInput label={false} placeholder={translate("crm.filter.company")} />
+      <AutocompleteInput
+        label={false}
+        placeholder={translate("crm.filter.company")}
+      />
     </ReferenceInput>,
     <SelectInput
       source="category"

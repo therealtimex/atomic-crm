@@ -171,7 +171,9 @@ const SettingsForm = ({
               className="flex items-center"
             >
               {isEditMode ? <CircleX /> : <Pencil />}
-              {isEditMode ? translate("crm.activity.cancel") : translate("crm.task.action.edit")}
+              {isEditMode
+                ? translate("crm.activity.cancel")
+                : translate("crm.task.action.edit")}
             </Button>
 
             {isEditMode && (

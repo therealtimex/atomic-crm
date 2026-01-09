@@ -69,7 +69,7 @@ export const TaskEdit = ({
         onError: (error) => {
           console.error("Failed to create task note:", error);
         },
-      }
+      },
     );
   };
 
@@ -143,12 +143,7 @@ const TaskEditForm = ({
 
   const translatedTaskStatuses = taskStatuses.map((status) => ({
     ...status,
-    name: translateChoice(
-      translate,
-      "crm.task.status",
-      status.id,
-      status.name,
-    ),
+    name: translateChoice(translate, "crm.task.status", status.id, status.name),
   }));
 
   return (

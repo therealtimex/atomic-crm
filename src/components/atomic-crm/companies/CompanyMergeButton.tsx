@@ -66,7 +66,11 @@ const CompanyMergeDialog = ({ open, onClose }: CompanyMergeDialogProps) => {
   );
   const [isMerging, setIsMerging] = useState(false);
   const { mutateAsync } = useMutation({
-    mutationKey: ["companies", "merge", { loserId: loserCompany?.id, winnerId }],
+    mutationKey: [
+      "companies",
+      "merge",
+      { loserId: loserCompany?.id, winnerId },
+    ],
     mutationFn: async () => {
       return dataProvider.mergeCompanies(loserCompany?.id, winnerId);
     },

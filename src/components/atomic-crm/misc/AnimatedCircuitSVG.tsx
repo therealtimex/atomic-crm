@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export const AnimatedCircuitSVG = () => {
   return (
@@ -71,54 +71,129 @@ export const AnimatedCircuitSVG = () => {
         </style>
 
         {/* --- Background Radar Ripples --- */}
-        <circle cx="400" cy="300" r="120" stroke="#4338ca" strokeWidth="1.5" className="scanner" style={{ animationDelay: '0s' }} />
-        <circle cx="400" cy="300" r="120" stroke="#4338ca" strokeWidth="1.5" className="scanner" style={{ animationDelay: '2s' }} />
+        <circle
+          cx="400"
+          cy="300"
+          r="120"
+          stroke="#4338ca"
+          strokeWidth="1.5"
+          className="scanner"
+          style={{ animationDelay: "0s" }}
+        />
+        <circle
+          cx="400"
+          cy="300"
+          r="120"
+          stroke="#4338ca"
+          strokeWidth="1.5"
+          className="scanner"
+          style={{ animationDelay: "2s" }}
+        />
 
         {/* --- Connecting Lines (The "Wires") --- */}
         {/* Left Wire */}
         <path d="M200 300 L320 300" stroke="#1e1b4b" strokeWidth="4" />
-        <path d="M200 300 L320 300" stroke="url(#flow-grad)" strokeWidth="2" className="flow-line" />
-        
+        <path
+          d="M200 300 L320 300"
+          stroke="url(#flow-grad)"
+          strokeWidth="2"
+          className="flow-line"
+        />
+
         {/* Right Wire */}
         <path d="M600 300 L480 300" stroke="#1e1b4b" strokeWidth="4" />
-        <path d="M600 300 L480 300" stroke="url(#flow-grad)" strokeWidth="2" className="flow-line" style={{ animationDirection: 'reverse' }} />
+        <path
+          d="M600 300 L480 300"
+          stroke="url(#flow-grad)"
+          strokeWidth="2"
+          className="flow-line"
+          style={{ animationDirection: "reverse" }}
+        />
 
         {/* Top Wire */}
         <path d="M400 150 L400 220" stroke="#1e1b4b" strokeWidth="4" />
-        <path d="M400 150 L400 220" stroke="url(#flow-grad)" strokeWidth="2" className="flow-line-slow" />
+        <path
+          d="M400 150 L400 220"
+          stroke="url(#flow-grad)"
+          strokeWidth="2"
+          className="flow-line-slow"
+        />
 
         {/* Diagonal Wires */}
         <path d="M250 450 L350 350" stroke="#1e1b4b" strokeWidth="2" />
-        <path d="M250 450 L350 350" stroke="#6366f1" strokeWidth="1" strokeDasharray="5 5" opacity="0.5" />
-        
+        <path
+          d="M250 450 L350 350"
+          stroke="#6366f1"
+          strokeWidth="1"
+          strokeDasharray="5 5"
+          opacity="0.5"
+        />
+
         <path d="M550 150 L450 250" stroke="#1e1b4b" strokeWidth="2" />
-        <path d="M550 150 L450 250" stroke="#6366f1" strokeWidth="1" strokeDasharray="5 5" opacity="0.5" />
+        <path
+          d="M550 150 L450 250"
+          stroke="#6366f1"
+          strokeWidth="1"
+          strokeDasharray="5 5"
+          opacity="0.5"
+        />
 
         {/* --- Central Mechanism --- */}
-        
+
         {/* Outer Ring (Rotating Counter-Clockwise) */}
         <g className="spin-ccw">
-          <circle cx="400" cy="300" r="80" stroke="#4f46e5" strokeWidth="2" strokeDasharray="20 40" />
-          <circle cx="400" cy="300" r="80" stroke="#4f46e5" strokeWidth="1" opacity="0.3" />
+          <circle
+            cx="400"
+            cy="300"
+            r="80"
+            stroke="#4f46e5"
+            strokeWidth="2"
+            strokeDasharray="20 40"
+          />
+          <circle
+            cx="400"
+            cy="300"
+            r="80"
+            stroke="#4f46e5"
+            strokeWidth="1"
+            opacity="0.3"
+          />
         </g>
 
         {/* Inner Ring (Rotating Clockwise) */}
         <g className="spin-cw">
-           <circle cx="400" cy="300" r="60" stroke="#818cf8" strokeWidth="4" strokeDasharray="10 30" />
+          <circle
+            cx="400"
+            cy="300"
+            r="60"
+            stroke="#818cf8"
+            strokeWidth="4"
+            strokeDasharray="10 30"
+          />
         </g>
 
         {/* Core (Pulsing) */}
         <g className="pulse-core">
-          <circle cx="400" cy="300" r="40" fill="#1e1b4b" stroke="#6366f1" strokeWidth="2" />
+          <circle
+            cx="400"
+            cy="300"
+            r="40"
+            fill="#1e1b4b"
+            stroke="#6366f1"
+            strokeWidth="2"
+          />
           {/* Hexagon icon inside core */}
-          <path d="M400 280 L417 290 V310 L400 320 L383 310 V290 Z" fill="#4f46e5" filter="url(#glow-filter)" />
+          <path
+            d="M400 280 L417 290 V310 L400 320 L383 310 V290 Z"
+            fill="#4f46e5"
+            filter="url(#glow-filter)"
+          />
         </g>
-        
+
         {/* --- Floating Particles (Data Nodes) --- */}
         <circle cx="200" cy="300" r="5" fill="#818cf8" />
         <circle cx="600" cy="300" r="5" fill="#818cf8" />
         <circle cx="400" cy="150" r="5" fill="#818cf8" />
-
       </svg>
     </div>
   );

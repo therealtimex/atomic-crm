@@ -29,7 +29,7 @@ Deno.serve(async (req: Request) => {
       req.method,
       429,
       Date.now() - startTime,
-      req
+      req,
     );
     return rateLimitError;
   }
@@ -60,7 +60,7 @@ Deno.serve(async (req: Request) => {
       req.method,
       response.status,
       responseTime,
-      req
+      req,
     );
 
     return response;
@@ -73,7 +73,7 @@ Deno.serve(async (req: Request) => {
       500,
       responseTime,
       req,
-      error.message
+      error.message,
     );
     return createErrorResponse(500, "Internal server error");
   }
@@ -153,10 +153,7 @@ async function deleteDeal(apiKey: any, dealId: string) {
     return createErrorResponse(403, "Insufficient permissions");
   }
 
-  const { error } = await supabaseAdmin
-    .from("deals")
-    .delete()
-    .eq("id", dealId);
+  const { error } = await supabaseAdmin.from("deals").delete().eq("id", dealId);
 
   if (error) {
     return createErrorResponse(404, "Deal not found");

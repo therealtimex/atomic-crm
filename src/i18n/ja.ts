@@ -6,7 +6,8 @@ export const jaMessages = {
     setup_wizard: {
       welcome: {
         title: "%{title}へようこそ",
-        description: "開始するには、Supabaseデータベースに接続する必要があります。",
+        description:
+          "開始するには、Supabaseデータベースに接続する必要があります。",
         no_project: "Supabaseプロジェクトをお持ちではありませんか？",
         create_free: "こちらで無料で作成できます:",
         need_title: "必要なもの:",
@@ -26,14 +27,16 @@ export const jaMessages = {
         url_must_be_supabase: "URLはSupabaseドメインである必要があります",
         url_hint: "完全なURLまたはプロジェクトIDを入力してください",
         url_expansion: "%{url} に展開されます",
-        url_default_hint: "完全なURLまたはプロジェクトIDのみを入力してください (プロジェクト設定 → API)",
+        url_default_hint:
+          "完全なURLまたはプロジェクトIDのみを入力してください (プロジェクト設定 → API)",
         key_label: "APIキー",
         key_placeholder: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
         key_valid_publishable: "有効なpublishableキー形式",
         key_valid_anon: "有効なanonキー形式",
         key_incomplete_publishable: "publishableキーが不完全のようです",
         key_incomplete_anon: "anonキーが不完全のようです",
-        key_invalid: "有効なSupabase APIキー (anonまたはpublishable) である必要があります",
+        key_invalid:
+          "有効なSupabase APIキー (anonまたはpublishable) である必要があります",
         key_default_hint: "AnonまたはPublishableキー (プロジェクト設定 → API)",
         back: "戻る",
         connect: "接続",
@@ -484,16 +487,11 @@ export const jaMessages = {
         current_contact: "現在の連絡先（削除されます）",
         target_contact: "統合先の連絡先（保持されます）",
         what_will_be_merged: "統合される内容:",
-        notes_to_merge:
-          "%{count}件のノートが再割り当てされます",
-        tasks_to_merge:
-          "%{count}件のタスクが再割り当てされます",
-        deals_to_merge:
-          "%{count}件の案件が更新されます",
-        emails_to_merge:
-          "%{count}件のメールアドレスが追加されます",
-        phones_to_merge:
-          "%{count}件の電話番号が追加されます",
+        notes_to_merge: "%{count}件のノートが再割り当てされます",
+        tasks_to_merge: "%{count}件のタスクが再割り当てされます",
+        deals_to_merge: "%{count}件の案件が更新されます",
+        emails_to_merge: "%{count}件のメールアドレスが追加されます",
+        phones_to_merge: "%{count}件の電話番号が追加されます",
         no_data: "統合する追加データはありません",
         warning_title: "警告: 破壊的な操作",
         warning_message:
@@ -508,14 +506,16 @@ export const jaMessages = {
         title: "インポート",
         description: "CSVファイルから連絡先をインポートする",
         running: "インポートを実行中です。このタブを閉じないでください。",
-        status: "%{total}件中 %{count}件の連絡先をインポートしました（エラー: %{errors}件）",
+        status:
+          "%{total}件中 %{count}件の連絡先をインポートしました（エラー: %{errors}件）",
         remaining_time: "残り時間の目安: %{time}",
         stop: "インポートを停止",
         error:
           "インポートに失敗しました。有効なCSVファイルであることを確認してください。",
         complete:
           "連絡先のインポートが完了しました。%{count}件をインポートしました（エラー: %{errors}件）",
-        template_hint: "テンプレートとして使用できるサンプルCSVファイルはこちらです",
+        template_hint:
+          "テンプレートとして使用できるサンプルCSVファイルはこちらです",
         download_sample: "CSVサンプルをダウンロード",
         csv_file: "CSVファイル",
       },
@@ -634,12 +634,9 @@ export const jaMessages = {
         current_contact: "現在の会社（削除されます）",
         target_contact: "統合先の会社（保持されます）",
         what_will_be_merged: "統合される内容:",
-        contacts_to_merge:
-          "%{count}件の連絡先が再割り当てされます",
-        deals_to_merge:
-          "%{count}件の案件が再割り当てされます",
-        links_to_merge:
-          "%{count}件のコンテキストリンクが追加されます",
+        contacts_to_merge: "%{count}件の連絡先が再割り当てされます",
+        deals_to_merge: "%{count}件の案件が再割り当てされます",
+        links_to_merge: "%{count}件のコンテキストリンクが追加されます",
         no_data: "統合する追加データはありません",
         warning_title: "警告: 破壊的な操作",
         warning_message:
@@ -694,7 +691,8 @@ export const jaMessages = {
         },
         dialog: {
           create_title: "ウェブフックを作成",
-          create_description: "イベント通知を受信するための新しいウェブフックを作成します",
+          create_description:
+            "イベント通知を受信するための新しいウェブフックを作成します",
           edit_title: "ウェブフックを編集",
           edit_description: "ウェブフックの設定を更新します",
           delete_title: "ウェブフックを削除しますか？",
@@ -742,7 +740,8 @@ export const jaMessages = {
         },
       },
       api_keys: {
-        description: "APIキーを使用すると、外部アプリケーションからCRMデータにプログラムでアクセスできます。",
+        description:
+          "APIキーを使用すると、外部アプリケーションからCRMデータにプログラムでアクセスできます。",
         action: {
           create: "APIキーを作成",
           create_first: "最初のAPIキーを作成",
@@ -757,7 +756,8 @@ export const jaMessages = {
           created: "作成日: %{date}",
           last_used: "最終使用日: %{date}",
           expires: "有効期限: %{date}",
-          key_hint: "コピーをクリックして、マスクされていないフルキーを取得します",
+          key_hint:
+            "コピーをクリックして、マスクされていないフルキーを取得します",
           not_available: "APIキーをコピーできません",
           scopes: "スコープ",
           expiration: "有効期限（任意）",
@@ -765,9 +765,11 @@ export const jaMessages = {
         },
         dialog: {
           create_title: "APIキーを作成",
-          create_description: "CRM APIにアクセスするための新しいAPIキーを作成します",
+          create_description:
+            "CRM APIにアクセスするための新しいAPIキーを作成します",
           created_title: "APIキーを作成しました",
-          created_description: "今すぐこのキーをコピーしてください。二度と表示されません！",
+          created_description:
+            "今すぐこのキーをコピーしてください。二度と表示されません！",
           delete_title: "APIキーを削除しますか？",
           delete_description:
             "このAPIキーは完全に削除されます。このキーを使用しているアプリケーションは即座に動作を停止します。この操作は取り消せません。",
@@ -803,7 +805,8 @@ export const jaMessages = {
           upload_all: "すべてアップロード",
           clear_completed: "完了したものをクリア",
           drop_files: "ここにファイルをドロップ...",
-          drag_and_drop: "ファイルをここにドラッグ＆ドロップするか、クリックして選択してください",
+          drag_and_drop:
+            "ファイルをここにドラッグ＆ドロップするか、クリックして選択してください",
           supports_all:
             "すべてのファイル形式をサポート（実行ファイルはセキュリティのためブロックされます）",
         },
@@ -822,8 +825,10 @@ export const jaMessages = {
         },
         how_it_works: {
           title: "仕組み",
-          step_1: "ファイルは安全なストレージに直接アップロードされます（データベースを肥大化させません）",
-          step_2: "各ファイルは追跡と検索のためにアクティビティレコードを作成します",
+          step_1:
+            "ファイルは安全なストレージに直接アップロードされます（データベースを肥大化させません）",
+          step_2:
+            "各ファイルは追跡と検索のためにアクティビティレコードを作成します",
           step_3: "大きなファイルは自動的に処理されます（サイズ制限なし）",
           step_4: "ファイルは選択したインジェクションチャネルにリンクされます",
           step_5: "アクティビティはすぐにアクティビティフィードに表示されます",
@@ -834,12 +839,14 @@ export const jaMessages = {
           error: "アップロード失敗: %{name}",
           error_network: "ネットワークエラー",
           error_status: "ステータス %{status} でアップロードに失敗しました",
-          error_dangerous: "実行ファイルはセキュリティ上の理由で許可されていません",
+          error_dangerous:
+            "実行ファイルはセキュリティ上の理由で許可されていません",
         },
       },
       ingestion: {
         title: "インジェクションチャネル",
-        description: "CRMにアクティビティを取り込むためのインバウンドチャネル（メール、音声、SMS）を設定します。",
+        description:
+          "CRMにアクティビティを取り込むためのインバウンドチャネル（メール、音声、SMS）を設定します。",
         action: {
           create: "チャネルを作成",
           add: "インジェクションチャネルを追加",
@@ -854,7 +861,8 @@ export const jaMessages = {
           created: "作成日: %{date}",
         },
         dialog: {
-          create_description: "インカミングアクティビティの新しいソースを設定します。",
+          create_description:
+            "インカミングアクティビティの新しいソースを設定します。",
           name_label: "チャネル名",
           provider_label: "プロバイダー",
           token_label: "認証トークン (検証用)",
@@ -863,7 +871,8 @@ export const jaMessages = {
           placeholder_token: "Twilio認証トークン",
           select_provider: "プロバイダーを選択",
           delete_title: "チャネルを削除しますか？",
-          delete_description: "このソースからのすべての取り込みが停止されます。この操作は取り消せません。",
+          delete_description:
+            "このソースからのすべての取り込みが停止されます。この操作は取り消せません。",
         },
         providers: {
           twilio: "Twilio (音声/SMS)",
@@ -886,7 +895,8 @@ export const jaMessages = {
       },
       dialog: {
         title: "画像をアップロードしてサイズ変更",
-        dropzone: "ファイルをドロップしてアップロード、またはクリックして選択してください。",
+        dropzone:
+          "ファイルをドロップしてアップロード、またはクリックして選択してください。",
       },
       alt: "編集可能なコンテンツ",
     },
@@ -895,7 +905,8 @@ export const jaMessages = {
         docx: "DOCXコンテンツのレンダリングに失敗しました。",
         too_large: "ファイルが大きすぎます (最大 50MB)。サイズ: %{size}MB",
         not_available: "このファイル形式のプレビューは利用できません。",
-        access: "ファイルにアクセスできませんでした。ネットワークの問題、CORSの制限、またはリンクの期限切れの可能性があります。",
+        access:
+          "ファイルにアクセスできませんでした。ネットワークの問題、CORSの制限、またはリンクの期限切れの可能性があります。",
         load: "ドキュメントプレビューの読み込みに失敗しました。",
       },
       action: {
@@ -980,7 +991,8 @@ export const jaMessages = {
         invite_error: "招待メールの再送信に失敗しました",
         reset_sent: "パスワードリセットメールを送信しました",
         reset_error: "パスワードリセットメールの送信に失敗しました",
-        created: "ユーザーを作成しました。パスワード設定用のメールがまもなく送信されます。",
+        created:
+          "ユーザーを作成しました。パスワード設定用のメールがまもなく送信されます。",
         create_error: "ユーザーの作成中にエラーが発生しました。",
         updated: "ユーザーを更新しました",
         error: "エラーが発生しました。もう一度お試しください。",
@@ -1000,7 +1012,8 @@ export const jaMessages = {
     },
     auth: {
       login_with_code: "コードでログイン",
-      enter_email_for_code: "ログイン用の6桁のコードを受け取るには、メールアドレスを入力してください",
+      enter_email_for_code:
+        "ログイン用の6桁のコードを受け取るには、メールアドレスを入力してください",
       code_sent: "6桁のコードがメールに送信されました",
       enter_verification_code: "確認コードを入力",
       code_sent_to: "%{email} に6桁のコードを送信しました",
@@ -1010,7 +1023,8 @@ export const jaMessages = {
       resend_code: "コードを再送",
       back_to_email: "メール入力に戻る",
       back_to_login: "ログインに戻る",
-      no_access: "このアプリケーションへのアクセス権限がありません。管理者にお問い合わせください。",
+      no_access:
+        "このアプリケーションへのアクセス権限がありません。管理者にお問い合わせください。",
       login_successful: "ログインに成功しました！",
       set_new_password: "新しいパスワードを設定",
       choose_password_details: "アカウントの安全なパスワードを選択してください",
@@ -1020,14 +1034,16 @@ export const jaMessages = {
       update_password: "パスワードを更新",
       updating_password: "更新中...",
       failed_to_update_password: "パスワードの更新に失敗しました",
-      forgot_password_code_verified: "コードが確認されました！新しいパスワードを設定してください。",
+      forgot_password_code_verified:
+        "コードが確認されました！新しいパスワードを設定してください。",
       sign_in: "サインイン",
       login_otp_link: "メールコード（OTP）でログイン",
       send_code: "コードを送信",
     },
     signup: {
       title: "%{title}へようこそ",
-      subtitle: "セットアップを完了するために、最初のユーザーアカウントを作成してください。",
+      subtitle:
+        "セットアップを完了するために、最初のユーザーアカウントを作成してください。",
       action: {
         create: "アカウントを作成",
         creating: "作成中...",
@@ -1133,7 +1149,8 @@ export const jaMessages = {
         },
         close: "閉じる",
         copy: {
-          unsupported: "この環境ではコピーできません。手動でコピーしてください。",
+          unsupported:
+            "この環境ではコピーできません。手動でコピーしてください。",
           success: "クリップボードにコピーしました！",
           error: "コピーに失敗しました。手動でコピーしてください。",
           copy_label: "コピー",
@@ -1270,16 +1287,15 @@ export const jaMessages = {
       clear_array_input: "一覧をすべてクリアしてよろしいですか？",
       select_all_limit_reached:
         "選択できる要素が多すぎます。最初の %{max} 件のみ選択されました。",
-      unsaved_changes:
-        "変更が保存されていません。破棄してよろしいですか？",
+      unsaved_changes: "変更が保存されていません。破棄してよろしいですか？",
       placeholder_data_warning:
         "ネットワークの問題: データの更新に失敗しました。",
     },
     navigation: {
       clear_filters: "フィルターをクリア",
-      no_filtered_results:
-        "現在のフィルターで %{name} が見つかりません。",
-      partial_page_range_info: "%{offsetBegin}-%{offsetEnd} / %{offsetEnd} 以上",
+      no_filtered_results: "現在のフィルターで %{name} が見つかりません。",
+      partial_page_range_info:
+        "%{offsetBegin}-%{offsetEnd} / %{offsetEnd} 以上",
       current_page: "ページ %{page}",
       page: "%{page} ページへ",
       first: "最初のページへ",
@@ -1350,7 +1366,8 @@ export const jaMessages = {
     },
     reset_password: {
       forgot_password: "パスワードをお忘れですか？",
-      forgot_password_details: "6桁のコードを受け取るには、メールアドレスを入力してください。",
+      forgot_password_details:
+        "6桁のコードを受け取るには、メールアドレスを入力してください。",
     },
   },
 };

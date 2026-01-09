@@ -97,12 +97,7 @@ export const AddTask = ({
 
   const translatedTaskStatuses = taskStatuses.map((status) => ({
     ...status,
-    name: translateChoice(
-      translate,
-      "crm.task.status",
-      status.id,
-      status.name,
-    ),
+    name: translateChoice(translate, "crm.task.status", status.id, status.name),
   }));
 
   // Determine initial entity type and ID based on context
@@ -123,7 +118,9 @@ export const AddTask = ({
   const initialEntityData = getInitialEntityData();
 
   const recordLabel =
-    record?.first_name || record?.name || translate("crm.task.dialog.create.this_record");
+    record?.first_name ||
+    record?.name ||
+    translate("crm.task.dialog.create.this_record");
 
   return (
     <>

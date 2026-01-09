@@ -10,7 +10,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Database, CheckCircle, AlertCircle, ExternalLink, Check } from "lucide-react";
+import {
+  Loader2,
+  Database,
+  CheckCircle,
+  AlertCircle,
+  ExternalLink,
+  Check,
+} from "lucide-react";
 import { useTranslate } from "ra-core";
 import {
   saveSupabaseConfig,
@@ -44,7 +51,10 @@ function normalizeSupabaseUrl(input: string): string {
 /**
  * Validates if input looks like a valid Supabase URL or project ID
  */
-function validateUrlFormat(input: string): { valid: boolean; messageKey?: string } {
+function validateUrlFormat(input: string): {
+  valid: boolean;
+  messageKey?: string;
+} {
   const trimmed = input.trim();
   if (!trimmed) return { valid: false };
 
@@ -53,17 +63,29 @@ function validateUrlFormat(input: string): { valid: boolean; messageKey?: string
     try {
       const url = new URL(trimmed);
       if (url.hostname.endsWith(".supabase.co")) {
-        return { valid: true, messageKey: "crm.setup_wizard.credentials.url_valid" };
+        return {
+          valid: true,
+          messageKey: "crm.setup_wizard.credentials.url_valid",
+        };
       }
-      return { valid: false, messageKey: "crm.setup_wizard.credentials.url_must_be_supabase" };
+      return {
+        valid: false,
+        messageKey: "crm.setup_wizard.credentials.url_must_be_supabase",
+      };
     } catch {
-      return { valid: false, messageKey: "crm.setup_wizard.credentials.url_invalid_format" };
+      return {
+        valid: false,
+        messageKey: "crm.setup_wizard.credentials.url_invalid_format",
+      };
     }
   }
 
   // Check if it's a project ID (alphanumeric, typically 20 chars)
   if (/^[a-z0-9]+$/.test(trimmed)) {
-    return { valid: true, messageKey: "crm.setup_wizard.credentials.url_project_id" };
+    return {
+      valid: true,
+      messageKey: "crm.setup_wizard.credentials.url_project_id",
+    };
   }
 
   return { valid: false, messageKey: "crm.setup_wizard.credentials.url_hint" };
@@ -72,7 +94,10 @@ function validateUrlFormat(input: string): { valid: boolean; messageKey?: string
 /**
  * Validates if input looks like a valid Supabase API key
  */
-function validateKeyFormat(input: string): { valid: boolean; messageKey?: string } {
+function validateKeyFormat(input: string): {
+  valid: boolean;
+  messageKey?: string;
+} {
   const trimmed = input.trim();
   if (!trimmed) return { valid: false };
 
@@ -80,20 +105,35 @@ function validateKeyFormat(input: string): { valid: boolean; messageKey?: string
   if (trimmed.startsWith("sb_publishable_")) {
     // Check that there's actual key content after the prefix (at least 20 chars)
     if (trimmed.length > "sb_publishable_".length + 20) {
-      return { valid: true, messageKey: "crm.setup_wizard.credentials.key_valid_publishable" };
+      return {
+        valid: true,
+        messageKey: "crm.setup_wizard.credentials.key_valid_publishable",
+      };
     }
-    return { valid: false, messageKey: "crm.setup_wizard.credentials.key_incomplete_publishable" };
+    return {
+      valid: false,
+      messageKey: "crm.setup_wizard.credentials.key_incomplete_publishable",
+    };
   }
 
   // Legacy anon keys are JWT tokens starting with "eyJ"
   if (trimmed.startsWith("eyJ")) {
     if (trimmed.length > 100) {
-      return { valid: true, messageKey: "crm.setup_wizard.credentials.key_valid_anon" };
+      return {
+        valid: true,
+        messageKey: "crm.setup_wizard.credentials.key_valid_anon",
+      };
     }
-    return { valid: false, messageKey: "crm.setup_wizard.credentials.key_incomplete_anon" };
+    return {
+      valid: false,
+      messageKey: "crm.setup_wizard.credentials.key_incomplete_anon",
+    };
   }
 
-  return { valid: false, messageKey: "crm.setup_wizard.credentials.key_invalid" };
+  return {
+    valid: false,
+    messageKey: "crm.setup_wizard.credentials.key_invalid",
+  };
 }
 
 export function SupabaseSetupWizard({
@@ -129,7 +169,9 @@ export function SupabaseSetupWizard({
         window.location.href = window.location.origin;
       }, 1500);
     } else {
-      setError(result.error || translate("crm.setup_wizard.credentials.error_failed"));
+      setError(
+        result.error || translate("crm.setup_wizard.credentials.error_failed"),
+      );
       setStep("credentials");
     }
   };
@@ -138,7 +180,8 @@ export function SupabaseSetupWizard({
   const urlValidation = url ? validateUrlFormat(url) : { valid: false };
   const keyValidation = anonKey ? validateKeyFormat(anonKey) : { valid: false };
   const normalizedUrl = url ? normalizeSupabaseUrl(url) : "";
-  const showUrlExpansion = url && !url.startsWith("http") && urlValidation.valid;
+  const showUrlExpansion =
+    url && !url.startsWith("http") && urlValidation.valid;
 
   const handleClose = () => {
     if (canClose) {
@@ -147,7 +190,11 @@ export function SupabaseSetupWizard({
   };
 
   return (
-    <Dialog open={open} onOpenChange={canClose ? handleClose : undefined} modal={false}>
+    <Dialog
+      open={open}
+      onOpenChange={canClose ? handleClose : undefined}
+      modal={false}
+    >
       <DialogContent
         className="sm:max-w-md"
         onPointerDownOutside={(e) => !canClose && e.preventDefault()}
@@ -158,7 +205,11 @@ export function SupabaseSetupWizard({
             <DialogHeader>
               <div className="flex items-center gap-2 mb-2">
                 <Database className="h-6 w-6 text-primary" />
-                <DialogTitle>{translate("crm.setup_wizard.welcome.title", { title: "CRM" })}</DialogTitle>
+                <DialogTitle>
+                  {translate("crm.setup_wizard.welcome.title", {
+                    title: "CRM",
+                  })}
+                </DialogTitle>
               </div>
               <DialogDescription>
                 {translate("crm.setup_wizard.welcome.description")}
@@ -168,7 +219,9 @@ export function SupabaseSetupWizard({
             <div className="space-y-4 py-4">
               <Alert>
                 <AlertDescription>
-                  <strong>{translate("crm.setup_wizard.welcome.no_project")}</strong>
+                  <strong>
+                    {translate("crm.setup_wizard.welcome.no_project")}
+                  </strong>
                   <br />
                   {translate("crm.setup_wizard.welcome.create_free")}{" "}
                   <a
@@ -184,7 +237,9 @@ export function SupabaseSetupWizard({
               </Alert>
 
               <div className="space-y-2">
-                <h4 className="font-medium text-sm">{translate("crm.setup_wizard.welcome.need_title")}</h4>
+                <h4 className="font-medium text-sm">
+                  {translate("crm.setup_wizard.welcome.need_title")}
+                </h4>
                 <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
                   <li>{translate("crm.setup_wizard.welcome.need_url")}</li>
                   <li>{translate("crm.setup_wizard.welcome.need_key")}</li>
@@ -213,7 +268,9 @@ export function SupabaseSetupWizard({
         {step === "credentials" && (
           <>
             <DialogHeader>
-              <DialogTitle>{translate("crm.setup_wizard.credentials.title")}</DialogTitle>
+              <DialogTitle>
+                {translate("crm.setup_wizard.credentials.title")}
+              </DialogTitle>
               <DialogDescription>
                 {translate("crm.setup_wizard.credentials.description")}
               </DialogDescription>
@@ -228,11 +285,15 @@ export function SupabaseSetupWizard({
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="supabase-url">{translate("crm.setup_wizard.credentials.url_label")}</Label>
+                <Label htmlFor="supabase-url">
+                  {translate("crm.setup_wizard.credentials.url_label")}
+                </Label>
                 <div className="relative">
                   <Input
                     id="supabase-url"
-                    placeholder={translate("crm.setup_wizard.credentials.url_placeholder")}
+                    placeholder={translate(
+                      "crm.setup_wizard.credentials.url_placeholder",
+                    )}
                     value={url}
                     onChange={(e) => {
                       setUrl(e.target.value);
@@ -254,12 +315,21 @@ export function SupabaseSetupWizard({
                 {showUrlExpansion && (
                   <div className="flex items-start gap-1.5 text-xs text-green-600 dark:text-green-400">
                     <Check className="h-3 w-3 mt-0.5 flex-shrink-0" />
-                    <span>{translate("crm.setup_wizard.credentials.url_expansion", { url: normalizedUrl })}</span>
+                    <span>
+                      {translate("crm.setup_wizard.credentials.url_expansion", {
+                        url: normalizedUrl,
+                      })}
+                    </span>
                   </div>
                 )}
-                {urlTouched && url && urlValidation.messageKey && !urlValidation.valid && (
-                  <p className="text-xs text-destructive">{translate(urlValidation.messageKey)}</p>
-                )}
+                {urlTouched &&
+                  url &&
+                  urlValidation.messageKey &&
+                  !urlValidation.valid && (
+                    <p className="text-xs text-destructive">
+                      {translate(urlValidation.messageKey)}
+                    </p>
+                  )}
                 {(!urlTouched || !url) && (
                   <p className="text-xs text-muted-foreground">
                     {translate("crm.setup_wizard.credentials.url_default_hint")}
@@ -268,12 +338,16 @@ export function SupabaseSetupWizard({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="anon-key">{translate("crm.setup_wizard.credentials.key_label")}</Label>
+                <Label htmlFor="anon-key">
+                  {translate("crm.setup_wizard.credentials.key_label")}
+                </Label>
                 <div className="relative">
                   <Input
                     id="anon-key"
                     type="password"
-                    placeholder={translate("crm.setup_wizard.credentials.key_placeholder")}
+                    placeholder={translate(
+                      "crm.setup_wizard.credentials.key_placeholder",
+                    )}
                     value={anonKey}
                     onChange={(e) => {
                       setAnonKey(e.target.value);
@@ -293,7 +367,9 @@ export function SupabaseSetupWizard({
                   )}
                 </div>
                 {keyTouched && anonKey && keyValidation.messageKey && (
-                  <p className={`text-xs ${keyValidation.valid ? "text-green-600 dark:text-green-400" : "text-destructive"}`}>
+                  <p
+                    className={`text-xs ${keyValidation.valid ? "text-green-600 dark:text-green-400" : "text-destructive"}`}
+                  >
                     {translate(keyValidation.messageKey)}
                   </p>
                 )}
@@ -327,7 +403,9 @@ export function SupabaseSetupWizard({
         {step === "validating" && (
           <>
             <DialogHeader>
-              <DialogTitle>{translate("crm.setup_wizard.validating.title")}</DialogTitle>
+              <DialogTitle>
+                {translate("crm.setup_wizard.validating.title")}
+              </DialogTitle>
               <DialogDescription>
                 {translate("crm.setup_wizard.validating.description")}
               </DialogDescription>
@@ -335,7 +413,9 @@ export function SupabaseSetupWizard({
 
             <div className="flex flex-col items-center justify-center py-8">
               <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-              <p className="text-sm text-muted-foreground">{translate("crm.setup_wizard.validating.wait")}</p>
+              <p className="text-sm text-muted-foreground">
+                {translate("crm.setup_wizard.validating.wait")}
+              </p>
             </div>
           </>
         )}
@@ -343,7 +423,9 @@ export function SupabaseSetupWizard({
         {step === "success" && (
           <>
             <DialogHeader>
-              <DialogTitle>{translate("crm.setup_wizard.success.title")}</DialogTitle>
+              <DialogTitle>
+                {translate("crm.setup_wizard.success.title")}
+              </DialogTitle>
               <DialogDescription>
                 {translate("crm.setup_wizard.success.description")}
               </DialogDescription>

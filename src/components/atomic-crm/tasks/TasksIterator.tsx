@@ -15,12 +15,10 @@ export const TasksIterator = ({
   // Keep only tasks that are not done or done today (since done_date is date-only)
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const todayString = today.toISOString().split('T')[0];
+  const todayString = today.toISOString().split("T")[0];
 
   const tasks = data.filter(
-    (task) =>
-      !task.done_date ||
-      task.done_date.split('T')[0] === todayString,
+    (task) => !task.done_date || task.done_date.split("T")[0] === todayString,
   );
 
   return (

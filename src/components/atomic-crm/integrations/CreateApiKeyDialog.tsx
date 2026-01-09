@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useDataProvider, useNotify, useGetIdentity, useTranslate } from "ra-core";
+import {
+  useDataProvider,
+  useNotify,
+  useGetIdentity,
+  useTranslate,
+} from "ra-core";
 import { generateApiKey, hashApiKey } from "@/lib/api-key-utils";
 import { encryptValue } from "@/lib/encryption-utils";
 import {
@@ -84,9 +89,12 @@ export const CreateApiKeyDialog = ({
       notify(translate("crm.integrations.api_keys.notification.created"));
     },
     onError: () => {
-      notify(translate("crm.integrations.api_keys.notification.error_creating"), {
-        type: "error",
-      });
+      notify(
+        translate("crm.integrations.api_keys.notification.error_creating"),
+        {
+          type: "error",
+        },
+      );
     },
   });
 
@@ -110,7 +118,7 @@ export const CreateApiKeyDialog = ({
     if (currentScopes.includes(scope)) {
       setValue(
         "scopes",
-        currentScopes.filter((s) => s !== scope)
+        currentScopes.filter((s) => s !== scope),
       );
     } else {
       setValue("scopes", [...currentScopes, scope]);
@@ -128,8 +136,12 @@ export const CreateApiKeyDialog = ({
           </DialogTitle>
           <DialogDescription>
             {createdKey
-              ? translate("crm.integrations.api_keys.dialog.created_description")
-              : translate("crm.integrations.api_keys.dialog.create_description")}
+              ? translate(
+                  "crm.integrations.api_keys.dialog.created_description",
+                )
+              : translate(
+                  "crm.integrations.api_keys.dialog.create_description",
+                )}
           </DialogDescription>
         </DialogHeader>
 
@@ -184,7 +196,7 @@ export const CreateApiKeyDialog = ({
                 <Input
                   id="name"
                   placeholder={translate(
-                    "crm.integrations.api_keys.placeholder.name"
+                    "crm.integrations.api_keys.placeholder.name",
                   )}
                   {...register("name", { required: true })}
                 />
@@ -203,9 +215,12 @@ export const CreateApiKeyDialog = ({
                         onCheckedChange={() => toggleScope(scope)}
                       />
                       <label htmlFor={scope} className="text-sm cursor-pointer">
-                        {translate(`crm.integrations.api_keys.scopes.${scope}`, {
-                          _: scope,
-                        })}
+                        {translate(
+                          `crm.integrations.api_keys.scopes.${scope}`,
+                          {
+                            _: scope,
+                          },
+                        )}
                       </label>
                     </div>
                   ))}

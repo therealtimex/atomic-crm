@@ -5,8 +5,16 @@
  * Shows step-by-step guide for users to run the migration command.
  */
 
-import { useMemo, useState, useEffect, useRef } from 'react';
-import { AlertTriangle, Copy, Check, ExternalLink, Info, Loader2, Terminal } from 'lucide-react';
+import { useMemo, useState, useEffect, useRef } from "react";
+import {
+  AlertTriangle,
+  Copy,
+  Check,
+  ExternalLink,
+  Info,
+  Loader2,
+  Terminal,
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -14,15 +22,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
-import { useTranslate } from 'ra-core';
-import { getSupabaseConfig } from '@/lib/supabase-config';
-import type { MigrationStatus } from '@/lib/migration-check';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import { useTranslate } from "ra-core";
+import { getSupabaseConfig } from "@/lib/supabase-config";
+import type { MigrationStatus } from "@/lib/migration-check";
 
 interface MigrationModalProps {
   /** Whether the modal is open */
@@ -43,11 +51,11 @@ function CodeBlock({ code, label }: CodeBlockProps) {
   const translate = useTranslate();
 
   const canCopy =
-    typeof navigator !== 'undefined' && !!navigator.clipboard?.writeText;
+    typeof navigator !== "undefined" && !!navigator.clipboard?.writeText;
 
   const handleCopy = async () => {
     if (!canCopy) {
-      toast.error(translate('crm.migration.modal.copy.unsupported'));
+      toast.error(translate("crm.migration.modal.copy.unsupported"));
       return;
     }
 
@@ -55,10 +63,10 @@ function CodeBlock({ code, label }: CodeBlockProps) {
       await navigator.clipboard.writeText(code);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
-      toast.success(translate('crm.migration.modal.copy.success'));
+      toast.success(translate("crm.migration.modal.copy.success"));
     } catch (error) {
-      console.error('Failed to copy:', error);
-      toast.error(translate('crm.migration.modal.copy.error'));
+      console.error("Failed to copy:", error);
+      toast.error(translate("crm.migration.modal.copy.error"));
     }
   };
 
@@ -88,8 +96,8 @@ function CodeBlock({ code, label }: CodeBlockProps) {
           )}
           <span className="sr-only">
             {copied
-              ? translate('crm.migration.modal.copy.copied_label')
-              : translate('crm.migration.modal.copy.copy_label')}
+              ? translate("crm.migration.modal.copy.copied_label")
+              : translate("crm.migration.modal.copy.copy_label")}
           </span>
         </Button>
       </div>
@@ -97,218 +105,248 @@ function CodeBlock({ code, label }: CodeBlockProps) {
   );
 }
 
-export function MigrationModal({ open, onOpenChange, status }: MigrationModalProps) {
+export function MigrationModal({
+  open,
+  onOpenChange,
+  status,
+}: MigrationModalProps) {
   const config = getSupabaseConfig();
   const translate = useTranslate();
-  
+
   // Auto-migration state
   const [showAutoMigrate, setShowAutoMigrate] = useState(true);
   const [isMigrating, setIsMigrating] = useState(false);
-    const [migrationLogs, setMigrationLogs] = useState<string[]>([]);
-    const [dbPassword, setDbPassword] = useState('');
-    const [accessToken, setAccessToken] = useState('');
-    const logsEndRef = useRef<HTMLDivElement>(null);
-  
-    const projectId = useMemo(() => {
-      const url = config?.url;
-      if (!url) return '';
-      try {
-        const host = new URL(url).hostname;
-        return host.split('.')[0] || '';
-      } catch {
-        return '';
-      }
-    }, [config?.url]);
-  
-    // Scroll logs to bottom
-    useEffect(() => {
-      if (logsEndRef.current) {
-          logsEndRef.current.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, [migrationLogs]);
-  
-    const handleAutoMigrate = async () => {
-      if (!projectId) {
-          toast.error("Could not determine Project ID from configuration.");
-          return;
-      }
-      
-      setIsMigrating(true);
-      setMigrationLogs(['🚀 Initializing migration process...']);
-      
-      try {
-          const response = await fetch('/api/migrate', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ 
-                  projectRef: projectId,
-                  dbPassword,
-                  accessToken
-              })
-          });
-  
-          if (!response.ok) {
-               throw new Error(`Server returned ${response.status}: ${response.statusText}`);
-          }
-  
-          const reader = response.body?.getReader();
-          if (!reader) throw new Error("No response stream received.");
-          
-          const decoder = new TextDecoder();
-          
-          while (true) {
-              const { done, value } = await reader.read();
-              if (done) break;
-              
-              const text = decoder.decode(value);
-              const lines = text.split('\n').filter(Boolean);
-              setMigrationLogs(prev => [...prev, ...lines]);
-          }
-          
-      } catch (err) {
-          console.error(err);
-          setMigrationLogs(prev => [...prev, `❌ Error: ${err instanceof Error ? err.message : String(err)}`]);
-          toast.error("Migration failed. See logs for details.");
-      } finally {
-          setIsMigrating(false);
-      }
-    };
-  
-    return (
-      <Dialog open={open} onOpenChange={(val) => !isMigrating && onOpenChange(val)}>
-        <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-xl">
-              <AlertTriangle className="h-6 w-6 text-red-700 dark:text-red-600" />
-              {translate('crm.migration.modal.title')}
-            </DialogTitle>
-            <DialogDescription>
-              {translate('crm.migration.modal.description', {
-                version: status.appVersion,
-              })}
-            </DialogDescription>
-          </DialogHeader>
-  
-          <div className="space-y-6">
-              {/* Overview Alert */}
-            <Alert>
-              <Info className="h-4 w-4" />
-              <AlertDescription>
-                <strong>{translate('crm.migration.modal.overview.title')}</strong>
-                <ul className="mt-2 list-inside list-disc space-y-1 text-sm">
-                  <li>
-                    {translate('crm.migration.modal.overview.update_schema', {
-                      version: status.appVersion,
-                    })}
-                  </li>
-                  <li>{translate('crm.migration.modal.overview.enable_features')}</li>
-                  <li>{translate('crm.migration.modal.overview.data_safe')}</li>
-                </ul>
-              </AlertDescription>
-            </Alert>
-  
-            {/* Mode Selection Tabs */}
-            <div className="flex border-b">
-                <button 
-                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${showAutoMigrate ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
-                  onClick={() => setShowAutoMigrate(true)}
-                >
-                    ✨ Auto-Migrate (Recommended)
-                </button>
-                <button 
-                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${!showAutoMigrate ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
-                  onClick={() => setShowAutoMigrate(false)}
-                >
-                    🛠️ Manual Instructions
-                </button>
-            </div>
-  
-            {showAutoMigrate ? (
-                <div className="space-y-4 py-2">
-                    <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-                        <h3 className="text-lg font-semibold mb-2">One-Click Migration</h3>
-                        <p className="text-sm text-muted-foreground mb-4">
-                            We will automatically run the migration scripts for you.
-                        </p>
-                        
-                        <div className="grid gap-4">
-                            <div className="grid gap-2">
-                              <Label htmlFor="project-id">Project ID</Label>
-                              <Input id="project-id" value={projectId} disabled readOnly className="bg-muted" />
-                            </div>
-  
-                            <div className="grid gap-2">
-                              <div className="flex justify-between items-center">
-                                  <Label htmlFor="access-token">Supabase Access Token</Label>
-                                  <a 
-                                      href="https://supabase.com/dashboard/account/tokens" 
-                                      target="_blank" 
-                                      rel="noopener noreferrer"
-                                      className="text-xs text-primary hover:underline flex items-center gap-1"
-                                  >
-                                      Generate Token <ExternalLink className="h-3 w-3" />
-                                  </a>
-                              </div>
-                              <Input 
-                                  id="access-token" 
-                                  type="password" 
-                                  placeholder="sbp_..." 
-                                  value={accessToken}
-                                  onChange={(e) => setAccessToken(e.target.value)}
-                                  disabled={isMigrating}
-                              />
-                              <p className="text-xs text-muted-foreground">
-                                  Required if you are not logged in to the CLI globally.
-                              </p>
-                            </div>
-                            
-                            <div className="grid gap-2">
-                              <Label htmlFor="db-password">Database Password (Optional)</Label>
-                              <Input 
-                                  id="db-password" 
-                                  type="password" 
-                                  placeholder="Enter only if your project is not linked yet" 
-                                  value={dbPassword}
-                                  onChange={(e) => setDbPassword(e.target.value)}
-                                  disabled={isMigrating}
-                              />
-                              <p className="text-xs text-muted-foreground">
-                                  Only required if this is your first time connecting to this project from this machine.
-                              </p>
-                            </div>
-  
-                            <Button 
-                              onClick={handleAutoMigrate} 
-                              disabled={isMigrating} 
-                              className="w-full"
-                            >
-                                {isMigrating ? (
-                                    <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Migrating...
-                                    </>
-                                ) : (
-                                    <>
-                                        <Terminal className="mr-2 h-4 w-4" />
-                                        Start Migration
-                                    </>
-                                )}
-                            </Button>
-                        </div>
-                    </div>
+  const [migrationLogs, setMigrationLogs] = useState<string[]>([]);
+  const [dbPassword, setDbPassword] = useState("");
+  const [accessToken, setAccessToken] = useState("");
+  const logsEndRef = useRef<HTMLDivElement>(null);
 
-                  {/* Logs Terminal */}
-                  <div className="rounded-lg border bg-black text-white font-mono text-xs p-4 h-64 overflow-y-auto">
-                      {migrationLogs.length === 0 ? (
-                          <div className="text-gray-500 italic">Logs will appear here...</div>
-                      ) : (
-                          migrationLogs.map((log, i) => (
-                              <div key={i} className="mb-1 whitespace-pre-wrap">{log}</div>
-                          ))
-                      )}
-                      <div ref={logsEndRef} />
+  const projectId = useMemo(() => {
+    const url = config?.url;
+    if (!url) return "";
+    try {
+      const host = new URL(url).hostname;
+      return host.split(".")[0] || "";
+    } catch {
+      return "";
+    }
+  }, [config?.url]);
+
+  // Scroll logs to bottom
+  useEffect(() => {
+    if (logsEndRef.current) {
+      logsEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [migrationLogs]);
+
+  const handleAutoMigrate = async () => {
+    if (!projectId) {
+      toast.error("Could not determine Project ID from configuration.");
+      return;
+    }
+
+    setIsMigrating(true);
+    setMigrationLogs(["🚀 Initializing migration process..."]);
+
+    try {
+      const response = await fetch("/api/migrate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectRef: projectId,
+          dbPassword,
+          accessToken,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Server returned ${response.status}: ${response.statusText}`,
+        );
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error("No response stream received.");
+
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const text = decoder.decode(value);
+        const lines = text.split("\n").filter(Boolean);
+        setMigrationLogs((prev) => [...prev, ...lines]);
+      }
+    } catch (err) {
+      console.error(err);
+      setMigrationLogs((prev) => [
+        ...prev,
+        `❌ Error: ${err instanceof Error ? err.message : String(err)}`,
+      ]);
+      toast.error("Migration failed. See logs for details.");
+    } finally {
+      setIsMigrating(false);
+    }
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={(val) => !isMigrating && onOpenChange(val)}
+    >
+      <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-xl">
+            <AlertTriangle className="h-6 w-6 text-red-700 dark:text-red-600" />
+            {translate("crm.migration.modal.title")}
+          </DialogTitle>
+          <DialogDescription>
+            {translate("crm.migration.modal.description", {
+              version: status.appVersion,
+            })}
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-6">
+          {/* Overview Alert */}
+          <Alert>
+            <Info className="h-4 w-4" />
+            <AlertDescription>
+              <strong>{translate("crm.migration.modal.overview.title")}</strong>
+              <ul className="mt-2 list-inside list-disc space-y-1 text-sm">
+                <li>
+                  {translate("crm.migration.modal.overview.update_schema", {
+                    version: status.appVersion,
+                  })}
+                </li>
+                <li>
+                  {translate("crm.migration.modal.overview.enable_features")}
+                </li>
+                <li>{translate("crm.migration.modal.overview.data_safe")}</li>
+              </ul>
+            </AlertDescription>
+          </Alert>
+
+          {/* Mode Selection Tabs */}
+          <div className="flex border-b">
+            <button
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${showAutoMigrate ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+              onClick={() => setShowAutoMigrate(true)}
+            >
+              ✨ Auto-Migrate (Recommended)
+            </button>
+            <button
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${!showAutoMigrate ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+              onClick={() => setShowAutoMigrate(false)}
+            >
+              🛠️ Manual Instructions
+            </button>
+          </div>
+
+          {showAutoMigrate ? (
+            <div className="space-y-4 py-2">
+              <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+                <h3 className="text-lg font-semibold mb-2">
+                  One-Click Migration
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  We will automatically run the migration scripts for you.
+                </p>
+
+                <div className="grid gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="project-id">Project ID</Label>
+                    <Input
+                      id="project-id"
+                      value={projectId}
+                      disabled
+                      readOnly
+                      className="bg-muted"
+                    />
                   </div>
+
+                  <div className="grid gap-2">
+                    <div className="flex justify-between items-center">
+                      <Label htmlFor="access-token">
+                        Supabase Access Token
+                      </Label>
+                      <a
+                        href="https://supabase.com/dashboard/account/tokens"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-primary hover:underline flex items-center gap-1"
+                      >
+                        Generate Token <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </div>
+                    <Input
+                      id="access-token"
+                      type="password"
+                      placeholder="sbp_..."
+                      value={accessToken}
+                      onChange={(e) => setAccessToken(e.target.value)}
+                      disabled={isMigrating}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Required if you are not logged in to the CLI globally.
+                    </p>
+                  </div>
+
+                  <div className="grid gap-2">
+                    <Label htmlFor="db-password">
+                      Database Password (Optional)
+                    </Label>
+                    <Input
+                      id="db-password"
+                      type="password"
+                      placeholder="Enter only if your project is not linked yet"
+                      value={dbPassword}
+                      onChange={(e) => setDbPassword(e.target.value)}
+                      disabled={isMigrating}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Only required if this is your first time connecting to
+                      this project from this machine.
+                    </p>
+                  </div>
+
+                  <Button
+                    onClick={handleAutoMigrate}
+                    disabled={isMigrating}
+                    className="w-full"
+                  >
+                    {isMigrating ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Migrating...
+                      </>
+                    ) : (
+                      <>
+                        <Terminal className="mr-2 h-4 w-4" />
+                        Start Migration
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
+
+              {/* Logs Terminal */}
+              <div className="rounded-lg border bg-black text-white font-mono text-xs p-4 h-64 overflow-y-auto">
+                {migrationLogs.length === 0 ? (
+                  <div className="text-gray-500 italic">
+                    Logs will appear here...
+                  </div>
+                ) : (
+                  migrationLogs.map((log, i) => (
+                    <div key={i} className="mb-1 whitespace-pre-wrap">
+                      {log}
+                    </div>
+                  ))
+                )}
+                <div ref={logsEndRef} />
+              </div>
+            </div>
           ) : (
             // Manual Instructions (Existing content)
             <>
@@ -318,21 +356,31 @@ export function MigrationModal({ open, onOpenChange, status }: MigrationModalPro
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                     1
                   </span>
-                  {translate('crm.migration.modal.prerequisites.title')}
+                  {translate("crm.migration.modal.prerequisites.title")}
                 </h4>
                 <div className="ml-8 space-y-3">
                   <p className="text-sm text-muted-foreground">
-                    {translate('crm.migration.modal.prerequisites.intro')}
+                    {translate("crm.migration.modal.prerequisites.intro")}
                   </p>
                   <ul className="list-inside list-disc space-y-1 text-sm">
-                    <li>{translate('crm.migration.modal.prerequisites.cli_installed')}</li>
                     <li>
-                      {translate('crm.migration.modal.prerequisites.project_id')}{' '}
+                      {translate(
+                        "crm.migration.modal.prerequisites.cli_installed",
+                      )}
+                    </li>
+                    <li>
+                      {translate(
+                        "crm.migration.modal.prerequisites.project_id",
+                      )}{" "}
                       <code className="rounded bg-muted px-1 py-0.5 text-xs">
-                        {projectId || 'your-project-id'}
+                        {projectId || "your-project-id"}
                       </code>
                     </li>
-                    <li>{translate('crm.migration.modal.prerequisites.db_password')}</li>
+                    <li>
+                      {translate(
+                        "crm.migration.modal.prerequisites.db_password",
+                      )}
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -343,44 +391,46 @@ export function MigrationModal({ open, onOpenChange, status }: MigrationModalPro
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                     2
                   </span>
-                  {translate('crm.migration.modal.install_cli.title')}
+                  {translate("crm.migration.modal.install_cli.title")}
                 </h4>
                 <div className="ml-8 space-y-3">
-                    <div className="space-y-2">
-                        <p className="text-sm font-medium">
-                        {translate('crm.migration.modal.install_cli.macos')}
-                        </p>
-                        <CodeBlock code="brew install supabase/tap/supabase" />
-                    </div>
-                    {/* ... other instructions kept via implicit return if I didn't cut them ... */}
-                    {/* To save tokens/time I'm keeping the structure but replacing the manual content block with the original logic if I had the full file content in memory.
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">
+                      {translate("crm.migration.modal.install_cli.macos")}
+                    </p>
+                    <CodeBlock code="brew install supabase/tap/supabase" />
+                  </div>
+                  {/* ... other instructions kept via implicit return if I didn't cut them ... */}
+                  {/* To save tokens/time I'm keeping the structure but replacing the manual content block with the original logic if I had the full file content in memory.
                         Since I'm rewriting the file, I must include EVERYTHING.
                     */}
-                     <div className="space-y-2">
-                        <p className="text-sm font-medium">
-                        {translate('crm.migration.modal.install_cli.windows_scoop')}
-                        </p>
-                        <CodeBlock
-                        code={`scoop bucket add supabase https://github.com/supabase/scoop-bucket.git\nscoop install supabase`}
-                        />
-                    </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">
+                      {translate(
+                        "crm.migration.modal.install_cli.windows_scoop",
+                      )}
+                    </p>
+                    <CodeBlock
+                      code={`scoop bucket add supabase https://github.com/supabase/scoop-bucket.git\nscoop install supabase`}
+                    />
+                  </div>
 
-                    <div className="space-y-2">
-                        <p className="text-sm font-medium">
-                        {translate('crm.migration.modal.install_cli.windows_npm')}
-                        </p>
-                        <CodeBlock code="npm install -g supabase" />
-                    </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">
+                      {translate("crm.migration.modal.install_cli.windows_npm")}
+                    </p>
+                    <CodeBlock code="npm install -g supabase" />
+                  </div>
 
-                    <a
-                        href="https://supabase.com/docs/guides/cli/getting-started"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-                    >
-                        {translate('crm.migration.modal.install_cli.view_all')}
-                        <ExternalLink className="h-3 w-3" />
-                    </a>
+                  <a
+                    href="https://supabase.com/docs/guides/cli/getting-started"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                  >
+                    {translate("crm.migration.modal.install_cli.view_all")}
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
                 </div>
               </div>
 
@@ -390,29 +440,47 @@ export function MigrationModal({ open, onOpenChange, status }: MigrationModalPro
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                     3
                   </span>
-                  {translate('crm.migration.modal.run_migration.title')}
+                  {translate("crm.migration.modal.run_migration.title")}
                 </h4>
                 <div className="ml-8 space-y-3">
                   <p className="text-sm text-muted-foreground">
-                    {translate('crm.migration.modal.run_migration.intro')}
+                    {translate("crm.migration.modal.run_migration.intro")}
                   </p>
                   <CodeBlock code="npx realtimex-crm migrate" />
                   <p className="text-sm text-muted-foreground">
-                    {translate('crm.migration.modal.run_migration.tool_intro')}
+                    {translate("crm.migration.modal.run_migration.tool_intro")}
                   </p>
                   <ol className="list-inside list-decimal space-y-1 text-sm text-muted-foreground">
-                    <li>{translate('crm.migration.modal.run_migration.steps.login')}</li>
                     <li>
-                      {translate('crm.migration.modal.run_migration.steps.project_id')}{' '}
+                      {translate(
+                        "crm.migration.modal.run_migration.steps.login",
+                      )}
+                    </li>
+                    <li>
+                      {translate(
+                        "crm.migration.modal.run_migration.steps.project_id",
+                      )}{" "}
                       (
                       <code className="rounded bg-muted px-1 py-0.5 text-xs">
-                        {projectId || 'your-project-id'}
+                        {projectId || "your-project-id"}
                       </code>
                       )
                     </li>
-                    <li>{translate('crm.migration.modal.run_migration.steps.password')}</li>
-                    <li>{translate('crm.migration.modal.run_migration.steps.apply')}</li>
-                    <li>{translate('crm.migration.modal.run_migration.steps.deploy')}</li>
+                    <li>
+                      {translate(
+                        "crm.migration.modal.run_migration.steps.password",
+                      )}
+                    </li>
+                    <li>
+                      {translate(
+                        "crm.migration.modal.run_migration.steps.apply",
+                      )}
+                    </li>
+                    <li>
+                      {translate(
+                        "crm.migration.modal.run_migration.steps.deploy",
+                      )}
+                    </li>
                   </ol>
                 </div>
               </div>
@@ -423,11 +491,11 @@ export function MigrationModal({ open, onOpenChange, status }: MigrationModalPro
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                     4
                   </span>
-                  {translate('crm.migration.modal.refresh.title')}
+                  {translate("crm.migration.modal.refresh.title")}
                 </h4>
                 <div className="ml-8 space-y-3">
                   <p className="text-sm text-muted-foreground">
-                    {translate('crm.migration.modal.refresh.description')}
+                    {translate("crm.migration.modal.refresh.description")}
                   </p>
                 </div>
               </div>
@@ -438,25 +506,33 @@ export function MigrationModal({ open, onOpenChange, status }: MigrationModalPro
           <Alert className="border-red-200 bg-red-50 dark:border-red-900/40 dark:bg-red-950/20">
             <AlertTriangle className="h-4 w-4 text-red-700 dark:text-red-600" />
             <AlertDescription>
-              <strong>{translate('crm.migration.modal.troubleshooting.title')}</strong>
+              <strong>
+                {translate("crm.migration.modal.troubleshooting.title")}
+              </strong>
               <ul className="mt-2 list-inside list-disc space-y-1 text-sm">
                 <li>
-                  {translate('crm.migration.modal.troubleshooting.logout_prefix')}{' '}
-                  <code>supabase logout</code>{' '}
-                  {translate('crm.migration.modal.troubleshooting.logout_suffix')}
+                  {translate(
+                    "crm.migration.modal.troubleshooting.logout_prefix",
+                  )}{" "}
+                  <code>supabase logout</code>{" "}
+                  {translate(
+                    "crm.migration.modal.troubleshooting.logout_suffix",
+                  )}
                 </li>
                 <li>
-                  {translate('crm.migration.modal.troubleshooting.password')}
+                  {translate("crm.migration.modal.troubleshooting.password")}
                 </li>
                 <li>
-                  {translate('crm.migration.modal.troubleshooting.report')}{' '}
+                  {translate("crm.migration.modal.troubleshooting.report")}{" "}
                   <a
                     href="https://github.com/therealtimex/realtimex-crm/issues"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="underline"
                   >
-                    {translate('crm.migration.modal.troubleshooting.report_link')}
+                    {translate(
+                      "crm.migration.modal.troubleshooting.report_link",
+                    )}
                   </a>
                 </li>
               </ul>
@@ -465,8 +541,13 @@ export function MigrationModal({ open, onOpenChange, status }: MigrationModalPro
         </div>
 
         <DialogFooter>
-          <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isMigrating}>
-            {translate('crm.migration.modal.close')}
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={isMigrating}
+          >
+            {translate("crm.migration.modal.close")}
           </Button>
         </DialogFooter>
       </DialogContent>

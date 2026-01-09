@@ -1,6 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { MoreVertical } from "lucide-react";
-import { useDeleteWithUndoController, useNotify, useUpdate, useTranslate } from "ra-core";
+import {
+  useDeleteWithUndoController,
+  useNotify,
+  useUpdate,
+  useTranslate,
+} from "ra-core";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { ReferenceField } from "@/components/admin/reference-field";

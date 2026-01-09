@@ -37,9 +37,10 @@ function mergeCompanyData(winner: Company, loser: Company) {
     revenue: winner.revenue ?? loser.revenue,
     tax_identifier: winner.tax_identifier ?? loser.tax_identifier,
     sales_id: winner.sales_id ?? loser.sales_id,
-    context_links: mergedContextLinks.length > 0
-      ? (JSON.stringify(mergedContextLinks) as any)
-      : null,
+    context_links:
+      mergedContextLinks.length > 0
+        ? (JSON.stringify(mergedContextLinks) as any)
+        : null,
   };
 }
 

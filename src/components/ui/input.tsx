@@ -9,8 +9,8 @@ function Input({
   alwaysOn: _alwaysOn,
   ...props
 }: React.ComponentProps<"input"> & {
-  helperText?: string;
-  alwaysOn?: boolean;
+  helperText?: string
+  alwaysOn?: boolean
 }) {
   return (
     <input

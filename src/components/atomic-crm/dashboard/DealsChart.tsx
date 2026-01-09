@@ -140,10 +140,13 @@ export const DealsChart = memo(() => {
           tooltip={({ value, indexValue }) => (
             <div className="p-2 bg-secondary rounded shadow inline-flex items-center gap-1 text-secondary-foreground">
               <strong>{indexValue}: </strong>&nbsp;{value > 0 ? "+" : ""}
-              {value.toLocaleString(locale ?? acceptedLanguages.at(0) ?? DEFAULT_LOCALE, {
-                style: "currency",
-                currency: CURRENCY,
-              })}
+              {value.toLocaleString(
+                locale ?? acceptedLanguages.at(0) ?? DEFAULT_LOCALE,
+                {
+                  style: "currency",
+                  currency: CURRENCY,
+                },
+              )}
             </div>
           )}
           axisTop={{

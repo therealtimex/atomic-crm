@@ -84,7 +84,8 @@ export const LocaleSync = () => {
       if (storedLocale && identityLocale && storedLocale !== identityLocale) {
         lastPersistedLocale.current = identityLocale;
       } else {
-        lastPersistedLocale.current = identityLocale ?? storedLocale ?? nextLocale;
+        lastPersistedLocale.current =
+          identityLocale ?? storedLocale ?? nextLocale;
       }
     }
 

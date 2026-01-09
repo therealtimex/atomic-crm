@@ -160,7 +160,7 @@ To configure the app:
         proc.on("close", (code) => {
           if (code === 0) {
             console.log(
-              `✅ Supabase command 'supabase ${command.join(" ")}' completed successfully.`, 
+              `✅ Supabase command 'supabase ${command.join(" ")}' completed successfully.`,
             );
             resolve();
           } else {
@@ -271,122 +271,126 @@ To configure the app:
         for await (const chunk of req) {
           buffers.push(chunk);
         }
-        
+
         let body = {};
         try {
           body = JSON.parse(Buffer.concat(buffers).toString());
         } catch (e) {
           // Ignore parse error
         }
-        
+
         const { projectRef, dbPassword, accessToken } = body;
 
         res.writeHead(200, {
           "Content-Type": "text/plain",
           "Transfer-Encoding": "chunked",
-          "X-Content-Type-Options": "nosniff"
+          "X-Content-Type-Options": "nosniff",
         });
 
         const log = (msg) => {
-           res.write(`${msg}\n`);
+          res.write(`${msg}\n`);
         };
 
         log("🚀 Starting migration process...");
-        
+
         // Helper to run command and stream output
         const runStreamedCommand = (cmd, args, env = process.env) => {
-            return new Promise((resolve, reject) => {
-                let finalCmd = cmd;
-                let finalArgs = args;
-                
-                // Login TTY Trick using 'expect' (only if we need interactive login)
-                // If token is provided, we don't use this.
-                const isLogin = args.includes('login') && args.some(a => a.includes('supabase'));
-                
-                if (isLogin && !env.SUPABASE_ACCESS_TOKEN) {
-                    const fullCmd = `${cmd} ${args.join(' ')}`;
-                    const expectScript = `
+          return new Promise((resolve, reject) => {
+            let finalCmd = cmd;
+            let finalArgs = args;
+
+            // Login TTY Trick using 'expect' (only if we need interactive login)
+            // If token is provided, we don't use this.
+            const isLogin =
+              args.includes("login") &&
+              args.some((a) => a.includes("supabase"));
+
+            if (isLogin && !env.SUPABASE_ACCESS_TOKEN) {
+              const fullCmd = `${cmd} ${args.join(" ")}`;
+              const expectScript = `
                         spawn ${fullCmd}
                         expect "Press Enter"
                         send "\r"
                         set timeout -1
                         expect eof
                     `;
-                    finalCmd = 'expect';
-                    finalArgs = ['-c', expectScript];
-                }
+              finalCmd = "expect";
+              finalArgs = ["-c", expectScript];
+            }
 
-                const proc = spawn(finalCmd, finalArgs, { 
-                    cwd: join(__dirname, ".."), 
-                    shell: true, 
-                    env,
-                    stdio: ['ignore', 'pipe', 'pipe'] 
-                });
-
-                proc.stdout.on('data', (d) => {
-                    const str = d.toString();
-                    log(str.trim());
-                });
-
-                proc.stderr.on('data', (d) => log(d.toString().trim()));
-
-                proc.on('close', (code) => {
-                    if (code === 0) resolve();
-                    else reject(new Error(`Command failed with code ${code}`));
-                });
+            const proc = spawn(finalCmd, finalArgs, {
+              cwd: join(__dirname, ".."),
+              shell: true,
+              env,
+              stdio: ["ignore", "pipe", "pipe"],
             });
+
+            proc.stdout.on("data", (d) => {
+              const str = d.toString();
+              log(str.trim());
+            });
+
+            proc.stderr.on("data", (d) => log(d.toString().trim()));
+
+            proc.on("close", (code) => {
+              if (code === 0) resolve();
+              else reject(new Error(`Command failed with code ${code}`));
+            });
+          });
         };
 
         // Prepare environment
         const env = { ...process.env };
         if (accessToken) {
-             env.SUPABASE_ACCESS_TOKEN = accessToken;
-             log("🔑 Using provided Access Token.");
+          env.SUPABASE_ACCESS_TOKEN = accessToken;
+          log("🔑 Using provided Access Token.");
         }
 
         // 1. Supabase Login Check / Login
         // Skip if we have a token (we assume it works)
         if (!accessToken) {
-            log("Checking Supabase authentication...");
+          log("Checking Supabase authentication...");
+          try {
+            // Check if logged in by listing projects
+            await runStreamedCommand("npx", ["supabase", "projects", "list"]);
+            log("✅ Authenticated with Supabase.");
+          } catch (e) {
+            log("⚠️ Not authenticated. Launching login browser...");
+            log(
+              "👉 Please complete the login in the browser window that opens.",
+            );
             try {
-                // Check if logged in by listing projects
-                await runStreamedCommand("npx", ["supabase", "projects", "list"]);
-                log("✅ Authenticated with Supabase.");
-            } catch (e) {
-                log("⚠️ Not authenticated. Launching login browser...");
-                log("👉 Please complete the login in the browser window that opens.");
-                try {
-                    await runStreamedCommand("npx", ["supabase", "login"]);
-                    log("✅ Login successful!");
-                } catch (loginErr) {
-                    log("❌ Login failed. Please provide an Access Token instead.");
-                    res.end();
-                    return;
-                }
+              await runStreamedCommand("npx", ["supabase", "login"]);
+              log("✅ Login successful!");
+            } catch (loginErr) {
+              log("❌ Login failed. Please provide an Access Token instead.");
+              res.end();
+              return;
             }
+          }
         }
 
         // 2. Run Migrate Script
         if (projectRef) {
-            log(`Running migration for project: ${projectRef}`);
-            // Add project-specific vars
-            env.SUPABASE_PROJECT_ID = projectRef;
-            if (dbPassword) env.SUPABASE_DB_PASSWORD = dbPassword;
-            
-            const migrateScript = join(SCRIPTS_PATH, "migrate.sh");
-            
-            try {
-                // Ensure script is executable
-                await runStreamedCommand("chmod", ["+x", migrateScript]);
-                await runStreamedCommand(migrateScript, [], env);
-                log("✅ Migration completed successfully!");
-            } catch (err) {
-                log(`❌ Migration failed: ${err.message}`);
-            }
+          log(`Running migration for project: ${projectRef}`);
+          // Add project-specific vars
+          env.SUPABASE_PROJECT_ID = projectRef;
+          if (dbPassword) env.SUPABASE_DB_PASSWORD = dbPassword;
+
+          const migrateScript = join(SCRIPTS_PATH, "migrate.sh");
+
+          try {
+            // Ensure script is executable
+            await runStreamedCommand("chmod", ["+x", migrateScript]);
+            await runStreamedCommand(migrateScript, [], env);
+            log("✅ Migration completed successfully!");
+          } catch (err) {
+            log(`❌ Migration failed: ${err.message}`);
+          }
         } else {
-            log("❌ Error: Project Reference ID is missing.");
+          log("❌ Error: Project Reference ID is missing.");
         }
-        
+
         res.end();
       } catch (err) {
         console.error(err);
@@ -397,18 +401,18 @@ To configure the app:
     }
 
     // --- Static File Serving ---
-    let cleanUrl = req.url.split('?')[0];
+    let cleanUrl = req.url.split("?")[0];
     let filePath = join(DIST_PATH, cleanUrl === "/" ? "index.html" : cleanUrl);
-    
+
     if (!existsSync(filePath)) {
-        // SPA Fallback: serve index.html for non-existent paths (unless it looks like a file)
-        if (!cleanUrl.includes(".")) {
-            filePath = join(DIST_PATH, "index.html");
-        } else {
-            res.writeHead(404);
-            res.end("Not Found");
-            return;
-        }
+      // SPA Fallback: serve index.html for non-existent paths (unless it looks like a file)
+      if (!cleanUrl.includes(".")) {
+        filePath = join(DIST_PATH, "index.html");
+      } else {
+        res.writeHead(404);
+        res.end("Not Found");
+        return;
+      }
     }
 
     const ext = extname(filePath);

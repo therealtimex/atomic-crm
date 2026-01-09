@@ -43,7 +43,7 @@ export const EntityTypePillSelector = () => {
               "px-3 py-1.5 text-sm rounded-full border transition-colors",
               entityType === type.value
                 ? "bg-primary text-primary-foreground border-primary"
-                : "bg-background hover:bg-accent border-input"
+                : "bg-background hover:bg-accent border-input",
             )}
           >
             {translate(`crm.task.entity_type.${type.key}`)}

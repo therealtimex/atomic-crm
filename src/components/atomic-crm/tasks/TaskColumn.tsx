@@ -24,12 +24,7 @@ export const TaskColumn = ({
   const { taskStatuses } = useConfigurationContext();
   const translate = useTranslate();
   const rawLabel = findStatusLabel(taskStatuses, status);
-  const label = translateChoice(
-    translate,
-    "crm.task.status",
-    status,
-    rawLabel,
-  );
+  const label = translateChoice(translate, "crm.task.status", status, rawLabel);
   const count = tasks.length;
   const collapsed = isCollapsed ?? false;
 
@@ -43,7 +38,9 @@ export const TaskColumn = ({
       <div
         className={cn(
           "sticky top-0 z-10 flex items-center border-b bg-background/95 backdrop-blur",
-          collapsed ? "justify-center mx-1 rounded-full" : "justify-between px-2",
+          collapsed
+            ? "justify-center mx-1 rounded-full"
+            : "justify-between px-2",
         )}
       >
         {collapsed ? (

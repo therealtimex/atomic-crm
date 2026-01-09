@@ -97,7 +97,9 @@ const RowActions = () => {
       refresh();
     },
     onError: () => {
-      notify(translate("crm.user.notification.invite_error"), { type: "error" });
+      notify(translate("crm.user.notification.invite_error"), {
+        type: "error",
+      });
       setInviteDialogOpen(false);
     },
   });
@@ -316,7 +318,9 @@ const SalesEmpty = () => {
     >
       <img src="./img/empty.svg" alt={translate("crm.user.empty.title")} />
       <div className="flex flex-col gap-0 items-center">
-        <h6 className="text-lg font-bold">{translate("crm.user.empty.title")}</h6>
+        <h6 className="text-lg font-bold">
+          {translate("crm.user.empty.title")}
+        </h6>
         <p className="text-sm text-muted-foreground text-center mb-4">
           {translate("crm.user.empty.description")}
         </p>

@@ -102,9 +102,7 @@ const DueDateField = ({
 
   // Parse date as local date to avoid timezone shift (same logic as getRelativeDueDate)
   const dueDate = record.due_date ? parseLocalDate(record.due_date) : null;
-  const formattedDate = dueDate
-    ? dueDate.toLocaleDateString(locale)
-    : "";
+  const formattedDate = dueDate ? dueDate.toLocaleDateString(locale) : "";
 
   return (
     <div className="flex flex-col gap-0.5">
@@ -120,9 +118,7 @@ const DueDateField = ({
         {text}
       </span>
       {dueDate && !isCompleted && (
-        <span className="text-xs text-muted-foreground">
-          {formattedDate}
-        </span>
+        <span className="text-xs text-muted-foreground">{formattedDate}</span>
       )}
     </div>
   );
@@ -130,7 +126,7 @@ const DueDateField = ({
 
 const TaskActions = ({
   record,
-  onEdit
+  onEdit,
 }: {
   record: Task;
   onEdit: (taskId: number) => void;
@@ -165,7 +161,7 @@ const TaskActions = ({
         onError: (error) => {
           console.error("Failed to create task note:", error);
         },
-      }
+      },
     );
   };
 
@@ -184,10 +180,12 @@ const TaskActions = ({
       },
       {
         onSuccess: () => {
-          notify(translate("crm.task.notification.marked_complete"), { type: "success" });
+          notify(translate("crm.task.notification.marked_complete"), {
+            type: "success",
+          });
           createTaskNote(translate("crm.task.note.marked_complete_quick"));
         },
-      }
+      },
     );
   };
 
@@ -232,7 +230,9 @@ const TaskActions = ({
           noteText = translate("crm.task.note.snoozed_to_date", {
             date: tomorrow.toLocaleDateString(locale),
           });
-          notificationText = translate("crm.task.notification.snoozed_tomorrow");
+          notificationText = translate(
+            "crm.task.notification.snoozed_tomorrow",
+          );
         } else {
           // Add 1 day to the due date
           const newDueDate = new Date(dueDate);
@@ -261,7 +261,7 @@ const TaskActions = ({
           notify(notificationText, { type: "success" });
           createTaskNote(noteText);
         },
-      }
+      },
     );
   };
 
@@ -327,13 +327,13 @@ const TaskActions = ({
               >
                 <Clock className="h-4 w-4" />
               </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{snoozeLabel}</p>
-          </TooltipContent>
-        </Tooltip>
-      )}
-    </TooltipProvider>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{snoozeLabel}</p>
+            </TooltipContent>
+          </Tooltip>
+        )}
+      </TooltipProvider>
     </div>
   );
 };
@@ -344,7 +344,8 @@ export const TaskListTable = () => {
   const [locale] = useLocaleState();
 
   const getRowClassName = (record: Task) => {
-    const isCompleted = record.status === "done" || record.status === "cancelled";
+    const isCompleted =
+      record.status === "done" || record.status === "cancelled";
     const { isOverdue } = getRelativeDueDate(record.due_date, isCompleted, {
       translate,
       locale,
@@ -353,71 +354,77 @@ export const TaskListTable = () => {
     // Add 'group' class for hover actions, plus overdue styling
     const baseClass = "group";
     if (isCompleted) return baseClass;
-    return isOverdue ? `${baseClass} bg-destructive/10 hover:bg-destructive/20` : baseClass;
+    return isOverdue
+      ? `${baseClass} bg-destructive/10 hover:bg-destructive/20`
+      : baseClass;
   };
 
   return (
     <>
       <DataTable rowClick="show" rowClassName={getRowClassName}>
-      <DataTable.Col
-        source="text"
-        label={translate("crm.task.field.task")}
-        className="w-[35%]"
-        cellClassName="max-w-md overflow-hidden"
-        render={(record: Task) => (
-          <div className="flex items-center gap-2">
-            <TaskTypeIcon taskType={record.type} />
-            <div className="line-clamp-2 flex-1" title={record.text}>
-              {record.text}
+        <DataTable.Col
+          source="text"
+          label={translate("crm.task.field.task")}
+          className="w-[35%]"
+          cellClassName="max-w-md overflow-hidden"
+          render={(record: Task) => (
+            <div className="flex items-center gap-2">
+              <TaskTypeIcon taskType={record.type} />
+              <div className="line-clamp-2 flex-1" title={record.text}>
+                {record.text}
+              </div>
             </div>
-          </div>
-        )}
-      />
-      <DataTable.Col
-        label={translate("crm.task.field.related_to")}
-        className="w-[16%]"
-        cellClassName="overflow-hidden"
-        sortable={false}
-        render={(record: Task) => <RelatedEntityField record={record} />}
-      />
-      <DataTable.Col
-        source="due_date"
-        label={translate("crm.task.field.due_date")}
-        className="w-[14%]"
-        cellClassName="overflow-hidden"
-        render={(record: Task) => (
-          <DueDateField record={record} translate={translate} locale={locale} />
-        )}
-      />
-      <DataTable.Col
-        label={translate("crm.task.field.priority")}
-        className="w-[8%]"
-        render={(record: Task) => (
-          <TaskPriorityBadge priority={record.priority} />
-        )}
-      />
-      <DataTable.Col
-        label={translate("crm.task.field.status")}
-        className="w-[8%]"
-        render={(record: Task) => <TaskStatusBadge status={record.status} />}
-      />
-      <DataTable.Col
-        label={translate("crm.task.field.assigned_to")}
-        className="w-[8%]"
-        cellClassName="truncate"
-      >
-        <ReferenceField source="assigned_to" reference="sales" link={false} />
-      </DataTable.Col>
-      <DataTable.Col
-        label={translate("crm.task.field.actions")}
-        className="w-[11%]"
-        sortable={false}
-        cellClassName="text-right pr-2"
-        render={(record: Task) => (
-          <TaskActions record={record} onEdit={setEditingTaskId} />
-        )}
-      />
-    </DataTable>
+          )}
+        />
+        <DataTable.Col
+          label={translate("crm.task.field.related_to")}
+          className="w-[16%]"
+          cellClassName="overflow-hidden"
+          sortable={false}
+          render={(record: Task) => <RelatedEntityField record={record} />}
+        />
+        <DataTable.Col
+          source="due_date"
+          label={translate("crm.task.field.due_date")}
+          className="w-[14%]"
+          cellClassName="overflow-hidden"
+          render={(record: Task) => (
+            <DueDateField
+              record={record}
+              translate={translate}
+              locale={locale}
+            />
+          )}
+        />
+        <DataTable.Col
+          label={translate("crm.task.field.priority")}
+          className="w-[8%]"
+          render={(record: Task) => (
+            <TaskPriorityBadge priority={record.priority} />
+          )}
+        />
+        <DataTable.Col
+          label={translate("crm.task.field.status")}
+          className="w-[8%]"
+          render={(record: Task) => <TaskStatusBadge status={record.status} />}
+        />
+        <DataTable.Col
+          label={translate("crm.task.field.assigned_to")}
+          className="w-[8%]"
+          cellClassName="truncate"
+        >
+          <ReferenceField source="assigned_to" reference="sales" link={false} />
+        </DataTable.Col>
+        <DataTable.Col
+          label={translate("crm.task.field.actions")}
+          className="w-[11%]"
+          sortable={false}
+          cellClassName="text-right pr-2"
+          render={(record: Task) => (
+            <TaskActions record={record} onEdit={setEditingTaskId} />
+          )}
+        />
+      </DataTable>
 
       {editingTaskId && (
         <TaskEdit

@@ -18,9 +18,5 @@ export const TaskStatusBadge = ({ status }: { status?: string }) => {
     statusColors[status as keyof typeof statusColors] || "bg-slate-500";
   const label = translateChoice(translate, "crm.task.status", status, status);
 
-  return (
-    <Badge className={cn(colorClass)}>
-      {label}
-    </Badge>
-  );
+  return <Badge className={cn(colorClass)}>{label}</Badge>;
 };

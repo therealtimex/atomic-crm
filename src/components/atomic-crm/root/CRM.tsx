@@ -185,7 +185,10 @@ export const CRM = ({
           <CustomRoutes>
             <Route path={SettingsPage.path} element={<SettingsPage />} />
             <Route path={DatabasePage.path} element={<DatabasePage />} />
-            <Route path={IntegrationsPage.path} element={<IntegrationsPage />} />
+            <Route
+              path={IntegrationsPage.path}
+              element={<IntegrationsPage />}
+            />
           </CustomRoutes>
           <Resource name="deals" {...deals} />
           <Resource name="contacts" {...contacts} />

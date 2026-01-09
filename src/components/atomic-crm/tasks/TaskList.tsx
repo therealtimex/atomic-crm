@@ -171,7 +171,7 @@ const TaskList = () => {
 
 const TaskActions = ({
   view,
-  setView
+  setView,
 }: {
   view: "table" | "kanban";
   setView: (view: "table" | "kanban") => void;

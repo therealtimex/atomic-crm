@@ -81,16 +81,8 @@ export const SignupPage = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        <img
-          className="[.light_&]:hidden h-6"
-          src={darkModeLogo}
-          alt={title}
-        />
-        <img
-          className="[.dark_&]:hidden h-6"
-          src={lightModeLogo}
-          alt={title}
-        />
+        <img className="[.light_&]:hidden h-6" src={darkModeLogo} alt={title} />
+        <img className="[.dark_&]:hidden h-6" src={lightModeLogo} alt={title} />
         <h1 className="text-xl font-semibold">{title}</h1>
       </div>
       <div className="h-full">
@@ -98,9 +90,7 @@ export const SignupPage = () => {
           <h1 className="text-2xl font-bold mb-4">
             {translate("crm.signup.title", { title })}
           </h1>
-          <p className="text-base mb-4">
-            {translate("crm.signup.subtitle")}
-          </p>
+          <p className="text-base mb-4">{translate("crm.signup.subtitle")}</p>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="first_name">

@@ -1,9 +1,5 @@
 import { Building, Truck, Users } from "lucide-react";
-import {
-  FilterLiveForm,
-  useGetIdentity,
-  useTranslate,
-} from "ra-core";
+import { FilterLiveForm, useGetIdentity, useTranslate } from "ra-core";
 import { ToggleFilterButton } from "@/components/admin/toggle-filter-button";
 import { SearchInput } from "@/components/admin/search-input";
 

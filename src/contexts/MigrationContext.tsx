@@ -1,5 +1,5 @@
-import { createContext, useContext, type ReactNode } from 'react';
-import type { MigrationStatus } from '@/lib/migration-check';
+import { createContext, useContext, type ReactNode } from "react";
+import type { MigrationStatus } from "@/lib/migration-check";
 
 interface MigrationContextValue {
   /** Current migration status */
@@ -38,7 +38,7 @@ export function useMigrationContext() {
   const context = useContext(MigrationContext);
   if (context === undefined) {
     throw new Error(
-      'useMigrationContext must be used within a MigrationProvider',
+      "useMigrationContext must be used within a MigrationProvider",
     );
   }
   return context;

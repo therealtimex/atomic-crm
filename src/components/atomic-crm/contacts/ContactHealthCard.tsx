@@ -106,8 +106,14 @@ export const ContactHealthCard = () => {
 
   if (!record) return null;
 
-  const daysSince = record.days_since_last_activity ?? 
-    (record.last_seen ? Math.floor((new Date().getTime() - new Date(record.last_seen).getTime()) / (1000 * 60 * 60 * 24)) : undefined);
+  const daysSince =
+    record.days_since_last_activity ??
+    (record.last_seen
+      ? Math.floor(
+          (new Date().getTime() - new Date(record.last_seen).getTime()) /
+            (1000 * 60 * 60 * 24),
+        )
+      : undefined);
 
   const hasInternalHealth =
     record.internal_heartbeat_score != null ||
@@ -210,7 +216,7 @@ export const ContactHealthCard = () => {
               {formatDistance(
                 new Date(record.external_heartbeat_checked_at),
                 new Date(),
-                { 
+                {
                   addSuffix: true,
                   locale: getDateFnsLocale(locale),
                 },

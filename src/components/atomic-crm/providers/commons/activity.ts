@@ -47,7 +47,12 @@ export async function getActivityLog(
       getNewCompanyNotes(dataProvider, filter),
     ]);
   return (
-    [...newCompanies, ...newContactsAndNotes, ...newDealsAndNotes, ...newCompanyNotes]
+    [
+      ...newCompanies,
+      ...newContactsAndNotes,
+      ...newDealsAndNotes,
+      ...newCompanyNotes,
+    ]
       // sort by date desc
       .sort((a, b) =>
         a.date && b.date ? a.date.localeCompare(b.date) * -1 : 0,

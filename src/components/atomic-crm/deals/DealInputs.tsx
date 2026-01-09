@@ -112,7 +112,12 @@ const DealMiscInputs = () => {
 
   const translatedDealStages = dealStages.map((stage) => ({
     id: stage.value,
-    name: translateChoice(translate, "crm.deal.stage", stage.value, stage.label),
+    name: translateChoice(
+      translate,
+      "crm.deal.stage",
+      stage.value,
+      stage.label,
+    ),
   }));
   return (
     <div className="flex flex-col gap-4 flex-1">

@@ -22,7 +22,10 @@ export const ExportVCardButton = () => {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", `${contact.first_name}_${contact.last_name}.vcf`);
+    link.setAttribute(
+      "download",
+      `${contact.first_name}_${contact.last_name}.vcf`,
+    );
     document.body.appendChild(link);
     link.click();
     link.remove();

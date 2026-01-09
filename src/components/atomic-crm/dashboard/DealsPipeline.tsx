@@ -1,5 +1,10 @@
 import { DollarSign } from "lucide-react";
-import { useGetIdentity, useGetList, useLocaleState, useTranslate } from "ra-core";
+import {
+  useGetIdentity,
+  useGetList,
+  useLocaleState,
+  useTranslate,
+} from "ra-core";
 import { Link } from "react-router";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { Card } from "@/components/ui/card";

@@ -26,7 +26,8 @@ export const viMessages = {
         url_must_be_supabase: "URL phải là tên miền Supabase",
         url_hint: "Nhập URL đầy đủ hoặc ID dự án",
         url_expansion: "Sẽ mở rộng thành: %{url}",
-        url_default_hint: "Nhập URL đầy đủ hoặc chỉ ID dự án (từ Cài đặt dự án → API)",
+        url_default_hint:
+          "Nhập URL đầy đủ hoặc chỉ ID dự án (từ Cài đặt dự án → API)",
         key_label: "Mã API",
         key_placeholder: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
         key_valid_publishable: "Định dạng khóa publishable hợp lệ",
@@ -179,7 +180,8 @@ export const viMessages = {
         move_failed: "Không thể di chuyển công việc. Vui lòng thử lại.",
       },
       note: {
-        marked_complete: "Công việc được đánh dấu hoàn thành qua thao tác nhanh",
+        marked_complete:
+          "Công việc được đánh dấu hoàn thành qua thao tác nhanh",
         marked_complete_quick: "Đánh dấu hoàn thành qua thao tác nhanh",
         snoozed_to_date: "Ngày đến hạn được dời đến %{date}",
         postponed_to_date: "Ngày đến hạn được hoãn đến %{date}",
@@ -190,7 +192,8 @@ export const viMessages = {
         related: "Liên quan",
         assignment: "Phân công",
         activity_timeline: "Dòng thời gian hoạt động",
-        activity_description: "Theo dõi thay đổi trạng thái và cập nhật của công việc",
+        activity_description:
+          "Theo dõi thay đổi trạng thái và cập nhật của công việc",
         notes: "Ghi chú",
         notes_description: "Thêm ghi chú và cập nhật cho công việc này",
       },
@@ -406,7 +409,8 @@ export const viMessages = {
         personal_info: "Thông tin cá nhân",
         misc: "Khác",
         activity_timeline: "Dòng thời gian hoạt động",
-        activity_timeline_description: "Trạng thái xử lý thời gian thực của các hoạt động",
+        activity_timeline_description:
+          "Trạng thái xử lý thời gian thực của các hoạt động",
         notes: "Ghi chú",
         notes_description: "Bản ghi vĩnh viễn về các tương tác và kết quả",
         background_info: "Thông tin tiểu sử",
@@ -669,7 +673,8 @@ export const viMessages = {
         webhooks: "Webhook (Gửi đi)",
       },
       webhooks: {
-        description: "Webhook thông báo cho các hệ thống bên ngoài khi có sự kiện xảy ra trong CRM của bạn.",
+        description:
+          "Webhook thông báo cho các hệ thống bên ngoài khi có sự kiện xảy ra trong CRM của bạn.",
         action: {
           create: "Tạo Webhook",
           create_first: "Tạo webhook đầu tiên của bạn",
@@ -742,7 +747,8 @@ export const viMessages = {
         },
       },
       api_keys: {
-        description: "Mã API cho phép các ứng dụng bên ngoài truy cập dữ liệu CRM của bạn theo lập trình.",
+        description:
+          "Mã API cho phép các ứng dụng bên ngoài truy cập dữ liệu CRM của bạn theo lập trình.",
         action: {
           create: "Tạo mã API",
           create_first: "Tạo mã API đầu tiên của bạn",
@@ -767,7 +773,8 @@ export const viMessages = {
           create_title: "Tạo mã API",
           create_description: "Tạo mã API mới để truy cập CRM API",
           created_title: "Đã tạo mã API",
-          created_description: "Hãy sao chép mã này ngay - nó sẽ không hiển thị lại lần nữa!",
+          created_description:
+            "Hãy sao chép mã này ngay - nó sẽ không hiển thị lại lần nữa!",
           delete_title: "Xóa mã API?",
           delete_description:
             "Thao tác này sẽ xóa vĩnh viễn mã API này. Bất kỳ ứng dụng nào sử dụng mã này sẽ ngừng hoạt động ngay lập tức. Thao tác này không thể hoàn tác.",
@@ -836,8 +843,7 @@ export const viMessages = {
           error: "Tải lên thất bại: %{name}",
           error_network: "Lỗi mạng",
           error_status: "Tải lên thất bại với trạng thái %{status}",
-          error_dangerous:
-            "Tệp thực thi không được phép vì lý do bảo mật",
+          error_dangerous: "Tệp thực thi không được phép vì lý do bảo mật",
         },
       },
       ingestion: {
@@ -900,7 +906,8 @@ export const viMessages = {
         docx: "Không thể hiển thị nội dung DOCX.",
         too_large: "Tệp quá lớn (tối đa 50MB). Kích thước: %{size}MB",
         not_available: "Không có bản xem trước cho loại tệp này.",
-        access: "Không thể truy cập tệp. Điều này có thể do vấn đề mạng, hạn chế CORS hoặc liên kết đã hết hạn.",
+        access:
+          "Không thể truy cập tệp. Điều này có thể do vấn đề mạng, hạn chế CORS hoặc liên kết đã hết hạn.",
         load: "Không thể tải bản xem trước tài liệu.",
       },
       action: {
@@ -985,7 +992,8 @@ export const viMessages = {
         invite_error: "Gửi lại email mời thất bại",
         reset_sent: "Đã gửi email đặt lại mật khẩu thành công",
         reset_error: "Gửi email đặt lại mật khẩu thất bại",
-        created: "Đã tạo người dùng. Họ sẽ sớm nhận được email để thiết lập mật khẩu.",
+        created:
+          "Đã tạo người dùng. Họ sẽ sớm nhận được email để thiết lập mật khẩu.",
         create_error: "Đã xảy ra lỗi khi tạo người dùng.",
         updated: "Cập nhật người dùng thành công",
         error: "Đã xảy ra lỗi. Vui lòng thử lại.",
@@ -994,12 +1002,14 @@ export const viMessages = {
         resend_invitation: {
           title: "Gửi lại lời mời",
           description: "Gửi email mời mới đến %{email}?",
-          fresh_link: "Thao tác này sẽ gửi cho họ một liên kết mời mới để thiết lập tài khoản.",
+          fresh_link:
+            "Thao tác này sẽ gửi cho họ một liên kết mời mới để thiết lập tài khoản.",
         },
         reset_password: {
           title: "Đặt lại mật khẩu",
           description: "Gửi email đặt lại mật khẩu đến %{email}?",
-          reset_link: "Thao tác này sẽ gửi cho họ một liên kết để đặt lại mật khẩu.",
+          reset_link:
+            "Thao tác này sẽ gửi cho họ một liên kết để đặt lại mật khẩu.",
         },
       },
     },
@@ -1015,17 +1025,20 @@ export const viMessages = {
       resend_code: "Gửi lại mã",
       back_to_email: "Quay lại nhập email",
       back_to_login: "Quay lại đăng nhập",
-      no_access: "Bạn không có quyền truy cập ứng dụng này. Vui lòng liên hệ quản trị viên.",
+      no_access:
+        "Bạn không có quyền truy cập ứng dụng này. Vui lòng liên hệ quản trị viên.",
       login_successful: "Đăng nhập thành công!",
       set_new_password: "Đặt mật khẩu mới",
-      choose_password_details: "Chọn một mật khẩu an toàn cho tài khoản của bạn",
+      choose_password_details:
+        "Chọn một mật khẩu an toàn cho tài khoản của bạn",
       password_min_length: "Mật khẩu phải có ít nhất 6 ký tự",
       passwords_do_not_match: "Mật khẩu không khớp",
       password_updated: "Cập nhật mật khẩu thành công",
       update_password: "Cập nhật mật khẩu",
       updating_password: "Đang cập nhật...",
       failed_to_update_password: "Cập nhật mật khẩu thất bại",
-      forgot_password_code_verified: "Mã đã được xác nhận! Vui lòng đặt mật khẩu mới.",
+      forgot_password_code_verified:
+        "Mã đã được xác nhận! Vui lòng đặt mật khẩu mới.",
       sign_in: "Đăng nhập",
       login_otp_link: "Đăng nhập bằng mã email (OTP)",
       send_code: "Gửi mã",
@@ -1091,7 +1104,8 @@ export const viMessages = {
           "Lược đồ cơ sở dữ liệu cần được cập nhật lên v%{version}. Hãy làm theo các bước dưới đây để hoàn tất migration.",
         overview: {
           title: "Điều sẽ xảy ra:",
-          update_schema: "Lược đồ cơ sở dữ liệu sẽ được cập nhật lên v%{version}",
+          update_schema:
+            "Lược đồ cơ sở dữ liệu sẽ được cập nhật lên v%{version}",
           enable_features: "Các tính năng và cải tiến mới sẽ được bật",
           data_safe: "Dữ liệu hiện có của bạn sẽ không bị ảnh hưởng",
           duration: "Quy trình thường mất dưới 2 phút",
@@ -1256,17 +1270,14 @@ export const viMessages = {
         "Bạn có chắc muốn cập nhật %{name} %{recordRepresentation}? |||| Bạn có chắc muốn cập nhật %{smart_count} mục này?",
       bulk_update_title:
         "Cập nhật %{name} %{recordRepresentation} |||| Cập nhật %{smart_count} %{name}",
-      clear_array_input:
-        "Bạn có chắc muốn xóa toàn bộ danh sách?",
+      clear_array_input: "Bạn có chắc muốn xóa toàn bộ danh sách?",
       select_all_limit_reached:
         "Có quá nhiều phần tử để chọn tất cả. Chỉ %{max} phần tử đầu tiên được chọn.",
-      placeholder_data_warning:
-        "Sự cố mạng: không thể làm mới dữ liệu.",
+      placeholder_data_warning: "Sự cố mạng: không thể làm mới dữ liệu.",
     },
     navigation: {
       clear_filters: "Xóa bộ lọc",
-      no_filtered_results:
-        "Không tìm thấy %{name} với bộ lọc hiện tại.",
+      no_filtered_results: "Không tìm thấy %{name} với bộ lọc hiện tại.",
       partial_page_range_info:
         "%{offsetBegin}-%{offsetEnd} trong hơn %{offsetEnd}",
       current_page: "Trang %{page}",
@@ -1298,7 +1309,7 @@ export const viMessages = {
       new_label: "Lưu truy vấn hiện tại...",
       new_dialog_title: "Lưu truy vấn hiện tại dưới dạng",
       remove_label: "Xóa truy vấn đã lưu",
-      remove_label_with_name: "Xóa truy vấn \"%{name}\"",
+      remove_label_with_name: 'Xóa truy vấn "%{name}"',
       remove_dialog_title: "Xóa truy vấn đã lưu?",
       remove_message:
         "Bạn có chắc muốn xóa mục này khỏi danh sách truy vấn đã lưu?",

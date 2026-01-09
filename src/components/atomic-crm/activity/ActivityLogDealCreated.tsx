@@ -23,7 +23,8 @@ export function ActivityLogDealCreated({
           <span className="text-muted-foreground text-sm">
             Sales ID: {activity.sales_id}
           </span>{" "}
-          {translate("crm.activity.added_deal")} <Link to={`/deals/${deal.id}/show`}>{deal.name}</Link>{" "}
+          {translate("crm.activity.added_deal")}{" "}
+          <Link to={`/deals/${deal.id}/show`}>{deal.name}</Link>{" "}
           {context !== "company" && (
             <>
               {translate("crm.activity.to_company")} {activity.company_id}{" "}

@@ -11,7 +11,7 @@ interface EntityAutocompleteProps {
 
 export const EntityAutocomplete = ({
   helperText = false,
-  validate
+  validate,
 }: EntityAutocompleteProps) => {
   const translate = useTranslate();
   const entityType = useWatch({ name: "entity_type" });

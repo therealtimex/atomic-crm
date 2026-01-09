@@ -13,10 +13,7 @@ export const CompanyEmpty = () => {
         height: `calc(100dvh - ${appbarHeight}px)`,
       }}
     >
-      <img
-        src="./img/empty.svg"
-        alt={translate("crm.company.empty.title")}
-      />
+      <img src="./img/empty.svg" alt={translate("crm.company.empty.title")} />
       <div className="flex flex-col gap-0 items-center">
         <h6 className="text-lg font-bold">
           {translate("crm.company.empty.title")}

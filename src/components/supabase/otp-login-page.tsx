@@ -11,13 +11,13 @@ interface EmailFormData {
   email: string;
 }
 
-type Step = 'email' | 'otp';
+type Step = "email" | "otp";
 
 export const OtpLoginPage = () => {
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState<Step>('email');
-  const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
+  const [step, setStep] = useState<Step>("email");
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
   const [otpError, setOtpError] = useState(false);
 
   const notify = useNotify();
@@ -41,8 +41,8 @@ export const OtpLoginPage = () => {
         throw error;
       }
 
-      notify(translate("crm.auth.code_sent"), { type: 'success' });
-      setStep('otp');
+      notify(translate("crm.auth.code_sent"), { type: "success" });
+      setStep("otp");
     } catch (error: any) {
       notify(
         typeof error === "string"
@@ -78,7 +78,7 @@ export const OtpLoginPage = () => {
       const { data, error } = await supabase.auth.verifyOtp({
         email: email.trim().toLowerCase(), // Normalize email
         token: cleanOtp,
-        type: 'magiclink', // Changed from 'email' - some Supabase versions treat OTP as magiclink
+        type: "magiclink", // Changed from 'email' - some Supabase versions treat OTP as magiclink
       });
 
       if (error) {
@@ -86,14 +86,14 @@ export const OtpLoginPage = () => {
       }
 
       if (!data.session) {
-        throw new Error('Failed to create session');
+        throw new Error("Failed to create session");
       }
 
       // Check if user exists in sales table (access control)
       const { data: saleData, error: saleError } = await supabase
-        .from('sales')
-        .select('id, email_confirmed_at')
-        .eq('user_id', data.user.id)
+        .from("sales")
+        .select("id, email_confirmed_at")
+        .eq("user_id", data.user.id)
         .single();
 
       if (saleError || !saleData) {
@@ -103,16 +103,16 @@ export const OtpLoginPage = () => {
       }
 
       // User is logged in and authorized
-      notify(translate("crm.auth.login_successful"), { type: 'success' });
+      notify(translate("crm.auth.login_successful"), { type: "success" });
 
       // Check if this is their first login (email not confirmed yet)
       if (!saleData.email_confirmed_at) {
         // Navigate to change password
-        window.location.href = '#/change-password';
+        window.location.href = "#/change-password";
         window.location.reload();
       } else {
         // Navigate to dashboard
-        window.location.href = '#/';
+        window.location.href = "#/";
         window.location.reload();
       }
     } catch (error: any) {
@@ -145,14 +145,14 @@ export const OtpLoginPage = () => {
   };
 
   const handleResendCode = async () => {
-    setOtp('');
+    setOtp("");
     setOtpError(false);
     await submitEmail({ email });
   };
 
   return (
     <Layout>
-      {step === 'email' ? (
+      {step === "email" ? (
         <>
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">
@@ -172,7 +172,11 @@ export const OtpLoginPage = () => {
               autoComplete="email"
               validate={required()}
             />
-            <Button type="submit" className="cursor-pointer w-full" disabled={loading}>
+            <Button
+              type="submit"
+              className="cursor-pointer w-full"
+              disabled={loading}
+            >
               {translate("crm.auth.send_code")}
             </Button>
           </Form>
@@ -210,7 +214,9 @@ export const OtpLoginPage = () => {
                 disabled={loading || otp.length !== 6}
                 onClick={() => verifyOtp(otp)}
               >
-                {loading ? translate("crm.auth.verifying") : translate("crm.auth.verify_code")}
+                {loading
+                  ? translate("crm.auth.verifying")
+                  : translate("crm.auth.verify_code")}
               </Button>
               <Button
                 type="button"

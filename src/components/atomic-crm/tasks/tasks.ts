@@ -37,20 +37,26 @@ export const getTasksByStatus = (
 
   // order each column by index, then due date
   Object.keys(tasksByStatus).forEach((statusId) => {
-    tasksByStatus[statusId] = tasksByStatus[statusId].sort((recordA, recordB) => {
-      const indexA =
-        typeof recordA.index === "number" ? recordA.index : Number.POSITIVE_INFINITY;
-      const indexB =
-        typeof recordB.index === "number" ? recordB.index : Number.POSITIVE_INFINITY;
-      if (indexA !== indexB) return indexA - indexB;
+    tasksByStatus[statusId] = tasksByStatus[statusId].sort(
+      (recordA, recordB) => {
+        const indexA =
+          typeof recordA.index === "number"
+            ? recordA.index
+            : Number.POSITIVE_INFINITY;
+        const indexB =
+          typeof recordB.index === "number"
+            ? recordB.index
+            : Number.POSITIVE_INFINITY;
+        if (indexA !== indexB) return indexA - indexB;
 
-      if (!recordA.due_date) return 1;
-      if (!recordB.due_date) return -1;
-      return (
-        new Date(recordA.due_date).getTime() -
-        new Date(recordB.due_date).getTime()
-      );
-    });
+        if (!recordA.due_date) return 1;
+        if (!recordB.due_date) return -1;
+        return (
+          new Date(recordA.due_date).getTime() -
+          new Date(recordB.due_date).getTime()
+        );
+      },
+    );
   });
 
   return tasksByStatus;

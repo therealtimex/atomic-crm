@@ -32,7 +32,7 @@ Deno.serve(async (req: Request) => {
       req.method,
       429,
       Date.now() - startTime,
-      req
+      req,
     );
     return rateLimitError;
   }
@@ -68,7 +68,7 @@ Deno.serve(async (req: Request) => {
       req.method,
       response.status,
       responseTime,
-      req
+      req,
     );
 
     return response;
@@ -81,7 +81,7 @@ Deno.serve(async (req: Request) => {
       500,
       responseTime,
       req,
-      error.message
+      error.message,
     );
     return createErrorResponse(500, "Internal server error");
   }

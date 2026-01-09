@@ -1,4 +1,7 @@
-export type Translate = (key: string, options?: Record<string, unknown>) => string;
+export type Translate = (
+  key: string,
+  options?: Record<string, unknown>,
+) => string;
 
 export const toI18nKey = (value: string): string =>
   value

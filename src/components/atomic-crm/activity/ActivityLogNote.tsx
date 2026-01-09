@@ -22,9 +22,7 @@ export function ActivityLogNote({
           {header}
         </div>
         <div className="prose prose-sm max-w-none dark:prose-invert line-clamp-3 overflow-hidden">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {text}
-          </ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
         </div>
       </div>
     </div>

@@ -72,7 +72,7 @@ export const CreateChannelDialog = ({
         translate("crm.integrations.ingestion.notification.error_creating", {
           message: error.message,
         }),
-        { type: "error" }
+        { type: "error" },
       );
     },
   });
@@ -96,7 +96,7 @@ export const CreateChannelDialog = ({
             <Input
               id="name"
               placeholder={translate(
-                "crm.integrations.ingestion.dialog.placeholder_name"
+                "crm.integrations.ingestion.dialog.placeholder_name",
               )}
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -110,7 +110,7 @@ export const CreateChannelDialog = ({
               <SelectTrigger>
                 <SelectValue
                   placeholder={translate(
-                    "crm.integrations.ingestion.dialog.select_provider"
+                    "crm.integrations.ingestion.dialog.select_provider",
                   )}
                 />
               </SelectTrigger>
@@ -137,7 +137,7 @@ export const CreateChannelDialog = ({
                 id="token"
                 type="password"
                 placeholder={translate(
-                  "crm.integrations.ingestion.dialog.placeholder_token"
+                  "crm.integrations.ingestion.dialog.placeholder_token",
                 )}
                 value={authToken}
                 onChange={(e) => setAuthToken(e.target.value)}

@@ -53,15 +53,21 @@ async function inviteUser(req: Request, currentUserSale: any) {
   // 1. Creates the user account
   // 2. Sends the "Invite user" email template (not "Confirm signup")
   // 3. User will use OTP to log in (not the invite link)
-  console.log(`[inviteUser] Creating user and sending welcome email to ${email}`);
+  console.log(
+    `[inviteUser] Creating user and sending welcome email to ${email}`,
+  );
 
-  const { data, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-    data: { first_name, last_name }, // User metadata
-  });
+  const { data, error: inviteError } =
+    await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+      data: { first_name, last_name }, // User metadata
+    });
 
   if (inviteError) {
     console.error(`[inviteUser] Error: ${inviteError.message}`);
-    return createErrorResponse(500, `Failed to invite user: ${inviteError.message}`);
+    return createErrorResponse(
+      500,
+      `Failed to invite user: ${inviteError.message}`,
+    );
   }
 
   if (!data?.user) {
@@ -117,7 +123,12 @@ async function resendInvite(req: Request, currentUserSale: any) {
       return createErrorResponse(404, "User not found");
     }
 
-    console.log("[resendInvite] User email:", authUser.user.email, "Action:", action);
+    console.log(
+      "[resendInvite] User email:",
+      authUser.user.email,
+      "Action:",
+      action,
+    );
 
     // NOTE: With OTP authentication, users don't need invite/reset emails
     // Instead, instruct them to:
@@ -136,7 +147,10 @@ async function resendInvite(req: Request, currentUserSale: any) {
     );
   } catch (err) {
     console.error("[resendInvite] Unexpected error:", err);
-    return createErrorResponse(500, `Internal error: ${err instanceof Error ? err.message : "Unknown error"}`);
+    return createErrorResponse(
+      500,
+      `Internal error: ${err instanceof Error ? err.message : "Unknown error"}`,
+    );
   }
 }
 

@@ -6,7 +6,8 @@ export const esMessages = {
     setup_wizard: {
       welcome: {
         title: "Bienvenido a %{title}",
-        description: "Para comenzar, necesitas conectar una base de datos Supabase.",
+        description:
+          "Para comenzar, necesitas conectar una base de datos Supabase.",
         no_project: "¿No tienes un proyecto Supabase?",
         create_free: "Crea uno gratis en",
         need_title: "Qué necesitarás:",
@@ -26,15 +27,18 @@ export const esMessages = {
         url_must_be_supabase: "La URL debe ser un dominio de Supabase",
         url_hint: "Introduce la URL completa o ID del proyecto",
         url_expansion: "Se expandirá a: %{url}",
-        url_default_hint: "Introduce la URL completa o solo el ID del proyecto (desde Configuración del proyecto → API)",
+        url_default_hint:
+          "Introduce la URL completa o solo el ID del proyecto (desde Configuración del proyecto → API)",
         key_label: "Clave API",
         key_placeholder: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
         key_valid_publishable: "Formato de clave publicable válido",
         key_valid_anon: "Formato de clave anon válido",
         key_incomplete_publishable: "La clave publicable parece incompleta",
         key_incomplete_anon: "La clave anon parece incompleta",
-        key_invalid: "Debe ser una clave API de Supabase válida (anon o publicable)",
-        key_default_hint: "Clave anon o publicable (desde Configuración del proyecto → API)",
+        key_invalid:
+          "Debe ser una clave API de Supabase válida (anon o publicable)",
+        key_default_hint:
+          "Clave anon o publicable (desde Configuración del proyecto → API)",
         back: "Atrás",
         connect: "Conectar",
         error_failed: "Conexión fallida",
@@ -131,7 +135,8 @@ export const esMessages = {
       welcome: {
         title: "Bienvenido",
         body_1: "es un CRM completo que puedes ejecutar localmente.",
-        body_2: "Incluye contactos, empresas, negocios y tareas desde el inicio.",
+        body_2:
+          "Incluye contactos, empresas, negocios y tareas desde el inicio.",
         powered_by: "Con tecnología de",
         fork_of: ", un fork de",
         by_marmelab: "por Marmelab.",
@@ -393,7 +398,8 @@ export const esMessages = {
         phone_number: "Número de teléfono",
         phone_numbers: "Números de teléfono",
         linkedin_url: "URL de LinkedIn",
-        background: "Información de contexto (biografía, cómo se conocieron, etc.)",
+        background:
+          "Información de contexto (biografía, cómo se conocieron, etc.)",
         has_newsletter: "Tiene boletín",
         account_manager: "Gerente de cuenta",
         first_seen: "Añadido el",
@@ -512,15 +518,18 @@ export const esMessages = {
       import: {
         title: "Importar",
         description: "Importar contactos desde un archivo CSV",
-        running: "La importación está en curso, por favor no cierres esta pestaña.",
-        status: "Importados %{count} / %{total} contactos, con %{errors} errores.",
+        running:
+          "La importación está en curso, por favor no cierres esta pestaña.",
+        status:
+          "Importados %{count} / %{total} contactos, con %{errors} errores.",
         remaining_time: "Tiempo restante estimado: %{time}.",
         stop: "Detener importación",
         error:
           "Error al importar este archivo, por favor asegúrate de haber proporcionado un archivo CSV válido.",
         complete:
           "Importación de contactos completada. Importados %{count} contactos, con %{errors} errores",
-        template_hint: "Aquí tienes un archivo CSV de ejemplo que puedes usar como plantilla",
+        template_hint:
+          "Aquí tienes un archivo CSV de ejemplo que puedes usar como plantilla",
         download_sample: "Descargar ejemplo CSV",
         csv_file: "Archivo CSV",
       },
@@ -764,7 +773,8 @@ export const esMessages = {
           created: "Creado: %{date}",
           last_used: "Último uso: %{date}",
           expires: "Expira: %{date}",
-          key_hint: "Haga clic en copiar para obtener la clave completa sin máscara",
+          key_hint:
+            "Haga clic en copiar para obtener la clave completa sin máscara",
           not_available: "Clave de API no disponible para copiar",
           scopes: "Permisos",
           expiration: "Expiración (opcional)",
@@ -772,9 +782,11 @@ export const esMessages = {
         },
         dialog: {
           create_title: "Crear clave de API",
-          create_description: "Cree una nueva clave de API para acceder a la API del CRM",
+          create_description:
+            "Cree una nueva clave de API para acceder a la API del CRM",
           created_title: "Clave de API creada",
-          created_description: "¡Copie esta clave ahora - no se volverá a mostrar!",
+          created_description:
+            "¡Copie esta clave ahora - no se volverá a mostrar!",
           delete_title: "¿Eliminar clave de API?",
           delete_description:
             "Esto eliminará permanentemente esta clave de API. Cualquier aplicación que use esta clave dejará de funcionar inmediatamente. Esta acción no se puede deshacer.",
@@ -812,7 +824,8 @@ export const esMessages = {
           upload_all: "Cargar todo",
           clear_completed: "Limpiar completados",
           drop_files: "Suelte los archivos aquí...",
-          drag_and_drop: "Arrastre y suelte archivos aquí, o haga clic para seleccionar",
+          drag_and_drop:
+            "Arrastre y suelte archivos aquí, o haga clic para seleccionar",
           supports_all:
             "Admite todos los tipos de archivos (ejecutables bloqueados por seguridad)",
         },
@@ -833,10 +846,13 @@ export const esMessages = {
           title: "Cómo funciona",
           step_1:
             "Los archivos se cargan directamente en un almacenamiento seguro (sin saturar la base de datos)",
-          step_2: "Cada archivo crea un registro de actividad para seguimiento y búsqueda",
-          step_3: "Los archivos grandes se manejan automáticamente (sin límites de tamaño)",
+          step_2:
+            "Cada archivo crea un registro de actividad para seguimiento y búsqueda",
+          step_3:
+            "Los archivos grandes se manejan automáticamente (sin límites de tamaño)",
           step_4: "Los archivos se vinculan al canal de ingesta seleccionado",
-          step_5: "Las actividades aparecen en el Feed de actividad de inmediato",
+          step_5:
+            "Las actividades aparecen en el Feed de actividad de inmediato",
         },
         notification: {
           select_channel: "Por favor, seleccione un canal de ingesta",
@@ -866,7 +882,8 @@ export const esMessages = {
           created: "Creado: %{date}",
         },
         dialog: {
-          create_description: "Configure una nueva fuente para actividades entrantes.",
+          create_description:
+            "Configure una nueva fuente para actividades entrantes.",
           name_label: "Nombre del canal",
           provider_label: "Proveedor",
           token_label: "Token de autenticación (Validación)",
@@ -899,7 +916,8 @@ export const esMessages = {
       },
       dialog: {
         title: "Subir y redimensionar imagen",
-        dropzone: "Arrastra un archivo para subirlo, o haz clic para seleccionarlo.",
+        dropzone:
+          "Arrastra un archivo para subirlo, o haz clic para seleccionarlo.",
       },
       alt: "Contenido editable",
     },
@@ -908,7 +926,8 @@ export const esMessages = {
         docx: "Error al representar el contenido DOCX.",
         too_large: "Archivo demasiado grande (máx. 50MB). Tamaño: %{size}MB",
         not_available: "Vista previa no disponible para este tipo de archivo.",
-        access: "No se pudo acceder al archivo. Esto puede deberse a un problema de red, una restricción de CORS o un enlace caducado.",
+        access:
+          "No se pudo acceder al archivo. Esto puede deberse a un problema de red, una restricción de CORS o un enlace caducado.",
         load: "Error al cargar la vista previa del documento.",
       },
       action: {
@@ -993,7 +1012,8 @@ export const esMessages = {
         invite_error: "Error al reenviar la invitación",
         reset_sent: "Correo de restablecimiento enviado correctamente",
         reset_error: "Error al enviar el correo de restablecimiento",
-        created: "Usuario creado. Pronto recibirá un correo para establecer su contraseña.",
+        created:
+          "Usuario creado. Pronto recibirá un correo para establecer su contraseña.",
         create_error: "Ocurrió un error al crear el usuario.",
         updated: "Usuario actualizado correctamente",
         error: "Ocurrió un error. Por favor, inténtelo de nuevo.",
@@ -1002,28 +1022,34 @@ export const esMessages = {
         resend_invitation: {
           title: "Reenviar invitación",
           description: "¿Enviar un nuevo correo de invitación a %{email}?",
-          fresh_link: "Esto le enviará un nuevo enlace de invitación para configurar su cuenta.",
+          fresh_link:
+            "Esto le enviará un nuevo enlace de invitación para configurar su cuenta.",
         },
         reset_password: {
           title: "Restablecer contraseña",
-          description: "¿Enviar un correo de restablecimiento de contraseña a %{email}?",
-          reset_link: "Esto le enviará un enlace para restablecer su contraseña.",
+          description:
+            "¿Enviar un correo de restablecimiento de contraseña a %{email}?",
+          reset_link:
+            "Esto le enviará un enlace para restablecer su contraseña.",
         },
       },
     },
     auth: {
       login_with_code: "Iniciar sesión con código",
-      enter_email_for_code: "Ingrese su correo electrónico para recibir un código de inicio de sesión de 6 dígitos",
+      enter_email_for_code:
+        "Ingrese su correo electrónico para recibir un código de inicio de sesión de 6 dígitos",
       code_sent: "Se ha enviado un código de 6 dígitos a su correo electrónico",
       enter_verification_code: "Ingrese el código de verificación",
       code_sent_to: "Hemos enviado un código de 6 dígitos a %{email}",
-      invalid_code: "Código inválido o expirado. Por favor, inténtelo de nuevo.",
+      invalid_code:
+        "Código inválido o expirado. Por favor, inténtelo de nuevo.",
       verify_code: "Verificar código",
       verifying: "Verificando...",
       resend_code: "Reenviar código",
       back_to_email: "Volver al correo",
       back_to_login: "Volver al inicio de sesión",
-      no_access: "No tiene acceso a esta aplicación. Por favor, póngase en contacto con su administrador.",
+      no_access:
+        "No tiene acceso a esta aplicación. Por favor, póngase en contacto con su administrador.",
       login_successful: "¡Inicio de sesión exitoso!",
       set_new_password: "Establecer nueva contraseña",
       choose_password_details: "Elija una contraseña segura para su cuenta",
@@ -1033,14 +1059,16 @@ export const esMessages = {
       update_password: "Actualizar contraseña",
       updating_password: "Actualizando...",
       failed_to_update_password: "Error al actualizar la contraseña",
-      forgot_password_code_verified: "¡Código verificado! Por favor, establezca su nueva contraseña.",
+      forgot_password_code_verified:
+        "¡Código verificado! Por favor, establezca su nueva contraseña.",
       sign_in: "Iniciar sesión",
       login_otp_link: "Iniciar sesión con código de correo (OTP)",
       send_code: "Enviar código",
     },
     signup: {
       title: "Bienvenido a %{title}",
-      subtitle: "Cree la primera cuenta de usuario para completar la configuración.",
+      subtitle:
+        "Cree la primera cuenta de usuario para completar la configuración.",
       action: {
         create: "Crear cuenta",
         creating: "Creando...",
@@ -1065,7 +1093,8 @@ export const esMessages = {
       },
       database: {
         title: "Conexión a la base de datos",
-        description: "Administre la configuración de conexión de su base de datos Supabase",
+        description:
+          "Administre la configuración de conexión de su base de datos Supabase",
         connected: "Conectado",
         not_connected: "No conectado",
         no_config: "No hay ninguna base de datos Supabase configurada",
@@ -1278,18 +1307,15 @@ export const esMessages = {
       },
     },
     message: {
-      access_denied:
-        "No tienes permisos para acceder a esta página",
+      access_denied: "No tienes permisos para acceder a esta página",
       authentication_error:
         "El servidor de autenticación devolvió un error y no se pudieron verificar tus credenciales.",
-      auth_error:
-        "Ocurrió un error al validar el token de autenticación.",
+      auth_error: "Ocurrió un error al validar el token de autenticación.",
       bulk_update_content:
         "¿Seguro que deseas actualizar %{name} %{recordRepresentation}? |||| ¿Seguro que deseas actualizar estos %{smart_count} elementos?",
       bulk_update_title:
         "Actualizar %{name} %{recordRepresentation} |||| Actualizar %{smart_count} %{name}",
-      clear_array_input:
-        "¿Seguro que deseas borrar toda la lista?",
+      clear_array_input: "¿Seguro que deseas borrar toda la lista?",
       details: "Detalles",
       error:
         "Se produjo un error del cliente y no se pudo completar tu solicitud.",
@@ -1329,10 +1355,8 @@ export const esMessages = {
         "Error del dataProvider. Revisa la consola para más detalles.",
       i18n_error:
         "No se pueden cargar las traducciones para el idioma especificado",
-      logged_out:
-        "Tu sesión ha finalizado, por favor vuelve a iniciar sesión.",
-      not_authorized:
-        "No estás autorizado para acceder a este recurso.",
+      logged_out: "Tu sesión ha finalizado, por favor vuelve a iniciar sesión.",
+      not_authorized: "No estás autorizado para acceder a este recurso.",
       application_update_available: "Hay una nueva versión disponible.",
       offline: "Sin conectividad. No se pudieron obtener los datos.",
     },
@@ -1345,7 +1369,7 @@ export const esMessages = {
       new_label: "Guardar consulta actual...",
       new_dialog_title: "Guardar consulta actual como",
       remove_label: "Eliminar consulta guardada",
-      remove_label_with_name: "Eliminar consulta \"%{name}\"",
+      remove_label_with_name: 'Eliminar consulta "%{name}"',
       remove_dialog_title: "¿Eliminar consulta guardada?",
       remove_message:
         "¿Seguro que quieres eliminar ese elemento de tu lista de consultas guardadas?",
@@ -1385,7 +1409,8 @@ export const esMessages = {
     },
     reset_password: {
       forgot_password: "¿Olvidó su contraseña?",
-      forgot_password_details: "Ingrese su correo electrónico para recibir un código de 6 dígitos.",
+      forgot_password_details:
+        "Ingrese su correo electrónico para recibir un código de 6 dígitos.",
     },
   },
 };

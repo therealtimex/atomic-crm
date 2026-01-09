@@ -29,7 +29,7 @@ Deno.serve(async (req: Request) => {
       req.method,
       429,
       Date.now() - startTime,
-      req
+      req,
     );
     return rateLimitError;
   }
@@ -44,7 +44,7 @@ Deno.serve(async (req: Request) => {
         req.method,
         response.status,
         responseTime,
-        req
+        req,
       );
       return response;
     } else {
@@ -59,7 +59,7 @@ Deno.serve(async (req: Request) => {
       500,
       responseTime,
       req,
-      error.message
+      error.message,
     );
     return createErrorResponse(500, "Internal server error");
   }
@@ -102,23 +102,29 @@ async function createActivity(apiKey: any, req: Request) {
 
         // Generate unique filename
         const timestamp = Date.now();
-        const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
         const storagePath = `${timestamp}-${sanitizedName}`;
 
         // Upload to Supabase Storage using admin client (bypasses RLS)
-        const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
-          .from("attachments")
-          .upload(storagePath, file, {
-            contentType: file.type,
-            upsert: false,
-          });
+        const { data: uploadData, error: uploadError } =
+          await supabaseAdmin.storage
+            .from("attachments")
+            .upload(storagePath, file, {
+              contentType: file.type,
+              upsert: false,
+            });
 
         if (uploadError) {
-          return createErrorResponse(400, `File upload failed: ${uploadError.message}`);
+          return createErrorResponse(
+            400,
+            `File upload failed: ${uploadError.message}`,
+          );
         }
 
         // Get public URL
-        const { data: { publicUrl } } = supabaseAdmin.storage
+        const {
+          data: { publicUrl },
+        } = supabaseAdmin.storage
           .from("attachments")
           .getPublicUrl(uploadData.path);
 
@@ -134,7 +140,6 @@ async function createActivity(apiKey: any, req: Request) {
     if (uploadedFiles.length > 0) {
       noteData.attachments = uploadedFiles;
     }
-
   } else {
     // JSON body (backwards compatible)
     noteData = await req.json();
@@ -168,7 +173,7 @@ async function createActivity(apiKey: any, req: Request) {
     default:
       return createErrorResponse(
         400,
-        "Invalid note type. Must be 'contact_note', 'company_note', 'deal_note', or 'task_note'. For tasks, use /api-v1-tasks endpoint."
+        "Invalid note type. Must be 'contact_note', 'company_note', 'deal_note', or 'task_note'. For tasks, use /api-v1-tasks endpoint.",
       );
   }
 

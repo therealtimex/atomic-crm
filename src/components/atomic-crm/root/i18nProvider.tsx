@@ -13,7 +13,11 @@ import { esMessages } from "@/i18n/es";
 import { viMessages } from "@/i18n/vi";
 import { jaMessages } from "@/i18n/ja";
 import { koMessages } from "@/i18n/ko";
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES, normalizeLocale } from "@/i18n/locales";
+import {
+  DEFAULT_LOCALE,
+  SUPPORTED_LOCALES,
+  normalizeLocale,
+} from "@/i18n/locales";
 
 const raSupabaseEnglishMessagesOverride = {
   "ra-supabase": {

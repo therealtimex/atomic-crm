@@ -45,7 +45,9 @@ const Header = () => {
 
   // Check if a dialog is currently open (synchronous check to prevent flash)
   const checkDialogSync = () => {
-    const dialogOpen = document.querySelector('[role="dialog"][data-state="open"]');
+    const dialogOpen = document.querySelector(
+      '[role="dialog"][data-state="open"]',
+    );
     return !!dialogOpen;
   };
 
@@ -90,7 +92,11 @@ const Header = () => {
       <div className="px-4 sm:px-5 lg:px-6">
         <div className="flex justify-between items-center flex-1">
           <div className="flex items-center gap-2">
-            <Logo darkLogo={darkModeLogo} lightLogo={lightModeLogo} title={title} />
+            <Logo
+              darkLogo={darkModeLogo}
+              lightLogo={lightModeLogo}
+              title={title}
+            />
             {showBackButton && <BackButton />}
           </div>
 

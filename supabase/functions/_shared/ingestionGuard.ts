@@ -12,7 +12,8 @@ export async function validateIngestionRequest(req: Request) {
   const providerCode = url.searchParams.get("provider");
 
   // Check for ingestion key in header (preferred) or URL query param (backward compatibility)
-  const ingestionKey = req.headers.get("x-ingestion-key") || url.searchParams.get("key");
+  const ingestionKey =
+    req.headers.get("x-ingestion-key") || url.searchParams.get("key");
 
   // 1. Internal/Manual API Key (Bearer)
   const authHeader = req.headers.get("Authorization");
@@ -40,13 +41,20 @@ export async function validateIngestionRequest(req: Request) {
 
   // 3. Fallback: Identify by Query Param (Legacy/Public Webhooks)
   if (providerCode === "twilio") {
-      // In this case, we need to find WHICH Twilio config to use.
-      // Usually, we match by the 'To' phone number in the body, but that requires parsing the body first.
-      // For strict security, we REJECT requests without an ingestion_key in the URL.
-      return { error: createErrorResponse(401, "Missing 'key' parameter in webhook URL") };
+    // In this case, we need to find WHICH Twilio config to use.
+    // Usually, we match by the 'To' phone number in the body, but that requires parsing the body first.
+    // For strict security, we REJECT requests without an ingestion_key in the URL.
+    return {
+      error: createErrorResponse(401, "Missing 'key' parameter in webhook URL"),
+    };
   }
 
-  return { error: createErrorResponse(400, "Unknown Provider or Missing Authentication") };
+  return {
+    error: createErrorResponse(
+      400,
+      "Unknown Provider or Missing Authentication",
+    ),
+  };
 }
 
 /**
@@ -56,7 +64,7 @@ export async function validateIngestionRequest(req: Request) {
 export async function validateTwilioWebhook(
   req: Request,
   authToken: string,
-  body: Record<string, any>
+  body: Record<string, any>,
 ): Promise<boolean> {
   return await validateTwilioSignature(req, authToken, body);
 }
@@ -69,7 +77,7 @@ export async function validateTwilioWebhook(
 async function validateTwilioSignature(
   req: Request,
   authToken: string,
-  body: Record<string, any>
+  body: Record<string, any>,
 ): Promise<boolean> {
   const signature = req.headers.get("X-Twilio-Signature");
   if (!signature) return false;
@@ -97,10 +105,14 @@ async function validateTwilioSignature(
       keyData,
       { name: "HMAC", hash: "SHA-1" },
       false,
-      ["sign"]
+      ["sign"],
     );
 
-    const signatureBuffer = await crypto.subtle.sign("HMAC", cryptoKey, messageData);
+    const signatureBuffer = await crypto.subtle.sign(
+      "HMAC",
+      cryptoKey,
+      messageData,
+    );
 
     // 5. Convert to Base64
     const signatureArray = Array.from(new Uint8Array(signatureBuffer));

@@ -51,7 +51,8 @@ export function ActivityLogContactNoteCreated({
                   reference="contacts"
                   record={activity.contactNote}
                 >
-                  &nbsp;{translate("crm.activity.added_note_about")} <TextField source="first_name" />
+                  &nbsp;{translate("crm.activity.added_note_about")}{" "}
+                  <TextField source="first_name" />
                   &nbsp;
                   <TextField source="last_name" />
                 </ReferenceField>

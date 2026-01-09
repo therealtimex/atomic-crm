@@ -152,7 +152,9 @@ const ImageEditorDialog = (props: ImageEditorDialogProps) => {
       )}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{translate("crm.image_editor.dialog.title")}</DialogTitle>
+          <DialogTitle>
+            {translate("crm.image_editor.dialog.title")}
+          </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-2 justify-center">
           <div

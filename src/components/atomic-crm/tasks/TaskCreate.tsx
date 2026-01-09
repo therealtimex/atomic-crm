@@ -50,12 +50,7 @@ export const TaskCreate = () => {
 
   const translatedTaskStatuses = taskStatuses.map((status) => ({
     ...status,
-    name: translateChoice(
-      translate,
-      "crm.task.status",
-      status.id,
-      status.name,
-    ),
+    name: translateChoice(translate, "crm.task.status", status.id, status.name),
   }));
 
   const handleSuccess = async (task: Task) => {
@@ -150,10 +145,7 @@ export const TaskCreate = () => {
 
               {/* Rest of form fields in grid */}
               <div className="grid grid-cols-2 gap-4 mt-4">
-                <DateInput
-                  source="due_date"
-                  validate={required()}
-                />
+                <DateInput source="due_date" validate={required()} />
                 <SelectInput
                   source="type"
                   validate={required()}
@@ -164,10 +156,7 @@ export const TaskCreate = () => {
                   source="priority"
                   choices={translatedTaskPriorities}
                 />
-                <SelectInput
-                  source="status"
-                  choices={translatedTaskStatuses}
-                />
+                <SelectInput source="status" choices={translatedTaskStatuses} />
                 <ReferenceInput source="assigned_to" reference="sales">
                   <SelectInput
                     optionText={(record) =>

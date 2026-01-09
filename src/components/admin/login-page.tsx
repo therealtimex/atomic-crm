@@ -61,8 +61,16 @@ export const LoginPage = (props: { redirectTo?: string }) => {
       <div className="container relative flex flex-col items-center justify-center lg:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <div className="relative hidden h-full flex-col bg-muted p-10 dark:border-r lg:flex overflow-hidden">
           <div className="relative z-20 flex items-center text-lg font-medium">
-            <img className="[.dark_&]:hidden h-6 mr-2" src={lightModeLogo} alt={title} />
-            <img className="[.light_&]:hidden h-6 mr-2" src={darkModeLogo} alt={title} />
+            <img
+              className="[.dark_&]:hidden h-6 mr-2"
+              src={lightModeLogo}
+              alt={title}
+            />
+            <img
+              className="[.light_&]:hidden h-6 mr-2"
+              src={darkModeLogo}
+              alt={title}
+            />
             {title}
           </div>
           <div className="relative z-10 flex-1 flex items-center justify-center">

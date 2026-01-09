@@ -22,7 +22,7 @@ Deno.serve(async () => {
   console.log(`Processing ${queueItems.length} webhook deliveries`);
 
   const results = await Promise.allSettled(
-    queueItems.map((item) => deliverWebhook(item))
+    queueItems.map((item) => deliverWebhook(item)),
   );
 
   const successful = results.filter((r) => r.status === "fulfilled").length;
@@ -30,7 +30,7 @@ Deno.serve(async () => {
 
   return new Response(
     JSON.stringify({ processed: queueItems.length, successful, failed }),
-    { headers: { "Content-Type": "application/json" } }
+    { headers: { "Content-Type": "application/json" } },
   );
 });
 
@@ -47,7 +47,7 @@ async function deliverWebhook(queueItem: any) {
     const payloadString = JSON.stringify(queueItem.payload);
     const signature = await generateWebhookSignature(
       webhook.secret,
-      payloadString
+      payloadString,
     );
 
     const headers: Record<string, string> = {
@@ -101,8 +101,9 @@ async function deliverWebhook(queueItem: any) {
       // Exponential backoff: 1min, 5min, 15min
       const retryDelays = [60, 300, 900];
       const delaySeconds = retryDelays[newAttempts - 1] || 900;
-      const nextRetry = new Date(Date.now() + delaySeconds * 1000)
-        .toISOString();
+      const nextRetry = new Date(
+        Date.now() + delaySeconds * 1000,
+      ).toISOString();
 
       await supabaseAdmin
         .from("webhook_queue")

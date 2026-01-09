@@ -22,9 +22,5 @@ export const TaskPriorityBadge = ({ priority }: { priority?: string }) => {
     priority,
   );
 
-  return (
-    <Badge className={cn(colorClass)}>
-      {label}
-    </Badge>
-  );
+  return <Badge className={cn(colorClass)}>{label}</Badge>;
 };

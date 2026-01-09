@@ -40,9 +40,7 @@ it("should return gravatar URL for anthony@marmelab.com", async () => {
   fetchResponses[gravatarUrl] = true;
 
   const avatarUrl = await getContactAvatar(record);
-  expect(avatarUrl).toBe(
-    gravatarUrl,
-  );
+  expect(avatarUrl).toBe(gravatarUrl);
 });
 
 it("should return favicon URL if gravatar does not exist", async () => {

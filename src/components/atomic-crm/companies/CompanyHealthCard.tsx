@@ -80,7 +80,7 @@ export const CompanyHealthCard = () => {
               {formatDistance(
                 new Date(record.internal_heartbeat_updated_at),
                 new Date(),
-                { 
+                {
                   addSuffix: true,
                   locale: getDateFnsLocale(locale),
                 },
@@ -112,7 +112,7 @@ export const CompanyHealthCard = () => {
               {formatDistance(
                 new Date(record.external_heartbeat_checked_at),
                 new Date(),
-                { 
+                {
                   addSuffix: true,
                   locale: getDateFnsLocale(locale),
                 },

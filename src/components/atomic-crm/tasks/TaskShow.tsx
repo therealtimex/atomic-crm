@@ -1,4 +1,9 @@
-import { ShowBase, useLocaleState, useShowContext, useTranslate } from "ra-core";
+import {
+  ShowBase,
+  useLocaleState,
+  useShowContext,
+  useTranslate,
+} from "ra-core";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReferenceManyField } from "@/components/admin/reference-many-field";
 import { Calendar } from "lucide-react";
@@ -38,31 +43,36 @@ const TaskShowContent = () => {
           <CardContent>
             {/* Task Header */}
             <div className="mb-6">
-              <h5 className="text-xl font-semibold mb-3">{typeLabel || record.type}</h5>
+              <h5 className="text-xl font-semibold mb-3">
+                {typeLabel || record.type}
+              </h5>
               <div className="flex gap-3 mb-4">
                 <TaskStatusBadge status={record.status} />
                 <TaskPriorityBadge priority={record.priority} />
               </div>
-              {record.due_date && (() => {
-                const dueDate = parseLocalDate(record.due_date);
-                if (!dueDate) return null;
-                const relativeDue = formatDistance(dueDate, new Date(), {
-                  addSuffix: true,
-                  locale: dateFnsLocale,
-                });
+              {record.due_date &&
+                (() => {
+                  const dueDate = parseLocalDate(record.due_date);
+                  if (!dueDate) return null;
+                  const relativeDue = formatDistance(dueDate, new Date(), {
+                    addSuffix: true,
+                    locale: dateFnsLocale,
+                  });
 
-                return (
-                  <div className="flex items-center gap-2 mb-3 text-sm">
-                    <Calendar className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">
-                      {translate("crm.task.due.relative", { time: relativeDue })}
-                    </span>
-                    <span className="text-muted-foreground">
-                      ({dueDate.toLocaleDateString(locale ?? undefined)})
-                    </span>
-                  </div>
-                );
-              })()}
+                  return (
+                    <div className="flex items-center gap-2 mb-3 text-sm">
+                      <Calendar className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-muted-foreground">
+                        {translate("crm.task.due.relative", {
+                          time: relativeDue,
+                        })}
+                      </span>
+                      <span className="text-muted-foreground">
+                        ({dueDate.toLocaleDateString(locale ?? undefined)})
+                      </span>
+                    </div>
+                  );
+                })()}
               {record.text && (
                 <p className="text-sm text-muted-foreground whitespace-pre-line">
                   {record.text}
@@ -93,7 +103,9 @@ const TaskShowContent = () => {
                 reference="taskNotes"
                 target="task_id"
                 sort={{ field: "date", order: "DESC" }}
-                empty={<NoteCreate reference="tasks" showStatus className="mt-4" />}
+                empty={
+                  <NoteCreate reference="tasks" showStatus className="mt-4" />
+                }
               >
                 <NotesIterator reference="tasks" showStatus />
               </ReferenceManyField>

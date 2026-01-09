@@ -6,7 +6,8 @@ import { DocumentViewer } from "../misc/DocumentViewer";
 import { Button } from "@/components/ui/button";
 
 export const NoteAttachments = ({ note }: { note: ContactNote | DealNote }) => {
-  const [selectedAttachment, setSelectedAttachment] = useState<AttachmentNote | null>(null);
+  const [selectedAttachment, setSelectedAttachment] =
+    useState<AttachmentNote | null>(null);
 
   if (!note.attachments || note.attachments.length === 0) {
     return null;
@@ -40,7 +41,10 @@ export const NoteAttachments = ({ note }: { note: ContactNote | DealNote }) => {
       )}
       {otherAttachments.length > 0 &&
         otherAttachments.map((attachment: AttachmentNote, index: number) => (
-          <div key={index} className="flex items-center justify-between gap-2 p-2 hover:bg-muted/50 rounded-md transition-colors group">
+          <div
+            key={index}
+            className="flex items-center justify-between gap-2 p-2 hover:bg-muted/50 rounded-md transition-colors group"
+          >
             <button
               onClick={() => setSelectedAttachment(attachment)}
               className="flex items-center gap-2 overflow-hidden cursor-pointer text-left hover:text-primary transition-colors flex-1 min-w-0"

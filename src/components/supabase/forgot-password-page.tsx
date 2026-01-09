@@ -12,13 +12,13 @@ interface EmailFormData {
   email: string;
 }
 
-type Step = 'email' | 'otp';
+type Step = "email" | "otp";
 
 export const ForgotPasswordPage = () => {
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState<Step>('email');
-  const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
+  const [step, setStep] = useState<Step>("email");
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
   const [otpError, setOtpError] = useState(false);
 
   const notify = useNotify();
@@ -42,8 +42,8 @@ export const ForgotPasswordPage = () => {
         throw error;
       }
 
-      notify(translate("crm.auth.code_sent"), { type: 'success' });
-      setStep('otp');
+      notify(translate("crm.auth.code_sent"), { type: "success" });
+      setStep("otp");
     } catch (error: any) {
       notify(
         typeof error === "string"
@@ -79,7 +79,7 @@ export const ForgotPasswordPage = () => {
       const { data, error } = await supabase.auth.verifyOtp({
         email: email.trim().toLowerCase(), // Normalize email
         token: cleanOtp,
-        type: 'magiclink', // Changed from 'email' - some Supabase versions treat OTP as magiclink
+        type: "magiclink", // Changed from 'email' - some Supabase versions treat OTP as magiclink
       });
 
       if (error) {
@@ -87,14 +87,16 @@ export const ForgotPasswordPage = () => {
       }
 
       if (!data.session) {
-        throw new Error('Failed to create session');
+        throw new Error("Failed to create session");
       }
 
       // User is now logged in, redirect to change password page
-      notify(translate("crm.auth.forgot_password_code_verified"), { type: 'success' });
+      notify(translate("crm.auth.forgot_password_code_verified"), {
+        type: "success",
+      });
 
       // Navigate to change password page with reload
-      window.location.href = '#/change-password';
+      window.location.href = "#/change-password";
       window.location.reload();
     } catch (error: any) {
       setOtpError(true);
@@ -126,14 +128,14 @@ export const ForgotPasswordPage = () => {
   };
 
   const handleResendCode = async () => {
-    setOtp('');
+    setOtp("");
     setOtpError(false);
     await submitEmail({ email });
   };
 
   return (
     <Layout>
-      {step === 'email' ? (
+      {step === "email" ? (
         <>
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">
@@ -153,7 +155,11 @@ export const ForgotPasswordPage = () => {
               autoComplete="email"
               validate={required()}
             />
-            <Button type="submit" className="cursor-pointer w-full" disabled={loading}>
+            <Button
+              type="submit"
+              className="cursor-pointer w-full"
+              disabled={loading}
+            >
               {translate("crm.auth.send_code")}
             </Button>
           </Form>
@@ -199,7 +205,9 @@ export const ForgotPasswordPage = () => {
                 disabled={loading || otp.length !== 6}
                 onClick={() => verifyOtp(otp)}
               >
-                {loading ? translate("crm.auth.verifying") : translate("crm.auth.verify_code")}
+                {loading
+                  ? translate("crm.auth.verifying")
+                  : translate("crm.auth.verify_code")}
               </Button>
               <Button
                 type="button"
@@ -216,8 +224,8 @@ export const ForgotPasswordPage = () => {
                 className="cursor-pointer w-full"
                 disabled={loading}
                 onClick={() => {
-                  setStep('email');
-                  setOtp('');
+                  setStep("email");
+                  setOtp("");
                   setOtpError(false);
                 }}
               >

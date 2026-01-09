@@ -1,5 +1,22 @@
-import { Calendar, Building2, UserCircle, UserCheck, Pencil, Briefcase, Check, Clock } from "lucide-react";
-import { useRecordContext, useUpdate, useCreate, useNotify, useGetIdentity, useLocaleState, useTranslate } from "ra-core";
+import {
+  Calendar,
+  Building2,
+  UserCircle,
+  UserCheck,
+  Pencil,
+  Briefcase,
+  Check,
+  Clock,
+} from "lucide-react";
+import {
+  useRecordContext,
+  useUpdate,
+  useCreate,
+  useNotify,
+  useGetIdentity,
+  useLocaleState,
+  useTranslate,
+} from "ra-core";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/admin/delete-button";
@@ -49,7 +66,7 @@ export const TaskAside = () => {
         onError: (error) => {
           console.error("Failed to create task note:", error);
         },
-      }
+      },
     );
   };
 
@@ -67,10 +84,12 @@ export const TaskAside = () => {
       },
       {
         onSuccess: () => {
-          notify(translate("crm.task.notification.marked_complete"), { type: "success" });
+          notify(translate("crm.task.notification.marked_complete"), {
+            type: "success",
+          });
           createTaskNote(translate("crm.task.note.marked_complete"));
         },
-      }
+      },
     );
   };
 
@@ -108,7 +127,9 @@ export const TaskAside = () => {
           noteText = translate("crm.task.note.snoozed_to_date", {
             date: tomorrow.toLocaleDateString(locale),
           });
-          notificationText = translate("crm.task.notification.snoozed_tomorrow");
+          notificationText = translate(
+            "crm.task.notification.snoozed_tomorrow",
+          );
         } else {
           // Add 1 day to the due date
           const newDueDate = new Date(dueDate);
@@ -137,7 +158,7 @@ export const TaskAside = () => {
           notify(notificationText, { type: "success" });
           createTaskNote(noteText);
         },
-      }
+      },
     );
   };
 
@@ -233,7 +254,11 @@ export const TaskAside = () => {
             icon={<Building2 className="w-4 h-4 text-muted-foreground" />}
             label={translate("crm.filter.company")}
             value={
-              <ReferenceField source="company_id" reference="companies" link="show">
+              <ReferenceField
+                source="company_id"
+                reference="companies"
+                link="show"
+              >
                 <TextField source="name" />
               </ReferenceField>
             }
@@ -262,7 +287,11 @@ export const TaskAside = () => {
           icon={<UserCheck className="w-4 h-4 text-muted-foreground" />}
           label={translate("crm.task.field.assigned_to")}
           value={
-            <ReferenceField source="assigned_to" reference="sales" link={false} />
+            <ReferenceField
+              source="assigned_to"
+              reference="sales"
+              link={false}
+            />
           }
         />
         <InfoRow

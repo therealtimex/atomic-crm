@@ -9,9 +9,12 @@ import packageJson from "./package.json";
 // Get latest migration timestamp at build time
 function getLatestMigrationTimestamp() {
   try {
-    const timestamp = execSync("node ./scripts/get-latest-migration-timestamp.mjs", {
-      encoding: "utf8",
-    }).trim();
+    const timestamp = execSync(
+      "node ./scripts/get-latest-migration-timestamp.mjs",
+      {
+        encoding: "utf8",
+      },
+    ).trim();
     return timestamp;
   } catch {
     console.warn("Warning: Could not determine latest migration timestamp");
@@ -35,7 +38,9 @@ export default defineConfig({
   ],
   define: {
     "import.meta.env.VITE_APP_VERSION": JSON.stringify(packageJson.version),
-    "import.meta.env.VITE_LATEST_MIGRATION_TIMESTAMP": JSON.stringify(getLatestMigrationTimestamp()),
+    "import.meta.env.VITE_LATEST_MIGRATION_TIMESTAMP": JSON.stringify(
+      getLatestMigrationTimestamp(),
+    ),
     "import.meta.env.VITE_IS_DEMO": JSON.stringify("true"),
     "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(
       process.env.VITE_SUPABASE_URL ?? "https://demo.example.org",

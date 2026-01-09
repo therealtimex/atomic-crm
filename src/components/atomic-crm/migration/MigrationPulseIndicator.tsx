@@ -5,14 +5,14 @@
  * Provides a subtle, persistent reminder without being intrusive.
  */
 
-import { AlertTriangle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { AlertTriangle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
+} from "@/components/ui/tooltip";
 
 interface MigrationPulseIndicatorProps {
   /** Callback when user clicks the indicator */

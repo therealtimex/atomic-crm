@@ -70,7 +70,11 @@ function EditHeader() {
       <DialogTitle className="pb-0">
         <div className="flex justify-between items-start mb-8">
           <div className="flex items-center gap-4">
-            <ReferenceField source="company_id" reference="companies" link="show">
+            <ReferenceField
+              source="company_id"
+              reference="companies"
+              link="show"
+            >
               <CompanyAvatar />
             </ReferenceField>
             <h2 className="text-2xl font-semibold">Edit {deal.name} deal</h2>
@@ -84,7 +88,8 @@ function EditHeader() {
         </div>
       </DialogTitle>
       <DialogDescription className="sr-only">
-        Edit deal information including name, company, contacts, and other details
+        Edit deal information including name, company, contacts, and other
+        details
       </DialogDescription>
     </>
   );

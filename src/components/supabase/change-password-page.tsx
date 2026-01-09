@@ -104,8 +104,14 @@ export const ChangePasswordPage = () => {
           autoComplete="new-password"
           validate={required()}
         />
-        <Button type="submit" className="cursor-pointer w-full" disabled={loading}>
-          {loading ? translate("crm.auth.updating_password") : translate("crm.auth.update_password")}
+        <Button
+          type="submit"
+          className="cursor-pointer w-full"
+          disabled={loading}
+        >
+          {loading
+            ? translate("crm.auth.updating_password")
+            : translate("crm.auth.update_password")}
         </Button>
       </Form>
       <div className="text-center">

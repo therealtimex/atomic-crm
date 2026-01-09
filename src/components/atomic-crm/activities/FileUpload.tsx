@@ -52,7 +52,7 @@ export const FileUpload = () => {
       filter: { is_active: true },
       pagination: { page: 1, perPage: 100 },
       sort: { field: "created_at", order: "DESC" },
-    }
+    },
   );
 
   // Auto-select first provider when data loads
@@ -106,7 +106,7 @@ export const FileUpload = () => {
         return {
           code: "dangerous-file",
           message: translate(
-            "crm.integrations.file_upload.notification.error_dangerous"
+            "crm.integrations.file_upload.notification.error_dangerous",
           ),
         };
       }
@@ -119,9 +119,12 @@ export const FileUpload = () => {
     const provider = providers.find((p) => p.id === selectedProvider);
 
     if (!provider) {
-      notify(translate("crm.integrations.file_upload.notification.select_channel"), {
-        type: "error",
-      });
+      notify(
+        translate("crm.integrations.file_upload.notification.select_channel"),
+        {
+          type: "error",
+        },
+      );
       return;
     }
 
@@ -131,8 +134,8 @@ export const FileUpload = () => {
     // Update status to uploading
     setFiles((prev) =>
       prev.map((f, i) =>
-        i === index ? { ...f, status: "uploading", progress: 0 } : f
-      )
+        i === index ? { ...f, status: "uploading", progress: 0 } : f,
+      ),
     );
 
     try {
@@ -149,7 +152,7 @@ export const FileUpload = () => {
         if (e.lengthComputable) {
           const progress = Math.round((e.loaded / e.total) * 100);
           setFiles((prev) =>
-            prev.map((f, i) => (i === index ? { ...f, progress } : f))
+            prev.map((f, i) => (i === index ? { ...f, progress } : f)),
           );
         }
       });
@@ -160,15 +163,20 @@ export const FileUpload = () => {
           setFiles((prev) =>
             prev.map((f, i) =>
               i === index
-                ? { ...f, status: "success", progress: 100, activityId: response.id }
-                : f
-            )
+                ? {
+                    ...f,
+                    status: "success",
+                    progress: 100,
+                    activityId: response.id,
+                  }
+                : f,
+            ),
           );
           notify(
             translate("crm.integrations.file_upload.notification.success", {
               name: fileToUpload.file.name,
             }),
-            { type: "success" }
+            { type: "success" },
           );
         } else {
           throw new Error(`Upload failed with status ${xhr.status}`);
@@ -183,17 +191,17 @@ export const FileUpload = () => {
                   ...f,
                   status: "error",
                   error: translate(
-                    "crm.integrations.file_upload.notification.error_network"
+                    "crm.integrations.file_upload.notification.error_network",
                   ),
                 }
-              : f
-          )
+              : f,
+          ),
         );
         notify(
           translate("crm.integrations.file_upload.notification.error", {
             name: fileToUpload.file.name,
           }),
-          { type: "error" }
+          { type: "error" },
         );
       });
 
@@ -204,14 +212,14 @@ export const FileUpload = () => {
     } catch (error) {
       setFiles((prev) =>
         prev.map((f, i) =>
-          i === index ? { ...f, status: "error", error: String(error) } : f
-        )
+          i === index ? { ...f, status: "error", error: String(error) } : f,
+        ),
       );
       notify(
         translate("crm.integrations.file_upload.notification.error", {
           name: fileToUpload.file.name,
         }),
-        { type: "error" }
+        { type: "error" },
       );
     }
   };
@@ -242,7 +250,9 @@ export const FileUpload = () => {
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>{translate("crm.integrations.file_upload.title")}</CardTitle>
+          <CardTitle>
+            {translate("crm.integrations.file_upload.title")}
+          </CardTitle>
           <CardDescription>
             {translate("crm.integrations.file_upload.description")}
           </CardDescription>
@@ -252,13 +262,18 @@ export const FileUpload = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="provider">
-                {translate("crm.integrations.file_upload.fields.ingestion_channel")}
+                {translate(
+                  "crm.integrations.file_upload.fields.ingestion_channel",
+                )}
               </Label>
-              <Select value={selectedProvider} onValueChange={setSelectedProvider}>
+              <Select
+                value={selectedProvider}
+                onValueChange={setSelectedProvider}
+              >
                 <SelectTrigger id="provider">
                   <SelectValue
                     placeholder={translate(
-                      "crm.integrations.file_upload.fields.select_channel"
+                      "crm.integrations.file_upload.fields.select_channel",
                     )}
                   />
                 </SelectTrigger>
@@ -323,10 +338,14 @@ export const FileUpload = () => {
             ) : (
               <>
                 <p className="text-lg font-medium mb-2">
-                  {translate("crm.integrations.file_upload.action.drag_and_drop")}
+                  {translate(
+                    "crm.integrations.file_upload.action.drag_and_drop",
+                  )}
                 </p>
                 <p className="text-sm text-gray-500">
-                  {translate("crm.integrations.file_upload.action.supports_all")}
+                  {translate(
+                    "crm.integrations.file_upload.action.supports_all",
+                  )}
                 </p>
               </>
             )}
@@ -337,9 +356,12 @@ export const FileUpload = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <h3 className="font-medium">
-                  {translate("crm.integrations.file_upload.fields.files_count", {
-                    count: files.length,
-                  })}
+                  {translate(
+                    "crm.integrations.file_upload.fields.files_count",
+                    {
+                      count: files.length,
+                    },
+                  )}
                 </h3>
                 <div className="space-x-2">
                   <Button
@@ -347,7 +369,9 @@ export const FileUpload = () => {
                     onClick={uploadAll}
                     disabled={!files.some((f) => f.status === "pending")}
                   >
-                    {translate("crm.integrations.file_upload.action.upload_all")}
+                    {translate(
+                      "crm.integrations.file_upload.action.upload_all",
+                    )}
                   </Button>
                   <Button
                     size="sm"
@@ -356,7 +380,7 @@ export const FileUpload = () => {
                     disabled={!files.some((f) => f.status === "success")}
                   >
                     {translate(
-                      "crm.integrations.file_upload.action.clear_completed"
+                      "crm.integrations.file_upload.action.clear_completed",
                     )}
                   </Button>
                 </div>
@@ -386,7 +410,9 @@ export const FileUpload = () => {
                       <div className="flex items-center gap-2 flex-shrink-0">
                         {fileItem.status === "pending" && (
                           <Button size="sm" onClick={() => uploadFile(index)}>
-                            {translate("crm.integrations.file_upload.action.upload")}
+                            {translate(
+                              "crm.integrations.file_upload.action.upload",
+                            )}
                           </Button>
                         )}
                         {fileItem.status === "uploading" && (

@@ -141,7 +141,7 @@ export function ActivityLogIterator({
                       {page}
                     </PaginationLink>
                   </PaginationItem>
-                )
+                ),
               )}
 
               <PaginationItem>

@@ -1,7 +1,10 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { supabaseAdmin } from "../_shared/supabaseAdmin.ts";
 import { createErrorResponse, corsHeaders } from "../_shared/utils.ts";
-import { validateIngestionRequest, validateTwilioWebhook } from "../_shared/ingestionGuard.ts";
+import {
+  validateIngestionRequest,
+  validateTwilioWebhook,
+} from "../_shared/ingestionGuard.ts";
 
 /**
  * Sanitize filename to remove special characters that break storage paths
@@ -9,21 +12,21 @@ import { validateIngestionRequest, validateTwilioWebhook } from "../_shared/inge
  */
 function sanitizeFilename(filename: string): string {
   // Get file extension
-  const lastDotIndex = filename.lastIndexOf('.');
-  const name = lastDotIndex > 0 ? filename.substring(0, lastDotIndex) : filename;
-  const ext = lastDotIndex > 0 ? filename.substring(lastDotIndex) : '';
+  const lastDotIndex = filename.lastIndexOf(".");
+  const name =
+    lastDotIndex > 0 ? filename.substring(0, lastDotIndex) : filename;
+  const ext = lastDotIndex > 0 ? filename.substring(lastDotIndex) : "";
 
   // Replace special characters with underscores, keep alphanumeric and basic punctuation
   const safeName = name
-    .replace(/[^a-zA-Z0-9._-]/g, '_')  // Replace unsafe chars with underscore
-    .replace(/_+/g, '_')                // Collapse multiple underscores
-    .replace(/^_|_$/g, '');             // Remove leading/trailing underscores
+    .replace(/[^a-zA-Z0-9._-]/g, "_") // Replace unsafe chars with underscore
+    .replace(/_+/g, "_") // Collapse multiple underscores
+    .replace(/^_|_$/g, ""); // Remove leading/trailing underscores
 
   // Limit length to avoid path issues (200 chars for name + extension)
   const maxLength = 200 - ext.length;
-  const truncatedName = safeName.length > maxLength
-    ? safeName.substring(0, maxLength)
-    : safeName;
+  const truncatedName =
+    safeName.length > maxLength ? safeName.substring(0, maxLength) : safeName;
 
   return truncatedName + ext;
 }
@@ -44,11 +47,19 @@ Deno.serve(async (req) => {
     // 2. Parse Body based on Content-Type
     const contentType = req.headers.get("content-type") || "";
     let rawBody: any;
-    const uploadedFiles: Array<{ fieldName: string; storagePath: string; size: number; type: string }> = [];
+    const uploadedFiles: Array<{
+      fieldName: string;
+      storagePath: string;
+      size: number;
+      type: string;
+    }> = [];
 
     if (contentType.includes("application/json")) {
       rawBody = await req.json();
-    } else if (contentType.includes("application/x-www-form-urlencoded") || contentType.includes("multipart/form-data")) {
+    } else if (
+      contentType.includes("application/x-www-form-urlencoded") ||
+      contentType.includes("multipart/form-data")
+    ) {
       const formData = await req.formData();
       rawBody = {};
 
@@ -64,18 +75,23 @@ Deno.serve(async (req) => {
           const sanitizedName = sanitizeFilename(file.name);
           const storagePath = `incoming/${timestamp}_${sanitizedName}`;
 
-          console.log(`Uploading file: ${file.name} → ${sanitizedName} (${file.size} bytes, ${file.type})`);
+          console.log(
+            `Uploading file: ${file.name} → ${sanitizedName} (${file.size} bytes, ${file.type})`,
+          );
 
           const { error: uploadError } = await supabaseAdmin.storage
-            .from('activity-payloads')
+            .from("activity-payloads")
             .upload(storagePath, file, {
-              contentType: file.type || 'application/octet-stream',
+              contentType: file.type || "application/octet-stream",
               upsert: false,
             });
 
           if (uploadError) {
             console.error(`Failed to upload file ${file.name}:`, uploadError);
-            return createErrorResponse(500, `File upload failed: ${uploadError.message}`);
+            return createErrorResponse(
+              500,
+              `File upload failed: ${uploadError.message}`,
+            );
           }
 
           console.log(`File uploaded successfully: ${storagePath}`);
@@ -85,12 +101,12 @@ Deno.serve(async (req) => {
             fieldName: key,
             storagePath,
             size: file.size,
-            type: file.type || 'application/octet-stream',
+            type: file.type || "application/octet-stream",
           });
 
           // Add storage reference to rawBody
           rawBody[key] = {
-            _type: 'file_ref',
+            _type: "file_ref",
             storage_path: storagePath,
             filename: file.name,
             size: file.size,
@@ -107,7 +123,11 @@ Deno.serve(async (req) => {
 
     // 2.5. Validate Twilio Signature (after body is parsed)
     if (provider.provider_code === "twilio" && provider.config?.auth_token) {
-      const isValid = await validateTwilioWebhook(req, provider.config.auth_token, rawBody);
+      const isValid = await validateTwilioWebhook(
+        req,
+        provider.config.auth_token,
+        rawBody,
+      );
       if (!isValid) {
         console.error("Invalid Twilio signature");
         return createErrorResponse(401, "Invalid Twilio Signature");
@@ -139,7 +159,8 @@ Deno.serve(async (req) => {
         metadata: activityMetadata,
         provider_id: provider.id,
         sales_id: provider.sales_id, // Auto-assign if provider has an owner
-        payload_storage_status: uploadedFiles.length > 0 ? 'in_storage' : undefined, // Files uploaded directly to storage
+        payload_storage_status:
+          uploadedFiles.length > 0 ? "in_storage" : undefined, // Files uploaded directly to storage
       })
       .select()
       .single();
@@ -147,14 +168,16 @@ Deno.serve(async (req) => {
     if (error) {
       console.error("DB Insert Error:", error);
       console.error("Error details:", JSON.stringify(error, null, 2));
-      return createErrorResponse(500, `Failed to persist activity: ${error.message || JSON.stringify(error)}`);
+      return createErrorResponse(
+        500,
+        `Failed to persist activity: ${error.message || JSON.stringify(error)}`,
+      );
     }
 
     return new Response(JSON.stringify({ success: true, id: data.id }), {
       status: 202, // Accepted
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-
   } catch (err) {
     console.error("Ingestion Error:", err);
     return createErrorResponse(500, "Internal Server Error");
@@ -211,8 +234,11 @@ function normalizeActivity(providerCode: string, payload: any) {
     type = payload.type || "note";
 
     // Check if payload contains file references from multipart upload
-    const fileFields = Object.entries(payload).filter(([_, value]) =>
-      typeof value === 'object' && value !== null && value._type === 'file_ref'
+    const fileFields = Object.entries(payload).filter(
+      ([_, value]) =>
+        typeof value === "object" &&
+        value !== null &&
+        value._type === "file_ref",
     );
 
     if (fileFields.length > 0) {
@@ -245,14 +271,17 @@ function normalizeActivity(providerCode: string, payload: any) {
       metadata = {
         ...payload.metadata,
         form_data: Object.fromEntries(
-          Object.entries(payload).filter(([key]) =>
-            !key.startsWith('_') && typeof payload[key] !== 'object'
-          )
+          Object.entries(payload).filter(
+            ([key]) => !key.startsWith("_") && typeof payload[key] !== "object",
+          ),
         ),
       };
     } else {
       // Regular JSON payload
-      raw_data = payload.raw_data || { source_type: "text", content: JSON.stringify(payload) };
+      raw_data = payload.raw_data || {
+        source_type: "text",
+        content: JSON.stringify(payload),
+      };
       metadata = payload.metadata || {};
     }
   }

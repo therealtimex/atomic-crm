@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useDataProvider, useNotify, useGetIdentity, useTranslate } from "ra-core";
+import {
+  useDataProvider,
+  useNotify,
+  useGetIdentity,
+  useTranslate,
+} from "ra-core";
 import { useForm } from "react-hook-form";
 import { generateApiKey } from "@/lib/api-key-utils";
 import { Button } from "@/components/ui/button";
@@ -82,14 +87,23 @@ export const WebhooksTab = () => {
       setWebhookToDelete(null);
     },
     onError: () => {
-      notify(translate("crm.integrations.webhooks.notification.error_deleting"), {
-        type: "error",
-      });
+      notify(
+        translate("crm.integrations.webhooks.notification.error_deleting"),
+        {
+          type: "error",
+        },
+      );
     },
   });
 
   const toggleMutation = useMutation({
-    mutationFn: async ({ id, is_active }: { id: number; is_active: boolean }) => {
+    mutationFn: async ({
+      id,
+      is_active,
+    }: {
+      id: number;
+      is_active: boolean;
+    }) => {
       await dataProvider.update("webhooks", {
         id,
         data: { is_active },
@@ -101,9 +115,12 @@ export const WebhooksTab = () => {
       notify(translate("crm.integrations.webhooks.notification.updated"));
     },
     onError: () => {
-      notify(translate("crm.integrations.webhooks.notification.error_updating"), {
-        type: "error",
-      });
+      notify(
+        translate("crm.integrations.webhooks.notification.error_updating"),
+        {
+          type: "error",
+        },
+      );
     },
   });
 
@@ -336,9 +353,12 @@ const CreateWebhookDialog = ({
       onClose();
     },
     onError: () => {
-      notify(translate("crm.integrations.webhooks.notification.error_creating"), {
-        type: "error",
-      });
+      notify(
+        translate("crm.integrations.webhooks.notification.error_creating"),
+        {
+          type: "error",
+        },
+      );
     },
   });
 
@@ -347,7 +367,7 @@ const CreateWebhookDialog = ({
     if (currentEvents.includes(event)) {
       setValue(
         "events",
-        currentEvents.filter((e) => e !== event)
+        currentEvents.filter((e) => e !== event),
       );
     } else {
       setValue("events", [...currentEvents, event]);
@@ -360,13 +380,16 @@ const CreateWebhookDialog = ({
   };
 
   // Group events by category
-  const eventsByCategory = AVAILABLE_EVENTS.reduce((acc, event) => {
-    if (!acc[event.category]) {
-      acc[event.category] = [];
-    }
-    acc[event.category].push(event);
-    return acc;
-  }, {} as Record<string, typeof AVAILABLE_EVENTS>);
+  const eventsByCategory = AVAILABLE_EVENTS.reduce(
+    (acc, event) => {
+      if (!acc[event.category]) {
+        acc[event.category] = [];
+      }
+      acc[event.category].push(event);
+      return acc;
+    },
+    {} as Record<string, typeof AVAILABLE_EVENTS>,
+  );
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -391,7 +414,7 @@ const CreateWebhookDialog = ({
               <Input
                 id="name"
                 placeholder={translate(
-                  "crm.integrations.webhooks.placeholder.name"
+                  "crm.integrations.webhooks.placeholder.name",
                 )}
                 {...register("name", { required: true })}
               />
@@ -405,19 +428,23 @@ const CreateWebhookDialog = ({
                 id="url"
                 type="url"
                 placeholder={translate(
-                  "crm.integrations.webhooks.placeholder.url"
+                  "crm.integrations.webhooks.placeholder.url",
                 )}
                 {...register("url", { required: true })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label>{translate("crm.integrations.webhooks.fields.events")}</Label>
+              <Label>
+                {translate("crm.integrations.webhooks.fields.events")}
+              </Label>
               <div className="space-y-3 max-h-60 overflow-y-auto border rounded-md p-3">
                 {Object.entries(eventsByCategory).map(([category, events]) => (
                   <div key={category}>
                     <p className="text-sm font-semibold mb-2">
-                      {translate(`crm.integrations.webhooks.categories.${category}`)}
+                      {translate(
+                        `crm.integrations.webhooks.categories.${category}`,
+                      )}
                     </p>
                     <div className="space-y-2 ml-2">
                       {events.map((event) => (
@@ -435,7 +462,7 @@ const CreateWebhookDialog = ({
                             className="text-sm cursor-pointer"
                           >
                             {translate(
-                              `crm.integrations.webhooks.events.${event.value}`
+                              `crm.integrations.webhooks.events.${event.value}`,
                             )}
                           </label>
                         </div>
@@ -511,9 +538,12 @@ const EditWebhookDialog = ({
       onClose();
     },
     onError: () => {
-      notify(translate("crm.integrations.webhooks.notification.error_updating"), {
-        type: "error",
-      });
+      notify(
+        translate("crm.integrations.webhooks.notification.error_updating"),
+        {
+          type: "error",
+        },
+      );
     },
   });
 
@@ -522,7 +552,7 @@ const EditWebhookDialog = ({
     if (currentEvents.includes(event)) {
       setValue(
         "events",
-        currentEvents.filter((e) => e !== event)
+        currentEvents.filter((e) => e !== event),
       );
     } else {
       setValue("events", [...currentEvents, event]);
@@ -535,13 +565,16 @@ const EditWebhookDialog = ({
   };
 
   // Group events by category
-  const eventsByCategory = AVAILABLE_EVENTS.reduce((acc, event) => {
-    if (!acc[event.category]) {
-      acc[event.category] = [];
-    }
-    acc[event.category].push(event);
-    return acc;
-  }, {} as Record<string, typeof AVAILABLE_EVENTS>);
+  const eventsByCategory = AVAILABLE_EVENTS.reduce(
+    (acc, event) => {
+      if (!acc[event.category]) {
+        acc[event.category] = [];
+      }
+      acc[event.category].push(event);
+      return acc;
+    },
+    {} as Record<string, typeof AVAILABLE_EVENTS>,
+  );
 
   if (!webhook) return null;
 
@@ -568,7 +601,7 @@ const EditWebhookDialog = ({
               <Input
                 id="edit-name"
                 placeholder={translate(
-                  "crm.integrations.webhooks.placeholder.name"
+                  "crm.integrations.webhooks.placeholder.name",
                 )}
                 {...register("name", { required: true })}
               />
@@ -582,19 +615,23 @@ const EditWebhookDialog = ({
                 id="edit-url"
                 type="url"
                 placeholder={translate(
-                  "crm.integrations.webhooks.placeholder.url"
+                  "crm.integrations.webhooks.placeholder.url",
                 )}
                 {...register("url", { required: true })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label>{translate("crm.integrations.webhooks.fields.events")}</Label>
+              <Label>
+                {translate("crm.integrations.webhooks.fields.events")}
+              </Label>
               <div className="space-y-3 max-h-60 overflow-y-auto border rounded-md p-3">
                 {Object.entries(eventsByCategory).map(([category, events]) => (
                   <div key={category}>
                     <p className="text-sm font-semibold mb-2">
-                      {translate(`crm.integrations.webhooks.categories.${category}`)}
+                      {translate(
+                        `crm.integrations.webhooks.categories.${category}`,
+                      )}
                     </p>
                     <div className="space-y-2 ml-2">
                       {events.map((event) => (
@@ -612,7 +649,7 @@ const EditWebhookDialog = ({
                             className="text-sm cursor-pointer"
                           >
                             {translate(
-                              `crm.integrations.webhooks.events.${event.value}`
+                              `crm.integrations.webhooks.events.${event.value}`,
                             )}
                           </label>
                         </div>

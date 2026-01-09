@@ -49,9 +49,12 @@ export const ApiKeysTab = () => {
       setKeyToDelete(null);
     },
     onError: () => {
-      notify(translate("crm.integrations.api_keys.notification.error_deleting"), {
-        type: "error",
-      });
+      notify(
+        translate("crm.integrations.api_keys.notification.error_deleting"),
+        {
+          type: "error",
+        },
+      );
     },
   });
 
@@ -156,7 +159,7 @@ const ApiKeyCard = ({
     } catch {
       notify(
         translate("crm.integrations.api_keys.notification.error_copying"),
-        { type: "error" }
+        { type: "error" },
       );
     }
   };

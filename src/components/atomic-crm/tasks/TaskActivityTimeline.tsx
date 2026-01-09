@@ -1,5 +1,10 @@
 import { formatDistance } from "date-fns";
-import { useGetList, useLocaleState, useRecordContext, useTranslate } from "ra-core";
+import {
+  useGetList,
+  useLocaleState,
+  useRecordContext,
+  useTranslate,
+} from "ra-core";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { AlertCircle } from "lucide-react";
 import { getDateFnsLocale } from "@/i18n/date-fns";
@@ -16,14 +21,15 @@ export const TaskActivityTimeline = ({
   const translate = useTranslate();
   const [locale] = useLocaleState();
   const dateFnsLocale = getDateFnsLocale(locale);
-  const { data: activities, isPending, total } = useGetList<TaskActivity>(
-    "task_activity",
-    {
-      filter: { task_id: taskId },
-      pagination: { page: 1, perPage: MAX_ACTIVITIES },
-      sort: { field: "created_at", order: "DESC" },
-    },
-  );
+  const {
+    data: activities,
+    isPending,
+    total,
+  } = useGetList<TaskActivity>("task_activity", {
+    filter: { task_id: taskId },
+    pagination: { page: 1, perPage: MAX_ACTIVITIES },
+    sort: { field: "created_at", order: "DESC" },
+  });
 
   if (isPending)
     return (
@@ -91,7 +97,10 @@ const SaleName = () => {
   );
 };
 
-const formatActivityMessage = (activity: TaskActivity, translate: Translate) => {
+const formatActivityMessage = (
+  activity: TaskActivity,
+  translate: Translate,
+) => {
   switch (activity.action) {
     case "created":
       return translate("crm.task.activity.created");

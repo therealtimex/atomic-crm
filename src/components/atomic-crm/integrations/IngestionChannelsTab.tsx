@@ -55,7 +55,7 @@ export const IngestionChannelsTab = () => {
     onError: () => {
       notify(
         translate("crm.integrations.ingestion.notification.error_deleting"),
-        { type: "error" }
+        { type: "error" },
       );
     },
   });
@@ -117,7 +117,9 @@ export const IngestionChannelsTab = () => {
               {translate("crm.integrations.ingestion.dialog.delete_title")}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {translate("crm.integrations.ingestion.dialog.delete_description")}
+              {translate(
+                "crm.integrations.ingestion.dialog.delete_description",
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

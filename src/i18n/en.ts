@@ -6,7 +6,8 @@ export const enMessages = {
     setup_wizard: {
       welcome: {
         title: "Welcome to %{title}",
-        description: "To get started, you'll need to connect to a Supabase database.",
+        description:
+          "To get started, you'll need to connect to a Supabase database.",
         no_project: "Don't have a Supabase project?",
         create_free: "Create one for free at",
         need_title: "What you'll need:",
@@ -26,7 +27,8 @@ export const enMessages = {
         url_must_be_supabase: "URL must be a Supabase domain",
         url_hint: "Enter full URL or project ID",
         url_expansion: "Will expand to: %{url}",
-        url_default_hint: "Enter full URL or just the project ID (from Project Settings → API)",
+        url_default_hint:
+          "Enter full URL or just the project ID (from Project Settings → API)",
         key_label: "API Key",
         key_placeholder: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
         key_valid_publishable: "Valid publishable key format",
@@ -34,7 +36,8 @@ export const enMessages = {
         key_incomplete_publishable: "Publishable key seems incomplete",
         key_incomplete_anon: "Anon key seems incomplete",
         key_invalid: "Must be a valid Supabase API key (anon or publishable)",
-        key_default_hint: "Anon or publishable key (from Project Settings → API)",
+        key_default_hint:
+          "Anon or publishable key (from Project Settings → API)",
         back: "Back",
         connect: "Connect",
         error_failed: "Connection failed",
@@ -131,7 +134,8 @@ export const enMessages = {
       welcome: {
         title: "Welcome",
         body_1: "is a full-featured CRM you can run locally.",
-        body_2: "It comes with contacts, companies, deals, and tasks out of the box.",
+        body_2:
+          "It comes with contacts, companies, deals, and tasks out of the box.",
         powered_by: "Powered by",
         fork_of: ", a fork of",
         by_marmelab: "by Marmelab.",
@@ -190,7 +194,8 @@ export const enMessages = {
         related: "Related",
         assignment: "Assignment",
         activity_timeline: "Activity Timeline",
-        activity_description: "Track all status changes and updates for this task",
+        activity_description:
+          "Track all status changes and updates for this task",
         notes: "Notes",
         notes_description: "Add notes and updates to this task",
       },
@@ -830,7 +835,8 @@ export const enMessages = {
           title: "How it works",
           step_1:
             "Files are uploaded directly to secure storage (no database bloat)",
-          step_2: "Each file creates an activity record for tracking and search",
+          step_2:
+            "Each file creates an activity record for tracking and search",
           step_3: "Large files are handled automatically (no size limits)",
           step_4: "Files are linked to your selected ingestion channel",
           step_5: "Activities appear in the Activity Feed immediately",
@@ -905,7 +911,8 @@ export const enMessages = {
         docx: "Failed to render DOCX content.",
         too_large: "File too large (max 50MB). Size: %{size}MB",
         not_available: "Preview not available for this file type.",
-        access: "Could not access the file. This may be due to a network issue, CORS restriction, or an expired link.",
+        access:
+          "Could not access the file. This may be due to a network issue, CORS restriction, or an expired link.",
         load: "Failed to load document preview.",
       },
       action: {
@@ -990,7 +997,8 @@ export const enMessages = {
         invite_error: "Failed to resend invitation email",
         reset_sent: "Password reset email sent successfully",
         reset_error: "Failed to send password reset email",
-        created: "User created. They will soon receive an email to set their password.",
+        created:
+          "User created. They will soon receive an email to set their password.",
         create_error: "An error occurred while creating the user.",
         updated: "User updated successfully",
         error: "An error occurred. Please try again.",
@@ -999,7 +1007,8 @@ export const enMessages = {
         resend_invitation: {
           title: "Resend Invitation",
           description: "Send a new invitation email to %{email}?",
-          fresh_link: "This will send them a fresh invitation link to set up their account.",
+          fresh_link:
+            "This will send them a fresh invitation link to set up their account.",
         },
         reset_password: {
           title: "Send Password Reset",
@@ -1020,7 +1029,8 @@ export const enMessages = {
       resend_code: "Resend code",
       back_to_email: "Back to email",
       back_to_login: "Back to login",
-      no_access: "You do not have access to this application. Please contact your administrator.",
+      no_access:
+        "You do not have access to this application. Please contact your administrator.",
       login_successful: "Login successful!",
       set_new_password: "Set new password",
       choose_password_details: "Choose a secure password for your account",
@@ -1030,7 +1040,8 @@ export const enMessages = {
       update_password: "Update password",
       updating_password: "Updating...",
       failed_to_update_password: "Failed to update password",
-      forgot_password_code_verified: "Code verified! Please set your new password.",
+      forgot_password_code_verified:
+        "Code verified! Please set your new password.",
       sign_in: "Sign in",
       login_otp_link: "Login with email code (OTP)",
       send_code: "Send code",

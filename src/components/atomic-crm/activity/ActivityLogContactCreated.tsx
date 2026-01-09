@@ -31,7 +31,11 @@ export function ActivityLogContactCreated({
             {contact.first_name}&nbsp;{contact.last_name}
           </Link>
           &nbsp;
-          {context !== "company" && <>{translate("crm.activity.to_company")} {activity.company_id}</>}
+          {context !== "company" && (
+            <>
+              {translate("crm.activity.to_company")} {activity.company_id}
+            </>
+          )}
         </span>
         {context === "company" && (
           <span className="text-muted-foreground text-sm">

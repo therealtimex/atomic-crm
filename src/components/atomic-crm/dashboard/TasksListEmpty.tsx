@@ -17,7 +17,5 @@ export const TasksListEmpty = () => {
 
   if (total) return null;
 
-  return (
-    <p className="text-sm">{translate("crm.dashboard.tasks_empty")}</p>
-  );
+  return <p className="text-sm">{translate("crm.dashboard.tasks_empty")}</p>;
 };

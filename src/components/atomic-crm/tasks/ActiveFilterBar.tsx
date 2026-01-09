@@ -16,8 +16,7 @@ import { useConfigurationContext } from "../root/ConfigurationContext";
  * Integrates with react-admin's filter system
  */
 export const ActiveFilterBar = () => {
-  const { filterValues, displayedFilters, setFilters } =
-    useListFilterContext();
+  const { filterValues, displayedFilters, setFilters } = useListFilterContext();
   const { identity } = useGetIdentity();
   const { taskStatuses, taskPriorities } = useConfigurationContext();
   const translate = useTranslate();
@@ -29,19 +28,19 @@ export const ActiveFilterBar = () => {
   const { data: contact } = useGetOne(
     "contacts",
     { id: filterValues.contact_id },
-    { enabled: !!filterValues.contact_id }
+    { enabled: !!filterValues.contact_id },
   );
 
   const { data: company } = useGetOne(
     "companies",
     { id: filterValues.company_id },
-    { enabled: !!filterValues.company_id }
+    { enabled: !!filterValues.company_id },
   );
 
   const { data: deal } = useGetOne(
     "deals",
     { id: filterValues.deal_id },
-    { enabled: !!filterValues.deal_id }
+    { enabled: !!filterValues.deal_id },
   );
 
   // Remove a filter
@@ -118,7 +117,10 @@ export const ActiveFilterBar = () => {
   // Check if a filter is active (not default)
   const isActiveFilter = (key: string, value: unknown): boolean => {
     // Skip if it's a default filter with default value
-    if (key in defaultFilters && defaultFilters[key as keyof typeof defaultFilters] === value) {
+    if (
+      key in defaultFilters &&
+      defaultFilters[key as keyof typeof defaultFilters] === value
+    ) {
       return false;
     }
     // Skip if value is undefined, null, or empty string
@@ -130,7 +132,7 @@ export const ActiveFilterBar = () => {
 
   // Get list of active filters
   const activeFilters = Object.entries(filterValues).filter(([key, value]) =>
-    isActiveFilter(key, value)
+    isActiveFilter(key, value),
   );
 
   // Don't render if no active filters

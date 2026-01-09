@@ -42,9 +42,13 @@ export const generateTasks = (db: Db) => {
     // Randomly choose entity type: contact (60%), company (20%), deal (15%), none (5%)
     const entityTypeRandom = Math.random();
     const entityType =
-      entityTypeRandom < 0.60 ? "contact" :
-      entityTypeRandom < 0.80 ? "company" :
-      entityTypeRandom < 0.95 ? "deal" : "none";
+      entityTypeRandom < 0.6
+        ? "contact"
+        : entityTypeRandom < 0.8
+          ? "company"
+          : entityTypeRandom < 0.95
+            ? "deal"
+            : "none";
 
     let contact_id = null;
     let company_id = null;
@@ -77,7 +81,8 @@ export const generateTasks = (db: Db) => {
     }
 
     const creator = db.sales.find((s) => s.id === sales_id);
-    const baseDate = contact?.first_seen || new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
+    const baseDate =
+      contact?.first_seen || new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
 
     const createdDate = randomDate(new Date(baseDate)).toISOString();
     const dueDate = randomDate(
@@ -86,7 +91,9 @@ export const generateTasks = (db: Db) => {
     ).toISOString();
 
     const isDone = datatype.boolean();
-    const doneDate = isDone ? randomDate(new Date(createdDate)).toISOString() : undefined;
+    const doneDate = isDone
+      ? randomDate(new Date(createdDate)).toISOString()
+      : undefined;
 
     return {
       id,

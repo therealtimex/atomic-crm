@@ -1,6 +1,6 @@
-import { useRef, useState, KeyboardEvent, ClipboardEvent } from 'react';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import { useRef, useState, KeyboardEvent, ClipboardEvent } from "react";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 interface OtpInputProps {
   length?: number;
@@ -24,13 +24,13 @@ export function OtpInput({
 
   const handleChange = (index: number, inputValue: string) => {
     // Only allow digits
-    const digit = inputValue.replace(/[^0-9]/g, '');
+    const digit = inputValue.replace(/[^0-9]/g, "");
 
     if (digit.length === 0) {
       // Handle backspace/delete
-      const newValue = value.split('');
-      newValue[index] = '';
-      const updatedValue = newValue.join('');
+      const newValue = value.split("");
+      newValue[index] = "";
+      const updatedValue = newValue.join("");
       onChange(updatedValue);
 
       // Move to previous input
@@ -41,9 +41,9 @@ export function OtpInput({
     }
 
     // Update the value at the current index
-    const newValue = value.split('');
+    const newValue = value.split("");
     newValue[index] = digit[0];
-    const updatedValue = newValue.join('');
+    const updatedValue = newValue.join("");
     onChange(updatedValue);
 
     // Move to next input if not the last one
@@ -58,20 +58,20 @@ export function OtpInput({
   };
 
   const handleKeyDown = (index: number, e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !value[index] && index > 0) {
+    if (e.key === "Backspace" && !value[index] && index > 0) {
       // If current input is empty and backspace is pressed, move to previous
       inputRefs.current[index - 1]?.focus();
-    } else if (e.key === 'ArrowLeft' && index > 0) {
+    } else if (e.key === "ArrowLeft" && index > 0) {
       inputRefs.current[index - 1]?.focus();
-    } else if (e.key === 'ArrowRight' && index < length - 1) {
+    } else if (e.key === "ArrowRight" && index < length - 1) {
       inputRefs.current[index + 1]?.focus();
     }
   };
 
   const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const pastedData = e.clipboardData.getData('text/plain');
-    const digits = pastedData.replace(/[^0-9]/g, '').slice(0, length);
+    const pastedData = e.clipboardData.getData("text/plain");
+    const digits = pastedData.replace(/[^0-9]/g, "").slice(0, length);
 
     onChange(digits);
 
@@ -96,7 +96,7 @@ export function OtpInput({
           type="text"
           inputMode="numeric"
           maxLength={1}
-          value={value[index] || ''}
+          value={value[index] || ""}
           onChange={(e) => handleChange(index, e.target.value)}
           onKeyDown={(e) => handleKeyDown(index, e)}
           onPaste={handlePaste}
@@ -104,9 +104,9 @@ export function OtpInput({
           onBlur={() => setFocusedIndex(null)}
           disabled={disabled}
           className={cn(
-            'w-12 h-12 text-center text-lg font-semibold',
-            error && 'border-destructive focus-visible:ring-destructive',
-            focusedIndex === index && 'ring-2 ring-ring'
+            "w-12 h-12 text-center text-lg font-semibold",
+            error && "border-destructive focus-visible:ring-destructive",
+            focusedIndex === index && "ring-2 ring-ring",
           )}
           aria-label={`Digit ${index + 1}`}
         />

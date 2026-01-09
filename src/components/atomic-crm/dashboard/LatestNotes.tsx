@@ -1,6 +1,11 @@
 import { formatDistance } from "date-fns";
 import { FileText } from "lucide-react";
-import { useGetIdentity, useGetList, useLocaleState, useTranslate } from "ra-core";
+import {
+  useGetIdentity,
+  useGetList,
+  useLocaleState,
+  useTranslate,
+} from "ra-core";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ReferenceField } from "@/components/admin/reference-field";

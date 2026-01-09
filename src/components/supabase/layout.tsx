@@ -17,8 +17,16 @@ export const Layout = ({ children }: React.PropsWithChildren) => {
             to="/"
             className="relative z-20 flex items-center text-lg font-medium no-underline text-foreground hover:opacity-80 transition-opacity"
           >
-            <img className="[.dark_&]:hidden h-6 mr-2" src={lightModeLogo} alt={title} />
-            <img className="[.light_&]:hidden h-6 mr-2" src={darkModeLogo} alt={title} />
+            <img
+              className="[.dark_&]:hidden h-6 mr-2"
+              src={lightModeLogo}
+              alt={title}
+            />
+            <img
+              className="[.light_&]:hidden h-6 mr-2"
+              src={darkModeLogo}
+              alt={title}
+            />
             {title}
           </Link>
           <div className="relative z-10 flex-1 flex items-center justify-center">

@@ -31,10 +31,7 @@ export const DealEmpty = ({ children }: { children?: ReactNode }) => {
         height: `calc(100dvh - ${appbarHeight}px)`,
       }}
     >
-      <img
-        src="./img/empty.svg"
-        alt={translate("crm.deal.empty.title")}
-      />
+      <img src="./img/empty.svg" alt={translate("crm.deal.empty.title")} />
       {contacts && contacts.length > 0 ? (
         <>
           <div className="flex flex-col items-center gap-0">

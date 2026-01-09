@@ -5,15 +5,15 @@
  * Non-blocking: allows users to continue using the app while showing the reminder.
  */
 
-import { useState } from 'react';
-import { AlertTriangle, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
-import { useTranslate } from 'ra-core';
+import { useState } from "react";
+import { AlertTriangle, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useTranslate } from "ra-core";
 import {
   dismissMigrationReminder,
   type MigrationStatus,
-} from '@/lib/migration-check';
+} from "@/lib/migration-check";
 
 interface MigrationBannerProps {
   /** Migration status from checkMigrationStatus */
@@ -45,8 +45,8 @@ export function MigrationBanner({
       onLearnMore();
     } else {
       // Fallback: copy command
-      navigator.clipboard.writeText('npx realtimex-crm migrate');
-      toast.success(translate('crm.migration.banner.command_copied'));
+      navigator.clipboard.writeText("npx realtimex-crm migrate");
+      toast.success(translate("crm.migration.banner.command_copied"));
     }
   };
 
@@ -58,7 +58,7 @@ export function MigrationBanner({
           <div className="flex-1 space-y-2">
             <div className="flex items-start justify-between gap-2">
               <p className="text-sm font-medium text-yellow-900 dark:text-yellow-100">
-                {translate('crm.migration.banner.title')}
+                {translate("crm.migration.banner.title")}
               </p>
               <Button
                 size="icon"
@@ -68,12 +68,12 @@ export function MigrationBanner({
               >
                 <X className="h-3 w-3" />
                 <span className="sr-only">
-                  {translate('crm.migration.banner.dismiss')}
+                  {translate("crm.migration.banner.dismiss")}
                 </span>
               </Button>
             </div>
             <p className="text-xs text-yellow-800 dark:text-yellow-200">
-              {translate('crm.migration.banner.subtitle', {
+              {translate("crm.migration.banner.subtitle", {
                 version: status.appVersion,
               })}
             </p>
@@ -84,7 +84,7 @@ export function MigrationBanner({
                 className="h-7 text-xs bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600"
                 onClick={handleClick}
               >
-                {translate('crm.migration.banner.view_details')}
+                {translate("crm.migration.banner.view_details")}
               </Button>
               <Button
                 size="sm"
@@ -92,7 +92,7 @@ export function MigrationBanner({
                 className="h-7 text-xs text-yellow-900 hover:bg-yellow-100 dark:text-yellow-100 dark:hover:bg-yellow-900/30"
                 onClick={handleDismiss}
               >
-                {translate('crm.migration.banner.later')}
+                {translate("crm.migration.banner.later")}
               </Button>
             </div>
           </div>

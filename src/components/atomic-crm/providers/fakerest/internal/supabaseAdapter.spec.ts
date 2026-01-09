@@ -275,9 +275,9 @@ describe("getList", () => {
     const { getList: getListAdapter } =
       withSupabaseFilterAdapter(mockDataProvider);
 
-    await expect(getListAdapter("resource", { filter: { id: 1 } })).resolves.toEqual([
-      { id: 1 },
-    ]);
+    await expect(
+      getListAdapter("resource", { filter: { id: 1 } }),
+    ).resolves.toEqual([{ id: 1 }]);
 
     expect(getList).toHaveBeenCalledWith("resource", {
       filter: { id: 1 },

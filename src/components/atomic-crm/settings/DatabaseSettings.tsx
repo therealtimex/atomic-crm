@@ -57,7 +57,9 @@ export function DatabaseSettings() {
                   {config.configuredAt && (
                     <p className="text-xs text-muted-foreground">
                       {translate("crm.settings.database.configured_on", {
-                        date: new Date(config.configuredAt).toLocaleDateString(),
+                        date: new Date(
+                          config.configuredAt,
+                        ).toLocaleDateString(),
                       })}
                     </p>
                   )}

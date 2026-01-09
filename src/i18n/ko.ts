@@ -26,7 +26,8 @@ export const koMessages = {
         url_must_be_supabase: "URL은 Supabase 도메인이어야 합니다",
         url_hint: "전체 URL 또는 프로젝트 ID 입력",
         url_expansion: "%{url}로 확장됩니다",
-        url_default_hint: "전체 URL 또는 프로젝트 ID만 입력하세요 (프로젝트 설정 → API)",
+        url_default_hint:
+          "전체 URL 또는 프로젝트 ID만 입력하세요 (프로젝트 설정 → API)",
         key_label: "API 키",
         key_placeholder: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
         key_valid_publishable: "유효한 publishable 키 형식",
@@ -507,11 +508,11 @@ export const koMessages = {
         title: "가져오기",
         description: "CSV 파일에서 연락처 가져오기",
         running: "가져오기가 실행 중입니다. 이 탭을 닫지 마세요.",
-        status: "%{total}개 중 %{count}개 연락처를 가져왔습니다(오류: %{errors}개)",
+        status:
+          "%{total}개 중 %{count}개 연락처를 가져왔습니다(오류: %{errors}개)",
         remaining_time: "예상 남은 시간: %{time}",
         stop: "가져오기 중단",
-        error:
-          "가져오기에 실패했습니다. 올바른 CSV 파일인지 확인하세요.",
+        error: "가져오기에 실패했습니다. 올바른 CSV 파일인지 확인하세요.",
         complete:
           "연락처 가져오기가 완료되었습니다. %{count}개를 가져왔습니다(오류: %{errors}개)",
         template_hint: "템플릿으로 사용할 수 있는 샘플 CSV 파일입니다",
@@ -667,7 +668,8 @@ export const koMessages = {
         webhooks: "웹훅 (아웃바운드)",
       },
       webhooks: {
-        description: "웹훅은 CRM에서 이벤트가 발생할 때 외부 시스템에 알림을 보냅니다.",
+        description:
+          "웹훅은 CRM에서 이벤트가 발생할 때 외부 시스템에 알림을 보냅니다.",
         action: {
           create: "웹훅 생성",
           create_first: "첫 번째 웹훅 생성",
@@ -740,7 +742,8 @@ export const koMessages = {
         },
       },
       api_keys: {
-        description: "API 키를 사용하면 외부 애플리케이션에서 CRM 데이터에 프로그래밍 방식으로 액세스할 수 있습니다.",
+        description:
+          "API 키를 사용하면 외부 애플리케이션에서 CRM 데이터에 프로그래밍 방식으로 액세스할 수 있습니다.",
         action: {
           create: "API 키 생성",
           create_first: "첫 번째 API 키 생성",
@@ -763,9 +766,11 @@ export const koMessages = {
         },
         dialog: {
           create_title: "API 키 생성",
-          create_description: "CRM API에 액세스하기 위한 새 API 키를 생성합니다",
+          create_description:
+            "CRM API에 액세스하기 위한 새 API 키를 생성합니다",
           created_title: "API 키 생성됨",
-          created_description: "지금 이 키를 복사하십시오 - 다시는 표시되지 않습니다!",
+          created_description:
+            "지금 이 키를 복사하십시오 - 다시는 표시되지 않습니다!",
           delete_title: "API 키를 삭제하시겠습니까?",
           delete_description:
             "이 API 키를 영구적으로 삭제합니다. 이 키를 사용하는 모든 애플리케이션이 즉시 작동을 멈춥니다. 이 작업은 되돌릴 수 없습니다.",
@@ -819,7 +824,8 @@ export const koMessages = {
         },
         how_it_works: {
           title: "작동 방식",
-          step_1: "파일이 보안 저장소에 직접 업로드됩니다 (데이터베이스 비대화 방지)",
+          step_1:
+            "파일이 보안 저장소에 직접 업로드됩니다 (데이터베이스 비대화 방지)",
           step_2: "각 파일은 추적 및 검색을 위한 활동 기록을 생성합니다",
           step_3: "대용량 파일은 자동으로 처리됩니다 (크기 제한 없음)",
           step_4: "파일이 선택한 인입 채널에 연결됩니다",
@@ -836,7 +842,8 @@ export const koMessages = {
       },
       ingestion: {
         title: "인입 채널",
-        description: "CRM으로 활동을 가져오기 위한 인입 채널(이메일, 음성, SMS)을 구성합니다.",
+        description:
+          "CRM으로 활동을 가져오기 위한 인입 채널(이메일, 음성, SMS)을 구성합니다.",
         action: {
           create: "채널 생성",
           add: "인입 채널 추가",
@@ -860,7 +867,8 @@ export const koMessages = {
           placeholder_token: "Twilio 인증 토큰",
           select_provider: "제공자 선택",
           delete_title: "채널을 삭제하시겠습니까?",
-          delete_description: "이 소스에서의 모든 수집이 중단됩니다. 이 작업은 되돌릴 수 없습니다.",
+          delete_description:
+            "이 소스에서의 모든 수집이 중단됩니다. 이 작업은 되돌릴 수 없습니다.",
         },
         providers: {
           twilio: "Twilio (음성/SMS)",
@@ -892,7 +900,8 @@ export const koMessages = {
         docx: "DOCX 콘텐츠 렌더링에 실패했습니다.",
         too_large: "파일이 너무 큽니다 (최대 50MB). 크기: %{size}MB",
         not_available: "이 파일 형식의 미리보기를 사용할 수 없습니다.",
-        access: "파일에 액세스할 수 없습니다. 네트워크 문제, CORS 제한 또는 만료된 링크일 수 있습니다.",
+        access:
+          "파일에 액세스할 수 없습니다. 네트워크 문제, CORS 제한 또는 만료된 링크일 수 있습니다.",
         load: "문서 미리보기를 불러오지 못했습니다.",
       },
       action: {
@@ -977,7 +986,8 @@ export const koMessages = {
         invite_error: "초대 이메일 재전송에 실패했습니다",
         reset_sent: "비밀번호 재설정 이메일이 성공적으로 전송되었습니다",
         reset_error: "비밀번호 재설정 이메일 전송에 실패했습니다",
-        created: "사용자가 생성되었습니다. 곧 비밀번호 설정을 위한 이메일이 전송됩니다.",
+        created:
+          "사용자가 생성되었습니다. 곧 비밀번호 설정을 위한 이메일이 전송됩니다.",
         create_error: "사용자 생성 중 오류가 발생했습니다.",
         updated: "사용자가 성공적으로 업데이트되었습니다",
         error: "오류가 발생했습니다. 다시 시도해 주세요.",
@@ -1001,13 +1011,15 @@ export const koMessages = {
       code_sent: "6자리 코드가 이메일로 발송되었습니다",
       enter_verification_code: "인증 코드 입력",
       code_sent_to: "%{email}로 6자리 코드를 보냈습니다",
-      invalid_code: "코드가 유효하지 않거나 만료되었습니다. 다시 시도해 주세요.",
+      invalid_code:
+        "코드가 유효하지 않거나 만료되었습니다. 다시 시도해 주세요.",
       verify_code: "코드 확인",
       verifying: "확인 중...",
       resend_code: "코드 재발송",
       back_to_email: "이메일 입력으로 돌아가기",
       back_to_login: "로그인으로 돌아가기",
-      no_access: "이 애플리케이션에 대한 접근 권한이 없습니다. 관리자에게 문의하세요.",
+      no_access:
+        "이 애플리케이션에 대한 접근 권한이 없습니다. 관리자에게 문의하세요.",
       login_successful: "로그인 성공!",
       set_new_password: "새 비밀번호 설정",
       choose_password_details: "계정의 안전한 비밀번호를 선택하세요",
@@ -1017,7 +1029,8 @@ export const koMessages = {
       update_password: "비밀번호 업데이트",
       updating_password: "업데이트 중...",
       failed_to_update_password: "비밀번호 업데이트 실패",
-      forgot_password_code_verified: "코드가 확인되었습니다! 새 비밀번호를 설정해 주세요.",
+      forgot_password_code_verified:
+        "코드가 확인되었습니다! 새 비밀번호를 설정해 주세요.",
       sign_in: "로그인",
       login_otp_link: "이메일 코드(OTP)로 로그인",
       send_code: "코드 발송",
@@ -1123,13 +1136,15 @@ export const koMessages = {
           title: "문제 해결:",
           logout_prefix: "로그인 실패 시",
           logout_suffix: "를 실행한 다음 다시 시도하세요",
-          password: "데이터베이스 비밀번호가 올바른지 확인하세요(Supabase 대시보드에서 확인)",
+          password:
+            "데이터베이스 비밀번호가 올바른지 확인하세요(Supabase 대시보드에서 확인)",
           report: "문제가 지속되면 다음에 제보하세요:",
           report_link: "GitHub Issues",
         },
         close: "닫기",
         copy: {
-          unsupported: "이 환경에서는 복사를 지원하지 않습니다 — 수동으로 복사하세요.",
+          unsupported:
+            "이 환경에서는 복사를 지원하지 않습니다 — 수동으로 복사하세요.",
           success: "클립보드에 복사했습니다!",
           error: "복사에 실패했습니다 — 수동으로 복사하세요.",
           copy_label: "복사",
@@ -1273,9 +1288,9 @@ export const koMessages = {
     },
     navigation: {
       clear_filters: "필터 지우기",
-      no_filtered_results:
-        "현재 필터로 %{name}를 찾을 수 없습니다.",
-      partial_page_range_info: "%{offsetBegin}-%{offsetEnd} / %{offsetEnd} 이상",
+      no_filtered_results: "현재 필터로 %{name}를 찾을 수 없습니다.",
+      partial_page_range_info:
+        "%{offsetBegin}-%{offsetEnd} / %{offsetEnd} 이상",
       current_page: "페이지 %{page}",
       page: "%{page} 페이지로 이동",
       first: "첫 페이지로 이동",
@@ -1307,10 +1322,9 @@ export const koMessages = {
       new_label: "현재 쿼리 저장...",
       new_dialog_title: "현재 쿼리를 다음 이름으로 저장",
       remove_label: "저장된 쿼리 삭제",
-      remove_label_with_name: "쿼리 \"%{name}\" 삭제",
+      remove_label_with_name: '쿼리 "%{name}" 삭제',
       remove_dialog_title: "저장된 쿼리를 삭제할까요?",
-      remove_message:
-        "저장된 쿼리 목록에서 이 항목을 삭제하시겠습니까?",
+      remove_message: "저장된 쿼리 목록에서 이 항목을 삭제하시겠습니까?",
       help: "목록을 필터링하고 이 쿼리를 저장해 나중에 사용하세요",
     },
     configurable: {

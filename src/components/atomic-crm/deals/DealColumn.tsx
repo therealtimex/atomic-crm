@@ -19,18 +19,11 @@ export const DealColumn = ({
   const translate = useTranslate();
   const rawLabel =
     dealStages.find((dealStage) => dealStage.value === stage)?.label || stage;
-  const label = translateChoice(
-    translate,
-    "crm.deal.stage",
-    stage,
-    rawLabel,
-  );
+  const label = translateChoice(translate, "crm.deal.stage", stage, rawLabel);
   return (
     <div className="flex-1 pb-8">
       <div className="flex flex-col items-center">
-        <h3 className="text-base font-medium">
-          {label}
-        </h3>
+        <h3 className="text-base font-medium">{label}</h3>
         <p className="text-sm text-muted-foreground">
           {totalAmount.toLocaleString("en-US", {
             notation: "compact",

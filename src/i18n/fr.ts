@@ -6,7 +6,8 @@ export const frMessages = {
     setup_wizard: {
       welcome: {
         title: "Bienvenue sur %{title}",
-        description: "Pour commencer, vous devez connecter une base de données Supabase.",
+        description:
+          "Pour commencer, vous devez connecter une base de données Supabase.",
         no_project: "Vous n'avez pas de projet Supabase ?",
         create_free: "Créez-en un gratuitement sur",
         need_title: "Ce dont vous aurez besoin :",
@@ -26,15 +27,18 @@ export const frMessages = {
         url_must_be_supabase: "L'URL doit être un domaine Supabase",
         url_hint: "Entrez l'URL complète ou l'ID de projet",
         url_expansion: "Sera étendu en : %{url}",
-        url_default_hint: "Entrez l'URL complète ou juste l'ID de projet (dans Paramètres du projet → API)",
+        url_default_hint:
+          "Entrez l'URL complète ou juste l'ID de projet (dans Paramètres du projet → API)",
         key_label: "Clé API",
         key_placeholder: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
         key_valid_publishable: "Format de clé publiable valide",
         key_valid_anon: "Format de clé anon valide",
         key_incomplete_publishable: "La clé publiable semble incomplète",
         key_incomplete_anon: "La clé anon semble incomplète",
-        key_invalid: "Doit être une clé API Supabase valide (anon ou publiable)",
-        key_default_hint: "Clé anon ou publiable (dans Paramètres du projet → API)",
+        key_invalid:
+          "Doit être une clé API Supabase valide (anon ou publiable)",
+        key_default_hint:
+          "Clé anon ou publiable (dans Paramètres du projet → API)",
         back: "Retour",
         connect: "Se connecter",
         error_failed: "Échec de la connexion",
@@ -194,7 +198,8 @@ export const frMessages = {
         activity_description:
           "Suivez tous les changements de statut et mises à jour de cette tâche",
         notes: "Notes",
-        notes_description: "Ajoutez des notes et des mises à jour à cette tâche",
+        notes_description:
+          "Ajoutez des notes et des mises à jour à cette tâche",
       },
       related: {
         none: "Aucun élément lié",
@@ -513,7 +518,8 @@ export const frMessages = {
       import: {
         title: "Importer",
         description: "Importer des contacts depuis un fichier CSV",
-        running: "L'importation est en cours, veuillez ne pas fermer cet onglet.",
+        running:
+          "L'importation est en cours, veuillez ne pas fermer cet onglet.",
         status: "Importé %{count} / %{total} contacts, avec %{errors} erreurs.",
         remaining_time: "Temps restant estimé : %{time}.",
         stop: "Arrêter l'importation",
@@ -521,7 +527,8 @@ export const frMessages = {
           "Échec de l'importation de ce fichier, veuillez vous assurer d'avoir fourni un fichier CSV valide.",
         complete:
           "Importation des contacts terminée. %{count} contacts importés, avec %{errors} erreurs",
-        template_hint: "Voici un exemple de fichier CSV que vous pouvez utiliser comme modèle",
+        template_hint:
+          "Voici un exemple de fichier CSV que vous pouvez utiliser comme modèle",
         download_sample: "Télécharger l'exemple CSV",
         csv_file: "Fichier CSV",
       },
@@ -600,7 +607,8 @@ export const frMessages = {
         invalid_url: "Doit être une URL valide",
       },
       notification: {
-        error_creating: "Une erreur est survenue lors de la création de l'entreprise",
+        error_creating:
+          "Une erreur est survenue lors de la création de l'entreprise",
       },
       filter: {
         me: "Moi",
@@ -765,7 +773,8 @@ export const frMessages = {
           created: "Créée le : %{date}",
           last_used: "Dernière utilisation : %{date}",
           expires: "Expire le : %{date}",
-          key_hint: "Cliquez sur copier pour obtenir la clé complète non masquée",
+          key_hint:
+            "Cliquez sur copier pour obtenir la clé complète non masquée",
           not_available: "Clé API non disponible pour la copie",
           scopes: "Portées",
           expiration: "Expiration (facultatif)",
@@ -773,9 +782,11 @@ export const frMessages = {
         },
         dialog: {
           create_title: "Créer une clé API",
-          create_description: "Créer une nouvelle clé API pour accéder à l'API CRM",
+          create_description:
+            "Créer une nouvelle clé API pour accéder à l'API CRM",
           created_title: "Clé API créée",
-          created_description: "Copiez cette clé maintenant - elle ne sera plus affichée !",
+          created_description:
+            "Copiez cette clé maintenant - elle ne sera plus affichée !",
           delete_title: "Supprimer la clé API ?",
           delete_description:
             "Ceci supprimera définitivement cette clé API. Toutes les applications utilisant cette clé cesseront de fonctionner immédiatement. Cette action est irréversible.",
@@ -813,7 +824,8 @@ export const frMessages = {
           upload_all: "Tout télécharger",
           clear_completed: "Effacer les terminés",
           drop_files: "Déposez les fichiers ici...",
-          drag_and_drop: "Faites glisser et déposez des fichiers ici, ou cliquez pour sélectionner",
+          drag_and_drop:
+            "Faites glisser et déposez des fichiers ici, ou cliquez pour sélectionner",
           supports_all:
             "Prend en charge tous les types de fichiers (exécutables bloqués pour la sécurité)",
         },
@@ -834,10 +846,13 @@ export const frMessages = {
           title: "Comment ça marche",
           step_1:
             "Les fichiers sont téléchargés directement sur un stockage sécurisé (pas d'encombrement de la base de données)",
-          step_2: "Chaque fichier crée un enregistrement d'activité pour le suivi et la recherche",
-          step_3: "Les fichiers volumineux sont gérés automatiquement (aucune limite de taille)",
+          step_2:
+            "Chaque fichier crée un enregistrement d'activité pour le suivi et la recherche",
+          step_3:
+            "Les fichiers volumineux sont gérés automatiquement (aucune limite de taille)",
           step_4: "Les fichiers sont liés au canal d'ingestion sélectionné",
-          step_5: "Les activités apparaissent immédiatement dans le flux d'activité",
+          step_5:
+            "Les activités apparaissent immédiatement dans le flux d'activité",
         },
         notification: {
           select_channel: "Veuillez sélectionner un canal d'ingestion",
@@ -867,7 +882,8 @@ export const frMessages = {
           created: "Créé le : %{date}",
         },
         dialog: {
-          create_description: "Configurer une nouvelle source pour les activités entrantes.",
+          create_description:
+            "Configurer une nouvelle source pour les activités entrantes.",
           name_label: "Nom du canal",
           provider_label: "Fournisseur",
           token_label: "Jeton d'authentification (Validation)",
@@ -900,7 +916,8 @@ export const frMessages = {
       },
       dialog: {
         title: "Télécharger et redimensionner l'image",
-        dropzone: "Déposez un fichier pour le télécharger, ou cliquez pour le sélectionner.",
+        dropzone:
+          "Déposez un fichier pour le télécharger, ou cliquez pour le sélectionner.",
       },
       alt: "Contenu modifiable",
     },
@@ -909,7 +926,8 @@ export const frMessages = {
         docx: "Échec du rendu du contenu DOCX.",
         too_large: "Fichier trop volumineux (max 50Mo). Taille : %{size}Mo",
         not_available: "Aperçu non disponible pour ce type de fichier.",
-        access: "Impossible d'accéder au fichier. Cela peut être dû à un problème réseau, une restriction CORS ou un lien expiré.",
+        access:
+          "Impossible d'accéder au fichier. Cela peut être dû à un problème réseau, une restriction CORS ou un lien expiré.",
         load: "Échec du chargement de l'aperçu du document.",
       },
       action: {
@@ -994,8 +1012,10 @@ export const frMessages = {
         invite_error: "Échec du renvoi de l'e-mail d'invitation",
         reset_sent: "E-mail de réinitialisation envoyé avec succès",
         reset_error: "Échec de l'envoi de l'e-mail de réinitialisation",
-        created: "Utilisateur créé. Il recevra bientôt un e-mail pour définir son mot de passe.",
-        create_error: "Une erreur est survenue lors de la création de l'utilisateur.",
+        created:
+          "Utilisateur créé. Il recevra bientôt un e-mail pour définir son mot de passe.",
+        create_error:
+          "Une erreur est survenue lors de la création de l'utilisateur.",
         updated: "Utilisateur mis à jour avec succès",
         error: "Une erreur est survenue. Veuillez réessayer.",
       },
@@ -1003,18 +1023,21 @@ export const frMessages = {
         resend_invitation: {
           title: "Renvoyer l'invitation",
           description: "Envoyer un nouvel e-mail d'invitation à %{email} ?",
-          fresh_link: "Cela lui enverra un nouveau lien d'invitation pour configurer son compte.",
+          fresh_link:
+            "Cela lui enverra un nouveau lien d'invitation pour configurer son compte.",
         },
         reset_password: {
           title: "Réinitialiser le mot de passe",
           description: "Envoyer un e-mail de réinitialisation à %{email} ?",
-          reset_link: "Cela lui enverra un lien pour réinitialiser son mot de passe.",
+          reset_link:
+            "Cela lui enverra un lien pour réinitialiser son mot de passe.",
         },
       },
     },
     auth: {
       login_with_code: "Se connecter avec un code",
-      enter_email_for_code: "Entrez votre e-mail pour recevoir un code de connexion à 6 chiffres",
+      enter_email_for_code:
+        "Entrez votre e-mail pour recevoir un code de connexion à 6 chiffres",
       code_sent: "Un code à 6 chiffres a été envoyé à votre e-mail",
       enter_verification_code: "Entrez le code de vérification",
       code_sent_to: "Nous avons envoyé un code à 6 chiffres à %{email}",
@@ -1024,24 +1047,29 @@ export const frMessages = {
       resend_code: "Renvoyer le code",
       back_to_email: "Retour à l'e-mail",
       back_to_login: "Retour à la connexion",
-      no_access: "Vous n'avez pas accès à cette application. Veuillez contacter votre administrateur.",
+      no_access:
+        "Vous n'avez pas accès à cette application. Veuillez contacter votre administrateur.",
       login_successful: "Connexion réussie !",
       set_new_password: "Définir un nouveau mot de passe",
-      choose_password_details: "Choisissez un mot de passe sécurisé pour votre compte",
-      password_min_length: "Le mot de passe doit comporter au moins 6 caractères",
+      choose_password_details:
+        "Choisissez un mot de passe sécurisé pour votre compte",
+      password_min_length:
+        "Le mot de passe doit comporter au moins 6 caractères",
       passwords_do_not_match: "Les mots de passe ne correspondent pas",
       password_updated: "Mot de passe mis à jour avec succès",
       update_password: "Mettre à jour le mot de passe",
       updating_password: "Mise à jour...",
       failed_to_update_password: "Échec de la mise à jour du mot de passe",
-      forgot_password_code_verified: "Code vérifié ! Veuillez définir votre nouveau mot de passe.",
+      forgot_password_code_verified:
+        "Code vérifié ! Veuillez définir votre nouveau mot de passe.",
       sign_in: "Se connecter",
       login_otp_link: "Se connecter avec un code e-mail (OTP)",
       send_code: "Envoyer le code",
     },
     signup: {
       title: "Bienvenue sur %{title}",
-      subtitle: "Créez le premier compte utilisateur pour terminer la configuration.",
+      subtitle:
+        "Créez le premier compte utilisateur pour terminer la configuration.",
       action: {
         create: "Créer un compte",
         creating: "Création...",
@@ -1066,7 +1094,8 @@ export const frMessages = {
       },
       database: {
         title: "Connexion à la base de données",
-        description: "Gérez les paramètres de connexion à votre base de données Supabase",
+        description:
+          "Gérez les paramètres de connexion à votre base de données Supabase",
         connected: "Connecté",
         not_connected: "Non connecté",
         no_config: "Aucune base de données Supabase n'est configurée",
@@ -1101,7 +1130,8 @@ export const frMessages = {
         overview: {
           title: "Ce qui va se passer :",
           update_schema: "Le schéma sera mis à jour vers la v%{version}",
-          enable_features: "De nouvelles fonctionnalités et améliorations seront activées",
+          enable_features:
+            "De nouvelles fonctionnalités et améliorations seront activées",
           data_safe: "Vos données existantes ne seront pas affectées",
           duration: "Le processus prend généralement moins de 2 minutes",
         },
@@ -1242,7 +1272,8 @@ export const frMessages = {
     },
     reset_password: {
       forgot_password: "Mot de passe oublié ?",
-      forgot_password_details: "Entrez votre e-mail pour recevoir un code à 6 chiffres.",
+      forgot_password_details:
+        "Entrez votre e-mail pour recevoir un code à 6 chiffres.",
     },
   },
 };

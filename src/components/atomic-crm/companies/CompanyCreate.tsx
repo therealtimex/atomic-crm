@@ -29,7 +29,9 @@ export const CompanyCreate = () => {
                 <FormToolbar>
                   <div className="flex flex-row gap-2 justify-end">
                     <CancelButton />
-                    <SaveButton label={translate("crm.company.action.create")} />
+                    <SaveButton
+                      label={translate("crm.company.action.create")}
+                    />
                   </div>
                 </FormToolbar>
               </CardContent>

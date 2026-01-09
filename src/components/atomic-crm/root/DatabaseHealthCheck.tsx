@@ -17,8 +17,9 @@ export function DatabaseHealthCheck({
   children,
   dataProvider,
 }: DatabaseHealthCheckProps) {
-  const [healthStatus, setHealthStatus] =
-    useState<DatabaseHealthStatus | null>(null);
+  const [healthStatus, setHealthStatus] = useState<DatabaseHealthStatus | null>(
+    null,
+  );
   const [isChecking, setIsChecking] = useState(true);
   const translate = useTranslate();
   const migrationContext = useMigrationContextSafe();
@@ -32,8 +33,8 @@ export function DatabaseHealthCheck({
         if (!cancelled) {
           setHealthStatus(status);
           setIsChecking(false);
-          
-          // If database is not healthy, suppress the migration banner 
+
+          // If database is not healthy, suppress the migration banner
           // because we will be showing the full-page Setup Guide instead.
           if (!status.isHealthy && migrationContext) {
             migrationContext.setSuppressMigrationBanner(true);
