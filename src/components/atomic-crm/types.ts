@@ -3,6 +3,7 @@ import type { ComponentType } from "react";
 
 import type {
   COMPANY_CREATED,
+  COMPANY_NOTE_CREATED,
   CONTACT_CREATED,
   CONTACT_NOTE_CREATED,
   DEAL_CREATED,
@@ -360,3 +361,83 @@ export interface ContactGender {
   label: string;
   icon: ComponentType<{ className?: string }>;
 }
+
+// ============================================================================
+// INVOICE TYPES
+// ============================================================================
+
+export type InvoiceStatus = 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled';
+
+export type InvoiceItemType = 'service' | 'product' | 'hour' | 'day' | 'deposit';
+
+export type Invoice = {
+  invoice_number: string;
+  reference?: string;
+  company_id?: Identifier;
+  contact_id?: Identifier;
+  deal_id?: Identifier;
+  sales_id?: Identifier;
+  status: InvoiceStatus;
+  issue_date: string;
+  due_date: string;
+  paid_at?: string;
+  currency: string; // ISO 4217 currency code
+  subtotal: number;
+  discount: number; // Global discount amount
+  discount_type: 'fixed' | 'percentage';
+  tax_total: number;
+  total: number;
+  amount_paid: number;
+  notes?: string;
+  payment_terms?: string;
+  terms_and_conditions?: string;
+  sent_at?: string;
+  viewed_at?: string;
+  created_at: string;
+  updated_at: string;
+
+  // View-computed fields (from invoices_summary)
+  company_name?: string;
+  contact_name?: string;
+  contact_email?: EmailAndType[];
+  deal_name?: string;
+  sales_name?: string;
+  nb_items?: number;
+  nb_notes?: number;
+  computed_status?: string;
+  days_overdue?: number;
+  balance_due?: number;
+} & Pick<RaRecord, 'id'>;
+
+export type InvoiceItem = {
+  invoice_id: Identifier;
+  description: string;
+  item_description?: string; // Extended detailed description
+  quantity: number;
+  unit_price: number;
+  tax_rate: number;
+  tax_name?: string;
+  tax_amount: number;
+  item_type: InvoiceItemType;
+  line_total: number;
+  line_total_with_tax: number;
+  sort_order: number;
+} & Pick<RaRecord, 'id'>;
+
+export type InvoiceNote = {
+  invoice_id: Identifier;
+  text: string;
+  date: string;
+  sales_id?: Identifier;
+  attachments?: AttachmentNote[];
+} & Pick<RaRecord, 'id'>;
+
+export type TaxPreset = {
+  name: string;
+  region: string;
+  tax_rate: number;
+  description?: string;
+  is_active: boolean;
+  created_at: string;
+} & Pick<RaRecord, 'id'>;
+

@@ -161,6 +161,17 @@ input[type="time"] {
   right: 0.75rem;
 }
 
+/* Hide numeric input spinners for a cleaner UI */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
