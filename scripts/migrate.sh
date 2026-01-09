@@ -132,9 +132,22 @@ $SUPABASE_CMD config push
 
 echo "---------------------------------------------------------"
 echo "⚡ Deploying Edge Functions..."
-# Deploys API logic (contacts, deals, etc).
-# verify_jwt is configured in supabase/config.toml
-$SUPABASE_CMD functions deploy
+# Deploys API logic explicitly for each function to ensure they are all deployed
+# We skip _shared and hidden folders
+if [ -d "supabase/functions" ]; then
+    for func in supabase/functions/*; do
+        if [ -d "$func" ]; then
+            func_name=$(basename "$func")
+            # Skip _shared and hidden folders
+            if [[ "$func_name" != "_shared" && "$func_name" != .* ]]; then
+                echo "   Deploying $func_name..."
+                $SUPABASE_CMD functions deploy "$func_name"
+            fi
+        fi
+    done
+else
+    echo "⚠️ Warning: supabase/functions directory not found. Skipping function deployment."
+fi
 
 
 # ------------------------------------------------------------------------------

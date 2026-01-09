@@ -6,6 +6,8 @@ import { Navigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ThemeModeToggle } from "@/components/admin/theme-mode-toggle";
+import { LocalesMenuButton } from "@/components/admin/locales-menu-button";
 
 import type { CrmDataProvider } from "../providers/types";
 import { useConfigurationContext } from "../root/ConfigurationContext";
@@ -15,7 +17,7 @@ import { LoginSkeleton } from "./LoginSkeleton";
 export const SignupPage = () => {
   const queryClient = useQueryClient();
   const dataProvider = useDataProvider<CrmDataProvider>();
-  const { darkModeLogo: logo, title } = useConfigurationContext();
+  const { darkModeLogo, lightModeLogo, title } = useConfigurationContext();
   const translate = useTranslate();
   const { data: isInitialized, isPending } = useQuery({
     queryKey: ["init"],
@@ -72,13 +74,22 @@ export const SignupPage = () => {
   };
 
   return (
-    <div className="h-screen p-8">
+    <div className="h-screen p-8 bg-background text-foreground relative">
+      <div className="absolute top-4 right-4 flex items-center gap-2">
+        <LocalesMenuButton />
+        <ThemeModeToggle />
+      </div>
+
       <div className="flex items-center gap-4">
         <img
-          src={logo}
+          className="[.light_&]:hidden h-6"
+          src={darkModeLogo}
           alt={title}
-          width={24}
-          className="filter brightness-0 invert"
+        />
+        <img
+          className="[.dark_&]:hidden h-6"
+          src={lightModeLogo}
+          alt={title}
         />
         <h1 className="text-xl font-semibold">{title}</h1>
       </div>
