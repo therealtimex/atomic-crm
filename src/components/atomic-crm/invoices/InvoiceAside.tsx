@@ -19,7 +19,7 @@ export const InvoiceAside = () => {
             <Card>
                 <CardHeader>
                     <CardTitle className="text-base">
-                        {translate("crm.invoice.section.actions")}
+                        {translate("resources.invoices.section.actions")}
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
@@ -31,13 +31,13 @@ export const InvoiceAside = () => {
             <Card>
                 <CardHeader>
                     <CardTitle className="text-base">
-                        {translate("crm.invoice.section.details")}
+                        {translate("resources.invoices.section.details")}
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                     <div>
                         <p className="text-xs text-muted-foreground mb-1">
-                            {translate("crm.invoice.field.invoice_number")}
+                            {translate("resources.invoices.fields.invoice_number")}
                         </p>
                         <p className="text-sm font-medium">{record.invoice_number}</p>
                     </div>
@@ -45,7 +45,7 @@ export const InvoiceAside = () => {
                     {record.reference && (
                         <div>
                             <p className="text-xs text-muted-foreground mb-1">
-                                {translate("crm.invoice.field.reference")}
+                                {translate("resources.invoices.fields.reference")}
                             </p>
                             <p className="text-sm font-medium">{record.reference}</p>
                         </div>
@@ -53,14 +53,14 @@ export const InvoiceAside = () => {
 
                     <div>
                         <p className="text-xs text-muted-foreground mb-1">
-                            {translate("crm.invoice.field.currency")}
+                            {translate("resources.invoices.fields.currency")}
                         </p>
                         <p className="text-sm font-medium">{record.currency}</p>
                     </div>
 
                     <div>
                         <p className="text-xs text-muted-foreground mb-1">
-                            {translate("crm.invoice.field.created_at")}
+                            {translate("resources.invoices.fields.created_at")}
                         </p>
                         <p className="text-sm">
                             <DateField source="created_at" showTime />
@@ -70,7 +70,7 @@ export const InvoiceAside = () => {
                     {record.sent_at && (
                         <div>
                             <p className="text-xs text-muted-foreground mb-1">
-                                {translate("crm.invoice.field.sent_at")}
+                                {translate("resources.invoices.fields.sent_at")}
                             </p>
                             <p className="text-sm">
                                 <DateField source="sent_at" showTime />
@@ -81,7 +81,7 @@ export const InvoiceAside = () => {
                     {record.viewed_at && (
                         <div>
                             <p className="text-xs text-muted-foreground mb-1">
-                                {translate("crm.invoice.field.viewed_at")}
+                                {translate("resources.invoices.fields.viewed_at")}
                             </p>
                             <p className="text-sm">
                                 <DateField source="viewed_at" showTime />
@@ -96,7 +96,7 @@ export const InvoiceAside = () => {
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-base">
-                            {translate("crm.invoice.section.assigned_to")}
+                            {translate("resources.invoices.section.assigned_to")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>

@@ -123,7 +123,7 @@ const Header = () => {
               isActive={currentPath === "/deals"}
             />
             <NavigationTab
-              label={translate("crm.invoice.name")}
+              label={translate("crm.nav.invoices")}
               to="/invoices"
               isActive={currentPath === "/invoices"}
             />

@@ -43,11 +43,11 @@ const InvoiceShowContent = () => {
                                 )}
                                 <div>
                                     <CardTitle className="text-2xl">
-                                        {translate("crm.invoice.name", { smart_count: 1 })} #{record.invoice_number}
+                                        {translate("resources.invoices.name", { smart_count: 1 })} #{record.invoice_number}
                                     </CardTitle>
                                     {record.reference && (
                                         <p className="text-sm text-muted-foreground">
-                                            {translate("crm.invoice.field.reference")}: {record.reference}
+                                            {translate("resources.invoices.fields.reference")}: {record.reference}
                                         </p>
                                     )}
                                 </div>
@@ -61,12 +61,12 @@ const InvoiceShowContent = () => {
                         <div className="grid grid-cols-2 gap-6 mb-6">
                             <div>
                                 <h3 className="text-sm font-semibold mb-3">
-                                    {translate("crm.invoice.section.details")}
+                                    {translate("resources.invoices.section.details")}
                                 </h3>
                                 <dl className="space-y-2">
                                     <div className="flex justify-between">
                                         <dt className="text-sm text-muted-foreground">
-                                            {translate("crm.invoice.field.issue_date")}:
+                                            {translate("resources.invoices.fields.issue_date")}:
                                         </dt>
                                         <dd className="text-sm font-medium">
                                             <DateField source="issue_date" />
@@ -74,7 +74,7 @@ const InvoiceShowContent = () => {
                                     </div>
                                     <div className="flex justify-between">
                                         <dt className="text-sm text-muted-foreground">
-                                            {translate("crm.invoice.field.due_date")}:
+                                            {translate("resources.invoices.fields.due_date")}:
                                         </dt>
                                         <dd className="text-sm font-medium">
                                             <DateField source="due_date" />
@@ -83,7 +83,7 @@ const InvoiceShowContent = () => {
                                     {record.paid_at && (
                                         <div className="flex justify-between">
                                             <dt className="text-sm text-muted-foreground">
-                                                {translate("crm.invoice.field.paid_at")}:
+                                                {translate("resources.invoices.fields.paid_at")}:
                                             </dt>
                                             <dd className="text-sm font-medium">
                                                 <DateField source="paid_at" />
@@ -95,13 +95,13 @@ const InvoiceShowContent = () => {
 
                             <div>
                                 <h3 className="text-sm font-semibold mb-3">
-                                    {translate("crm.invoice.section.billing")}
+                                    {translate("resources.invoices.section.billing")}
                                 </h3>
                                 <dl className="space-y-2">
                                     {record.company_id && (
                                         <div className="flex justify-between">
                                             <dt className="text-sm text-muted-foreground">
-                                                {translate("crm.invoice.field.company")}:
+                                                {translate("resources.invoices.fields.company_id")}:
                                             </dt>
                                             <dd className="text-sm font-medium">
                                                 <ReferenceField source="company_id" reference="companies" link="show">
@@ -113,7 +113,7 @@ const InvoiceShowContent = () => {
                                     {record.contact_id && (
                                         <div className="flex justify-between">
                                             <dt className="text-sm text-muted-foreground">
-                                                {translate("crm.invoice.field.contact")}:
+                                                {translate("resources.invoices.fields.contact_id")}:
                                             </dt>
                                             <dd className="text-sm font-medium">
                                                 <ReferenceField source="contact_id" reference="contacts" link="show">
@@ -127,7 +127,7 @@ const InvoiceShowContent = () => {
                                     {record.deal_id && (
                                         <div className="flex justify-between">
                                             <dt className="text-sm text-muted-foreground">
-                                                {translate("crm.invoice.field.deal")}:
+                                                {translate("resources.invoices.fields.deal_id")}:
                                             </dt>
                                             <dd className="text-sm font-medium">
                                                 <ReferenceField source="deal_id" reference="deals" link="show">
@@ -145,7 +145,7 @@ const InvoiceShowContent = () => {
                         {/* Line Items */}
                         <div className="mb-6">
                             <h3 className="text-lg font-semibold mb-4">
-                                {translate("crm.invoice.section.items")}
+                                {translate("resources.invoices.section.items")}
                             </h3>
                             <ReferenceManyField
                                 target="invoice_id"
@@ -160,14 +160,14 @@ const InvoiceShowContent = () => {
                         <div className="flex justify-end mb-6">
                             <div className="w-64 space-y-2">
                                 <div className="flex justify-between">
-                                    <span className="text-sm">{translate("crm.invoice.field.subtotal")}:</span>
+                                    <span className="text-sm">{translate("resources.invoices.fields.subtotal")}:</span>
                                     <span className="text-sm font-medium">
                                         {record.currency} {record.subtotal.toFixed(2)}
                                     </span>
                                 </div>
                                 {record.discount > 0 && (
                                     <div className="flex justify-between text-sm">
-                                        <span>{translate("crm.invoice.field.discount")}:</span>
+                                        <span>{translate("resources.invoices.fields.discount")}:</span>
                                         <span className="font-medium text-orange-600">
                                             {record.discount_type === 'percentage'
                                                 ? `-${record.discount}%`
@@ -176,14 +176,14 @@ const InvoiceShowContent = () => {
                                     </div>
                                 )}
                                 <div className="flex justify-between">
-                                    <span className="text-sm">{translate("crm.invoice.field.tax_total")}:</span>
+                                    <span className="text-sm">{translate("resources.invoices.fields.tax_total")}:</span>
                                     <span className="text-sm font-medium">
                                         {record.currency} {record.tax_total.toFixed(2)}
                                     </span>
                                 </div>
                                 <Separator />
                                 <div className="flex justify-between">
-                                    <span className="text-base font-semibold">{translate("crm.invoice.field.total")}:</span>
+                                    <span className="text-base font-semibold">{translate("resources.invoices.fields.total")}:</span>
                                     <span className="text-base font-semibold">
                                         {record.currency} {record.total.toFixed(2)}
                                     </span>
@@ -191,13 +191,13 @@ const InvoiceShowContent = () => {
                                 {record.amount_paid > 0 && (
                                     <>
                                         <div className="flex justify-between text-green-600">
-                                            <span className="text-sm">{translate("crm.invoice.field.amount_paid")}:</span>
+                                            <span className="text-sm">{translate("resources.invoices.fields.amount_paid")}:</span>
                                             <span className="text-sm font-medium">
                                                 {record.currency} {record.amount_paid.toFixed(2)}
                                             </span>
                                         </div>
                                         <div className="flex justify-between text-red-600">
-                                            <span className="text-sm font-semibold">{translate("crm.invoice.field.balance_due")}:</span>
+                                            <span className="text-sm font-semibold">{translate("resources.invoices.fields.balance_due")}:</span>
                                             <span className="text-sm font-semibold">
                                                 {record.currency} {(record.total - record.amount_paid).toFixed(2)}
                                             </span>
@@ -211,7 +211,7 @@ const InvoiceShowContent = () => {
                         {record.notes && (
                             <div className="mb-6">
                                 <h3 className="text-sm font-semibold mb-2">
-                                    {translate("crm.invoice.field.notes")}:
+                                    {translate("resources.invoices.fields.notes")}:
                                 </h3>
                                 <p className="text-sm text-muted-foreground whitespace-pre-line">
                                     {record.notes}
@@ -223,7 +223,7 @@ const InvoiceShowContent = () => {
                         {record.payment_terms && (
                             <div className="mb-6">
                                 <h3 className="text-sm font-semibold mb-2">
-                                    {translate("crm.invoice.field.payment_terms")}:
+                                    {translate("resources.invoices.fields.payment_terms")}:
                                 </h3>
                                 <p className="text-sm text-muted-foreground whitespace-pre-line">
                                     {record.payment_terms}
@@ -236,10 +236,10 @@ const InvoiceShowContent = () => {
                         {/* Activity Notes */}
                         <div className="mt-8">
                             <h3 className="text-lg font-semibold mb-4">
-                                {translate("crm.invoice.section.activity")}
+                                {translate("resources.invoices.section.activity")}
                             </h3>
                             <p className="text-sm text-muted-foreground mb-3">
-                                {translate("crm.invoice.section.activity_description")}
+                                {translate("resources.invoices.section.activity_description")}
                             </p>
                             <ReferenceManyField
                                 target="invoice_id"
@@ -265,7 +265,7 @@ const InvoiceItemsTable = ({ currency }: { currency: string }) => {
     if (!data || data.length === 0) {
         return (
             <p className="text-sm text-muted-foreground">
-                {translate("crm.invoice.empty_items")}
+                {translate("resources.invoices.empty_items")}
             </p>
         );
     }
@@ -276,19 +276,19 @@ const InvoiceItemsTable = ({ currency }: { currency: string }) => {
                 <thead className="bg-muted">
                     <tr>
                         <th className="text-left p-3 text-sm font-semibold">
-                            {translate("crm.invoice.item.description")}
+                            {translate("resources.invoices.item.name")}
                         </th>
                         <th className="text-right p-3 text-sm font-semibold">
-                            {translate("crm.invoice.item.quantity")}
+                            {translate("resources.invoices.item.quantity")}
                         </th>
                         <th className="text-right p-3 text-sm font-semibold">
-                            {translate("crm.invoice.item.unit_price")}
+                            {translate("resources.invoices.item.unit_price")}
                         </th>
                         <th className="text-right p-3 text-sm font-semibold">
-                            {translate("crm.invoice.item.tax")}
+                            {translate("resources.invoices.item.tax")}
                         </th>
                         <th className="text-right p-3 text-sm font-semibold">
-                            {translate("crm.invoice.item.total")}
+                            {translate("resources.invoices.item.total")}
                         </th>
                     </tr>
                 </thead>
@@ -305,7 +305,7 @@ const InvoiceItemsTable = ({ currency }: { currency: string }) => {
                                     )}
                                     {item.item_type !== "service" && (
                                         <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">
-                                            {translate(`crm.invoice.item_type.${item.item_type}`)}
+                                            {translate(`resources.invoices.item_type.${item.item_type}`)}
                                         </p>
                                     )}
                                 </div>
@@ -363,7 +363,7 @@ const InvoiceStatusBadge = ({ record }: { record: Invoice }) => {
             className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${statusColors[status] || statusColors.draft
                 }`}
         >
-            {translate(`crm.invoice.status.${status}`)}
+            {translate(`resources.invoices.status.${status}`)}
         </span>
     );
 };

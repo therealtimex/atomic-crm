@@ -58,6 +58,7 @@ export const enMessages = {
       contacts: "Contacts",
       companies: "Companies",
       deals: "Deals",
+      invoices: "Invoices",
       tasks: "Tasks",
       users: "Users",
       settings: "My info",
@@ -1172,6 +1173,7 @@ export const enMessages = {
       last_activity: "last activity %{distance} ago",
       add_contact: "Add contact",
     },
+    days_overdue: "days overdue",
   },
   resources: {
     contacts: {
@@ -1240,14 +1242,14 @@ export const enMessages = {
         disabled: "Disabled",
       },
     },
-    invoice: {
+    invoices: {
       name: "Invoice |||| Invoices",
-      field: {
+      fields: {
         invoice_number: "Invoice #",
         reference: "Reference",
-        company: "Company",
-        contact: "Contact",
-        deal: "Deal",
+        company_id: "Company",
+        contact_id: "Contact",
+        deal_id: "Deal",
         status: "Status",
         issue_date: "Issue Date",
         due_date: "Due Date",
@@ -1283,8 +1285,8 @@ export const enMessages = {
         assigned_to: "Created By",
       },
       item: {
-        description: "Item",
-        item_description_placeholder: "Add details...",
+        name: "Item",
+        description_placeholder: "Add details...",
         quantity: "Qty",
         unit_price: "Unit Price",
         tax: "Tax",

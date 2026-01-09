@@ -23,13 +23,13 @@ export const InvoiceList = () => {
         <SearchInput source="q" alwaysOn />,
         <SelectInput
             source="status"
-            emptyText={translate("crm.invoice.field.status")}
+            emptyText={translate("resources.invoices.fields.status")}
             choices={[
-                { id: "draft", name: translate("crm.invoice.status.draft") },
-                { id: "sent", name: translate("crm.invoice.status.sent") },
-                { id: "paid", name: translate("crm.invoice.status.paid") },
-                { id: "overdue", name: translate("crm.invoice.status.overdue") },
-                { id: "cancelled", name: translate("crm.invoice.status.cancelled") },
+                { id: "draft", name: translate("resources.invoices.status.draft") },
+                { id: "sent", name: translate("resources.invoices.status.sent") },
+                { id: "paid", name: translate("resources.invoices.status.paid") },
+                { id: "overdue", name: translate("resources.invoices.status.overdue") },
+                { id: "cancelled", name: translate("resources.invoices.status.cancelled") },
             ]}
         />,
         <ReferenceInput source="company_id" reference="companies">
@@ -46,7 +46,7 @@ export const InvoiceList = () => {
         </ReferenceInput>,
         <SelectInput
             source="currency"
-            emptyText={translate("crm.invoice.field.currency")}
+            emptyText={translate("resources.invoices.fields.currency")}
             choices={[
                 { id: "USD", name: "USD" },
                 { id: "EUR", name: "EUR" },
@@ -71,11 +71,11 @@ export const InvoiceList = () => {
                 rowClick="show"
                 bulkActionButtons={false}
             >
-                <DataTable.Col source="invoice_number" label="crm.invoice.field.invoice_number">
+                <DataTable.Col source="invoice_number" label="resources.invoices.fields.invoice_number">
                     <TextField source="invoice_number" />
                 </DataTable.Col>
 
-                <DataTable.Col source="company_id" label="crm.invoice.field.company">
+                <DataTable.Col source="company_id" label="resources.invoices.fields.company_id">
                     <ReferenceField
                         source="company_id"
                         reference="companies"
@@ -85,7 +85,7 @@ export const InvoiceList = () => {
                     </ReferenceField>
                 </DataTable.Col>
 
-                <DataTable.Col source="contact_id" label="crm.invoice.field.contact">
+                <DataTable.Col source="contact_id" label="resources.invoices.fields.contact_id">
                     <ReferenceField
                         source="contact_id"
                         reference="contacts"
@@ -99,7 +99,7 @@ export const InvoiceList = () => {
                     </ReferenceField>
                 </DataTable.Col>
 
-                <DataTable.Col source="status" label="crm.invoice.field.status">
+                <DataTable.Col source="status" label="resources.invoices.fields.status">
                     <FunctionField
                         render={(record: Invoice) => (
                             <InvoiceStatusBadge record={record} />
@@ -107,15 +107,15 @@ export const InvoiceList = () => {
                     />
                 </DataTable.Col>
 
-                <DataTable.Col source="issue_date" label="crm.invoice.field.issue_date">
+                <DataTable.Col source="issue_date" label="resources.invoices.fields.issue_date">
                     <DateField source="issue_date" />
                 </DataTable.Col>
 
-                <DataTable.Col source="due_date" label="crm.invoice.field.due_date">
+                <DataTable.Col source="due_date" label="resources.invoices.fields.due_date">
                     <DateField source="due_date" />
                 </DataTable.Col>
 
-                <DataTable.Col label="crm.invoice.field.total" headerClassName="text-right">
+                <DataTable.Col label="resources.invoices.fields.total" headerClassName="text-right">
                     <FunctionField
                         render={(record: Invoice) => (
                             <span className="font-semibold">
@@ -126,7 +126,7 @@ export const InvoiceList = () => {
                     />
                 </DataTable.Col>
 
-                <DataTable.Col label="crm.invoice.field.balance_due" headerClassName="text-right">
+                <DataTable.Col label="resources.invoices.fields.balance_due" headerClassName="text-right">
                     <FunctionField
                         render={(record: Invoice) => {
                             const total = record.total || 0;
@@ -138,7 +138,7 @@ export const InvoiceList = () => {
                                 </span>
                             ) : (
                                 <span className="text-green-600">
-                                    {translate("crm.invoice.status.paid")}
+                                    {translate("resources.invoices.status.paid")}
                                 </span>
                             );
                         }}
@@ -176,7 +176,7 @@ const InvoiceStatusBadge = ({ record }: { record: Invoice }) => {
             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${statusColors[status] || statusColors.draft
                 }`}
         >
-            {translate(`crm.invoice.status.${status}`)}
+            {translate(`resources.invoices.status.${status}`)}
         </span>
     );
 };
@@ -187,7 +187,7 @@ const InvoiceActions = () => {
         <TopToolbar>
             <FilterButton />
             <ExportButton />
-            <CreateButton label={translate("crm.action.new_invoice")} />
+            <CreateButton label={translate("resources.invoices.action.new_invoice")} />
         </TopToolbar>
     );
 };

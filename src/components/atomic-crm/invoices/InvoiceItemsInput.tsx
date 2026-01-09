@@ -72,11 +72,11 @@ export const InvoiceItemsInput = () => {
     };
 
     const itemTypeChoices = [
-        { value: "service", label: translate("crm.invoice.item_type.service") },
-        { value: "product", label: translate("crm.invoice.item_type.product") },
-        { value: "hour", label: translate("crm.invoice.item_type.hour") },
-        { value: "day", label: translate("crm.invoice.item_type.day") },
-        { value: "deposit", label: translate("crm.invoice.item_type.deposit") },
+        { value: "service", label: translate("resources.invoices.item_type.service") },
+        { value: "product", label: translate("resources.invoices.item_type.product") },
+        { value: "hour", label: translate("resources.invoices.item_type.hour") },
+        { value: "day", label: translate("resources.invoices.item_type.day") },
+        { value: "deposit", label: translate("resources.invoices.item_type.deposit") },
     ];
 
     // Calculate totals
@@ -93,7 +93,7 @@ export const InvoiceItemsInput = () => {
         <div className="space-y-4">
             {items.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
-                    <p>{translate("crm.invoice.empty_items")}</p>
+                    <p>{translate("resources.invoices.empty_items")}</p>
                     <Button
                         type="button"
                         variant="outline"
@@ -101,7 +101,7 @@ export const InvoiceItemsInput = () => {
                         className="mt-4"
                     >
                         <Plus className="h-4 w-4 mr-2" />
-                        {translate("crm.invoice.action.add_item")}
+                        {translate("resources.invoices.action.add_item")}
                     </Button>
                 </div>
             ) : (
@@ -121,7 +121,7 @@ export const InvoiceItemsInput = () => {
                                     {/* Description (Title) */}
                                     <div className="col-span-4">
                                         <Input
-                                            placeholder={translate("crm.invoice.item.description")}
+                                            placeholder={translate("resources.invoices.item.name")}
                                             value={item.description || ""}
                                             onChange={(e) =>
                                                 updateItem(index, "description", e.target.value)
@@ -215,7 +215,7 @@ export const InvoiceItemsInput = () => {
                                 <div className="pl-10 pr-12">
                                     <Input // Using Input for single line extended description or Textarea? Input is cleaner for now.
                                         className="text-sm text-muted-foreground h-8"
-                                        placeholder={translate("crm.invoice.item.item_description_placeholder") || "Add item details (optional)"}
+                                        placeholder={translate("resources.invoices.item.description_placeholder") || "Add item details (optional)"}
                                         value={item.item_description || ""}
                                         onChange={(e) =>
                                             updateItem(index, "item_description", e.target.value)
@@ -234,18 +234,18 @@ export const InvoiceItemsInput = () => {
                         className="w-full"
                     >
                         <Plus className="h-4 w-4 mr-2" />
-                        {translate("crm.invoice.action.add_item")}
+                        {translate("resources.invoices.action.add_item")}
                     </Button>
 
                     {/* Totals Summary */}
                     <div className="flex justify-end pt-4">
                         <div className="w-96 space-y-3 p-4 border rounded-lg bg-muted/30 shadow-sm">
                             <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">{translate("crm.invoice.field.subtotal")}:</span>
+                                <span className="text-muted-foreground">{translate("resources.invoices.fields.subtotal")}:</span>
                                 <span className="font-medium">{subtotal.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between text-sm items-center gap-4">
-                                <span className="text-muted-foreground shrink-0">{translate("crm.invoice.field.discount") || "Discount"}:</span>
+                                <span className="text-muted-foreground shrink-0">{translate("resources.invoices.fields.discount") || "Discount"}:</span>
                                 <div className="flex items-center gap-2 flex-1 justify-end">
                                     <Select
                                         value={discountType}
@@ -270,12 +270,12 @@ export const InvoiceItemsInput = () => {
                                 </div>
                             </div>
                             <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">{translate("crm.invoice.field.tax_total")}:</span>
+                                <span className="text-muted-foreground">{translate("resources.invoices.fields.tax_total")}:</span>
                                 <span className="font-medium">{taxTotal.toFixed(2)}</span>
                             </div>
                             <Separator className="my-2" />
                             <div className="flex justify-between text-lg font-bold">
-                                <span>{translate("crm.invoice.field.total")}:</span>
+                                <span>{translate("resources.invoices.fields.total")}:</span>
                                 <span>{total.toFixed(2)}</span>
                             </div>
                         </div>

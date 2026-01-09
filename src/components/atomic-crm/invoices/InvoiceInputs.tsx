@@ -37,11 +37,11 @@ export const InvoiceInputs = () => {
     ];
 
     const statusChoices = [
-        { id: "draft", name: translate("crm.invoice.status.draft") },
-        { id: "sent", name: translate("crm.invoice.status.sent") },
-        { id: "paid", name: translate("crm.invoice.status.paid") },
-        { id: "overdue", name: translate("crm.invoice.status.overdue") },
-        { id: "cancelled", name: translate("crm.invoice.status.cancelled") },
+        { id: "draft", name: translate("resources.invoices.status.draft") },
+        { id: "sent", name: translate("resources.invoices.status.sent") },
+        { id: "paid", name: translate("resources.invoices.status.paid") },
+        { id: "overdue", name: translate("resources.invoices.status.overdue") },
+        { id: "cancelled", name: translate("resources.invoices.status.cancelled") },
     ];
 
     return (
@@ -50,14 +50,14 @@ export const InvoiceInputs = () => {
             <div className="grid grid-cols-2 gap-4">
                 <TextInput
                     source="invoice_number"
-                    label="crm.invoice.field.invoice_number"
+                    label="resources.invoices.fields.invoice_number"
                     validate={required()}
-                    helperText="crm.invoice.helper.invoice_number"
+                    helperText="resources.invoices.helper.invoice_number"
                 />
                 <TextInput
                     source="reference"
-                    label="crm.invoice.field.reference"
-                    helperText="crm.invoice.helper.reference"
+                    label="resources.invoices.fields.reference"
+                    helperText="resources.invoices.helper.reference"
                 />
             </div>
 
@@ -67,7 +67,7 @@ export const InvoiceInputs = () => {
                 <div className="md:col-span-2">
                     <ReferenceInput source="company_id" reference="companies">
                         <AutocompleteInput
-                            label="crm.invoice.field.company"
+                            label="resources.invoices.fields.company_id"
                             optionText="name"
                         />
                     </ReferenceInput>
@@ -79,11 +79,11 @@ export const InvoiceInputs = () => {
                     filter={company_id ? { company_id } : undefined}
                 >
                     <AutocompleteInput
-                        label="crm.invoice.field.contact"
+                        label="resources.invoices.fields.contact_id"
                         optionText={(record) =>
                             record ? `${record.first_name} ${record.last_name}` : ""
                         }
-                        helperText={!company_id ? translate("crm.invoice.helper.select_company_for_contacts") : false}
+                        helperText={!company_id ? translate("resources.invoices.helper.select_company_for_contacts") : false}
                     />
                 </ReferenceInput>
 
@@ -93,9 +93,9 @@ export const InvoiceInputs = () => {
                     filter={company_id ? { company_id } : undefined}
                 >
                     <AutocompleteInput
-                        label="crm.invoice.field.deal"
+                        label="resources.invoices.fields.deal_id"
                         optionText="name"
-                        helperText={!company_id ? translate("crm.invoice.helper.select_company_for_deals") : false}
+                        helperText={!company_id ? translate("resources.invoices.helper.select_company_for_deals") : false}
                     />
                 </ReferenceInput>
             </div>
@@ -104,14 +104,14 @@ export const InvoiceInputs = () => {
             <div className="grid grid-cols-2 gap-4">
                 <SelectInput
                     source="status"
-                    label="crm.invoice.field.status"
+                    label="resources.invoices.fields.status"
                     choices={statusChoices}
                     defaultValue="draft"
                     validate={required()}
                 />
                 <SelectInput
                     source="currency"
-                    label="crm.invoice.field.currency"
+                    label="resources.invoices.fields.currency"
                     choices={currencyChoices}
                     defaultValue="USD"
                     validate={required()}
@@ -122,13 +122,13 @@ export const InvoiceInputs = () => {
             <div className="grid grid-cols-3 gap-4">
                 <DateInput
                     source="issue_date"
-                    label="crm.invoice.field.issue_date"
+                    label="resources.invoices.fields.issue_date"
                     validate={required()}
                     defaultValue={new Date().toISOString().split("T")[0]}
                 />
                 <DateInput
                     source="due_date"
-                    label="crm.invoice.field.due_date"
+                    label="resources.invoices.fields.due_date"
                     validate={required()}
                     defaultValue={
                         new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
@@ -138,14 +138,14 @@ export const InvoiceInputs = () => {
                 />
                 <DateInput
                     source="paid_at"
-                    label="crm.invoice.field.paid_at"
+                    label="resources.invoices.fields.paid_at"
                 />
             </div>
 
             {/* Line Items */}
             <div className="border rounded-lg p-4">
                 <h3 className="text-lg font-semibold mb-4">
-                    {translate("crm.invoice.section.items")}
+                    {translate("resources.invoices.section.items")}
                 </h3>
                 <InvoiceItemsInput />
             </div>
@@ -154,20 +154,20 @@ export const InvoiceInputs = () => {
             <div className="grid grid-cols-1 gap-4">
                 <TextInput
                     source="notes"
-                    label="crm.invoice.field.notes"
+                    label="resources.invoices.fields.notes"
                     multiline
                     rows={3}
                 />
                 <TextInput
                     source="payment_terms"
-                    label="crm.invoice.field.payment_terms"
+                    label="resources.invoices.fields.payment_terms"
                     multiline
                     rows={2}
-                    helperText="crm.invoice.helper.payment_terms"
+                    helperText="resources.invoices.helper.payment_terms"
                 />
                 <TextInput
                     source="terms_and_conditions"
-                    label="crm.invoice.field.terms_and_conditions"
+                    label="resources.invoices.fields.terms_and_conditions"
                     multiline
                     rows={3}
                 />
