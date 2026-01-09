@@ -67,13 +67,14 @@ jobs:
       - name: Check if version already released
         id: check_release
         run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
           VERSION="${{ steps.package_version.outputs.version }}"
-          if git ls-remote --tags origin | grep -q "refs/tags/v$VERSION$"; then
+          if npm view "$PACKAGE_NAME@$VERSION" version >/dev/null 2>&1; then
             echo "released=true" >> $GITHUB_OUTPUT
-            echo "::notice::Version v$VERSION already exists. Skipping publish."
+            echo "::notice::Version $VERSION of $PACKAGE_NAME already exists on npm. Skipping publish."
           else
             echo "released=false" >> $GITHUB_OUTPUT
-            echo "::notice::Version v$VERSION is new. Proceeding to publish."
+            echo "::notice::Version $VERSION of $PACKAGE_NAME is new. Proceeding to publish."
           fi
 
       - name: Build
@@ -84,8 +85,10 @@ jobs:
         if: steps.check_release.outputs.released == 'false'
         run: |
           VERSION="${{ steps.package_version.outputs.version }}"
-          git tag "v$VERSION"
-          git push origin "v$VERSION"
+          # Only create tag if it doesn't exist locally, ignore error if it does
+          git tag "v$VERSION" || echo "Tag v$VERSION already exists locally"
+          # Push tag, ignore error if it already exists on remote
+          git push origin "v$VERSION" || echo "Tag v$VERSION already exists on remote"
 
       - name: Check NPM_TOKEN
         if: steps.check_release.outputs.released == 'false'
