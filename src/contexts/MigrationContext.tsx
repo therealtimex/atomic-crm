@@ -10,6 +10,10 @@ interface MigrationContextValue {
   showMigrationModal: boolean;
   /** Open the migration modal */
   openMigrationModal: () => void;
+  /** Whether the migration banner should be suppressed (e.g., when showing Setup Guide) */
+  suppressMigrationBanner: boolean;
+  /** Set whether to suppress the migration banner */
+  setSuppressMigrationBanner: (suppress: boolean) => void;
 }
 
 const MigrationContext = createContext<MigrationContextValue | undefined>(

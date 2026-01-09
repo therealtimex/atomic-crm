@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { I18nContextProvider } from 'ra-core';
 import { CRM } from '@/components/atomic-crm/root/CRM';
 import { SupabaseSetupWizard } from '@/components/atomic-crm/setup/SupabaseSetupWizard';
@@ -111,6 +111,7 @@ const App = () => {
   const [migrationStatus, setMigrationStatus] = useState<MigrationStatus | null>(null);
   const [showMigrationBanner, setShowMigrationBanner] = useState(false);
   const [showMigrationModal, setShowMigrationModal] = useState(false);
+  const [suppressMigrationBanner, setSuppressMigrationBanner] = useState(false);
 
   // Check migration status after setup is complete
   useEffect(() => {
@@ -151,18 +152,25 @@ const App = () => {
     );
   }
 
+  const migrationContextValue = useMemo(() => ({
+    migrationStatus,
+    showMigrationBanner,
+    showMigrationModal,
+    openMigrationModal: () => setShowMigrationModal(true),
+    suppressMigrationBanner,
+    setSuppressMigrationBanner,
+  }), [
+    migrationStatus,
+    showMigrationBanner,
+    showMigrationModal,
+    suppressMigrationBanner
+  ]);
+
   return (
     <I18nContextProvider value={i18nProvider}>
-      <MigrationProvider
-        value={{
-          migrationStatus,
-          showMigrationBanner,
-          showMigrationModal,
-          openMigrationModal: () => setShowMigrationModal(true),
-        }}
-      >
+      <MigrationProvider value={migrationContextValue}>
         {/* Migration Notification (floating, top-right) */}
-        {showMigrationBanner && migrationStatus && (
+        {showMigrationBanner && !suppressMigrationBanner && migrationStatus && (
           <MigrationBanner
             status={migrationStatus}
             onDismiss={() => setShowMigrationBanner(false)}

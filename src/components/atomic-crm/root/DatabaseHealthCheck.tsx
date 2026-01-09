@@ -6,6 +6,7 @@ import {
 } from "@/lib/database-health-check";
 import { getSupabaseConfig } from "@/lib/supabase-config";
 import { DatabaseSetupGuide } from "../setup/DatabaseSetupGuide";
+import { useMigrationContextSafe } from "@/contexts/MigrationContext";
 
 interface DatabaseHealthCheckProps {
   children: React.ReactNode;
@@ -20,6 +21,7 @@ export function DatabaseHealthCheck({
     useState<DatabaseHealthStatus | null>(null);
   const [isChecking, setIsChecking] = useState(true);
   const translate = useTranslate();
+  const migrationContext = useMigrationContextSafe();
 
   useEffect(() => {
     let cancelled = false;
@@ -30,6 +32,14 @@ export function DatabaseHealthCheck({
         if (!cancelled) {
           setHealthStatus(status);
           setIsChecking(false);
+          
+          // If database is not healthy, suppress the migration banner 
+          // because we will be showing the full-page Setup Guide instead.
+          if (!status.isHealthy && migrationContext) {
+            migrationContext.setSuppressMigrationBanner(true);
+          } else if (status.isHealthy && migrationContext) {
+            migrationContext.setSuppressMigrationBanner(false);
+          }
         }
       } catch (error) {
         console.error(
@@ -47,7 +57,7 @@ export function DatabaseHealthCheck({
     return () => {
       cancelled = true;
     };
-  }, [dataProvider]);
+  }, [dataProvider, migrationContext]);
 
   // Show loading state
   if (isChecking) {
