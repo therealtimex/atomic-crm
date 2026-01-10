@@ -275,19 +275,19 @@ const InvoiceItemsTable = ({ currency }: { currency: string }) => {
             <table className="w-full">
                 <thead className="bg-muted">
                     <tr>
-                        <th className="text-left p-3 text-sm font-semibold">
+                        <th className="text-left p-4 text-sm font-semibold">
                             {translate("resources.invoices.item.name")}
                         </th>
-                        <th className="text-right p-3 text-sm font-semibold">
+                        <th className="text-right p-4 text-sm font-semibold">
                             {translate("resources.invoices.item.quantity")}
                         </th>
-                        <th className="text-right p-3 text-sm font-semibold">
+                        <th className="text-right p-4 text-sm font-semibold">
                             {translate("resources.invoices.item.unit_price")}
                         </th>
-                        <th className="text-right p-3 text-sm font-semibold">
+                        <th className="text-right p-4 text-sm font-semibold">
                             {translate("resources.invoices.item.tax")}
                         </th>
-                        <th className="text-right p-3 text-sm font-semibold">
+                        <th className="text-right p-4 text-sm font-semibold">
                             {translate("resources.invoices.item.total")}
                         </th>
                     </tr>
@@ -295,7 +295,7 @@ const InvoiceItemsTable = ({ currency }: { currency: string }) => {
                 <tbody>
                     {data.map((item, index) => (
                         <tr key={item.id} className={index % 2 === 0 ? "bg-transparent" : "bg-muted/30"}>
-                            <td className="p-3 text-sm">
+                            <td className="p-4 text-sm">
                                 <div>
                                     <p className="font-medium">{item.description}</p>
                                     {item.item_description && (
@@ -310,11 +310,11 @@ const InvoiceItemsTable = ({ currency }: { currency: string }) => {
                                     )}
                                 </div>
                             </td>
-                            <td className="p-3 text-sm text-right">{item.quantity}</td>
-                            <td className="p-3 text-sm text-right">
+                            <td className="p-4 text-sm text-right">{item.quantity}</td>
+                            <td className="p-4 text-sm text-right">
                                 {currency} {item.unit_price.toFixed(2)}
                             </td>
-                            <td className="p-3 text-sm text-right">
+                            <td className="p-4 text-sm text-right">
                                 {item.tax_rate > 0 ? (
                                     <div>
                                         <p>{item.tax_rate}%</p>
@@ -326,7 +326,7 @@ const InvoiceItemsTable = ({ currency }: { currency: string }) => {
                                     "-"
                                 )}
                             </td>
-                            <td className="p-3 text-sm text-right font-medium">
+                            <td className="p-4 text-sm text-right font-medium">
                                 {currency} {item.line_total_with_tax.toFixed(2)}
                             </td>
                         </tr>

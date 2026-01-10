@@ -71,7 +71,7 @@ const CompanyShowContent = () => {
               <h5 className="text-xl ml-2 flex-1">{record.name}</h5>
             </div>
             <Tabs defaultValue={currentTab} onValueChange={handleTabChange}>
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="w-full flex justify-start h-auto p-1 bg-muted/50">
                 <TabsTrigger value="activity">
                   {translate("crm.common.activity")}
                 </TabsTrigger>
@@ -301,7 +301,7 @@ const InvoicesIterator = () => {
   if (isPending || error) return null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
       {invoices.map((invoice) => (
         <RouterLink key={invoice.id} to={`/invoices/${invoice.id}/show`}>
           <InvoiceCard invoice={invoice} />

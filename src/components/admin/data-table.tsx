@@ -150,10 +150,10 @@ const DataTableHead = ({ children }: { children: ReactNode }) => {
     onSelect(
       checked
         ? selectedIds.concat(
-            data
-              .filter((record) => !selectedIds.includes(record.id))
-              .map((record) => record.id),
-          )
+          data
+            .filter((record) => !selectedIds.includes(record.id))
+            .map((record) => record.id),
+        )
         : [],
     );
   };
@@ -268,7 +268,7 @@ const DataTableRow = ({
       className={cn(rowClick !== false && "cursor-pointer", className)}
     >
       {hasBulkActions ? (
-        <TableCell className="w-8 py-1" onClick={handleToggle}>
+        <TableCell className="w-8 py-3" onClick={handleToggle}>
           <div className="flex items-center h-full">
             <Checkbox
               checked={selectedIds?.includes(record.id)}
@@ -456,7 +456,7 @@ function DataTableCell<
   return (
     <TableCell
       className={cn(
-        "py-1",
+        "py-3",
         className,
         cellClassName,
         record && conditionalClassName?.(record),

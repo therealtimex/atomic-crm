@@ -138,14 +138,14 @@ export const InvoiceItemsInput = () => {
                                 key={index}
                                 className="p-3 border rounded-lg bg-muted/30 flex flex-col gap-3"
                             >
-                                <div className="grid grid-cols-12 gap-2 items-start">
+                                <div className="grid grid-cols-16 gap-2 items-start">
                                     {/* Drag Handle */}
                                     <div className="col-span-1 flex items-center justify-center pt-2">
                                         <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
                                     </div>
 
                                     {/* Description (Title) */}
-                                    <div className="col-span-4">
+                                    <div className="col-span-6">
                                         <Input
                                             placeholder={translate("resources.invoices.item.name")}
                                             value={item.description || ""}
@@ -191,7 +191,7 @@ export const InvoiceItemsInput = () => {
                                     </div>
 
                                     {/* Unit Price */}
-                                    <div className="col-span-1">
+                                    <div className="col-span-2">
                                         <Input
                                             type="number"
                                             placeholder="Price"
@@ -223,7 +223,7 @@ export const InvoiceItemsInput = () => {
                                     </div>
 
                                     {/* Line Total */}
-                                    <div className="col-span-1 pt-2 text-right text-sm font-medium">
+                                    <div className="col-span-2 pt-2 text-right text-sm font-medium">
                                         {(item.line_total_with_tax || 0).toFixed(2)}
                                     </div>
 
