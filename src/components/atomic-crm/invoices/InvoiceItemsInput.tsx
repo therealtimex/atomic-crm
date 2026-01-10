@@ -18,6 +18,11 @@ export const InvoiceItemsInput = () => {
     const [discount, setDiscount] = useState<number>(Number(discountField.value) || 0);
     const [discountType, setDiscountType] = useState<'fixed' | 'percentage'>(discountTypeField.value || 'fixed');
 
+    const { field: subtotalField } = useInput({ source: "subtotal" });
+    const { field: taxTotalField } = useInput({ source: "tax_total" });
+    const { field: totalField } = useInput({ source: "total" });
+    const { field: amountPaidField } = useInput({ source: "amount_paid" });
+
     const currencySymbol = "$"; // Multi-currency handled elsewhere via props, but $ is a safe default for symbols here.
 
     // Sync with form state
@@ -32,6 +37,34 @@ export const InvoiceItemsInput = () => {
     useEffect(() => {
         discountTypeField.onChange(discountType);
     }, [discountType]);
+
+    // Totals logic
+    const subtotal = items.reduce((sum, item) => sum + (item.line_total || 0), 0);
+    const taxTotal = items.reduce((sum, item) => sum + (item.tax_amount || 0), 0);
+
+    const calculatedTotal = discountType === 'percentage'
+        ? (subtotal * (1 - discount / 100)) + taxTotal
+        : (subtotal + taxTotal) - discount;
+
+    const total = Math.max(0, calculatedTotal);
+
+    useEffect(() => {
+        subtotalField.onChange(subtotal);
+    }, [subtotal]);
+
+    useEffect(() => {
+        taxTotalField.onChange(taxTotal);
+    }, [taxTotal]);
+
+    useEffect(() => {
+        totalField.onChange(total);
+    }, [total]);
+
+    useEffect(() => {
+        if (amountPaidField.value === undefined || amountPaidField.value === null) {
+            amountPaidField.onChange(0);
+        }
+    }, []);
 
     const addItem = () => {
         setItems([
@@ -80,15 +113,7 @@ export const InvoiceItemsInput = () => {
         { value: "deposit", label: translate("resources.invoices.item_type.deposit") },
     ];
 
-    // Calculate totals
-    const subtotal = items.reduce((sum, item) => sum + (item.line_total || 0), 0);
-    const taxTotal = items.reduce((sum, item) => sum + (item.tax_amount || 0), 0);
-
-    const calculatedTotal = discountType === 'percentage'
-        ? (subtotal * (1 - discount / 100)) + taxTotal
-        : (subtotal + taxTotal) - discount;
-
-    const total = Math.max(0, calculatedTotal);
+    // Totals moved up to be used in effects
 
     return (
         <div className="space-y-4">
@@ -285,13 +310,7 @@ export const InvoiceItemsInput = () => {
                         </div>
                     </div>
 
-                    {/* Hidden inputs to sync with form */}
-                    <input type="hidden" name="subtotal" value={subtotal} />
-                    <input type="hidden" name="discount" value={discount} />
-                    <input type="hidden" name="discount_type" value={discountType} />
-                    <input type="hidden" name="tax_total" value={taxTotal} />
-                    <input type="hidden" name="total" value={total} />
-                    <input type="hidden" name="amount_paid" value="0" />
+                    {/* Totals are now synced via useInput effects */}
                 </>
             )}
         </div>

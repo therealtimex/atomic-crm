@@ -102,6 +102,8 @@ export const frMessages = {
       load_more: "Charger plus",
       tasks_empty: "Tout est à jour pour l’instant.",
       upcoming_deal_revenue: "Revenus prévisionnels",
+      revenue: "Chiffre d'affaires",
+      outstanding_invoices: "Factures en attente",
       deals_chart: {
         won: "Gagné",
         lost: "Perdu",
@@ -1334,9 +1336,12 @@ export const frMessages = {
         mark_as_cancelled: "Marquer comme annulé",
         print: "Imprimer",
         suggest_number: "Suggérer un numéro",
+        export_csv: "Exporter en CSV",
+        send_email: "Envoyer par email",
       },
       notification: {
         status_updated: "Statut de la facture mis à jour à %{status}",
+        email_sent: "La facture #%{number} a été envoyée à l'adresse email du client",
       },
       helper: {
         invoice_number: "Identifiant unique de la facture",

@@ -96,6 +96,9 @@ const dataProviderWithCustomMethods = {
     if (resource === "deals") {
       return baseDataProvider.getList("deals_summary", params);
     }
+    if (resource === "invoices") {
+      return baseDataProvider.getList("invoices_summary", params);
+    }
 
     return baseDataProvider.getList(resource, params);
   },
@@ -112,8 +115,51 @@ const dataProviderWithCustomMethods = {
     if (resource === "deals") {
       return baseDataProvider.getOne("deals_summary", params);
     }
+    if (resource === "invoices") {
+      return baseDataProvider.getOne("invoices_summary", params);
+    }
 
     return baseDataProvider.getOne(resource, params);
+  },
+  async create(resource: string, params: any) {
+    if (resource === "invoices") {
+      const {
+        items,
+        company_name: _cn,
+        contact_name: _ctn,
+        contact_email: _ce,
+        deal_name: _dn,
+        sales_name: _sn,
+        nb_items: _ni,
+        nb_notes: _nn,
+        computed_status: _cs,
+        days_overdue: _do,
+        balance_due: _bd,
+        ...data
+      } = params.data;
+
+      const result = await baseDataProvider.create(resource, {
+        ...params,
+        data: {
+          ...data,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+      });
+
+      if (items && items.length > 0) {
+        await Promise.all(
+          items.map((item: any) => {
+            const { id: _id, ...itemData } = item;
+            return baseDataProvider.create("invoice_items", {
+              data: { ...itemData, invoice_id: result.data.id }
+            });
+          })
+        );
+      }
+      return result;
+    }
+    return baseDataProvider.create(resource, params);
   },
 
   async update(resource: string, params: any) {
@@ -138,6 +184,47 @@ const dataProviderWithCustomMethods = {
         ...params,
         data,
       });
+    }
+
+    if (resource === "invoices") {
+      const {
+        items,
+        company_name: _cn,
+        contact_name: _ctn,
+        contact_email: _ce,
+        deal_name: _dn,
+        sales_name: _sn,
+        nb_items: _ni,
+        nb_notes: _nn,
+        computed_status: _cs,
+        days_overdue: _do,
+        balance_due: _bd,
+        ...data
+      } = params.data;
+
+      const result = await baseDataProvider.update(resource, {
+        ...params,
+        data: {
+          ...data,
+          updated_at: new Date().toISOString(),
+        },
+      });
+
+      if (items) {
+        // Simple sync strategy: remove all and re-add
+        await supabase.from("invoice_items").delete().eq("invoice_id", params.id);
+        if (items.length > 0) {
+          await Promise.all(
+            items.map((item: any) => {
+              const { id: _id, ...itemData } = item;
+              return baseDataProvider.create("invoice_items", {
+                data: { ...itemData, invoice_id: params.id }
+              });
+            })
+          );
+        }
+      }
+      return result;
     }
     return baseDataProvider.update(resource, params);
   },

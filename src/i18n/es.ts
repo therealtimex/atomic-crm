@@ -102,6 +102,8 @@ export const esMessages = {
       load_more: "Cargar más",
       tasks_empty: "Todo al día por ahora.",
       upcoming_deal_revenue: "Ingresos previstos",
+      revenue: "Ingresos",
+      outstanding_invoices: "Facturas pendientes",
       deals_chart: {
         won: "Ganado",
         lost: "Perdido",
@@ -1331,9 +1333,12 @@ export const esMessages = {
         mark_as_cancelled: "Marcar como cancelada",
         print: "Imprimir",
         suggest_number: "Sugerir número",
+        export_csv: "Exportar a CSV",
+        send_email: "Enviar por correo",
       },
       notification: {
         status_updated: "Estado de la factura actualizado a %{status}",
+        email_sent: "La factura #%{number} ha sido enviada al cliente",
       },
       helper: {
         invoice_number: "Identificador único de factura",

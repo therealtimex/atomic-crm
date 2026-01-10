@@ -99,6 +99,8 @@ export const koMessages = {
       load_more: "더 보기",
       tasks_empty: "현재 할 일이 없습니다.",
       upcoming_deal_revenue: "예상 거래 매출",
+      revenue: "수익",
+      outstanding_invoices: "미결제 송장",
       deals_chart: {
         won: "성공",
         lost: "실패",
@@ -1294,6 +1296,17 @@ export const koMessages = {
         new_invoice: "새 청구서",
         add_item: "항목 추가",
         edit: "청구서 수정",
+        mark_as_sent: "발송됨으로 표시",
+        mark_as_paid: "결제됨으로 표시",
+        mark_as_cancelled: "취소됨으로 표시",
+        print: "인쇄",
+        suggest_number: "번호 제안",
+        export_csv: "CSV로 내보내기",
+        send_email: "이메일로 보내기",
+      },
+      notification: {
+        status_updated: "송장 상태가 %{status}(으)로 업데이트되었습니다",
+        email_sent: "송장 #%{number}이(가) 클라이언트에게 전송되었습니다",
       },
       helper: {
         invoice_number: "고유 청구서 ID",

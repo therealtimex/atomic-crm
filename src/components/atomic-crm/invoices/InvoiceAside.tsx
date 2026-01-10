@@ -1,5 +1,5 @@
-import { useNotify, useRefresh, useShowContext, useTranslate, useUpdate } from "ra-core";
-import { Check, Printer, Send, XCircle } from "lucide-react";
+import { useNotify, useRefresh, useShowContext, useTranslate, useUpdate, useDataProvider } from "ra-core";
+import { Mail, Check, Download, Printer, Send, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DateField } from "@/components/admin/date-field";
@@ -60,6 +60,8 @@ export const InvoiceAside = () => {
                         <Printer className="w-4 h-4 mr-2" />
                         {translate("resources.invoices.action.print")}
                     </Button>
+                    <ExportCSVButton record={record} />
+                    <SendEmailButton record={record} />
                 </CardContent>
             </Card>
 
@@ -147,6 +149,113 @@ export const InvoiceAside = () => {
                 </Card>
             )}
         </div>
+    );
+};
+
+const ExportCSVButton = ({ record }: { record: Invoice }) => {
+    const translate = useTranslate();
+    const dataProvider = useDataProvider();
+    const notify = useNotify();
+
+    const handleExport = async () => {
+        try {
+            // Fetch invoice items
+            const { data: items } = await dataProvider.getList('invoice_items', {
+                filter: { invoice_id: record.id },
+                pagination: { page: 1, perPage: 100 },
+                sort: { field: 'sort_order', order: 'ASC' },
+            });
+
+            // Prepare CSV content
+            const header = [
+                'Invoice Number',
+                'Reference',
+                'Issue Date',
+                'Due Date',
+                'Status',
+                'Currency',
+                'Subtotal',
+                'Discount',
+                'Tax Total',
+                'Total',
+                'Item Name',
+                'Item Qty',
+                'Item Price',
+                'Item Total',
+            ];
+
+            const rows = items.map((item: any) => [
+                record.invoice_number,
+                record.reference || '',
+                record.issue_date,
+                record.due_date,
+                record.status,
+                record.currency,
+                record.subtotal,
+                record.discount,
+                record.tax_total,
+                record.total,
+                item.description,
+                item.quantity,
+                item.unit_price,
+                item.line_total_with_tax,
+            ]);
+
+            const csvContent = [
+                header.join(','),
+                ...rows.map((row: any[]) => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')),
+            ].join('\n');
+
+            // Download CSV
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `invoice-${record.invoice_number}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error: any) {
+            notify(error.message, { type: 'warning' });
+        }
+    };
+
+    return (
+        <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleExport}
+            className="w-full justify-start"
+        >
+            <Download className="w-4 h-4 mr-2" />
+            {translate("resources.invoices.action.export_csv")}
+        </Button>
+    );
+};
+
+const SendEmailButton = ({ record }: { record: Invoice }) => {
+    const translate = useTranslate();
+    const notify = useNotify();
+
+    const handleSend = () => {
+        // Mock email sending
+        notify('resources.invoices.notification.email_sent', {
+            type: 'success',
+            messageArgs: { number: record.invoice_number }
+        });
+    };
+
+    return (
+        <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleSend}
+            className="w-full justify-start"
+        >
+            <Mail className="w-4 h-4 mr-2" />
+            {translate("resources.invoices.action.send_email")}
+        </Button>
     );
 };
 

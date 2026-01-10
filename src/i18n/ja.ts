@@ -101,6 +101,8 @@ export const jaMessages = {
       load_more: "さらに読み込む",
       tasks_empty: "今のところ未処理のタスクはありません。",
       upcoming_deal_revenue: "今後の売上見込み",
+      revenue: "収益",
+      outstanding_invoices: "未払請求書",
       deals_chart: {
         won: "成約",
         lost: "失注",
@@ -1300,6 +1302,17 @@ export const jaMessages = {
         new_invoice: "新規請求書",
         add_item: "明細追加",
         edit: "編集",
+        mark_as_sent: "送付済みとしてマーク",
+        mark_as_paid: "支払い済みとしてマーク",
+        mark_as_cancelled: "キャンセル済みとしてマーク",
+        print: "印刷",
+        suggest_number: "番号を提案",
+        export_csv: "CSVへエクスポート",
+        send_email: "メールで送信",
+      },
+      notification: {
+        status_updated: "請求書のステータスを %{status} に更新しました",
+        email_sent: "請求書 #%{number} をクライアントに送信しました",
       },
       helper: {
         invoice_number: "一意の請求書ID",

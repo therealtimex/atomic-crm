@@ -233,8 +233,8 @@ const InvoiceShowContent = () => {
 
                         <Separator className="my-6" />
 
-                        {/* Activity Notes */}
-                        <div className="mt-8">
+                        {/* Activity Notes (Hidden from print) */}
+                        <div className="mt-8 no-print">
                             <h3 className="text-lg font-semibold mb-4">
                                 {translate("resources.invoices.section.activity")}
                             </h3>

@@ -176,6 +176,7 @@ input[type=number] {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -200,4 +201,48 @@ input[type=number] {
   display: block;
   height: 100%;
   width: 100%;
+}
+
+@media print {
+
+  header,
+  nav,
+  aside,
+  .no-print,
+  button,
+  .ra-notification,
+  .ra-sidebar {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    position: static !important;
+  }
+
+  /* Ensure background colors are printed */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Card styling for print */
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  body {
+    background-color: white !important;
+  }
+
+  /* Force vertical layout for details (remove horizontal gaps) */
+  .flex.gap-8 {
+    display: block !important;
+  }
+
+  .mt-2.mb-2 {
+    margin: 0 !important;
+  }
 }

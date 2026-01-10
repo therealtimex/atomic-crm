@@ -99,6 +99,8 @@ export const viMessages = {
       load_more: "Tải thêm",
       tasks_empty: "Tạm thời không có việc.",
       upcoming_deal_revenue: "Doanh thu giao dịch sắp tới",
+      revenue: "Doanh thu",
+      outstanding_invoices: "Hóa đơn chưa thanh toán",
       deals_chart: {
         won: "Thành công",
         lost: "Thất bại",
@@ -1303,6 +1305,17 @@ export const viMessages = {
         new_invoice: "Tạo Hóa đơn",
         add_item: "Thêm mục",
         edit: "Sửa hóa đơn",
+        mark_as_sent: "Đánh dấu là đã gửi",
+        mark_as_paid: "Đánh dấu là đã thanh toán",
+        mark_as_cancelled: "Đánh dấu là đã hủy",
+        print: "In",
+        suggest_number: "Gợi ý số",
+        export_csv: "Xuất ra CSV",
+        send_email: "Gửi qua Email",
+      },
+      notification: {
+        status_updated: "Trạng thái hóa đơn đã được cập nhật thành %{status}",
+        email_sent: "Hóa đơn #%{number} đã được gửi đến khách hàng",
       },
       helper: {
         invoice_number: "Mã định danh hóa đơn",

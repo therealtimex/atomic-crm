@@ -101,6 +101,8 @@ export const enMessages = {
       load_more: "Load more",
       tasks_empty: "All caught up for now.",
       upcoming_deal_revenue: "Upcoming Deal Revenue",
+      revenue: "Revenue",
+      outstanding_invoices: "Outstanding Invoices",
       deals_chart: {
         won: "Won",
         lost: "Lost",
@@ -1311,9 +1313,12 @@ export const enMessages = {
         mark_as_cancelled: "Mark as Cancelled",
         print: "Print",
         suggest_number: "Suggest Number",
+        export_csv: "Export to CSV",
+        send_email: "Send by Email",
       },
       notification: {
         status_updated: "Invoice status updated to %{status}",
+        email_sent: "Invoice #%{number} has been sent to the client's email address",
       },
       helper: {
         invoice_number: "Unique invoice identifier",
