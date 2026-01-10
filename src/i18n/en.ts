@@ -1315,10 +1315,12 @@ export const enMessages = {
         suggest_number: "Suggest Number",
         export_csv: "Export to CSV",
         send_email: "Send by Email",
+        download_pdf: "Download PDF",
       },
       notification: {
         status_updated: "Invoice status updated to %{status}",
         email_sent: "Invoice #%{number} has been sent to the client's email address",
+        pdf_downloaded: "Invoice #%{number} PDF has been downloaded",
       },
       helper: {
         invoice_number: "Unique invoice identifier",
@@ -1326,6 +1328,13 @@ export const enMessages = {
         payment_terms: "e.g., Net 30, Due on receipt",
         select_company_for_contacts: "Select a company to see its contacts",
         select_company_for_deals: "Select a company to see its deals",
+      },
+      email: {
+        subject: "Subject",
+        body: "Message Body",
+        description: "Review and customize the email message before sending it to the client.",
+        body_intro: "We've generated a new invoice (#%{number}) for your records.",
+        body_closing: "You can find all the details of this invoice attached. Please let us know if you have any questions.",
       },
       empty_items: "No line items added yet",
       days_overdue: "days overdue",

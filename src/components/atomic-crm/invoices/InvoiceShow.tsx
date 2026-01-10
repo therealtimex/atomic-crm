@@ -7,7 +7,7 @@ import { FunctionField } from "@/components/admin/function-field";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-import { CompanyAvatar } from "../companies/CompanyAvatar";
+import { CompanyLogo } from "../companies/CompanyLogo";
 import { NoteCreate } from "../notes/NoteCreate";
 import { NotesIterator } from "../notes/NotesIterator";
 import type { Invoice, InvoiceItem } from "../types";
@@ -28,7 +28,7 @@ const InvoiceShowContent = () => {
     return (
         <div className="mt-2 mb-2 flex gap-8">
             <div className="flex-1">
-                <Card>
+                <Card id="invoice-content">
                     <CardHeader className="border-b">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
@@ -38,7 +38,16 @@ const InvoiceShowContent = () => {
                                         reference="companies"
                                         link="show"
                                     >
-                                        <CompanyAvatar />
+                                        <CompanyLogo className="no-print" />
+                                    </ReferenceField>
+                                )}
+                                {record.company_id && (
+                                    <ReferenceField
+                                        source="company_id"
+                                        reference="companies"
+                                        link={false}
+                                    >
+                                        <CompanyLogo className="hidden print:block" />
                                     </ReferenceField>
                                 )}
                                 <div>
@@ -207,29 +216,41 @@ const InvoiceShowContent = () => {
                             </div>
                         </div>
 
-                        {/* Notes */}
-                        {record.notes && (
-                            <div className="mb-6">
-                                <h3 className="text-sm font-semibold mb-2">
-                                    {translate("resources.invoices.fields.notes")}:
-                                </h3>
-                                <p className="text-sm text-muted-foreground whitespace-pre-line">
-                                    {record.notes}
-                                </p>
-                            </div>
-                        )}
+                        {/* Notes, Terms & Conditions */}
+                        <div className="space-y-6">
+                            {record.notes && (
+                                <div>
+                                    <h3 className="text-sm font-semibold mb-2">
+                                        {translate("resources.invoices.fields.notes")}:
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground whitespace-pre-line">
+                                        {record.notes}
+                                    </p>
+                                </div>
+                            )}
 
-                        {/* Payment Terms */}
-                        {record.payment_terms && (
-                            <div className="mb-6">
-                                <h3 className="text-sm font-semibold mb-2">
-                                    {translate("resources.invoices.fields.payment_terms")}:
-                                </h3>
-                                <p className="text-sm text-muted-foreground whitespace-pre-line">
-                                    {record.payment_terms}
-                                </p>
-                            </div>
-                        )}
+                            {record.payment_terms && (
+                                <div>
+                                    <h3 className="text-sm font-semibold mb-2">
+                                        {translate("resources.invoices.fields.payment_terms")}:
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground whitespace-pre-line">
+                                        {record.payment_terms}
+                                    </p>
+                                </div>
+                            )}
+
+                            {record.terms_and_conditions && (
+                                <div>
+                                    <h3 className="text-sm font-semibold mb-2">
+                                        {translate("resources.invoices.fields.terms_and_conditions")}:
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground whitespace-pre-line">
+                                        {record.terms_and_conditions}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
 
                         <Separator className="my-6" />
 
@@ -254,7 +275,7 @@ const InvoiceShowContent = () => {
                 </Card>
             </div>
             <InvoiceAside />
-        </div>
+        </div >
     );
 };
 

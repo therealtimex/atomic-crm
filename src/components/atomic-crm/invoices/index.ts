@@ -5,6 +5,10 @@ import { InvoiceShow } from "./InvoiceShow";
 import { InvoiceCreate } from "./InvoiceCreate";
 import { InvoiceEdit } from "./InvoiceEdit";
 import { InvoiceCard } from "./InvoiceCard";
+import { DownloadPDFButton } from "./DownloadPDFButton";
+
+import { InvoiceAside } from "./InvoiceAside";
+import { InvoiceEmailModal } from "./InvoiceEmailModal";
 
 export default {
     list: InvoiceList,
@@ -15,4 +19,4 @@ export default {
     recordRepresentation: "invoice_number",
 };
 
-export { InvoiceList, InvoiceShow, InvoiceCreate, InvoiceEdit, InvoiceCard };
+export { InvoiceList, InvoiceShow, InvoiceCreate, InvoiceEdit, InvoiceCard, InvoiceAside, InvoiceEmailModal, DownloadPDFButton };

@@ -246,3 +246,26 @@ input[type=number] {
     margin: 0 !important;
   }
 }
+/* Force Light Mode for PDF Export */
+.pdf-export,
+.pdf-export * {
+  --background: oklch(1 0 0) !important;
+  --foreground: oklch(0.145 0 0) !important;
+  --card: oklch(1 0 0) !important;
+  --card-foreground: oklch(0.145 0 0) !important;
+  --primary: oklch(0.205 0 0) !important;
+  --primary-foreground: oklch(0.985 0 0) !important;
+  --muted: oklch(0.97 0 0) !important;
+  --muted-foreground: oklch(0.556 0 0) !important;
+  --accent: oklch(0.97 0 0) !important;
+  --accent-foreground: oklch(0.205 0 0) !important;
+  --border: oklch(0.922 0 0) !important;
+  --input: oklch(0.922 0 0) !important;
+  --ring: oklch(0.708 0 0) !important;
+  color: oklch(0.145 0 0) !important;
+  border-color: oklch(0.922 0 0) !important;
+}
+
+.pdf-export {
+  background-color: white !important;
+}

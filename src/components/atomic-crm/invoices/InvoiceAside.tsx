@@ -1,5 +1,5 @@
 import { useNotify, useRefresh, useShowContext, useTranslate, useUpdate, useDataProvider } from "ra-core";
-import { Mail, Check, Download, Printer, Send, XCircle } from "lucide-react";
+import { Check, Download, Printer, Send, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DateField } from "@/components/admin/date-field";
@@ -7,6 +7,8 @@ import { ReferenceField } from "@/components/admin/reference-field";
 import { TextField } from "@/components/admin/text-field";
 import { EditButton } from "@/components/admin/edit-button";
 
+import { InvoiceEmailModal } from "./InvoiceEmailModal";
+import { DownloadPDFButton } from "./DownloadPDFButton";
 import type { Invoice } from "../types";
 
 export const InvoiceAside = () => {
@@ -61,7 +63,8 @@ export const InvoiceAside = () => {
                         {translate("resources.invoices.action.print")}
                     </Button>
                     <ExportCSVButton record={record} />
-                    <SendEmailButton record={record} />
+                    <DownloadPDFButton record={record} />
+                    <InvoiceEmailModal record={record} />
                 </CardContent>
             </Card>
 
@@ -234,30 +237,6 @@ const ExportCSVButton = ({ record }: { record: Invoice }) => {
     );
 };
 
-const SendEmailButton = ({ record }: { record: Invoice }) => {
-    const translate = useTranslate();
-    const notify = useNotify();
-
-    const handleSend = () => {
-        // Mock email sending
-        notify('resources.invoices.notification.email_sent', {
-            type: 'success',
-            messageArgs: { number: record.invoice_number }
-        });
-    };
-
-    return (
-        <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleSend}
-            className="w-full justify-start"
-        >
-            <Mail className="w-4 h-4 mr-2" />
-            {translate("resources.invoices.action.send_email")}
-        </Button>
-    );
-};
 
 const ActionButton = ({
     label,
@@ -275,23 +254,37 @@ const ActionButton = ({
     const translate = useTranslate();
     const notify = useNotify();
     const refresh = useRefresh();
-    const [update, { isPending }] = useUpdate(
-        'invoices',
-        { id: record.id, data: { status, ...(status === 'paid' ? { paid_at: new Date().toISOString() } : {}), ...(status === 'sent' ? { sent_at: new Date().toISOString() } : {}) } },
-        {
-            onSuccess: () => {
-                notify('resources.invoices.notification.status_updated', { type: 'info', messageArgs: { status: translate(`resources.invoices.status.${status}`) } });
-                refresh();
+    const [update, { isPending }] = useUpdate();
+
+    const handleUpdate = () => {
+        update(
+            'invoices',
+            {
+                id: record.id,
+                data: {
+                    status,
+                    ...(status === 'paid' ? { paid_at: new Date().toISOString() } : {}),
+                    ...(status === 'sent' ? { sent_at: new Date().toISOString() } : {})
+                }
             },
-            onError: (error: any) => notify(error.message, { type: 'warning' }),
-        }
-    );
+            {
+                onSuccess: () => {
+                    notify('resources.invoices.notification.status_updated', {
+                        type: 'info',
+                        messageArgs: { status: translate(`resources.invoices.status.${status}`) }
+                    });
+                    refresh();
+                },
+                onError: (error: any) => notify(error.message, { type: 'warning' }),
+            }
+        );
+    };
 
     return (
         <Button
             variant={variant}
             size="sm"
-            onClick={() => update()}
+            onClick={handleUpdate}
             disabled={isPending}
             className="w-full justify-start"
         >
