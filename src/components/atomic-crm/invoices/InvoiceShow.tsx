@@ -1,4 +1,5 @@
-import { ShowBase, useShowContext, useTranslate, useListContext } from "ra-core";
+import { ShowBase, useShowContext, useTranslate, useListContext, useDataProvider } from "ra-core";
+import { useQuery } from "@tanstack/react-query";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { ReferenceManyField } from "@/components/admin/reference-many-field";
 import { TextField } from "@/components/admin/text-field";
@@ -22,6 +23,20 @@ export const InvoiceShow = () => (
 const InvoiceShowContent = () => {
     const { record, isPending } = useShowContext<Invoice>();
     const translate = useTranslate();
+    const dataProvider = useDataProvider();
+
+    // Fetch business profile for sender branding
+    const { data: businessProfile } = useQuery({
+        queryKey: ["business_profile"],
+        queryFn: async () => {
+            try {
+                const { data } = await dataProvider.getOne("business_profile", { id: 1 });
+                return data;
+            } catch (e) {
+                return null;
+            }
+        },
+    });
 
     if (isPending || !record) return null;
 
@@ -30,9 +45,15 @@ const InvoiceShowContent = () => {
             <div className="flex-1">
                 <Card id="invoice-content">
                     <CardHeader className="border-b">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                {record.company_id && (
+                        <div className="flex items-start justify-between">
+                            <div className="flex items-center gap-6">
+                                {businessProfile?.logo?.src ? (
+                                    <img
+                                        src={businessProfile.logo.src}
+                                        alt={businessProfile.name}
+                                        className="w-16 h-16 object-contain rounded border bg-white"
+                                    />
+                                ) : record.company_id && (
                                     <ReferenceField
                                         source="company_id"
                                         reference="companies"
@@ -41,19 +62,14 @@ const InvoiceShowContent = () => {
                                         <CompanyLogo className="no-print" />
                                     </ReferenceField>
                                 )}
-                                {record.company_id && (
-                                    <ReferenceField
-                                        source="company_id"
-                                        reference="companies"
-                                        link={false}
-                                    >
-                                        <CompanyLogo className="hidden print:block" />
-                                    </ReferenceField>
-                                )}
+
                                 <div>
-                                    <CardTitle className="text-2xl">
-                                        {translate("resources.invoices.name", { smart_count: 1 })} #{record.invoice_number}
-                                    </CardTitle>
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <CardTitle className="text-2xl">
+                                            {translate("resources.invoices.name", { smart_count: 1 })} #{record.invoice_number}
+                                        </CardTitle>
+                                        <InvoiceStatusBadge record={record} />
+                                    </div>
                                     {record.reference && (
                                         <p className="text-sm text-muted-foreground">
                                             {translate("resources.invoices.fields.reference")}: {record.reference}
@@ -61,7 +77,21 @@ const InvoiceShowContent = () => {
                                     )}
                                 </div>
                             </div>
-                            <InvoiceStatusBadge record={record} />
+
+                            {/* Sender Info (Address/Tax ID) */}
+                            {businessProfile && (
+                                <div className="text-right text-xs space-y-1">
+                                    <p className="font-bold text-sm uppercase">{businessProfile.name}</p>
+                                    {businessProfile.address && (
+                                        <p className="whitespace-pre-line text-muted-foreground">{businessProfile.address}</p>
+                                    )}
+                                    {businessProfile.tax_id && (
+                                        <p className="text-muted-foreground">
+                                            {translate("resources.business_profile.fields.tax_id")}: {businessProfile.tax_id}
+                                        </p>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </CardHeader>
 
@@ -247,6 +277,17 @@ const InvoiceShowContent = () => {
                                     </h3>
                                     <p className="text-sm text-muted-foreground whitespace-pre-line">
                                         {record.terms_and_conditions}
+                                    </p>
+                                </div>
+                            )}
+
+                            {businessProfile?.bank_details && (
+                                <div className="p-4 bg-muted/20 border-l-4 border-muted rounded-r">
+                                    <h3 className="text-sm font-semibold mb-2">
+                                        {translate("resources.business_profile.fields.bank_details")}:
+                                    </h3>
+                                    <p className="text-sm font-mono whitespace-pre-line">
+                                        {businessProfile.bank_details}
                                     </p>
                                 </div>
                             )}

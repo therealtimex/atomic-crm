@@ -444,3 +444,14 @@ export type TaxPreset = {
   created_at: string;
 } & Pick<RaRecord, 'id'>;
 
+
+export type BusinessProfile = {
+  name: string;
+  address?: string;
+  tax_id?: string;
+  vat_number?: string;
+  bank_details?: string;
+  logo?: RAFile;
+  default_payment_terms?: string;
+  default_terms_and_conditions?: string;
+} & Pick<RaRecord, "id">;

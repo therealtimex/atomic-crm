@@ -1062,6 +1062,10 @@ export const enMessages = {
       },
     },
     settings: {
+      section: {
+        profile: "My Profile",
+        organization: "Organization Branding",
+      },
       notification: {
         profile_updated: "Your profile has been updated",
         error: "An error occurred. Please try again",
@@ -1338,6 +1342,21 @@ export const enMessages = {
       },
       empty_items: "No line items added yet",
       days_overdue: "days overdue",
+    },
+    business_profile: {
+      name: "Business Profile",
+      fields: {
+        name: "Organization Name",
+        logo: "Organization Logo",
+        address: "Official Address",
+        tax_id: "Tax ID / VAT Number",
+        bank_details: "Bank Details (Payment Instructions)",
+        default_payment_terms: "Default Payment Terms",
+        default_terms_and_conditions: "Default Terms & Conditions",
+      },
+      notification: {
+        updated: "Organization profile updated successfully",
+      },
     },
   },
   "ra-supabase": {

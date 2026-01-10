@@ -413,6 +413,15 @@ export const dataProvider = withLifecycleCallbacks(
   dataProviderWithCustomMethods,
   [
     {
+      resource: "business_profile",
+      beforeUpdate: async (params) => {
+        if (params.data.logo && params.data.logo.rawFile instanceof File) {
+          await uploadToBucket(params.data.logo);
+        }
+        return params;
+      },
+    },
+    {
       resource: "contactNotes",
       beforeSave: async (data: ContactNote, _, __) => {
         if (data.attachments) {

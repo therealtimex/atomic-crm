@@ -1,4 +1,5 @@
-import { useTranslate, useGetIdentity, required } from "ra-core";
+import { useTranslate, useGetIdentity, required, useDataProvider, useRecordContext } from "ra-core";
+import { useQuery } from "@tanstack/react-query";
 import { useWatch, useFormContext } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
@@ -17,7 +18,22 @@ export const InvoiceInputs = () => {
     const { identity } = useGetIdentity();
     const { setValue } = useFormContext();
     const location = useLocation();
+    const record = useRecordContext();
     const company_id = useWatch({ name: "company_id" });
+    const dataProvider = useDataProvider();
+
+    // Fetch business profile for default terms
+    const { data: businessProfile } = useQuery({
+        queryKey: ["business_profile"],
+        queryFn: async () => {
+            try {
+                const { data } = await dataProvider.getOne("business_profile", { id: 1 });
+                return data;
+            } catch (e) {
+                return null;
+            }
+        },
+    });
 
     // Pre-fill from router state (e.g. when coming from CompanyShow)
     useEffect(() => {
@@ -29,6 +45,18 @@ export const InvoiceInputs = () => {
             if (deal_id) setValue("deal_id", deal_id);
         }
     }, [location.state, setValue]);
+
+    // Pre-fill default terms from business profile for NEW invoices
+    useEffect(() => {
+        if (!record && businessProfile) {
+            if (businessProfile.default_payment_terms) {
+                setValue("payment_terms", businessProfile.default_payment_terms);
+            }
+            if (businessProfile.default_terms_and_conditions) {
+                setValue("terms_and_conditions", businessProfile.default_terms_and_conditions);
+            }
+        }
+    }, [record, businessProfile, setValue]);
 
     // Clear dependent fields when company changes (optional but good UX)
     // We need a ref to track previous company_id if we want to avoid initial clear
