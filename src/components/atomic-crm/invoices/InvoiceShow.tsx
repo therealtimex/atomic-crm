@@ -294,7 +294,7 @@ const InvoiceItemsTable = ({ currency }: { currency: string }) => {
                 </thead>
                 <tbody>
                     {data.map((item, index) => (
-                        <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-muted/30"}>
+                        <tr key={item.id} className={index % 2 === 0 ? "bg-transparent" : "bg-muted/30"}>
                             <td className="p-3 text-sm">
                                 <div>
                                     <p className="font-medium">{item.description}</p>

@@ -292,7 +292,7 @@ export const InvoiceItemsInput = () => {
                                         type="number"
                                         min="0"
                                         step="0.01"
-                                        className="w-28 h-9 text-right bg-white"
+                                        className="w-28 h-9 text-right"
                                         value={discount}
                                         onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
                                     />
