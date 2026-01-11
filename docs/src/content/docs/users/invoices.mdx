@@ -1,63 +1,89 @@
 ---
 title: Managing Invoices
-description: RealTimeX CRM includes a comprehensive invoicing system to manage your revenue directly from your CRM.
+description: Create professional invoices, manage templates, and track revenue directly within RealTimeX CRM.
 ---
 
 RealTimeX CRM features a powerful Invoices module that allows you to create, manage, and track professional invoices linked to your companies, contacts, and deals.
 
 ## Overview
 
-The Invoices module provides a complete workflow for your billing process, fully integrated with your business entities.
+The Invoices module provides a complete workflow for your billing process, from template-based creation to PDF generation and email delivery.
 
 ![Invoices Dashboard](../images/dashboard.png)
 
-## Key Features
+## Configuring Your Brand
 
-- **Integrated Workflow**: Link invoices directly to Companies, Contacts, and Deals.
-- **Smart Creation**: Pre-fill invoice data from related entities with one click.
-- **Revenue Dashboard**: Track your performance with a real-time revenue chart and outstanding invoices list.
-- **Professional PDF Export**: Generate clean, professional invoices for your clients.
-- **CSV Export**: Easily export your invoice data for your accounting software.
-- **Email Communication**: Built-in "Send by Email" action to streamline client communication.
-- **Tax Presets**: Quickly apply tax rates with customizable presets.
+Before sending invoices, ensure your organization's identity is set up in **Settings > Organization**.
+
+- **Branding**: Upload your company logo.
+- **Organization Details**: Set your company name, address, and Tax ID.
+- **Banking**: Add your bank details and payment instructions.
+- **Email Settings**: Configure the "Sender Name" and "Sender Email" (e.g., `billing@yourcompany.com`) that will appear on outgoing emails.
+
+All these details will automatically appear on your invoices and in email footers.
+
+## Invoice Templates
+
+Templates allow you to save reusable invoice structures to speed up your workflow.
+
+### Creating a Template
+1. Go to **Invoices > Templates**.
+2. Click **Create Template**.
+3. Define default values for:
+   - **Line Items** (e.g., standard services or products)
+   - **Notes** (e.g., "Thank you for your business")
+   - **Payment Terms** (e.g., "Net 30")
+   - **Due Days** (e.g., 14 days)
+
+### Using a Template
+When creating a new invoice, simply select a template from the dropdown. All predefined items, notes, and settings will be instantly applied, which you can then customize for the specific client.
 
 ## Creating an Invoice
 
 You can create an invoice from the main Invoices list or directly from a Company, Contact, or Deal show page.
 
-### Smart Pre-fill
+### Smart Context
 When creating an invoice from a specific entity (e.g., a Deal), the CRM automatically pre-fills:
-- Customer details
-- Primary contact
+- Customer details (Company/Contact)
 - Related deal information
-- Default currency and payment terms
+- Primary recipient email
 
 ### Adding Line Items
 The invoice editor allows you to add multiple line items with:
 - Description and detailed notes
 - Quantity and unit price
-- Tax rates (including presets)
-- Automatic total calculation
+- Discount (Percentage or Fixed Amount)
+- Tax rates (with quick presets like 0%, 10%, 20%)
 
-## Managing Invoice Status
+## Sending Invoices via Email
+
+Streamline client communication by emailing invoices directly from the CRM.
+
+1. Open the invoice and click **Send Email**.
+2. **Recipient Detection**: The system intelligently suggests the best email address (Contact's primary email or Company email).
+3. **CC Support**: Add multiple CC recipients (e.g., `accounting@client.com`) if needed.
+4. **Professional Delivery**: The email includes a branded summary and the invoice attached as a high-quality PDF.
+5. **Status Update**: Upon sending, the invoice status is automatically updated to **Sent**.
+
+## Managing Status & Payment
 
 Track the lifecycle of your invoices through various statuses:
 - **Draft**: Initial creation phase.
-- **Sent**: Mark as sent when delivered to the client.
-- **Paid**: Recorded payment, including the payment date.
+- **Sent**: Marked automatically when emailed or manually after delivery.
+- **Paid**: use the **Mark as Paid** action to record the payment date.
 - **Overdue**: Automatically flagged based on the due date.
 - **Cancelled**: For voided invoices.
 
-## Dashboard Integration
+## Exporting & PDF
 
-The CRM dashboard includes two dedicated invoice widgets:
-1. **Revenue Overview**: A bar chart showing paid vs. pending revenue over the last 6 months.
-2. **Outstanding Invoices**: A prioritized list of overdue and pending high-value invoices.
+- **Download PDF**: Generate a high-fidelity, professional PDF including your branding, logo, and layout optimized for printing.
+- **CSV Export**: Download a raw data file of your invoices for import into external accounting software (QuickBooks, Xero, etc.).
 
-## Exporting and Printing
+## Dashboard Insights
 
-- **Professional Print**: Use the **Print** action to generate a clean, professional document for your client. The interface automatically hides all UI elements to focus on the invoice content.
-- **CSV Export**: Click **Export to CSV** to download a detailed breakdown of the invoice and its items, perfect for import into accounting tools like QuickBooks or Xero.
+The CRM dashboard includes two dedicated financial widgets:
+1. **Revenue Overview**: A bar chart showing paid vs. pending revenue trends over the last 6 months.
+2. **Outstanding Invoices**: A prioritized list of overdue and pending high-value invoices to help you chase payments.
 
 ## Localization
 
