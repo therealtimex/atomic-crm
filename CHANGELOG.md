@@ -5,6 +5,17 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.48.1] - 2026-01-11
+
+### Fixed
+
+- **Localization**: Fully localized the "Send by Email" modal across all 6 supported languages (en, es, fr, ja, ko, vi), including CC fields, labels, and placeholders.
+- **Localization**: Added missing translation for the "Download PDF" action label in all languages.
+- **Localization**: Resolved a syntax error in the English translation file (`en.ts`).
+- **Documentation**: Corrected an image resolution error in the user documentation that was causing build failures.
+- **Code Quality**: Fixed several ESLint errors related to unused variables in `InvoiceInputs.tsx` and `InvoiceShow.tsx`.
+- **Formatting**: Applied Prettier formatting across the codebase to resolve linting failures.
+
 ## [0.48.0] - 2026-01-11
 
 ### Added
