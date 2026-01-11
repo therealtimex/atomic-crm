@@ -30,6 +30,13 @@ export const InvoiceItemsInput = () => {
         field.onChange(items);
     }, [items]);
 
+    // Sync from form state (e.g. when template loaded)
+    useEffect(() => {
+        if (field.value && JSON.stringify(field.value) !== JSON.stringify(items)) {
+            setItems(field.value);
+        }
+    }, [field.value]);
+
     useEffect(() => {
         discountField.onChange(discount);
     }, [discount]);

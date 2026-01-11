@@ -124,16 +124,41 @@ export const InvoiceInputs = () => {
                 setValue("due_date", dueDate.toISOString().split("T")[0]);
             }
 
-            // Transform template items to invoice items
-            const invoiceItems = items.map((item: any) => ({
-                description: item.description,
-                item_description: item.item_description,
-                quantity: item.quantity,
-                unit_price: item.unit_price,
-                tax_rate: item.tax_rate,
-                discount_amount: item.discount_amount,
-                discount_type: item.discount_type,
-            }));
+            // Transform template items to invoice items and calculate totals
+            // Note: Current Invoice system only supports Global Discount.
+            // We bake per-item discounts from templates into the unit_price.
+            const invoiceItems = items.map((item: any) => {
+                let unitPrice = Number(item.unit_price) || 0;
+                const quantity = Number(item.quantity) || 0;
+                const taxRate = Number(item.tax_rate) || 0;
+
+                // Apply per-item discount to unit price
+                const discountAmount = Number(item.discount_amount) || 0;
+                const discountType = item.discount_type || 'percentage';
+
+                if (discountAmount > 0) {
+                    if (discountType === 'percentage') {
+                        unitPrice = unitPrice * (1 - discountAmount / 100);
+                    } else {
+                        unitPrice = Math.max(0, unitPrice - discountAmount);
+                    }
+                }
+
+                const lineTotal = quantity * unitPrice;
+                const taxAmount = (lineTotal * taxRate) / 100;
+                const lineTotalWithTax = lineTotal + taxAmount;
+
+                return {
+                    description: item.description,
+                    item_description: item.item_description,
+                    quantity: quantity,
+                    unit_price: unitPrice,
+                    tax_rate: taxRate,
+                    line_total: lineTotal,
+                    tax_amount: taxAmount,
+                    line_total_with_tax: lineTotalWithTax,
+                };
+            });
 
             setValue("items", invoiceItems);
 
