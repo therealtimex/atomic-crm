@@ -1295,7 +1295,8 @@ export const enMessages = {
         billing: "Billing To",
         items: "Line Items",
         activity: "Activity",
-        activity_description: "Track all updates and communications for this invoice",
+        activity_description:
+          "Track all updates and communications for this invoice",
         actions: "Actions",
         assigned_to: "Created By",
       },
@@ -1330,7 +1331,8 @@ export const enMessages = {
       },
       notification: {
         status_updated: "Invoice status updated to %{status}",
-        email_sent: "Invoice #%{number} has been sent to the client's email address",
+        email_sent:
+          "Invoice #%{number} has been sent to the client's email address",
         pdf_downloaded: "Invoice #%{number} PDF has been downloaded",
       },
       helper: {
@@ -1343,9 +1345,12 @@ export const enMessages = {
       email: {
         subject: "Subject",
         body: "Message Body",
-        description: "Review and customize the email message before sending it to the client.",
-        body_intro: "We've generated a new invoice (#%{number}) for your records.",
-        body_closing: "You can find all the details of this invoice attached. Please let us know if you have any questions.",
+        description:
+          "Review and customize the email message before sending it to the client.",
+        body_intro:
+          "We've generated a new invoice (#%{number}) for your records.",
+        body_closing:
+          "You can find all the details of this invoice attached. Please let us know if you have any questions.",
       },
       empty_items: "No line items added yet",
       days_overdue: "days overdue",

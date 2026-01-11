@@ -152,9 +152,9 @@ const dataProviderWithCustomMethods = {
           items.map((item: any) => {
             const { id: _id, ...itemData } = item;
             return baseDataProvider.create("invoice_items", {
-              data: { ...itemData, invoice_id: result.data.id }
+              data: { ...itemData, invoice_id: result.data.id },
             });
-          })
+          }),
         );
       }
       return result;
@@ -212,15 +212,18 @@ const dataProviderWithCustomMethods = {
 
       if (items) {
         // Simple sync strategy: remove all and re-add
-        await supabase.from("invoice_items").delete().eq("invoice_id", params.id);
+        await supabase
+          .from("invoice_items")
+          .delete()
+          .eq("invoice_id", params.id);
         if (items.length > 0) {
           await Promise.all(
             items.map((item: any) => {
               const { id: _id, ...itemData } = item;
               return baseDataProvider.create("invoice_items", {
-                data: { ...itemData, invoice_id: params.id }
+                data: { ...itemData, invoice_id: params.id },
               });
-            })
+            }),
           );
         }
       }

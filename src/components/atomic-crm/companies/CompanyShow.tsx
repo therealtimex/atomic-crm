@@ -202,9 +202,9 @@ const ContactsIterator = () => {
                   {contact.title}
                   {contact.nb_tasks
                     ? ` - ${translate("crm.task.field.task", {
-                      count: contact.nb_tasks,
-                      smart_count: contact.nb_tasks,
-                    })}`
+                        count: contact.nb_tasks,
+                        smart_count: contact.nb_tasks,
+                      })}`
                     : ""}
                   &nbsp; &nbsp;
                   <TagsList />

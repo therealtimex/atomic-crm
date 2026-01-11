@@ -369,9 +369,14 @@ export interface ContactGender {
 // INVOICE TYPES
 // ============================================================================
 
-export type InvoiceStatus = 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled';
+export type InvoiceStatus = "draft" | "sent" | "paid" | "overdue" | "cancelled";
 
-export type InvoiceItemType = 'service' | 'product' | 'hour' | 'day' | 'deposit';
+export type InvoiceItemType =
+  | "service"
+  | "product"
+  | "hour"
+  | "day"
+  | "deposit";
 
 export type Invoice = {
   invoice_number: string;
@@ -387,7 +392,7 @@ export type Invoice = {
   currency: string; // ISO 4217 currency code
   subtotal: number;
   discount: number; // Global discount amount
-  discount_type: 'fixed' | 'percentage';
+  discount_type: "fixed" | "percentage";
   tax_total: number;
   total: number;
   amount_paid: number;
@@ -410,7 +415,7 @@ export type Invoice = {
   computed_status?: string;
   days_overdue?: number;
   balance_due?: number;
-} & Pick<RaRecord, 'id'>;
+} & Pick<RaRecord, "id">;
 
 export type InvoiceItem = {
   invoice_id: Identifier;
@@ -425,7 +430,7 @@ export type InvoiceItem = {
   line_total: number;
   line_total_with_tax: number;
   sort_order: number;
-} & Pick<RaRecord, 'id'>;
+} & Pick<RaRecord, "id">;
 
 export type InvoiceNote = {
   invoice_id: Identifier;
@@ -433,7 +438,7 @@ export type InvoiceNote = {
   date: string;
   sales_id?: Identifier;
   attachments?: AttachmentNote[];
-} & Pick<RaRecord, 'id'>;
+} & Pick<RaRecord, "id">;
 
 export type TaxPreset = {
   name: string;
@@ -442,8 +447,7 @@ export type TaxPreset = {
   description?: string;
   is_active: boolean;
   created_at: string;
-} & Pick<RaRecord, 'id'>;
-
+} & Pick<RaRecord, "id">;
 
 export type BusinessProfile = {
   name: string;

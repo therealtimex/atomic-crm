@@ -1,4 +1,10 @@
-import { ShowBase, useListContext, useRecordContext, useShowContext, useTranslate } from "ra-core";
+import {
+  ShowBase,
+  useListContext,
+  useRecordContext,
+  useShowContext,
+  useTranslate,
+} from "ra-core";
 import { Link as RouterLink } from "react-router-dom";
 import { Receipt } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -123,11 +129,11 @@ const CreateRelatedInvoiceButton = () => {
         state={
           deal
             ? {
-              record: {
-                deal_id: deal.id,
-                company_id: deal.company_id,
-              },
-            }
+                record: {
+                  deal_id: deal.id,
+                  company_id: deal.company_id,
+                },
+              }
             : undefined
         }
         className="flex items-center gap-2"

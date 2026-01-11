@@ -1344,7 +1344,8 @@ export const esMessages = {
         invoice_number: "Identificador único de factura",
         reference: "Número de referencia externo opcional",
         payment_terms: "ej: Neto 30, Al recibir",
-        select_company_for_contacts: "Seleccione una empresa para ver sus contactos",
+        select_company_for_contacts:
+          "Seleccione una empresa para ver sus contactos",
         select_company_for_deals: "Seleccione una empresa para ver sus tratos",
       },
       empty_items: "No hay artículos añadidos",

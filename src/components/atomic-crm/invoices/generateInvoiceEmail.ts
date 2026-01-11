@@ -1,41 +1,42 @@
 import type { Invoice } from "../types";
 
 interface EmailTemplateData {
-    invoice: Invoice;
-    businessProfile?: {
-        name?: string;
-        logo?: { src?: string };
-        address?: string;
-        email_from_name?: string;
-    };
-    company?: {
-        name?: string;
-    };
-    contact?: {
-        first_name?: string;
-        last_name?: string;
-        email?: string;
-    };
-    items?: Array<{
-        description: string;
-        quantity: number;
-        unit_price: number;
-        line_total_with_tax: number;
-    }>;
-    message?: string;
+  invoice: Invoice;
+  businessProfile?: {
+    name?: string;
+    logo?: { src?: string };
+    address?: string;
+    email_from_name?: string;
+  };
+  company?: {
+    name?: string;
+  };
+  contact?: {
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+  };
+  items?: Array<{
+    description: string;
+    quantity: number;
+    unit_price: number;
+    line_total_with_tax: number;
+  }>;
+  message?: string;
 }
 
 export function generateInvoiceEmailHTML(data: EmailTemplateData): string {
-    const { invoice, businessProfile, company, contact, items, message } = data;
+  const { invoice, businessProfile, company, contact, items, message } = data;
 
-    const contactName = contact?.first_name
-        ? `${contact.first_name} ${contact.last_name || ''}`.trim()
-        : 'Valued Customer';
+  const contactName = contact?.first_name
+    ? `${contact.first_name} ${contact.last_name || ""}`.trim()
+    : "Valued Customer";
 
-    const companyName = company?.name || '';
-    const senderName = businessProfile?.email_from_name || businessProfile?.name || 'Your Company';
+  const companyName = company?.name || "";
+  const senderName =
+    businessProfile?.email_from_name || businessProfile?.name || "Your Company";
 
-    return `
+  return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,14 +53,22 @@ export function generateInvoiceEmailHTML(data: EmailTemplateData): string {
           <!-- Header -->
           <tr>
             <td style="padding: 40px 40px 20px 40px;">
-              ${businessProfile?.logo?.src ? `
+              ${
+                businessProfile?.logo?.src
+                  ? `
                 <img src="${businessProfile.logo.src}" alt="${senderName}" style="max-height: 60px; margin-bottom: 20px;" />
-              ` : `
+              `
+                  : `
                 <h1 style="margin: 0; font-size: 24px; color: #1a1a1a;">${senderName}</h1>
-              `}
-              ${businessProfile?.address ? `
-                <p style="margin: 10px 0 0 0; font-size: 14px; color: #666; line-height: 1.5;">${businessProfile.address.replace(/\n/g, '<br>')}</p>
-              ` : ''}
+              `
+              }
+              ${
+                businessProfile?.address
+                  ? `
+                <p style="margin: 10px 0 0 0; font-size: 14px; color: #666; line-height: 1.5;">${businessProfile.address.replace(/\n/g, "<br>")}</p>
+              `
+                  : ""
+              }
             </td>
           </tr>
 
@@ -68,19 +77,23 @@ export function generateInvoiceEmailHTML(data: EmailTemplateData): string {
             <td style="padding: 20px 40px;">
               <h2 style="margin: 0 0 10px 0; font-size: 20px; color: #1a1a1a;">Invoice #${invoice.invoice_number}</h2>
               <p style="margin: 0; font-size: 16px; color: #333; line-height: 1.6;">
-                Hello ${contactName}${companyName ? ` from ${companyName}` : ''},
+                Hello ${contactName}${companyName ? ` from ${companyName}` : ""},
               </p>
             </td>
           </tr>
 
           <!-- Custom Message -->
-          ${message ? `
+          ${
+            message
+              ? `
           <tr>
             <td style="padding: 0 40px 20px 40px;">
               <p style="margin: 0; font-size: 15px; color: #333; line-height: 1.6; white-space: pre-line;">${message}</p>
             </td>
           </tr>
-          ` : ''}
+          `
+              : ""
+          }
 
           <!-- Invoice Summary -->
           <tr>
@@ -109,7 +122,9 @@ export function generateInvoiceEmailHTML(data: EmailTemplateData): string {
           </tr>
 
           <!-- Line Items (if provided) -->
-          ${items && items.length > 0 ? `
+          ${
+            items && items.length > 0
+              ? `
           <tr>
             <td style="padding: 20px 40px;">
               <h3 style="margin: 0 0 15px 0; font-size: 16px; color: #1a1a1a;">Invoice Details</h3>
@@ -122,21 +137,29 @@ export function generateInvoiceEmailHTML(data: EmailTemplateData): string {
                   </tr>
                 </thead>
                 <tbody>
-                  ${items.map(item => `
+                  ${items
+                    .map(
+                      (item) => `
                   <tr style="border-bottom: 1px solid #dee2e6;">
                     <td style="padding: 12px 0; font-size: 14px; color: #333;">${item.description}</td>
                     <td style="padding: 12px 0; text-align: center; font-size: 14px; color: #666;">${item.quantity}</td>
                     <td style="padding: 12px 0; text-align: right; font-size: 14px; color: #333;">${invoice.currency} ${item.line_total_with_tax.toFixed(2)}</td>
                   </tr>
-                  `).join('')}
+                  `,
+                    )
+                    .join("")}
                 </tbody>
               </table>
             </td>
           </tr>
-          ` : ''}
+          `
+              : ""
+          }
 
           <!-- Payment Terms -->
-          ${invoice.payment_terms ? `
+          ${
+            invoice.payment_terms
+              ? `
           <tr>
             <td style="padding: 20px 40px;">
               <p style="margin: 0; font-size: 13px; color: #666; line-height: 1.5;">
@@ -144,7 +167,9 @@ export function generateInvoiceEmailHTML(data: EmailTemplateData): string {
               </p>
             </td>
           </tr>
-          ` : ''}
+          `
+              : ""
+          }
 
           <!-- Footer -->
           <tr>

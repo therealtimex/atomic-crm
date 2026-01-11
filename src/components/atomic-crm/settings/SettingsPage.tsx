@@ -1,5 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CircleX, Copy, Pencil, Save, Building2, UserCircle, Mail, FileText } from "lucide-react";
+import {
+  CircleX,
+  Copy,
+  Pencil,
+  Save,
+  Building2,
+  UserCircle,
+  Mail,
+  FileText,
+} from "lucide-react";
 import {
   Form,
   useDataProvider,
@@ -33,7 +42,9 @@ export const SettingsPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto mt-8 px-4">
-      <h1 className="text-2xl font-bold mb-6">{translate("crm.nav.settings")}</h1>
+      <h1 className="text-2xl font-bold mb-6">
+        {translate("crm.nav.settings")}
+      </h1>
 
       <Tabs defaultValue="profile" className="space-y-6">
         <TabsList className="grid w-full grid-cols-3">
@@ -47,7 +58,9 @@ export const SettingsPage = () => {
           </TabsTrigger>
           <TabsTrigger value="templates" className="flex items-center gap-2">
             <FileText className="h-4 w-4" />
-            {translate("resources.invoice_templates.name", { smart_count: 2 }) || "Templates"}
+            {translate("resources.invoice_templates.name", {
+              smart_count: 2,
+            }) || "Templates"}
           </TabsTrigger>
         </TabsList>
 
@@ -132,8 +145,14 @@ const ProfileSettings = () => {
               variant={isEditMode ? "ghost" : "outline"}
               onClick={() => setEditMode(!isEditMode)}
             >
-              {isEditMode ? <CircleX className="mr-2 h-4 w-4" /> : <Pencil className="mr-2 h-4 w-4" />}
-              {isEditMode ? translate("crm.activity.cancel") : translate("crm.task.action.edit")}
+              {isEditMode ? (
+                <CircleX className="mr-2 h-4 w-4" />
+              ) : (
+                <Pencil className="mr-2 h-4 w-4" />
+              )}
+              {isEditMode
+                ? translate("crm.activity.cancel")
+                : translate("crm.task.action.edit")}
             </Button>
 
             {isEditMode && <SaveButton />}
@@ -165,7 +184,11 @@ const OrganizationSettings = () => {
   const dataProvider = useDataProvider();
   const queryClient = useQueryClient();
 
-  const { data: businessProfile, isLoading, refetch } = useQuery({
+  const {
+    data: businessProfile,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["business_profile"],
     queryFn: async () => {
       const { data } = await dataProvider.getOne("business_profile", { id: 1 });
@@ -178,17 +201,22 @@ const OrganizationSettings = () => {
       return dataProvider.update("business_profile", {
         id: 1,
         data: values,
-        previousData: businessProfile
+        previousData: businessProfile,
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["business_profile"] });
       refetch();
       setEditMode(false);
-      notify(translate("resources.business_profile.notification.updated") || "Organization profile updated");
+      notify(
+        translate("resources.business_profile.notification.updated") ||
+          "Organization profile updated",
+      );
     },
     onError: (error: any) => {
-      notify(error.message || "Error updating organization profile", { type: "error" });
+      notify(error.message || "Error updating organization profile", {
+        type: "error",
+      });
     },
   });
 
@@ -211,12 +239,18 @@ const OrganizationSettings = () => {
               <div className="flex-1 space-y-4">
                 <TextRender
                   source="name"
-                  label={translate("resources.business_profile.fields.name") || "Organization Name"}
+                  label={
+                    translate("resources.business_profile.fields.name") ||
+                    "Organization Name"
+                  }
                   isEditMode={isEditMode}
                 />
                 <TextRender
                   source="tax_id"
-                  label={translate("resources.business_profile.fields.tax_id") || "Tax ID / EIN"}
+                  label={
+                    translate("resources.business_profile.fields.tax_id") ||
+                    "Tax ID / EIN"
+                  }
                   isEditMode={isEditMode}
                 />
               </div>
@@ -225,26 +259,40 @@ const OrganizationSettings = () => {
             <div className="grid grid-cols-1 gap-4">
               <TextRender
                 source="address"
-                label={translate("resources.business_profile.fields.address") || "Official Address"}
+                label={
+                  translate("resources.business_profile.fields.address") ||
+                  "Official Address"
+                }
                 isEditMode={isEditMode}
                 multiline
               />
               <TextRender
                 source="bank_details"
-                label={translate("resources.business_profile.fields.bank_details") || "Bank Details (Payment Instructions)"}
+                label={
+                  translate("resources.business_profile.fields.bank_details") ||
+                  "Bank Details (Payment Instructions)"
+                }
                 isEditMode={isEditMode}
                 multiline
                 rows={3}
               />
               <TextRender
                 source="default_payment_terms"
-                label={translate("resources.business_profile.fields.default_payment_terms") || "Default Payment Terms"}
+                label={
+                  translate(
+                    "resources.business_profile.fields.default_payment_terms",
+                  ) || "Default Payment Terms"
+                }
                 isEditMode={isEditMode}
                 helperText="e.g. Net 30, Due on Receipt"
               />
               <TextRender
                 source="default_terms_and_conditions"
-                label={translate("resources.business_profile.fields.default_terms_and_conditions") || "Default Terms & Conditions"}
+                label={
+                  translate(
+                    "resources.business_profile.fields.default_terms_and_conditions",
+                  ) || "Default Terms & Conditions"
+                }
                 isEditMode={isEditMode}
                 multiline
                 rows={4}
@@ -260,19 +308,31 @@ const OrganizationSettings = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <TextRender
                 source="email_from_name"
-                label={translate("resources.business_profile.fields.email_from_name") || "Email Sender Name"}
+                label={
+                  translate(
+                    "resources.business_profile.fields.email_from_name",
+                  ) || "Email Sender Name"
+                }
                 isEditMode={isEditMode}
                 helperText="Name shown as the sender (e.g. Acme Invoices)"
               />
               <TextRender
                 source="email_from_email"
-                label={translate("resources.business_profile.fields.email_from_email") || "Email Sender Address"}
+                label={
+                  translate(
+                    "resources.business_profile.fields.email_from_email",
+                  ) || "Email Sender Address"
+                }
                 isEditMode={isEditMode}
                 helperText="Email shown as the sender (e.g. billing@acme.com)"
               />
               <TextRender
                 source="resend_api_key"
-                label={translate("resources.business_profile.fields.resend_api_key") || "Resend API Key"}
+                label={
+                  translate(
+                    "resources.business_profile.fields.resend_api_key",
+                  ) || "Resend API Key"
+                }
                 isEditMode={isEditMode}
                 type="password"
                 helperText="Your Resend API key (re_...). Leave empty to use environment variable."
@@ -286,8 +346,14 @@ const OrganizationSettings = () => {
               variant={isEditMode ? "ghost" : "outline"}
               onClick={() => setEditMode(!isEditMode)}
             >
-              {isEditMode ? <CircleX className="mr-2 h-4 w-4" /> : <Pencil className="mr-2 h-4 w-4" />}
-              {isEditMode ? translate("crm.activity.cancel") : translate("crm.task.action.edit")}
+              {isEditMode ? (
+                <CircleX className="mr-2 h-4 w-4" />
+              ) : (
+                <Pencil className="mr-2 h-4 w-4" />
+              )}
+              {isEditMode
+                ? translate("crm.activity.cancel")
+                : translate("crm.task.action.edit")}
             </Button>
 
             {isEditMode && <SaveButton />}
@@ -303,7 +369,11 @@ const PasswordChangeButton = () => {
   const translate = useTranslate();
   const navigate = useNavigate();
   return (
-    <Button variant="outline" type="button" onClick={() => navigate("/change-password")}>
+    <Button
+      variant="outline"
+      type="button"
+      onClick={() => navigate("/change-password")}
+    >
       {translate("crm.settings.action.change_password")}
     </Button>
   );
@@ -351,9 +421,15 @@ const TextRender = ({
   }
   return (
     <div className="py-2">
-      <p className="text-xs font-semibold uppercase text-muted-foreground mb-1">{label}</p>
+      <p className="text-xs font-semibold uppercase text-muted-foreground mb-1">
+        {label}
+      </p>
       <div className="text-sm border-l-2 border-muted pl-3 py-1 bg-muted/10 rounded-r">
-        <RecordField source={source} label={false} className="whitespace-pre-line" />
+        <RecordField
+          source={source}
+          label={false}
+          className="whitespace-pre-line"
+        />
       </div>
     </div>
   );
@@ -382,7 +458,11 @@ const CopyPaste = ({ value }: { value: string }) => {
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>{copied ? "Copied!" : translate("crm.integrations.api_keys.action.copy")}</p>
+          <p>
+            {copied
+              ? "Copied!"
+              : translate("crm.integrations.api_keys.action.copy")}
+          </p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

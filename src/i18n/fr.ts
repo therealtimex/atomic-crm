@@ -1313,7 +1313,8 @@ export const frMessages = {
         billing: "Facturation",
         items: "Lignes",
         activity: "Activité",
-        activity_description: "Suivez toutes les mises à jour et communications pour cette facture",
+        activity_description:
+          "Suivez toutes les mises à jour et communications pour cette facture",
         actions: "Actions",
         assigned_to: "Créé par",
       },
@@ -1347,14 +1348,17 @@ export const frMessages = {
       },
       notification: {
         status_updated: "Statut de la facture mis à jour à %{status}",
-        email_sent: "La facture #%{number} a été envoyée à l'adresse email du client",
+        email_sent:
+          "La facture #%{number} a été envoyée à l'adresse email du client",
       },
       helper: {
         invoice_number: "Identifiant unique de la facture",
         reference: "Numéro de référence externe optionnel",
         payment_terms: "ex: 30 jours net, à réception",
-        select_company_for_contacts: "Sélectionnez une entreprise pour voir ses contacts",
-        select_company_for_deals: "Sélectionnez une entreprise pour voir ses affaires",
+        select_company_for_contacts:
+          "Sélectionnez une entreprise pour voir ses contacts",
+        select_company_for_deals:
+          "Sélectionnez une entreprise pour voir ses affaires",
       },
       empty_items: "Aucune ligne ajoutée",
       days_overdue: "jours de retard",
