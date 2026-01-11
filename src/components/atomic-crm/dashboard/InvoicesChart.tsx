@@ -74,17 +74,17 @@ export const InvoicesChart = memo(() => {
                     {translate("resources.invoices.name", { smart_count: 2 })} {translate("crm.dashboard.revenue")}
                 </h2>
             </div>
-            <div className="h-[300px]">
+            <div className="h-[350px]">
                 <ResponsiveBar
                     data={months}
                     indexBy="date"
                     keys={["paid", "pending"]}
                     colors={["#10b981", "#3b82f6"]}
-                    margin={{ top: 10, right: 10, bottom: 30, left: 40 }}
-                    padding={0.3}
+                    margin={{ top: 10, right: 10, bottom: 30, left: 50 }}
+                    padding={0.4}
                     valueScale={{ type: "linear" }}
                     indexScale={{ type: "band", round: true }}
-                    enableGridY={true}
+                    enableGridY={false}
                     enableLabel={false}
                     axisLeft={{
                         format: (v: any) => `${v / 1000}k`,
