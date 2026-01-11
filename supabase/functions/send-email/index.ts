@@ -35,7 +35,7 @@ serve(async (req) => {
         }
 
         // 2. Parse request body
-        const { to, subject, body, html } = await req.json();
+        const { to, subject, body, html, attachments } = await req.json();
 
         if (!to || !subject || (!body && !html)) {
             return new Response(
@@ -90,6 +90,7 @@ serve(async (req) => {
             subject: subject,
             text: body,
             html: html,
+            ...(attachments && attachments.length > 0 && { attachments }),
         };
 
         console.log("Sending email via Resend:", {
