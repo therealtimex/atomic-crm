@@ -92,6 +92,10 @@ export const InvoiceEmailModal = ({ record, trigger }: InvoiceEmailModalProps) =
             });
 
             // Generate PDF attachment
+            const invoiceElement = document.getElementById('invoice-content');
+            if (!invoiceElement) {
+                throw new Error("Invoice content not found. Please ensure the invoice is visible.");
+            }
             const pdfBase64 = await generateInvoicePDFBase64(record.invoice_number);
 
             const { error } = await supabase.functions.invoke("send-email", {

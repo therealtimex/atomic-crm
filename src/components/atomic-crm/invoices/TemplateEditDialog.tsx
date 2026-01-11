@@ -93,7 +93,7 @@ export const TemplateEditDialog = ({
                 description: values.description,
                 default_payment_terms: values.default_payment_terms,
                 default_terms_and_conditions: values.default_terms_and_conditions,
-                default_due_days: values.default_due_days ? parseInt(values.default_due_days) : 30,
+                default_due_days: Math.max(0, values.default_due_days ? parseInt(values.default_due_days) : 30),
             };
 
             if (template) {
@@ -129,7 +129,7 @@ export const TemplateEditDialog = ({
                     }
                 );
 
-                // Delete all old items
+                // Delete all old items in parallel
                 await Promise.all(
                     existingItems.map(item =>
                         dataProvider.delete("invoice_template_items", {
@@ -140,11 +140,10 @@ export const TemplateEditDialog = ({
                 );
             }
 
-            // Create new items
+            // Create new items in parallel
             const items = values.items || [];
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i];
-                await dataProvider.create("invoice_template_items", {
+            await Promise.all(items.map((item: any, i: number) =>
+                dataProvider.create("invoice_template_items", {
                     data: {
                         template_id: templateId,
                         description: item.description,
@@ -156,8 +155,8 @@ export const TemplateEditDialog = ({
                         discount_type: item.discount_type || "percentage",
                         sort_order: i,
                     },
-                });
-            }
+                })
+            ));
 
             onSuccess();
         } catch (error: any) {
