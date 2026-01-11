@@ -5,6 +5,24 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.48.0] - 2026-01-11
+
+### Added
+
+- **Invoices**: Full feature launch of the Invoices module with professional PDF generation, email sending, and template management.
+- **Invoices**: Create, edit, and manage invoices directly linked to Contacts, Companies, and Deals.
+- **Invoices**: "Send Email" functionality via Supabase Edge Functions with CC support, intelligent recipient detection, and transactional email logs.
+- **Invoices**: High-fidelity PDF export using `html-to-image` with JPEG compression and Smart Light Mode enforcement.
+- **Templates**: Reusable invoice templates with support for default items, notes, terms, and due days.
+- **Business Profile**: New settings tab for managing organization branding (Logo, Tax ID, Address) and banking details.
+- **Dashboard**: New "Revenue over time" chart and "Outstanding Invoices" widget for financial insights.
+- **Localization**: Complete translation support for Invoices module across 6 languages (en, es, fr, ja, ko, vi).
+
+### Changed
+
+- **Database**: Optimized summary views (`deals_summary`, `contacts_summary`, etc.) using `LATERAL` joins for significantly improved performance on large datasets.
+- **Settings**: Split settings page into "Profile" (personal) and "Organization" (business) tabs.
+
 ## [0.47.2] - 2026-01-09
 
 ### Fixed
