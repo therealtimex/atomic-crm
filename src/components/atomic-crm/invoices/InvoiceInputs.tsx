@@ -8,8 +8,22 @@ import { DateInput } from "@/components/admin/date-input";
 import { ReferenceInput } from "@/components/admin/reference-input";
 import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { SelectInput } from "@/components/admin/select-input";
-import { Sparkles } from "lucide-react";
+import { Sparkles, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "@/components/ui/command";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import { useState } from "react";
 
 import { InvoiceItemsInput } from "./InvoiceItemsInput";
 
@@ -34,6 +48,21 @@ export const InvoiceInputs = () => {
             }
         },
     });
+
+    // Fetch templates
+    const { data: templates } = useQuery({
+        queryKey: ["invoice_templates"],
+        queryFn: async () => {
+            const { data } = await dataProvider.getList("invoice_templates", {
+                pagination: { page: 1, perPage: 100 },
+                sort: { field: "name", order: "ASC" },
+                filter: {},
+            });
+            return data;
+        },
+    });
+
+    const [isTemplateOpen, setIsTemplateOpen] = useState(false);
 
     // Pre-fill from router state (e.g. when coming from CompanyShow)
     useEffect(() => {
@@ -72,6 +101,47 @@ export const InvoiceInputs = () => {
         const year = new Date().getFullYear();
         const random = Math.floor(Math.random() * 9000) + 1000;
         setValue("invoice_number", `INV-${year}-${random}`);
+    };
+
+    const loadTemplate = async (templateId: number) => {
+        try {
+            const { data: template } = await dataProvider.getOne("invoice_templates", { id: templateId });
+            const { data: items } = await dataProvider.getList("invoice_template_items", {
+                filter: { template_id: templateId },
+                pagination: { page: 1, perPage: 100 },
+                sort: { field: "sort_order", order: "ASC" },
+            });
+
+            if (template.default_payment_terms) {
+                setValue("payment_terms", template.default_payment_terms);
+            }
+            if (template.default_terms_and_conditions) {
+                setValue("terms_and_conditions", template.default_terms_and_conditions);
+            }
+            if (template.default_due_days) {
+                const dueDate = new Date();
+                dueDate.setDate(dueDate.getDate() + template.default_due_days);
+                setValue("due_date", dueDate.toISOString().split("T")[0]);
+            }
+
+            // Transform template items to invoice items
+            const invoiceItems = items.map((item: any) => ({
+                description: item.description,
+                item_description: item.item_description,
+                quantity: item.quantity,
+                unit_price: item.unit_price,
+                tax_rate: item.tax_rate,
+                discount_amount: item.discount_amount,
+                discount_type: item.discount_type,
+            }));
+
+            setValue("items", invoiceItems);
+
+            setIsTemplateOpen(false);
+            // Optionally notify success
+        } catch (error) {
+            console.error("Error loading template", error);
+        }
     };
 
     const currencyChoices = [
@@ -117,11 +187,52 @@ export const InvoiceInputs = () => {
                         <Sparkles className="h-4 w-4" />
                     </Button>
                 </div>
-                <TextInput
-                    source="reference"
-                    label="resources.invoices.fields.reference"
-                    helperText="resources.invoices.helper.reference"
-                />
+                <div className="flex items-end gap-2">
+                    <div className="flex-1">
+                        <TextInput
+                            source="reference"
+                            label="resources.invoices.fields.reference"
+                            helperText="resources.invoices.helper.reference"
+                        />
+                    </div>
+                    <Popover open={isTemplateOpen} onOpenChange={setIsTemplateOpen}>
+                        <PopoverTrigger asChild>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="mb-6"
+                                title={translate("resources.invoice_templates.action.load_template") || "Load Template"}
+                            >
+                                <FileText className="h-4 w-4 mr-2" />
+                                {translate("resources.invoice_templates.action.load_template") || "Template"}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-0" align="end">
+                            <Command>
+                                <CommandInput placeholder="Search templates..." />
+                                <CommandList>
+                                    <CommandEmpty>No templates found.</CommandEmpty>
+                                    <CommandGroup>
+                                        {templates?.map((template: any) => (
+                                            <CommandItem
+                                                key={template.id}
+                                                value={template.name}
+                                                onSelect={() => loadTemplate(template.id)}
+                                            >
+                                                <div className="flex flex-col">
+                                                    <span>{template.name}</span>
+                                                    {template.description && (
+                                                        <span className="text-xs text-muted-foreground">{template.description}</span>
+                                                    )}
+                                                </div>
+                                            </CommandItem>
+                                        ))}
+                                    </CommandGroup>
+                                </CommandList>
+                            </Command>
+                        </PopoverContent>
+                    </Popover>
+                </div>
             </div>
 
             {/* Entity References */}

@@ -1362,6 +1362,31 @@ export const enMessages = {
         updated: "Organization profile updated successfully",
       },
     },
+    invoice_templates: {
+      name: "Template |||| Templates",
+      fields: {
+        name: "Template Name",
+        description: "Description",
+        default_payment_terms: "Default Payment Terms",
+        default_terms_and_conditions: "Default Terms & Conditions",
+        default_due_days: "Default Due Days",
+        items: "Line Items",
+      },
+      action: {
+        create: "New Template",
+        load_template: "Load from Template",
+        save_as_template: "Save as Template",
+      },
+      notification: {
+        created: "Template created successfully",
+        updated: "Template updated successfully",
+        deleted: "Template deleted successfully",
+        loaded: "Template loaded successfully",
+      },
+    },
+    invoice_template_items: {
+      name: "Template Item |||| Template Items",
+    },
   },
   "ra-supabase": {
     auth: {

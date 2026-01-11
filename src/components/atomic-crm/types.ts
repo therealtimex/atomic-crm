@@ -458,3 +458,26 @@ export type BusinessProfile = {
   email_from_email?: string;
   resend_api_key?: string;
 } & Pick<RaRecord, "id">;
+
+export type InvoiceTemplate = {
+  name: string;
+  description?: string;
+  default_payment_terms?: string;
+  default_terms_and_conditions?: string;
+  default_due_days?: number;
+  created_at: string;
+  updated_at: string;
+} & Pick<RaRecord, "id">;
+
+export type InvoiceTemplateItem = {
+  template_id: number;
+  description: string;
+  item_description?: string;
+  quantity: number;
+  unit_price: number;
+  tax_rate: number;
+  discount_amount: number;
+  discount_type: "percentage" | "fixed";
+  sort_order: number;
+  created_at: string;
+} & Pick<RaRecord, "id">;

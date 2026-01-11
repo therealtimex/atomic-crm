@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CircleX, Copy, Pencil, Save, Building2, UserCircle, Mail } from "lucide-react";
+import { CircleX, Copy, Pencil, Save, Building2, UserCircle, Mail, FileText } from "lucide-react";
 import {
   Form,
   useDataProvider,
@@ -26,16 +26,17 @@ import {
 import ImageEditorField from "../misc/ImageEditorField";
 import type { CrmDataProvider } from "../providers/types";
 import type { SalesFormData } from "../types";
+import { TemplatesList } from "../invoices/TemplatesList";
 
 export const SettingsPage = () => {
   const translate = useTranslate();
 
   return (
-    <div className="max-w-2xl mx-auto mt-8 px-4">
+    <div className="max-w-4xl mx-auto mt-8 px-4">
       <h1 className="text-2xl font-bold mb-6">{translate("crm.nav.settings")}</h1>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="profile" className="flex items-center gap-2">
             <UserCircle className="h-4 w-4" />
             {translate("crm.settings.section.profile") || "Profile"}
@@ -43,6 +44,10 @@ export const SettingsPage = () => {
           <TabsTrigger value="organization" className="flex items-center gap-2">
             <Building2 className="h-4 w-4" />
             {translate("crm.settings.section.organization") || "Organization"}
+          </TabsTrigger>
+          <TabsTrigger value="templates" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            {translate("resources.invoice_templates.name", { smart_count: 2 }) || "Templates"}
           </TabsTrigger>
         </TabsList>
 
@@ -52,6 +57,10 @@ export const SettingsPage = () => {
 
         <TabsContent value="organization">
           <OrganizationSettings />
+        </TabsContent>
+
+        <TabsContent value="templates">
+          <TemplatesList />
         </TabsContent>
       </Tabs>
     </div>
