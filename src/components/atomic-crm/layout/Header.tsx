@@ -31,6 +31,7 @@ const Header = () => {
     { path: "/contacts", pattern: "/contacts/*" },
     { path: "/companies", pattern: "/companies/*" },
     { path: "/deals", pattern: "/deals/*" },
+    { path: "/invoices", pattern: "/invoices/*" },
     { path: "/tasks", pattern: "/tasks/*" },
   ];
 
@@ -120,6 +121,11 @@ const Header = () => {
               label={translate("crm.nav.deals")}
               to="/deals"
               isActive={currentPath === "/deals"}
+            />
+            <NavigationTab
+              label={translate("crm.nav.invoices")}
+              to="/invoices"
+              isActive={currentPath === "/invoices"}
             />
             <NavigationTab
               label={translate("crm.nav.tasks")}

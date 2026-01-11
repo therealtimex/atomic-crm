@@ -1,5 +1,5 @@
 import { formatDistance } from "date-fns";
-import { UserPlus } from "lucide-react";
+import { UserPlus, Receipt } from "lucide-react";
 import {
   RecordContextProvider,
   ShowBase,
@@ -29,9 +29,10 @@ import { Status } from "../misc/Status";
 import { NoteCreate } from "../notes/NoteCreate";
 import { NotesIterator } from "../notes/NotesIterator";
 import { useConfigurationContext } from "../root/ConfigurationContext";
-import type { Company, Contact, Deal } from "../types";
+import type { Company, Contact, Deal, Invoice } from "../types";
 import { CompanyAside } from "./CompanyAside";
 import { CompanyAvatar } from "./CompanyAvatar";
+import { InvoiceCard } from "../invoices";
 import { getDateFnsLocale } from "@/i18n/date-fns";
 
 export const CompanyShow = () => (
@@ -70,7 +71,7 @@ const CompanyShowContent = () => {
               <h5 className="text-xl ml-2 flex-1">{record.name}</h5>
             </div>
             <Tabs defaultValue={currentTab} onValueChange={handleTabChange}>
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="w-full flex justify-start h-auto p-1 bg-muted/50">
                 <TabsTrigger value="activity">
                   {translate("crm.common.activity")}
                 </TabsTrigger>
@@ -91,6 +92,11 @@ const CompanyShowContent = () => {
                     })}
                   </TabsTrigger>
                 ) : null}
+                <TabsTrigger value="invoices">
+                  {translate("crm.common.invoices", {
+                    smart_count: record.nb_invoices || 0,
+                  })}
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="activity" className="pt-2">
                 <ActivityLog companyId={record.id} context="company" />
@@ -142,6 +148,20 @@ const CompanyShowContent = () => {
                     <DealsIterator />
                   </ReferenceManyField>
                 ) : null}
+              </TabsContent>
+              <TabsContent value="invoices">
+                <ReferenceManyField
+                  reference="invoices"
+                  target="company_id"
+                  sort={{ field: "issue_date", order: "DESC" }}
+                >
+                  <div className="flex flex-col gap-4 pt-2">
+                    <div className="flex flex-row justify-end space-x-2">
+                      <CreateRelatedInvoiceButton />
+                    </div>
+                    <InvoicesIterator />
+                  </div>
+                </ReferenceManyField>
               </TabsContent>
             </Tabs>
           </CardContent>
@@ -273,5 +293,37 @@ const DealsIterator = () => {
         ))}
       </div>
     </div>
+  );
+};
+
+const InvoicesIterator = () => {
+  const { data: invoices, error, isPending } = useListContext<Invoice>();
+  if (isPending || error) return null;
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+      {invoices.map((invoice) => (
+        <RouterLink key={invoice.id} to={`/invoices/${invoice.id}/show`}>
+          <InvoiceCard invoice={invoice} />
+        </RouterLink>
+      ))}
+    </div>
+  );
+};
+
+const CreateRelatedInvoiceButton = () => {
+  const company = useRecordContext<Company>();
+  const translate = useTranslate();
+  return (
+    <Button variant="outline" asChild size="sm" className="h-9">
+      <RouterLink
+        to="/invoices/create"
+        state={company ? { record: { company_id: company.id } } : undefined}
+        className="flex items-center gap-2"
+      >
+        <Receipt className="h-4 w-4" />
+        {translate("crm.common.add_invoice")}
+      </RouterLink>
+    </Button>
   );
 };

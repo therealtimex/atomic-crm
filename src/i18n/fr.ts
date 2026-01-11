@@ -1,4 +1,10 @@
 export const frMessages = {
+  ra: {
+    action: {
+      send: "Envoyer",
+      sending: "Envoi en cours...",
+    },
+  },
   crm: {
     root: {
       database_checking: "Vérification de la connexion à la base de données...",
@@ -59,6 +65,7 @@ export const frMessages = {
       contacts: "Contacts",
       companies: "Entreprises",
       deals: "Affaires",
+      invoices: "Factures",
       tasks: "Tâches",
       users: "Utilisateurs",
       settings: "Mes infos",
@@ -101,6 +108,8 @@ export const frMessages = {
       load_more: "Charger plus",
       tasks_empty: "Tout est à jour pour l’instant.",
       upcoming_deal_revenue: "Revenus prévisionnels",
+      revenue: "Chiffre d'affaires",
+      outstanding_invoices: "Factures en attente",
       deals_chart: {
         won: "Gagné",
         lost: "Perdu",
@@ -1193,8 +1202,10 @@ export const frMessages = {
       notes: "1 Note |||| %{smart_count} Notes",
       deals: "1 Affaire |||| %{smart_count} Affaires",
       tasks: "1 Tâche |||| %{smart_count} Tâches",
+      invoices: "1 Facture |||| %{smart_count} Factures",
       last_activity: "dernière activité il y a %{distance}",
       add_contact: "Ajouter un contact",
+      add_invoice: "Ajouter une facture",
     },
   },
   resources: {
@@ -1263,6 +1274,94 @@ export const frMessages = {
         administrator: "Admin",
         disabled: "Désactivé",
       },
+    },
+    invoices: {
+      name: "Facture |||| Factures",
+      fields: {
+        invoice_number: "N° Facture",
+        reference: "Référence",
+        company_id: "Entreprise",
+        contact_id: "Contact",
+        deal_id: "Affaire",
+        status: "Statut",
+        issue_date: "Date d'émission",
+        due_date: "Date d'échéance",
+        paid_at: "Payé le",
+        currency: "Devise",
+        subtotal: "Sous-total",
+        discount: "Remise",
+        tax_total: "TVA",
+        total: "Total",
+        amount_paid: "Montant payé",
+        balance_due: "Reste à payer",
+        notes: "Notes",
+        payment_terms: "Conditions de paiement",
+        terms_and_conditions: "Termes et conditions",
+        sent_at: "Envoyé le",
+        viewed_at: "Vu le",
+        created_at: "Créé le",
+      },
+      status: {
+        draft: "Brouillon",
+        sent: "Envoyée",
+        paid: "Payée",
+        overdue: "En retard",
+        cancelled: "Annulée",
+      },
+      section: {
+        details: "Détails",
+        billing: "Facturation",
+        items: "Lignes",
+        activity: "Activité",
+        activity_description:
+          "Suivez toutes les mises à jour et communications pour cette facture",
+        actions: "Actions",
+        assigned_to: "Créé par",
+      },
+      item: {
+        name: "Article",
+        description_placeholder: "Ajouter des détails...",
+        quantity: "Qté",
+        unit_price: "Prix unitaire",
+        tax: "Taxe",
+        total: "Total",
+        tax_rate: "Taux",
+      },
+      item_type: {
+        service: "Service",
+        product: "Produit",
+        hour: "Heure",
+        day: "Jour",
+        deposit: "Acompte",
+      },
+      action: {
+        new_invoice: "Nouvelle Facture",
+        add_item: "Ajouter une ligne",
+        edit: "Modifier la facture",
+        mark_as_sent: "Marquer comme envoyé",
+        mark_as_paid: "Marquer comme payé",
+        mark_as_cancelled: "Marquer comme annulé",
+        print: "Imprimer",
+        suggest_number: "Suggérer un numéro",
+        export_csv: "Exporter en CSV",
+        send_email: "Envoyer par email",
+      },
+      notification: {
+        status_updated: "Statut de la facture mis à jour à %{status}",
+        email_sent:
+          "La facture #%{number} a été envoyée à l'adresse email du client",
+      },
+      helper: {
+        invoice_number: "Identifiant unique de la facture",
+        reference: "Numéro de référence externe optionnel",
+        payment_terms: "ex: 30 jours net, à réception",
+        select_company_for_contacts:
+          "Sélectionnez une entreprise pour voir ses contacts",
+        select_company_for_deals:
+          "Sélectionnez une entreprise pour voir ses affaires",
+      },
+      empty_items: "Aucune ligne ajoutée",
+      days_overdue: "jours de retard",
     },
   },
   "ra-supabase": {

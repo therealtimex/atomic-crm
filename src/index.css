@@ -161,10 +161,22 @@ input[type="time"] {
   right: 0.75rem;
 }
 
+/* Hide numeric input spinners for a cleaner UI */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -189,4 +201,70 @@ input[type="time"] {
   display: block;
   height: 100%;
   width: 100%;
+}
+
+@media print {
+  header,
+  nav,
+  aside,
+  .no-print,
+  button,
+  .ra-notification,
+  .ra-sidebar {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    position: static !important;
+  }
+
+  /* Ensure background colors are printed */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Card styling for print */
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  body {
+    background-color: white !important;
+  }
+
+  /* Force vertical layout for details (remove horizontal gaps) */
+  .flex.gap-8 {
+    display: block !important;
+  }
+
+  .mt-2.mb-2 {
+    margin: 0 !important;
+  }
+}
+/* Force Light Mode for PDF Export */
+.pdf-export,
+.pdf-export * {
+  --background: oklch(1 0 0) !important;
+  --foreground: oklch(0.145 0 0) !important;
+  --card: oklch(1 0 0) !important;
+  --card-foreground: oklch(0.145 0 0) !important;
+  --primary: oklch(0.205 0 0) !important;
+  --primary-foreground: oklch(0.985 0 0) !important;
+  --muted: oklch(0.97 0 0) !important;
+  --muted-foreground: oklch(0.556 0 0) !important;
+  --accent: oklch(0.97 0 0) !important;
+  --accent-foreground: oklch(0.205 0 0) !important;
+  --border: oklch(0.922 0 0) !important;
+  --input: oklch(0.922 0 0) !important;
+  --ring: oklch(0.708 0 0) !important;
+  color: oklch(0.145 0 0) !important;
+  border-color: oklch(0.922 0 0) !important;
+}
+
+.pdf-export {
+  background-color: white !important;
 }

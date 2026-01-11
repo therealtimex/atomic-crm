@@ -3,6 +3,7 @@ import type { ComponentType } from "react";
 
 import type {
   COMPANY_CREATED,
+  COMPANY_NOTE_CREATED,
   CONTACT_CREATED,
   CONTACT_NOTE_CREATED,
   DEAL_CREATED,
@@ -72,6 +73,7 @@ export type Company = {
   nb_deals?: number;
   nb_notes?: number;
   nb_tasks?: number;
+  nb_invoices?: number;
   last_seen?: string;
 
   // Phase 1: Lifecycle & Classification
@@ -142,6 +144,7 @@ export type Contact = {
   background: string;
   phone_jsonb: PhoneNumberAndType[];
   nb_tasks?: number;
+  nb_invoices?: number;
   company_name?: string;
 
   // Internal Heartbeat
@@ -188,6 +191,7 @@ export type Deal = {
   expected_closing_date: string;
   sales_id: Identifier;
   index: number;
+  nb_invoices?: number;
 } & Pick<RaRecord, "id">;
 
 export type DealNote = {
@@ -360,3 +364,124 @@ export interface ContactGender {
   label: string;
   icon: ComponentType<{ className?: string }>;
 }
+
+// ============================================================================
+// INVOICE TYPES
+// ============================================================================
+
+export type InvoiceStatus = "draft" | "sent" | "paid" | "overdue" | "cancelled";
+
+export type InvoiceItemType =
+  | "service"
+  | "product"
+  | "hour"
+  | "day"
+  | "deposit";
+
+export type Invoice = {
+  invoice_number: string;
+  reference?: string;
+  company_id?: Identifier;
+  contact_id?: Identifier;
+  deal_id?: Identifier;
+  sales_id?: Identifier;
+  status: InvoiceStatus;
+  issue_date: string;
+  due_date: string;
+  paid_at?: string;
+  currency: string; // ISO 4217 currency code
+  subtotal: number;
+  discount: number; // Global discount amount
+  discount_type: "fixed" | "percentage";
+  tax_total: number;
+  total: number;
+  amount_paid: number;
+  notes?: string;
+  payment_terms?: string;
+  terms_and_conditions?: string;
+  sent_at?: string;
+  viewed_at?: string;
+  created_at: string;
+  updated_at: string;
+
+  // View-computed fields (from invoices_summary)
+  company_name?: string;
+  contact_name?: string;
+  contact_email?: EmailAndType[];
+  deal_name?: string;
+  sales_name?: string;
+  nb_items?: number;
+  nb_notes?: number;
+  computed_status?: string;
+  days_overdue?: number;
+  balance_due?: number;
+} & Pick<RaRecord, "id">;
+
+export type InvoiceItem = {
+  invoice_id: Identifier;
+  description: string;
+  item_description?: string; // Extended detailed description
+  quantity: number;
+  unit_price: number;
+  tax_rate: number;
+  tax_name?: string;
+  tax_amount: number;
+  item_type: InvoiceItemType;
+  line_total: number;
+  line_total_with_tax: number;
+  sort_order: number;
+} & Pick<RaRecord, "id">;
+
+export type InvoiceNote = {
+  invoice_id: Identifier;
+  text: string;
+  date: string;
+  sales_id?: Identifier;
+  attachments?: AttachmentNote[];
+} & Pick<RaRecord, "id">;
+
+export type TaxPreset = {
+  name: string;
+  region: string;
+  tax_rate: number;
+  description?: string;
+  is_active: boolean;
+  created_at: string;
+} & Pick<RaRecord, "id">;
+
+export type BusinessProfile = {
+  name: string;
+  address?: string;
+  tax_id?: string;
+  vat_number?: string;
+  bank_details?: string;
+  logo?: RAFile;
+  default_payment_terms?: string;
+  default_terms_and_conditions?: string;
+  email_from_name?: string;
+  email_from_email?: string;
+  resend_api_key?: string;
+} & Pick<RaRecord, "id">;
+
+export type InvoiceTemplate = {
+  name: string;
+  description?: string;
+  default_payment_terms?: string;
+  default_terms_and_conditions?: string;
+  default_due_days?: number;
+  created_at: string;
+  updated_at: string;
+} & Pick<RaRecord, "id">;
+
+export type InvoiceTemplateItem = {
+  template_id: number;
+  description: string;
+  item_description?: string;
+  quantity: number;
+  unit_price: number;
+  tax_rate: number;
+  discount_amount: number;
+  discount_type: "percentage" | "fixed";
+  sort_order: number;
+  created_at: string;
+} & Pick<RaRecord, "id">;

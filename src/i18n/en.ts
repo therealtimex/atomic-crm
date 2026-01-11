@@ -1,4 +1,10 @@
 export const enMessages = {
+  ra: {
+    action: {
+      send: "Send",
+      sending: "Sending...",
+    },
+  },
   crm: {
     root: {
       database_checking: "Checking database connection...",
@@ -58,6 +64,7 @@ export const enMessages = {
       contacts: "Contacts",
       companies: "Companies",
       deals: "Deals",
+      invoices: "Invoices",
       tasks: "Tasks",
       users: "Users",
       settings: "My info",
@@ -100,6 +107,8 @@ export const enMessages = {
       load_more: "Load more",
       tasks_empty: "All caught up for now.",
       upcoming_deal_revenue: "Upcoming Deal Revenue",
+      revenue: "Revenue",
+      outstanding_invoices: "Outstanding Invoices",
       deals_chart: {
         won: "Won",
         lost: "Lost",
@@ -1059,6 +1068,11 @@ export const enMessages = {
       },
     },
     settings: {
+      section: {
+        profile: "My Profile",
+        organization: "Organization Branding",
+        email: "Email Settings",
+      },
       notification: {
         profile_updated: "Your profile has been updated",
         error: "An error occurred. Please try again",
@@ -1168,10 +1182,13 @@ export const enMessages = {
       contacts: "1 Contact |||| %{smart_count} Contacts",
       notes: "1 Note |||| %{smart_count} Notes",
       deals: "1 Deal |||| %{smart_count} Deals",
+      invoices: "1 Invoice |||| %{smart_count} Invoices",
       tasks: "1 Task |||| %{smart_count} Tasks",
       last_activity: "last activity %{distance} ago",
       add_contact: "Add contact",
+      add_invoice: "Add invoice",
     },
+    days_overdue: "days overdue",
   },
   resources: {
     contacts: {
@@ -1239,6 +1256,147 @@ export const enMessages = {
         administrator: "Admin",
         disabled: "Disabled",
       },
+    },
+    invoices: {
+      name: "Invoice |||| Invoices",
+      fields: {
+        invoice_number: "Invoice #",
+        reference: "Reference",
+        company_id: "Company",
+        contact_id: "Contact",
+        deal_id: "Deal",
+        status: "Status",
+        issue_date: "Issue Date",
+        due_date: "Due Date",
+        paid_at: "Paid At",
+        currency: "Currency",
+        subtotal: "Subtotal",
+        discount: "Discount",
+        tax_total: "Tax",
+        total: "Total",
+        amount_paid: "Amount Paid",
+        balance_due: "Balance Due",
+        notes: "Notes",
+        payment_terms: "Payment Terms",
+        terms_and_conditions: "Terms & Conditions",
+        sent_at: "Sent At",
+        viewed_at: "Viewed At",
+        created_at: "Created At",
+      },
+      status: {
+        draft: "Draft",
+        sent: "Sent",
+        paid: "Paid",
+        overdue: "Overdue",
+        cancelled: "Cancelled",
+      },
+      section: {
+        details: "Details",
+        billing: "Billing To",
+        items: "Line Items",
+        activity: "Activity",
+        activity_description:
+          "Track all updates and communications for this invoice",
+        actions: "Actions",
+        assigned_to: "Created By",
+      },
+      item: {
+        name: "Item",
+        description_placeholder: "Add details...",
+        quantity: "Qty",
+        unit_price: "Unit Price",
+        tax: "Tax",
+        total: "Total",
+        tax_rate: "Tax Rate",
+      },
+      item_type: {
+        service: "Service",
+        product: "Product",
+        hour: "Hour",
+        day: "Day",
+        deposit: "Deposit",
+      },
+      action: {
+        new_invoice: "New Invoice",
+        add_item: "Add Line Item",
+        edit: "Edit Invoice",
+        mark_as_sent: "Mark as Sent",
+        mark_as_paid: "Mark as Paid",
+        mark_as_cancelled: "Mark as Cancelled",
+        print: "Print",
+        suggest_number: "Suggest Number",
+        export_csv: "Export to CSV",
+        send_email: "Send by Email",
+        download_pdf: "Download PDF",
+      },
+      notification: {
+        status_updated: "Invoice status updated to %{status}",
+        email_sent:
+          "Invoice #%{number} has been sent to the client's email address",
+        pdf_downloaded: "Invoice #%{number} PDF has been downloaded",
+      },
+      helper: {
+        invoice_number: "Unique invoice identifier",
+        reference: "Optional external reference number",
+        payment_terms: "e.g., Net 30, Due on receipt",
+        select_company_for_contacts: "Select a company to see its contacts",
+        select_company_for_deals: "Select a company to see its deals",
+      },
+      email: {
+        subject: "Subject",
+        body: "Message Body",
+        description:
+          "Review and customize the email message before sending it to the client.",
+        body_intro:
+          "We've generated a new invoice (#%{number}) for your records.",
+        body_closing:
+          "You can find all the details of this invoice attached. Please let us know if you have any questions.",
+      },
+      empty_items: "No line items added yet",
+      days_overdue: "days overdue",
+    },
+    business_profile: {
+      name: "Business Profile",
+      fields: {
+        name: "Organization Name",
+        logo: "Organization Logo",
+        address: "Official Address",
+        tax_id: "Tax ID / VAT Number",
+        bank_details: "Bank Details (Payment Instructions)",
+        default_payment_terms: "Default Payment Terms",
+        default_terms_and_conditions: "Default Terms & Conditions",
+        email_from_name: "Email Sender Name",
+        email_from_email: "Email Sender Address",
+        resend_api_key: "Resend API Key",
+      },
+      notification: {
+        updated: "Organization profile updated successfully",
+      },
+    },
+    invoice_templates: {
+      name: "Template |||| Templates",
+      fields: {
+        name: "Template Name",
+        description: "Description",
+        default_payment_terms: "Default Payment Terms",
+        default_terms_and_conditions: "Default Terms & Conditions",
+        default_due_days: "Default Due Days",
+        items: "Line Items",
+      },
+      action: {
+        create: "New Template",
+        load_template: "Load from Template",
+        save_as_template: "Save as Template",
+      },
+      notification: {
+        created: "Template created successfully",
+        updated: "Template updated successfully",
+        deleted: "Template deleted successfully",
+        loaded: "Template loaded successfully",
+      },
+    },
+    invoice_template_items: {
+      name: "Template Item |||| Template Items",
     },
   },
   "ra-supabase": {

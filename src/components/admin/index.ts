@@ -32,6 +32,7 @@ export * from "./file-field";
 export * from "./file-input";
 export * from "./filter-form";
 export * from "./form";
+export * from "./function-field";
 export * from "./layout";
 export * from "./list-guesser";
 export * from "./list-pagination";

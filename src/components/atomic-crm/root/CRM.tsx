@@ -17,6 +17,7 @@ import companies from "../companies";
 import contacts from "../contacts";
 import { Dashboard } from "../dashboard/Dashboard";
 import deals from "../deals";
+import invoices from "../invoices";
 import { Layout } from "../layout/Layout";
 import { SignupPage } from "../login/SignupPage";
 import {
@@ -191,6 +192,11 @@ export const CRM = ({
             />
           </CustomRoutes>
           <Resource name="deals" {...deals} />
+          <Resource name="invoices" {...invoices} />
+          <Resource name="invoice_items" />
+          <Resource name="invoice_notes" />
+          <Resource name="invoices_summary" />
+          <Resource name="tax_presets" />
           <Resource name="contacts" {...contacts} />
           <Resource name="companies" {...companies} />
           <Resource name="companyNotes" />

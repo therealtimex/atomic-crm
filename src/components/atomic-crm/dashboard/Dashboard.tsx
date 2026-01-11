@@ -5,8 +5,12 @@ import { DashboardActivityLog } from "./DashboardActivityLog";
 import { DashboardStepper } from "./DashboardStepper";
 import { DealsChart } from "./DealsChart";
 import { HotContacts } from "./HotContacts";
+import { InvoicesChart } from "./InvoicesChart";
+import { OutstandingInvoices } from "./OutstandingInvoices";
 import { TasksList } from "./TasksList";
 import { Welcome } from "./Welcome";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TrendingUp, DollarSign } from "lucide-react";
 
 export const Dashboard = () => {
   const {
@@ -49,11 +53,33 @@ export const Dashboard = () => {
         <div className="flex flex-col gap-4">
           {import.meta.env.VITE_IS_DEMO === "true" ? <Welcome /> : null}
           <HotContacts />
+          <OutstandingInvoices />
         </div>
       </div>
       <div className="md:col-span-6">
         <div className="flex flex-col gap-6">
-          {totalDeal ? <DealsChart /> : null}
+          <Tabs defaultValue="invoices" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="invoices" className="flex items-center gap-2">
+                <DollarSign className="h-4 w-4" />
+                Invoice Revenue
+              </TabsTrigger>
+              {totalDeal ? (
+                <TabsTrigger value="deals" className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  Deal Pipeline
+                </TabsTrigger>
+              ) : null}
+            </TabsList>
+            <TabsContent value="invoices" className="mt-0">
+              <InvoicesChart />
+            </TabsContent>
+            {totalDeal ? (
+              <TabsContent value="deals" className="mt-0">
+                <DealsChart />
+              </TabsContent>
+            ) : null}
+          </Tabs>
           <DashboardActivityLog />
         </div>
       </div>
