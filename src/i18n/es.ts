@@ -1335,6 +1335,7 @@ export const esMessages = {
         suggest_number: "Sugerir número",
         export_csv: "Exportar a CSV",
         send_email: "Enviar por correo",
+        download_pdf: "Descargar PDF",
       },
       notification: {
         status_updated: "Estado de la factura actualizado a %{status}",

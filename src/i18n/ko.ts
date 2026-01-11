@@ -1303,6 +1303,7 @@ export const koMessages = {
         suggest_number: "번호 제안",
         export_csv: "CSV로 내보내기",
         send_email: "이메일로 보내기",
+        download_pdf: "PDF 다운로드",
       },
       notification: {
         status_updated: "송장 상태가 %{status}(으)로 업데이트되었습니다",

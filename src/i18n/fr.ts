@@ -1345,6 +1345,7 @@ export const frMessages = {
         suggest_number: "Suggérer un numéro",
         export_csv: "Exporter en CSV",
         send_email: "Envoyer par email",
+        download_pdf: "Télécharger le PDF",
       },
       notification: {
         status_updated: "Statut de la facture mis à jour à %{status}",

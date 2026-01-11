@@ -1309,6 +1309,7 @@ export const jaMessages = {
         suggest_number: "番号を提案",
         export_csv: "CSVへエクスポート",
         send_email: "メールで送信",
+        download_pdf: "PDFをダウンロード",
       },
       notification: {
         status_updated: "請求書のステータスを %{status} に更新しました",

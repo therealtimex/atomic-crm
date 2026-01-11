@@ -1312,6 +1312,7 @@ export const viMessages = {
         suggest_number: "Gợi ý số",
         export_csv: "Xuất ra CSV",
         send_email: "Gửi qua Email",
+        download_pdf: "Tải xuống PDF",
       },
       notification: {
         status_updated: "Trạng thái hóa đơn đã được cập nhật thành %{status}",
