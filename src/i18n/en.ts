@@ -1065,6 +1065,7 @@ export const enMessages = {
       section: {
         profile: "My Profile",
         organization: "Organization Branding",
+        email: "Email Settings",
       },
       notification: {
         profile_updated: "Your profile has been updated",
@@ -1353,6 +1354,9 @@ export const enMessages = {
         bank_details: "Bank Details (Payment Instructions)",
         default_payment_terms: "Default Payment Terms",
         default_terms_and_conditions: "Default Terms & Conditions",
+        email_from_name: "Email Sender Name",
+        email_from_email: "Email Sender Address",
+        resend_api_key: "Resend API Key",
       },
       notification: {
         updated: "Organization profile updated successfully",

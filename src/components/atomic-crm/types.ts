@@ -454,4 +454,7 @@ export type BusinessProfile = {
   logo?: RAFile;
   default_payment_terms?: string;
   default_terms_and_conditions?: string;
+  email_from_name?: string;
+  email_from_email?: string;
+  resend_api_key?: string;
 } & Pick<RaRecord, "id">;

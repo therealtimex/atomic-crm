@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CircleX, Copy, Pencil, Save, Building2, UserCircle } from "lucide-react";
+import { CircleX, Copy, Pencil, Save, Building2, UserCircle, Mail } from "lucide-react";
 import {
   Form,
   useDataProvider,
@@ -243,6 +243,34 @@ const OrganizationSettings = () => {
             </div>
           </div>
 
+          <div className="pt-6 border-t">
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Mail className="h-5 w-5" />
+              {translate("crm.settings.section.email") || "Email Settings"}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <TextRender
+                source="email_from_name"
+                label={translate("resources.business_profile.fields.email_from_name") || "Email Sender Name"}
+                isEditMode={isEditMode}
+                helperText="Name shown as the sender (e.g. Acme Invoices)"
+              />
+              <TextRender
+                source="email_from_email"
+                label={translate("resources.business_profile.fields.email_from_email") || "Email Sender Address"}
+                isEditMode={isEditMode}
+                helperText="Email shown as the sender (e.g. billing@acme.com)"
+              />
+              <TextRender
+                source="resend_api_key"
+                label={translate("resources.business_profile.fields.resend_api_key") || "Resend API Key"}
+                isEditMode={isEditMode}
+                type="password"
+                helperText="Your Resend API key (re_...). Leave empty to use environment variable."
+              />
+            </div>
+          </div>
+
           <div className="flex flex-row justify-end gap-2">
             <Button
               type="button"
@@ -290,6 +318,7 @@ const TextRender = ({
   multiline = false,
   rows = 1,
   helperText,
+  type = "text",
 }: {
   source: string;
   label: string;
@@ -297,6 +326,7 @@ const TextRender = ({
   multiline?: boolean;
   rows?: number;
   helperText?: string;
+  type?: "text" | "password";
 }) => {
   if (isEditMode) {
     return (
@@ -306,6 +336,7 @@ const TextRender = ({
         helperText={helperText || false}
         multiline={multiline}
         rows={rows}
+        type={type}
       />
     );
   }

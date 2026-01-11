@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslate, useNotify, useDataProvider } from "ra-core";
-import { Mail, Send } from "lucide-react";
+import { Mail, Send, Loader2 } from "lucide-react";
+import { supabase } from "../providers/supabase/supabase";
 import {
     Dialog,
     DialogContent,
@@ -61,25 +62,44 @@ export const InvoiceEmailModal = ({ record, trigger }: InvoiceEmailModalProps) =
     }, [isOpen, record, translate, dataProvider]);
 
     const handleSend = async () => {
+        if (!recipientEmail) {
+            notify("crm.company.error.invalid_url", { type: "warning" }); // Or better: "Email is required"
+            return;
+        }
+
         setIsSending(true);
         try {
-            // Mock delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            console.log("Sending Invoice Email:", {
-                to: recipientEmail,
-                subject,
-                body,
-                invoiceId: record.id
+            const { error } = await supabase.functions.invoke("send-email", {
+                body: {
+                    to: recipientEmail,
+                    subject,
+                    body,
+                },
             });
+
+            if (error) throw error;
 
             notify("resources.invoices.notification.email_sent", {
                 type: "success",
                 messageArgs: { number: record.invoice_number }
             });
+
+            // Mark invoice as sent if it was in draft
+            if (record.status === 'draft') {
+                await dataProvider.update('invoices', {
+                    id: record.id,
+                    data: {
+                        status: 'sent',
+                        sent_at: new Date().toISOString()
+                    },
+                    previousData: record
+                });
+            }
+
             setIsOpen(false);
         } catch (error: any) {
-            notify(error.message, { type: "warning" });
+            console.error("Error sending email:", error);
+            notify(error.message || "Failed to send email", { type: "warning" });
         } finally {
             setIsSending(false);
         }
@@ -136,7 +156,11 @@ export const InvoiceEmailModal = ({ record, trigger }: InvoiceEmailModalProps) =
                         {translate("ra.action.cancel")}
                     </Button>
                     <Button type="button" onClick={handleSend} disabled={isSending}>
-                        <Send className="mr-2 h-4 w-4" />
+                        {isSending ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                            <Send className="mr-2 h-4 w-4" />
+                        )}
                         {isSending ? translate("ra.action.sending") : translate("ra.action.send")}
                     </Button>
                 </DialogFooter>
