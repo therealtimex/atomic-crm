@@ -1315,6 +1315,21 @@ export const koMessages = {
         select_company_for_contacts: "회사를 선택하여 연락처 보기",
         select_company_for_deals: "회사를 선택하여 거래 보기",
       },
+      email: {
+        subject: "제목",
+        body: "메시지 본문",
+        description:
+          "클라이언트에게 보내기 전에 이메일 메시지를 검토하고 수정하세요.",
+        body_intro: "청구서 #%{number}를 첨부하였습니다.",
+        message_label: "메시지 (선택 사항)",
+        message_placeholder: "개인적인 메시지 추가...",
+        message_help:
+          "청구서 세부 정보가 포함된 전문적인 이메일이 자동으로 생성됩니다.",
+        attachment_title: "PDF 첨부",
+        attachment_help: "청구서 %{number}.pdf가 자동으로 첨부됩니다",
+        cc: "CC",
+        cc_placeholder: "cc@example.com, other@example.com",
+      },
       empty_items: "항목이 없습니다",
       days_overdue: "일 초과",
     },

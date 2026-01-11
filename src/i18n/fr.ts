@@ -1360,6 +1360,21 @@ export const frMessages = {
         select_company_for_deals:
           "Sélectionnez une entreprise pour voir ses affaires",
       },
+      email: {
+        subject: "Objet",
+        body: "Corps du message",
+        description:
+          "Vérifiez et personnalisez le message avant de l'envoyer au client.",
+        body_intro: "Veuillez trouver ci-joint votre facture #%{number}.",
+        message_label: "Message (Optionnel)",
+        message_placeholder: "Ajoutez un message personnel...",
+        message_help:
+          "Un e-mail professionnel sera généré automatiquement avec les détails de la facture.",
+        attachment_title: "Pièce jointe PDF",
+        attachment_help: "La facture %{number}.pdf sera jointe automatiquement",
+        cc: "CC",
+        cc_placeholder: "cc@exemple.com, autre@exemple.com",
+      },
       empty_items: "Aucune ligne ajoutée",
       days_overdue: "jours de retard",
     },

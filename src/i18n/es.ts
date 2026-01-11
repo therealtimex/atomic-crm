@@ -1348,6 +1348,22 @@ export const esMessages = {
           "Seleccione una empresa para ver sus contactos",
         select_company_for_deals: "Seleccione una empresa para ver sus tratos",
       },
+      email: {
+        subject: "Asunto",
+        body: "Cuerpo del mensaje",
+        description:
+          "Revise y personalice el mensaje antes de enviarlo al cliente.",
+        body_intro: "Adjunto encontrará su factura #%{number}.",
+        message_label: "Mensaje (Opcional)",
+        message_placeholder: "Añada un mensaje personal...",
+        message_help:
+          "Se generará automáticamente un correo profesional con los detalles de la factura.",
+        attachment_title: "Archivo adjunto PDF",
+        attachment_help:
+          "La factura %{number}.pdf se adjuntará automáticamente",
+        cc: "CC",
+        cc_placeholder: "cc@ejemplo.com, otro@ejemplo.com",
+      },
       empty_items: "No hay artículos añadidos",
       days_overdue: "días de retraso",
     },

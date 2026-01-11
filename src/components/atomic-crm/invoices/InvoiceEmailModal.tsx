@@ -234,10 +234,15 @@ export const InvoiceEmailModal = ({
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="cc">CC</Label>
+              <Label htmlFor="cc">
+                {translate("resources.invoices.email.cc", "CC")}
+              </Label>
               <Input
                 id="cc"
-                placeholder="cc@example.com, other@example.com"
+                placeholder={translate(
+                  "resources.invoices.email.cc_placeholder",
+                  "cc@example.com",
+                )}
                 value={ccEmail}
                 onChange={(e) => setCcEmail(e.target.value)}
               />
@@ -254,26 +259,39 @@ export const InvoiceEmailModal = ({
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="body">Message (Optional)</Label>
+            <Label htmlFor="body">
+              {translate("resources.invoices.email.message_label", "Message")}
+            </Label>
             <Textarea
               id="body"
               rows={6}
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              placeholder="Add a personal message to include in the email..."
+              placeholder={translate(
+                "resources.invoices.email.message_placeholder",
+                "Add a personal message...",
+              )}
             />
             <p className="text-xs text-muted-foreground">
-              A professional invoice email will be generated automatically with
-              all invoice details.
+              {translate(
+                "resources.invoices.email.message_help",
+                "A professional invoice email will be generated automatically...",
+              )}
             </p>
           </div>
           <div className="rounded-md bg-muted p-3 flex items-center gap-2">
             <FileText className="h-4 w-4 text-muted-foreground" />
             <div className="flex-1">
-              <p className="text-sm font-medium">PDF Attachment</p>
+              <p className="text-sm font-medium">
+                {translate(
+                  "resources.invoices.email.attachment_title",
+                  "PDF Attachment",
+                )}
+              </p>
               <p className="text-xs text-muted-foreground">
-                Invoice {record.invoice_number}.pdf will be automatically
-                attached
+                {translate("resources.invoices.email.attachment_help", {
+                  number: record.invoice_number,
+                })}
               </p>
             </div>
           </div>

@@ -1347,11 +1347,18 @@ export const enMessages = {
         body: "Message Body",
         description:
           "Review and customize the email message before sending it to the client.",
-        body_intro:
-          "We've generated a new invoice (#%{number}) for your records.",
-        body_closing:
-          "You can find all the details of this invoice attached. Please let us know if you have any questions.",
+        body_intro: "Please find attached your invoice #%{number}.",
+        message_label: "Message (Optional)",
+        message_placeholder:
+          "Add a personal message to include in the email...",
+        message_help:
+          "A professional invoice email will be generated automatically with all invoice details.",
+        attachment_title: "PDF Attachment",
+        attachment_help: "Invoice %{number}.pdf will be automatically attached",
+        cc: "CC",
+        cc_placeholder: "cc@example.com, other@example.com",
       },
+
       empty_items: "No line items added yet",
       days_overdue: "days overdue",
     },

@@ -1321,6 +1321,21 @@ export const jaMessages = {
         select_company_for_contacts: "会社を選択して連絡先を表示",
         select_company_for_deals: "会社を選択して案件を表示",
       },
+      email: {
+        subject: "件名",
+        body: "メッセージ本文",
+        description:
+          "クライアントに送信する前に、メールメッセージを確認・編集してください。",
+        body_intro: "請求書 #%{number} を添付いたしました。",
+        message_label: "メッセージ (任意)",
+        message_placeholder: "個人的なメッセージを追加...",
+        message_help:
+          "請求書の詳細を含むプロフェッショナルなメールが自動的に生成されます。",
+        attachment_title: "PDF添付",
+        attachment_help: "請求書 %{number}.pdf が自動的に添付されます",
+        cc: "CC",
+        cc_placeholder: "cc@example.com, other@example.com",
+      },
       empty_items: "明細がありません",
       days_overdue: "日超過",
     },
