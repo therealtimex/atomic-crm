@@ -35,7 +35,7 @@ serve(async (req) => {
         }
 
         // 2. Parse request body
-        const { to, subject, body, html, attachments } = await req.json();
+        const { to, cc, subject, body, html, attachments } = await req.json();
 
         if (!to || !subject || (!body && !html)) {
             return new Response(
@@ -67,6 +67,7 @@ serve(async (req) => {
             console.log("Mocking email sending (RESEND_API_KEY not set):", {
                 from: formattedFrom,
                 to,
+                cc,
                 subject,
                 body: body || "(html content)",
             });
@@ -87,6 +88,7 @@ serve(async (req) => {
         const emailPayload = {
             from: formattedFrom,
             to: Array.isArray(to) ? to : [to],
+            cc: cc ? (Array.isArray(cc) ? cc : [cc]) : undefined,
             subject: subject,
             text: body,
             html: html,

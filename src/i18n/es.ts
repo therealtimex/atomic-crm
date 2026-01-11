@@ -1353,6 +1353,8 @@ export const esMessages = {
   },
   ra: {
     action: {
+      send: "Enviar",
+      sending: "Enviando...",
       clear_array_input: "Borrar la lista",
       clear_input_value: "Borrar valor",
       clone: "Clonar",

@@ -1321,6 +1321,8 @@ export const koMessages = {
   },
   ra: {
     action: {
+      send: "보내기",
+      sending: "전송 중...",
       clear_array_input: "목록 지우기",
       confirm: "확인",
       create_item: "%{item} 만들기",

@@ -1,4 +1,10 @@
 export const enMessages = {
+  ra: {
+    action: {
+      send: "Send",
+      sending: "Sending...",
+    },
+  },
   crm: {
     root: {
       database_checking: "Checking database connection...",

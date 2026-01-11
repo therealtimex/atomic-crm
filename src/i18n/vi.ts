@@ -1330,6 +1330,8 @@ export const viMessages = {
   },
   ra: {
     action: {
+      send: "Gửi",
+      sending: "Đang gửi...",
       clear_array_input: "Xóa danh sách",
       create_item: "Tạo %{item}",
       remove_all_filters: "Xóa tất cả bộ lọc",

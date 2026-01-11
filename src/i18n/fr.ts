@@ -1,4 +1,10 @@
 export const frMessages = {
+  ra: {
+    action: {
+      send: "Envoyer",
+      sending: "Envoi en cours...",
+    },
+  },
   crm: {
     root: {
       database_checking: "Vérification de la connexion à la base de données...",

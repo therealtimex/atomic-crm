@@ -30,6 +30,7 @@ export const InvoiceEmailModal = ({ record, trigger }: InvoiceEmailModalProps) =
     const dataProvider = useDataProvider();
     const [isOpen, setIsOpen] = useState(false);
     const [recipientEmail, setRecipientEmail] = useState("");
+    const [ccEmail, setCcEmail] = useState("");
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
     const [isSending, setIsSending] = useState(false);
@@ -46,18 +47,43 @@ export const InvoiceEmailModal = ({ record, trigger }: InvoiceEmailModalProps) =
 
             setBody(defaultBody);
 
-            // Fetch contact email if available
-            if (record.contact_id) {
-                dataProvider.getOne("contacts", { id: record.contact_id })
-                    .then(({ data }) => {
-                        if (data?.email) {
-                            setRecipientEmail(data.email);
+            // Fetch contact/company email logic
+            const loadEmails = async () => {
+                let toEmail = "";
+
+                // 1. Try Contact Email
+                if (record.contact_id) {
+                    try {
+                        const { data: contact } = await dataProvider.getOne("contacts", { id: record.contact_id });
+                        if (contact) {
+                            // Helper to extract email from jsonb structure
+                            const extractEmail = (jsonb: any) => {
+                                if (Array.isArray(jsonb) && jsonb.length > 0 && jsonb[0].email) {
+                                    return jsonb[0].email;
+                                }
+                                return null;
+                            };
+
+                            toEmail = extractEmail(contact.email_jsonb) || contact.email || "";
                         }
-                    })
-                    .catch(() => {
-                        // Ignore error
-                    });
-            }
+                    } catch (e) { console.error(e); }
+                }
+
+                // 2. Fallback to Company Email if no contact email found
+                if (!toEmail && record.company_id) {
+                    try {
+                        const { data: company } = await dataProvider.getOne("companies", { id: record.company_id });
+                        if (company) {
+                            if (company.email) toEmail = company.email;
+                            // Add logic for company email_jsonb if exists in future
+                        }
+                    } catch (e) { console.error(e); }
+                }
+
+                if (toEmail) setRecipientEmail(toEmail);
+            };
+
+            loadEmails();
         }
     }, [isOpen, record, dataProvider]);
 
@@ -101,6 +127,7 @@ export const InvoiceEmailModal = ({ record, trigger }: InvoiceEmailModalProps) =
             const { error } = await supabase.functions.invoke("send-email", {
                 body: {
                     to: recipientEmail,
+                    cc: ccEmail ? ccEmail.split(',').map(e => e.trim()) : undefined,
                     subject,
                     body, // Plain text fallback
                     html, // Rich HTML version
@@ -151,7 +178,7 @@ export const InvoiceEmailModal = ({ record, trigger }: InvoiceEmailModalProps) =
                     </Button>
                 )}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-3xl">
                 <DialogHeader>
                     <DialogTitle>{translate("resources.invoices.action.send_email")}</DialogTitle>
                     <DialogDescription>
@@ -159,15 +186,26 @@ export const InvoiceEmailModal = ({ record, trigger }: InvoiceEmailModalProps) =
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">{translate("resources.contacts.fields.email")}</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            placeholder="recipient@example.com"
-                            value={recipientEmail}
-                            onChange={(e) => setRecipientEmail(e.target.value)}
-                        />
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="email">{translate("resources.contacts.fields.email")}</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="recipient@example.com"
+                                value={recipientEmail}
+                                onChange={(e) => setRecipientEmail(e.target.value)}
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="cc">CC</Label>
+                            <Input
+                                id="cc"
+                                placeholder="cc@example.com, other@example.com"
+                                value={ccEmail}
+                                onChange={(e) => setCcEmail(e.target.value)}
+                            />
+                        </div>
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="subject">{translate("resources.invoices.email.subject")}</Label>

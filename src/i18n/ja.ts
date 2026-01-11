@@ -1327,6 +1327,8 @@ export const jaMessages = {
   },
   ra: {
     action: {
+      send: "送信",
+      sending: "送信中...",
       clear_array_input: "一覧をクリア",
       confirm: "確認",
       create_item: "%{item}を作成",
