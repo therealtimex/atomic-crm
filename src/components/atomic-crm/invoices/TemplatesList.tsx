@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useGetList, useTranslate, useNotify, useDataProvider } from "ra-core";
-import { Plus, FileText, Trash2, Edit, Copy } from "lucide-react";
+import { Plus, FileText, Trash2, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +33,7 @@ export const TemplatesList = () => {
 
     const handleDelete = async (id: number) => {
         try {
-            await dataProvider.delete("invoice_templates", { id, previousData: {} });
+            await dataProvider.delete("invoice_templates", { id, previousData: { id } });
             notify(translate("resources.invoice_templates.notification.deleted"), { type: "success" });
             refetch();
         } catch (error: any) {
@@ -106,7 +106,7 @@ export const TemplatesList = () => {
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            onClick={() => setTemplateToDelete(template.id)}
+                                            onClick={() => setTemplateToDelete(template.id as number)}
                                         >
                                             <Trash2 className="h-4 w-4 text-destructive" />
                                         </Button>

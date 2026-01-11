@@ -1,5 +1,3 @@
-import { useTranslate } from "ra-core";
-import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -10,8 +8,8 @@ import {
 import { Percent } from "lucide-react";
 
 export const TaxPresetSelector = ({ onSelect }: { onSelect?: (rate: number) => void }) => {
-    const translate = useTranslate();
-    const { setValue } = useFormContext();
+    // No context needed if just using onSelect
+
 
     const presets = [
         { label: "0%", value: 0 },

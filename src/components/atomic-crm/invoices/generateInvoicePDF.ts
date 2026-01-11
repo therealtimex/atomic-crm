@@ -6,7 +6,7 @@ import { toJpeg } from "html-to-image";
  * @param invoiceNumber - The invoice number for the filename
  * @returns Promise<string> - Base64 encoded PDF
  */
-export async function generateInvoicePDFBase64(invoiceNumber: string): Promise<string> {
+export const generateInvoicePDFBase64 = async (_invoiceNumber: string): Promise<string> => {
     const element = document.getElementById("invoice-content");
     if (!element) {
         throw new Error("Invoice content not found");
