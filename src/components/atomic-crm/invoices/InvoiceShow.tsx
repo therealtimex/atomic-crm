@@ -32,7 +32,7 @@ const InvoiceShowContent = () => {
             try {
                 const { data } = await dataProvider.getOne("business_profile", { id: 1 });
                 return data;
-            } catch (_e) {
+            } catch {
                 return null;
             }
         },
