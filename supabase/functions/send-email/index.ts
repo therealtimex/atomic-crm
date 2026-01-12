@@ -15,7 +15,7 @@ serve(async (req) => {
     const authHeader = req.headers.get("Authorization")!;
     const isServiceRole = authHeader === `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`;
 
-    let user = null;
+    let _user = null;
     if (!isServiceRole) {
       const supabaseClient = createClient(
         Deno.env.get("SUPABASE_URL") ?? "",
@@ -35,7 +35,7 @@ serve(async (req) => {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      user = data.user;
+      _user = data.user;
     }
 
     // Use admin client for DB operations to ensure we bypass RLS correctly when needed

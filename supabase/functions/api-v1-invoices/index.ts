@@ -217,7 +217,7 @@ async function deleteInvoice(apiKey: any, invoiceId: string) {
   return new Response(null, { status: 204, headers: corsHeaders });
 }
 
-async function sendInvoice(apiKey: any, invoiceId: string, req: Request) {
+async function sendInvoice(apiKey: any, invoiceId: string, _req: Request) {
   if (!hasScope(apiKey, "invoices:write")) {
     return createErrorResponse(403, "Insufficient permissions");
   }
@@ -241,8 +241,8 @@ async function sendInvoice(apiKey: any, invoiceId: string, req: Request) {
     .single();
 
   // 2. Determine recipient (email_jsonb is JSONB array, companies may have email field)
-  const recipientEmail = 
-    invoice.contacts?.email_jsonb?.[0]?.email || 
+  const recipientEmail =
+    invoice.contacts?.email_jsonb?.[0]?.email ||
     invoice.companies?.email;
   if (!recipientEmail) {
     return createErrorResponse(
