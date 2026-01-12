@@ -731,6 +731,7 @@ export const viMessages = {
           companies: "Công ty",
           deals: "Giao dịch",
           tasks: "Công việc",
+          invoices: "Hóa đơn",
         },
         events: {
           "contact.created": "Đã tạo liên hệ",
@@ -752,6 +753,11 @@ export const viMessages = {
           "task.priority_changed": "Đã thay đổi ưu tiên công việc",
           "task.archived": "Đã lưu trữ công việc",
           "task.deleted": "Đã xóa công việc",
+          "invoice.created": "Đã tạo hóa đơn",
+          "invoice.updated": "Đã cập nhật hóa đơn",
+          "invoice.deleted": "Đã xóa hóa đơn",
+          "invoice.status_changed": "Hóa đơn thay đổi trạng thái",
+          "invoice.sent": "Đã gửi hóa đơn",
         },
       },
       api_keys: {
@@ -801,6 +807,8 @@ export const viMessages = {
           "deals:write": "Giao dịch: Ghi",
           "tasks:read": "Công việc: Đọc",
           "tasks:write": "Công việc: Ghi",
+          "invoices:read": "Hóa đơn: Đọc",
+          "invoices:write": "Hóa đơn: Ghi",
           "activities:write": "Hoạt động: Ghi (Ghi chú)",
         },
         notification: {

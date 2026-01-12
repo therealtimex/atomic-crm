@@ -37,6 +37,8 @@ const AVAILABLE_SCOPES = [
   "deals:write",
   "tasks:read",
   "tasks:write",
+  "invoices:read",
+  "invoices:write",
   "activities:write",
 ];
 
@@ -137,11 +139,11 @@ export const CreateApiKeyDialog = ({
           <DialogDescription>
             {createdKey
               ? translate(
-                  "crm.integrations.api_keys.dialog.created_description",
-                )
+                "crm.integrations.api_keys.dialog.created_description",
+              )
               : translate(
-                  "crm.integrations.api_keys.dialog.create_description",
-                )}
+                "crm.integrations.api_keys.dialog.create_description",
+              )}
           </DialogDescription>
         </DialogHeader>
 

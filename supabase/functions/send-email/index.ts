@@ -11,29 +11,39 @@ serve(async (req) => {
   }
 
   try {
-    // 1. Authenticate the user
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-      {
-        global: {
-          headers: { Authorization: req.headers.get("Authorization")! },
+    // 1. Authenticate the user (or service role)
+    const authHeader = req.headers.get("Authorization")!;
+    const isServiceRole = authHeader === `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`;
+
+    let user = null;
+    if (!isServiceRole) {
+      const supabaseClient = createClient(
+        Deno.env.get("SUPABASE_URL") ?? "",
+        Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+        {
+          global: {
+            headers: { Authorization: authHeader },
+          },
         },
-      },
-    );
+      );
 
-    const {
-      data: { user },
-      error: authError,
-    } = await supabaseClient.auth.getUser();
+      const { data, error: authError } = await supabaseClient.auth.getUser();
 
-    if (authError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      if (authError || !data.user) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      user = data.user;
     }
 
+    // Use admin client for DB operations to ensure we bypass RLS correctly when needed
+    const dbClient = isServiceRole
+      ? createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!)
+      : createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!, {
+        global: { headers: { Authorization: authHeader } }
+      });
     // 2. Parse request body
     const { to, cc, subject, body, html, attachments } = await req.json();
 
@@ -50,7 +60,7 @@ serve(async (req) => {
     }
 
     // 3. Fetch sender settings from business_profile
-    const { data: businessProfile } = await supabaseClient
+    const { data: businessProfile } = await dbClient
       .from("business_profile")
       .select("name, email_from_name, email_from_email, resend_api_key")
       .eq("id", 1)
@@ -124,8 +134,8 @@ serve(async (req) => {
       console.error("Resend API error:", data);
       throw new Error(
         data.message ||
-          JSON.stringify(data) ||
-          "Failed to send email via Resend",
+        JSON.stringify(data) ||
+        "Failed to send email via Resend",
       );
     }
 

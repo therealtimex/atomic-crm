@@ -745,6 +745,7 @@ export const enMessages = {
           companies: "Companies",
           deals: "Deals",
           tasks: "Tasks",
+          invoices: "Invoices",
         },
         events: {
           "contact.created": "Contact Created",
@@ -766,6 +767,11 @@ export const enMessages = {
           "task.priority_changed": "Task Priority Changed",
           "task.archived": "Task Archived",
           "task.deleted": "Task Deleted",
+          "invoice.created": "Invoice Created",
+          "invoice.updated": "Invoice Updated",
+          "invoice.deleted": "Invoice Deleted",
+          "invoice.status_changed": "Invoice Status Changed",
+          "invoice.sent": "Invoice Sent",
         },
       },
       api_keys: {
@@ -814,6 +820,8 @@ export const enMessages = {
           "deals:write": "Deals: Write",
           "tasks:read": "Tasks: Read",
           "tasks:write": "Tasks: Write",
+          "invoices:read": "Invoices: Read",
+          "invoices:write": "Invoices: Write",
           "activities:write": "Activities: Write (Notes)",
         },
         notification: {

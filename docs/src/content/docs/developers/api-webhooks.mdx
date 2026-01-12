@@ -21,6 +21,8 @@ Our REST API provides full CRUD operations for all major entities. The base URL 
 - `GET/POST/PATCH/DELETE /v1/companies`
 - `GET/POST/PATCH/DELETE /v1/deals`
 - `GET/POST/PATCH/DELETE /v1/tasks`
+- `GET/POST/PATCH/DELETE /v1/invoices`
+- `POST /v1/invoices/{id}/send`: Send an invoice by email.
 - `POST /v1/activities`: Create notes and tasks in a single request.
 
 For the full specification, including request/response examples and error codes, please refer to the [API.md](https://github.com/therealtimex/realtimex-crm/blob/main/docs/API.md) file in the repository.
@@ -30,8 +32,8 @@ For the full specification, including request/response examples and error codes,
 Webhooks allow RealTimeX CRM to notify your external services when specific events occur.
 
 ### Supported Events
-- **CRUD Events**: `contact.created`, `company.updated`, `deal.deleted`, etc.
-- **Business Events**: `deal.won`, `deal.lost`, `task.completed`.
+- **CRUD Events**: `contact.created`, `company.updated`, `invoice.deleted`, etc.
+- **Business Events**: `deal.won`, `deal.lost`, `task.completed`, `invoice.sent`, `invoice.status_changed`.
 
 ### Configuration
 1. Navigate to **Settings > Integrations > Webhooks**.

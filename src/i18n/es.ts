@@ -741,6 +741,7 @@ export const esMessages = {
           companies: "Empresas",
           deals: "Negocios",
           tasks: "Tareas",
+          invoices: "Facturas",
         },
         events: {
           "contact.created": "Contacto creado",
@@ -762,6 +763,11 @@ export const esMessages = {
           "task.priority_changed": "Prioridad de la tarea cambiada",
           "task.archived": "Tarea archivada",
           "task.deleted": "Tarea eliminada",
+          "invoice.created": "Factura creada",
+          "invoice.updated": "Factura actualizada",
+          "invoice.deleted": "Factura eliminada",
+          "invoice.status_changed": "Estado de factura cambiado",
+          "invoice.sent": "Factura enviada",
         },
       },
       api_keys: {
@@ -813,6 +819,8 @@ export const esMessages = {
           "deals:write": "Negocios: Escritura",
           "tasks:read": "Tareas: Lectura",
           "tasks:write": "Tareas: Escritura",
+          "invoices:read": "Facturas: Lectura",
+          "invoices:write": "Facturas: Escritura",
           "activities:write": "Actividades: Escritura (Notas)",
         },
         notification: {

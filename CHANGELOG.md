@@ -5,6 +5,16 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.48.7] - 2026-01-11
+
+### Added
+
+- **API**: New `/v1/invoices` endpoints for full CRUD and email sending (`/invoices/{id}/send`).
+- **Webhooks**: Outbound webhook support for Invoices (`invoice.created`, `invoice.updated`, `invoice.deleted`, `invoice.sent`, `invoice.status_changed`).
+- **Refinement**: Improved `send-email` to support `service_role` calls, enabling API-based invoice sending.
+- **Refinement**: Atomic invoice creation using a new PostgreSQL RPC (`create_invoice_with_items`).
+- **Docs**: Updated API & Webhooks documentation.
+
 ## [0.48.6] - 2026-01-11
 
 ### Added

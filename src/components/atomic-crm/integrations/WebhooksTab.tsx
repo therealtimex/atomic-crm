@@ -54,6 +54,11 @@ const AVAILABLE_EVENTS = [
   { value: "task.priority_changed", category: "tasks" },
   { value: "task.archived", category: "tasks" },
   { value: "task.deleted", category: "tasks" },
+  { value: "invoice.created", category: "invoices" },
+  { value: "invoice.updated", category: "invoices" },
+  { value: "invoice.deleted", category: "invoices" },
+  { value: "invoice.status_changed", category: "invoices" },
+  { value: "invoice.sent", category: "invoices" },
 ];
 
 export const WebhooksTab = () => {

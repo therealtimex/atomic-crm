@@ -724,6 +724,7 @@ export const jaMessages = {
           companies: "会社",
           deals: "案件",
           tasks: "タスク",
+          invoices: "請求書",
         },
         events: {
           "contact.created": "連絡先作成",
@@ -745,6 +746,11 @@ export const jaMessages = {
           "task.priority_changed": "タスク優先度変更",
           "task.archived": "タスクアーカイブ",
           "task.deleted": "タスク削除",
+          "invoice.created": "請求書が作成されました",
+          "invoice.updated": "請求書が更新されました",
+          "invoice.deleted": "請求書が削除されました",
+          "invoice.status_changed": "請求書のステータスが変更されました",
+          "invoice.sent": "請求書が送信されました",
         },
       },
       api_keys: {
@@ -796,6 +802,8 @@ export const jaMessages = {
           "deals:write": "案件: 書き込み",
           "tasks:read": "タスク: 読み取り",
           "tasks:write": "タスク: 書き込み",
+          "invoices:read": "請求書: 読み取り",
+          "invoices:write": "請求書: 書き込み",
           "activities:write": "アクティビティ: 書き込み (ノート)",
         },
         notification: {

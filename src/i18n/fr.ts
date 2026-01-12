@@ -752,6 +752,7 @@ export const frMessages = {
           companies: "Entreprises",
           deals: "Affaires",
           tasks: "Tâches",
+          invoices: "Factures",
         },
         events: {
           "contact.created": "Contact créé",
@@ -773,6 +774,11 @@ export const frMessages = {
           "task.priority_changed": "Priorité de la tâche modifiée",
           "task.archived": "Tâche archivée",
           "task.deleted": "Tâche supprimée",
+          "invoice.created": "Facture créée",
+          "invoice.updated": "Facture mise à jour",
+          "invoice.deleted": "Facture supprimée",
+          "invoice.status_changed": "Statut de la facture changé",
+          "invoice.sent": "Facture envoyée",
         },
       },
       api_keys: {
@@ -824,6 +830,8 @@ export const frMessages = {
           "deals:write": "Affaires : Écriture",
           "tasks:read": "Tâches : Lecture",
           "tasks:write": "Tâches : Écriture",
+          "invoices:read": "Factures : Lecture",
+          "invoices:write": "Factures : Écriture",
           "activities:write": "Activités : Écriture (Notes)",
         },
         notification: {
