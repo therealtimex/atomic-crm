@@ -3,6 +3,9 @@ export const koMessages = {
     root: {
       database_checking: "데이터베이스 연결 확인 중...",
     },
+    changelog: {
+      title: "새로운 기능",
+    },
     setup_wizard: {
       welcome: {
         title: "%{title}에 오신 것을 환영합니다",

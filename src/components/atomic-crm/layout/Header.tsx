@@ -15,6 +15,7 @@ import { useUserMenu } from "@/hooks/user-menu-context";
 import { MigrationPulseIndicator } from "@/components/atomic-crm/migration";
 import { useMigrationContextSafe } from "@/contexts/MigrationContext";
 import { Button } from "@/components/ui/button";
+import { ChangelogModal } from "./ChangelogModal";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
 
@@ -24,6 +25,7 @@ const Header = () => {
   const migrationContext = useMigrationContextSafe();
   const translate = useTranslate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [changelogOpen, setChangelogOpen] = useState(false);
 
   // Simplified path matching logic
   const navPaths = [
@@ -152,11 +154,18 @@ const Header = () => {
               </CanAccess>
               <DropdownMenuSeparator />
               <DropdownMenuLabel className="font-normal">
-                <div className="text-xs text-muted-foreground">
+                <button
+                  onClick={() => setChangelogOpen(true)}
+                  className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors w-full text-left"
+                >
                   Version {import.meta.env.VITE_APP_VERSION}
-                </div>
+                </button>
               </DropdownMenuLabel>
             </UserMenu>
+            <ChangelogModal
+              open={changelogOpen}
+              onOpenChange={setChangelogOpen}
+            />
           </div>
         </div>
       </div>

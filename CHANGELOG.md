@@ -5,6 +5,13 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.48.6] - 2026-01-11
+
+### Added
+
+- **UI**: Added a Changelog Modal accessible by clicking the version number in the User Menu.
+- **Build**: Automatically expose `CHANGELOG.md` to the frontend during development and build.
+
 ## [0.48.5] - 2026-01-11
 
 ### Added

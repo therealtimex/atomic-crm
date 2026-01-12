@@ -14,6 +14,9 @@ export const enMessages = {
     root: {
       database_checking: "Checking database connection...",
     },
+    changelog: {
+      title: "What's New",
+    },
     setup_wizard: {
       welcome: {
         title: "Welcome to %{title}",

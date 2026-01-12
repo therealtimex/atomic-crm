@@ -3,6 +3,9 @@ export const viMessages = {
     root: {
       database_checking: "Đang kiểm tra kết nối cơ sở dữ liệu...",
     },
+    changelog: {
+      title: "Có gì mới",
+    },
     setup_wizard: {
       welcome: {
         title: "Chào mừng bạn đến với %{title}",

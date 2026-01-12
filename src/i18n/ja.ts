@@ -3,6 +3,9 @@ export const jaMessages = {
     root: {
       database_checking: "データベース接続を確認中...",
     },
+    changelog: {
+      title: "更新履歴",
+    },
     setup_wizard: {
       welcome: {
         title: "%{title}へようこそ",

@@ -14,6 +14,9 @@ export const frMessages = {
     root: {
       database_checking: "Vérification de la connexion à la base de données...",
     },
+    changelog: {
+      title: "Quoi de neuf",
+    },
     setup_wizard: {
       welcome: {
         title: "Bienvenue sur %{title}",

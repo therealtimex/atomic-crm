@@ -1,6 +1,6 @@
 {
   "name": "realtimex-crm",
-  "version": "0.48.5",
+  "version": "0.48.6",
   "description": "RealTimeX CRM - A full-featured CRM with zero cloud costs and complete privacy.",
   "type": "module",
   "main": "./dist/index.js",
@@ -55,10 +55,10 @@
   "homepage": "https://github.com/therealtimex/realtimex-crm#readme",
   "scripts": {
     "test": "vitest",
-    "dev": "vite --force",
-    "dev:demo": "vite --config vite.demo.config --force",
-    "build": "tsc && vite build",
-    "build:demo": "tsc && vite build --config vite.demo.config",
+    "dev": "cp CHANGELOG.md public/ && vite --force",
+    "dev:demo": "cp CHANGELOG.md public/ && vite --config vite.demo.config --force",
+    "build": "cp CHANGELOG.md public/ && tsc && vite build",
+    "build:demo": "cp CHANGELOG.md public/ && tsc && vite build --config vite.demo.config",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "serve": "node api/server.js",

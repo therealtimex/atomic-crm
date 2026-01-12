@@ -3,6 +3,9 @@ export const esMessages = {
     root: {
       database_checking: "Comprobando la conexión a la base de datos...",
     },
+    changelog: {
+      title: "¿Qué hay de nuevo?",
+    },
     setup_wizard: {
       welcome: {
         title: "Bienvenido a %{title}",

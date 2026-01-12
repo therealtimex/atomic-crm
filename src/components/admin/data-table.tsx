@@ -7,7 +7,6 @@ import type {
   Identifier,
   RaRecord,
   SortPayload,
-  useTranslate,
 } from "ra-core";
 import {
   DataTableBase,
