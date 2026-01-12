@@ -1409,7 +1409,7 @@ export const viMessages = {
       placeholder_data_warning: "Sự cố mạng: không thể làm mới dữ liệu.",
     },
     navigation: {
-      clear_filters: "Xóa bộ lọc",
+      no_results: "Không tìm thấy kết quả.",
       no_filtered_results: "Không tìm thấy %{name} với bộ lọc hiện tại.",
       partial_page_range_info:
         "%{offsetBegin}-%{offsetEnd} trong hơn %{offsetEnd}",

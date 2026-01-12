@@ -4,6 +4,11 @@ export const enMessages = {
       send: "Send",
       sending: "Sending...",
     },
+    navigation: {
+      no_results: "No results found.",
+      no_filtered_results: "No results found with the current filters.",
+      clear_filters: "Clear filters",
+    },
   },
   crm: {
     root: {

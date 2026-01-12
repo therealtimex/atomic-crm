@@ -4,6 +4,11 @@ export const frMessages = {
       send: "Envoyer",
       sending: "Envoi en cours...",
     },
+    navigation: {
+      no_results: "Aucun résultat trouvé.",
+      no_filtered_results: "Aucun résultat trouvé avec les filtres actuels.",
+      clear_filters: "Effacer les filtres",
+    },
   },
   crm: {
     root: {

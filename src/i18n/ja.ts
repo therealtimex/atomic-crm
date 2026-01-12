@@ -1424,6 +1424,7 @@ export const jaMessages = {
         "ネットワークの問題: データの更新に失敗しました。",
     },
     navigation: {
+      no_results: "結果が見つかりませんでした。",
       clear_filters: "フィルターをクリア",
       no_filtered_results: "現在のフィルターで %{name} が見つかりません。",
       partial_page_range_info:

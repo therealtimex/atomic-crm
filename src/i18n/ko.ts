@@ -1419,6 +1419,7 @@ export const koMessages = {
         "네트워크 문제: 데이터 새로고침에 실패했습니다.",
     },
     navigation: {
+      no_results: "결과가 없습니다.",
       clear_filters: "필터 지우기",
       no_filtered_results: "현재 필터로 %{name}를 찾을 수 없습니다.",
       partial_page_range_info:

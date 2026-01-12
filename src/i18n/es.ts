@@ -1464,6 +1464,7 @@ export const esMessages = {
         "Problema de red: la actualización de datos falló.",
     },
     navigation: {
+      no_results: "No se encontraron resultados.",
       clear_filters: "Limpiar filtros",
       no_filtered_results:
         "No se encontraron %{name} con los filtros actuales.",

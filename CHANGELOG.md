@@ -5,6 +5,12 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.48.5] - 2026-01-11
+
+### Added
+
+- **Localization**: Localized "No results found" empty state messages in Tasks, Invoices, and admin data tables across all languages.
+
 ## [0.48.4] - 2026-01-11
 
 ### Added
