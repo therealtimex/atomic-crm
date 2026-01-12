@@ -74,6 +74,7 @@
     "supabase:configure:project": "node ./scripts/configure-project-settings.mjs",
     "supabase:configure:cron": "bash ./scripts/configure-webhook-cron.sh",
     "migration:create": "node ./scripts/create-migration.mjs",
+    "demo:seed": "node ./scripts/seed-demo.mjs",
     "prepare": "husky"
   },
   "dependencies": {

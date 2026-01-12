@@ -42,6 +42,7 @@ export default defineConfig({
       getLatestMigrationTimestamp(),
     ),
     "import.meta.env.VITE_IS_DEMO": JSON.stringify("true"),
+    "import.meta.env.VITE_DEMO_MODE": JSON.stringify("true"),
     "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(
       process.env.VITE_SUPABASE_URL ?? "https://demo.example.org",
     ),
