@@ -56,6 +56,19 @@ export default defineConfig({
   },
   build: {
     sourcemap: false,
+    chunkSizeWarningLimit: 2000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "react-router-dom"],
+          mui: ["@mui/material", "@mui/icons-material", "@emotion/react", "@emotion/styled"],
+          ra: ["ra-core"],
+          tanstack: ["@tanstack/react-query"],
+          utils: ["lodash", "lucide-react"],
+        },
+      },
+    },
+    minify: "esbuild",
   },
   resolve: {
     preserveSymlinks: true,
