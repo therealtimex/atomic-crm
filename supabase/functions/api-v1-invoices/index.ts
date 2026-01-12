@@ -240,8 +240,10 @@ async function sendInvoice(apiKey: any, invoiceId: string, req: Request) {
     .eq("id", 1)
     .single();
 
-  // 2. Determine recipient
-  const recipientEmail = invoice.contacts?.email || invoice.companies?.email;
+  // 2. Determine recipient (email_jsonb is JSONB array, companies may have email field)
+  const recipientEmail = 
+    invoice.contacts?.email_jsonb?.[0]?.email || 
+    invoice.companies?.email;
   if (!recipientEmail) {
     return createErrorResponse(
       400,

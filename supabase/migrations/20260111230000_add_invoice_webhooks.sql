@@ -46,7 +46,7 @@ BEGIN
 
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 -- Create trigger for invoices
 DROP TRIGGER IF EXISTS invoices_webhook_trigger ON public.invoices;
