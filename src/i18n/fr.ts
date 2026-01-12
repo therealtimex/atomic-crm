@@ -97,6 +97,8 @@ export const frMessages = {
       status: "Statut",
     },
     dashboard: {
+      invoice_revenue: "Chiffre d'affaires",
+      deal_pipeline: "Pipeline des opportunités",
       upcoming_tasks: "Tâches à venir",
       task_filters: {
         overdue: "En retard",
@@ -1184,6 +1186,32 @@ export const frMessages = {
             "Vérifiez que le mot de passe de la base est correct (dans le tableau de bord Supabase)",
           report: "Si le problème persiste, signalez-le sur",
           report_link: "GitHub Issues",
+        },
+        auto: {
+          tab_title: "✨ Auto-migration (Recommandé)",
+          manual_tab_title: "🛠️ Instructions manuelles",
+          title: "Migration en un clic",
+          description:
+            "Nous exécuterons automatiquement les scripts de migration pour vous.",
+          project_id: "ID du projet",
+          access_token: "Jeton d'accès Supabase (Access Token)",
+          generate_token: "Générer un jeton",
+          access_token_hint:
+            "Requis si vous n'êtes pas connecté au CLI globalement.",
+          db_password: "Mot de passe de la base (Optionnel)",
+          db_password_placeholder:
+            "Saisissez uniquement si votre projet n'est pas encore lié",
+          db_password_hint:
+            "Requis uniquement s'il s'agit de votre première connexion à ce projet depuis cette machine.",
+          migrating: "Migration en cours...",
+          start: "Démarrer la migration",
+          logs_placeholder: "Les journaux apparaîtront ici...",
+          init_log: "🚀 Initialisation du processus de migration...",
+          error_prefix: "❌ Erreur : ",
+          failure_toast:
+            "La migration a échoué. Voir les journaux pour plus de détails.",
+          missing_project_id:
+            "Impossible de déterminer l'ID du projet à partir de la configuration.",
         },
         close: "Fermer",
         copy: {

@@ -90,6 +90,8 @@ export const jaMessages = {
       status: "ステータス",
     },
     dashboard: {
+      invoice_revenue: "請求書収益",
+      deal_pipeline: "案件パイプライン",
       upcoming_tasks: "今後のタスク",
       task_filters: {
         overdue: "期限切れ",
@@ -1149,6 +1151,29 @@ export const jaMessages = {
             "データベースのパスワードが正しいことを確認してください（Supabase ダッシュボードにあります）",
           report: "問題が解決しない場合は",
           report_link: "GitHub Issues",
+        },
+        auto: {
+          tab_title: "✨ 自動移行（推奨）",
+          manual_tab_title: "🛠️ 手動手順",
+          title: "ワンクリック移行",
+          description: "移行スクリプトを自動的に実行します。",
+          project_id: "プロジェクトID",
+          access_token: "Supabaseアクセストークン",
+          generate_token: "トークンを生成",
+          access_token_hint:
+            "CLIにグローバルにログインしていない場合に必要です。",
+          db_password: "データベースパスワード（任意）",
+          db_password_placeholder:
+            "プロジェクトがまだリンクされていない場合のみ入力してください",
+          db_password_hint:
+            "このマシンからこのプロジェクトに初めて接続する場合のみ必要です。",
+          migrating: "移行中...",
+          start: "移行を開始",
+          logs_placeholder: "ログがここに表示されます...",
+          init_log: "🚀 移行プロセスを初期化中...",
+          error_prefix: "❌ エラー: ",
+          failure_toast: "移行に失敗しました。詳細はログを確認してください。",
+          missing_project_id: "設定からプロジェクトIDを特定できませんでした。",
         },
         close: "閉じる",
         copy: {

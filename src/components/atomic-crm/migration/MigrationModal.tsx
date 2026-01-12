@@ -141,12 +141,12 @@ export function MigrationModal({
 
   const handleAutoMigrate = async () => {
     if (!projectId) {
-      toast.error("Could not determine Project ID from configuration.");
+      toast.error(translate("crm.migration.modal.auto.missing_project_id"));
       return;
     }
 
     setIsMigrating(true);
-    setMigrationLogs(["🚀 Initializing migration process..."]);
+    setMigrationLogs([translate("crm.migration.modal.auto.init_log")]);
 
     try {
       const response = await fetch("/api/migrate", {
@@ -182,9 +182,9 @@ export function MigrationModal({
       console.error(err);
       setMigrationLogs((prev) => [
         ...prev,
-        `❌ Error: ${err instanceof Error ? err.message : String(err)}`,
+        `${translate("crm.migration.modal.auto.error_prefix")}${err instanceof Error ? err.message : String(err)}`,
       ]);
-      toast.error("Migration failed. See logs for details.");
+      toast.error(translate("crm.migration.modal.auto.failure_toast"));
     } finally {
       setIsMigrating(false);
     }
@@ -234,13 +234,13 @@ export function MigrationModal({
               className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${showAutoMigrate ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
               onClick={() => setShowAutoMigrate(true)}
             >
-              ✨ Auto-Migrate (Recommended)
+              {translate("crm.migration.modal.auto.tab_title")}
             </button>
             <button
               className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${!showAutoMigrate ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
               onClick={() => setShowAutoMigrate(false)}
             >
-              🛠️ Manual Instructions
+              {translate("crm.migration.modal.auto.manual_tab_title")}
             </button>
           </div>
 
@@ -248,15 +248,17 @@ export function MigrationModal({
             <div className="space-y-4 py-2">
               <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
                 <h3 className="text-lg font-semibold mb-2">
-                  One-Click Migration
+                  {translate("crm.migration.modal.auto.title")}
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  We will automatically run the migration scripts for you.
+                  {translate("crm.migration.modal.auto.description")}
                 </p>
 
                 <div className="grid gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="project-id">Project ID</Label>
+                    <Label htmlFor="project-id">
+                      {translate("crm.migration.modal.auto.project_id")}
+                    </Label>
                     <Input
                       id="project-id"
                       value={projectId}
@@ -269,7 +271,7 @@ export function MigrationModal({
                   <div className="grid gap-2">
                     <div className="flex justify-between items-center">
                       <Label htmlFor="access-token">
-                        Supabase Access Token
+                        {translate("crm.migration.modal.auto.access_token")}
                       </Label>
                       <a
                         href="https://supabase.com/dashboard/account/tokens"
@@ -277,7 +279,8 @@ export function MigrationModal({
                         rel="noopener noreferrer"
                         className="text-xs text-primary hover:underline flex items-center gap-1"
                       >
-                        Generate Token <ExternalLink className="h-3 w-3" />
+                        {translate("crm.migration.modal.auto.generate_token")}{" "}
+                        <ExternalLink className="h-3 w-3" />
                       </a>
                     </div>
                     <Input
@@ -289,25 +292,26 @@ export function MigrationModal({
                       disabled={isMigrating}
                     />
                     <p className="text-xs text-muted-foreground">
-                      Required if you are not logged in to the CLI globally.
+                      {translate("crm.migration.modal.auto.access_token_hint")}
                     </p>
                   </div>
 
                   <div className="grid gap-2">
                     <Label htmlFor="db-password">
-                      Database Password (Optional)
+                      {translate("crm.migration.modal.auto.db_password")}
                     </Label>
                     <Input
                       id="db-password"
                       type="password"
-                      placeholder="Enter only if your project is not linked yet"
+                      placeholder={translate(
+                        "crm.migration.modal.auto.db_password_placeholder",
+                      )}
                       value={dbPassword}
                       onChange={(e) => setDbPassword(e.target.value)}
                       disabled={isMigrating}
                     />
                     <p className="text-xs text-muted-foreground">
-                      Only required if this is your first time connecting to
-                      this project from this machine.
+                      {translate("crm.migration.modal.auto.db_password_hint")}
                     </p>
                   </div>
 
@@ -319,12 +323,12 @@ export function MigrationModal({
                     {isMigrating ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Migrating...
+                        {translate("crm.migration.modal.auto.migrating")}
                       </>
                     ) : (
                       <>
                         <Terminal className="mr-2 h-4 w-4" />
-                        Start Migration
+                        {translate("crm.migration.modal.auto.start")}
                       </>
                     )}
                   </Button>
@@ -335,7 +339,7 @@ export function MigrationModal({
               <div className="rounded-lg border bg-black text-white font-mono text-xs p-4 h-64 overflow-y-auto">
                 {migrationLogs.length === 0 ? (
                   <div className="text-gray-500 italic">
-                    Logs will appear here...
+                    {translate("crm.migration.modal.auto.logs_placeholder")}
                   </div>
                 ) : (
                   migrationLogs.map((log, i) => (

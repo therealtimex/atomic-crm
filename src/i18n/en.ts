@@ -96,6 +96,8 @@ export const enMessages = {
       status: "Status",
     },
     dashboard: {
+      invoice_revenue: "Invoice Revenue",
+      deal_pipeline: "Deal Pipeline",
       upcoming_tasks: "Upcoming Tasks",
       task_filters: {
         overdue: "Overdue",
@@ -1165,6 +1167,31 @@ export const enMessages = {
             "Ensure your database password is correct (found in the Supabase Dashboard)",
           report: "If issues persist, report at",
           report_link: "GitHub Issues",
+        },
+        auto: {
+          tab_title: "✨ Auto-Migrate (Recommended)",
+          manual_tab_title: "🛠️ Manual Instructions",
+          title: "One-Click Migration",
+          description:
+            "We will automatically run the migration scripts for you.",
+          project_id: "Project ID",
+          access_token: "Supabase Access Token",
+          generate_token: "Generate Token",
+          access_token_hint:
+            "Required if you are not logged in to the CLI globally.",
+          db_password: "Database Password (Optional)",
+          db_password_placeholder:
+            "Enter only if your project is not linked yet",
+          db_password_hint:
+            "Only required if this is your first time connecting to this project from this machine.",
+          migrating: "Migrating...",
+          start: "Start Migration",
+          logs_placeholder: "Logs will appear here...",
+          init_log: "🚀 Initializing migration process...",
+          error_prefix: "❌ Error: ",
+          failure_toast: "Migration failed. See logs for details.",
+          missing_project_id:
+            "Could not determine Project ID from configuration.",
         },
         close: "Close",
         copy: {

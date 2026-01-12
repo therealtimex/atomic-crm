@@ -91,6 +91,8 @@ export const esMessages = {
       status: "Estado",
     },
     dashboard: {
+      invoice_revenue: "Ingresos por facturas",
+      deal_pipeline: "Pipeline de oportunidades",
       upcoming_tasks: "Tareas próximas",
       task_filters: {
         overdue: "Vencidas",
@@ -1175,6 +1177,32 @@ export const esMessages = {
             "Asegúrate de que la contraseña de la base sea correcta (en el panel de Supabase)",
           report: "Si el problema continúa, repórtalo en",
           report_link: "GitHub Issues",
+        },
+        auto: {
+          tab_title: "✨ Auto-migración (Recomendado)",
+          manual_tab_title: "🛠️ Instrucciones manuales",
+          title: "Migración en un clic",
+          description:
+            "Ejecutaremos automáticamente los scripts de migración por usted.",
+          project_id: "ID del proyecto",
+          access_token: "Token de acceso de Supabase",
+          generate_token: "Generar token",
+          access_token_hint:
+            "Requerido si no has iniciado sesión en la CLI globalmente.",
+          db_password: "Contraseña de la base de datos (Opcional)",
+          db_password_placeholder:
+            "Ingrese solo si su proyecto aún no está vinculado",
+          db_password_hint:
+            "Solo es necesario si es la primera vez que se conecta a este proyecto desde esta máquina.",
+          migrating: "Migrando...",
+          start: "Iniciar migración",
+          logs_placeholder: "Los registros aparecerán aquí...",
+          init_log: "🚀 Inicializando el proceso de migración...",
+          error_prefix: "❌ Error: ",
+          failure_toast:
+            "La migración falló. Vea los registros para más detalles.",
+          missing_project_id:
+            "No se pudo determinar el ID del proyecto a partir de la configuración.",
         },
         close: "Cerrar",
         copy: {

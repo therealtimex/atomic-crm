@@ -1,4 +1,4 @@
-import { useGetList } from "ra-core";
+import { useGetList, useTranslate } from "ra-core";
 
 import type { Contact, ContactNote } from "../types";
 import { DashboardActivityLog } from "./DashboardActivityLog";
@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp, DollarSign } from "lucide-react";
 
 export const Dashboard = () => {
+  const translate = useTranslate();
   const {
     data: dataContact,
     total: totalContact,
@@ -62,12 +63,12 @@ export const Dashboard = () => {
             <TabsList className="grid w-full grid-cols-2 mb-4">
               <TabsTrigger value="invoices" className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4" />
-                Invoice Revenue
+                {translate("crm.dashboard.invoice_revenue")}
               </TabsTrigger>
               {totalDeal ? (
                 <TabsTrigger value="deals" className="flex items-center gap-2">
                   <TrendingUp className="h-4 w-4" />
-                  Deal Pipeline
+                  {translate("crm.dashboard.deal_pipeline")}
                 </TabsTrigger>
               ) : null}
             </TabsList>

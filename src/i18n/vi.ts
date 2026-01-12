@@ -88,6 +88,8 @@ export const viMessages = {
       status: "Trạng thái",
     },
     dashboard: {
+      invoice_revenue: "Doanh thu hóa đơn",
+      deal_pipeline: "Cơ hội (Pipeline)",
       upcoming_tasks: "Công việc sắp tới",
       task_filters: {
         overdue: "Quá hạn",
@@ -1152,6 +1154,30 @@ export const viMessages = {
             "Đảm bảo mật khẩu cơ sở dữ liệu đúng (trong Supabase Dashboard)",
           report: "Nếu vẫn còn lỗi, báo tại",
           report_link: "GitHub Issues",
+        },
+        auto: {
+          tab_title: "✨ Tự động Migrate (Khuyên dùng)",
+          manual_tab_title: "🛠️ Hướng dẫn thủ công",
+          title: "Migration một lần nhấp",
+          description:
+            "Chúng tôi sẽ tự động chạy các tập lệnh migration cho bạn.",
+          project_id: "ID dự án",
+          access_token: "Mã truy cập Supabase (Access Token)",
+          generate_token: "Tạo mã truy cập",
+          access_token_hint:
+            "Cần thiết nếu bạn chưa đăng nhập vào CLI toàn cầu.",
+          db_password: "Mật khẩu cơ sở dữ liệu (Tùy chọn)",
+          db_password_placeholder:
+            "Chỉ nhập nếu dự án của bạn chưa được liên kết",
+          db_password_hint:
+            "Chỉ bắt buộc nếu đây là lần đầu tiên bạn kết nối với dự án này từ máy tính này.",
+          migrating: "Đang migrate...",
+          start: "Bắt đầu Migration",
+          logs_placeholder: "Nhật ký sẽ xuất hiện ở đây...",
+          init_log: "🚀 Đang khởi tạo quá trình migration...",
+          error_prefix: "❌ Lỗi: ",
+          failure_toast: "Migration thất bại. Xem nhật ký để biết chi tiết.",
+          missing_project_id: "Không thể xác định ID dự án từ cấu hình.",
         },
         close: "Đóng",
         copy: {
