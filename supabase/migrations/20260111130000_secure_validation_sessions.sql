@@ -17,3 +17,7 @@ FOR ALL
 TO authenticated
 USING (true)
 WITH CHECK (true);
+
+-- Revoke anonymous execution of webhook enqueuing
+-- This prevents unauthenticated users from injecting events into the queue
+REVOKE EXECUTE ON FUNCTION public.enqueue_webhook_event(text, jsonb) FROM anon;
