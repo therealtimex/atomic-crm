@@ -35,7 +35,7 @@ import { House, List, Shell } from "lucide-react";
  * @see {@link https://ui.shadcn.com/docs/components/sidebar shadcn/ui Sidebar component}
  * @see layout.tsx
  */
-export function AppSidebar() {
+export function AppSidebar({ className }: { className?: string }) {
   const hasDashboard = useHasDashboard();
   const resources = useResourceDefinitions();
   const { openMobile, setOpenMobile } = useSidebar();
@@ -45,7 +45,7 @@ export function AppSidebar() {
     }
   };
   return (
-    <Sidebar variant="floating" collapsible="icon">
+    <Sidebar variant="floating" collapsible="icon" className={className}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

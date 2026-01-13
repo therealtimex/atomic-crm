@@ -66,14 +66,14 @@ export const Dashboard = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mt-1">
-      <div className="md:col-span-3">
+      <div className="md:col-span-3 order-2 md:order-1">
         <div className="flex flex-col gap-4">
           {import.meta.env.VITE_IS_DEMO === "true" ? <Welcome /> : null}
           <HotContacts />
           <OutstandingInvoices />
         </div>
       </div>
-      <div className="md:col-span-6">
+      <div className="md:col-span-6 order-1 md:order-2">
         <div className="flex flex-col gap-6">
           <Tabs defaultValue="invoices" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-4">
@@ -97,7 +97,7 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      <div className="md:col-span-3">
+      <div className="md:col-span-3 order-3 md:order-3">
         <TasksList />
       </div>
     </div>

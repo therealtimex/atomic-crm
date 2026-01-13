@@ -189,12 +189,64 @@ export const TaskKanbanView = () => {
       });
   };
 
+  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+  import { useIsMobile } from "@/hooks/use-mobile";
+  import { translateChoice } from "@/i18n/utils";
+
+  // ... imports
+
   const handleToggleCollapse = (statusId: string) => {
     setCollapsedStatuses((prev) => ({
       ...prev,
       [statusId]: !prev[statusId],
     }));
   };
+
+  const isMobile = useIsMobile();
+  const [selectedMobileStatus, setSelectedMobileStatus] = useState<string>(
+    kanbanStatuses?.[0]?.id || "todo"
+  );
+
+  useEffect(() => {
+    if (kanbanStatuses?.length > 0 && !selectedMobileStatus) {
+      setSelectedMobileStatus(kanbanStatuses[0].id);
+    }
+  }, [kanbanStatuses, selectedMobileStatus]);
+
+  if (isMobile) {
+    return (
+      <div className="flex flex-col gap-4 h-[calc(100vh-200px)]">
+        <Select value={selectedMobileStatus} onValueChange={setSelectedMobileStatus}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={translate("crm.task.field.status")} />
+          </SelectTrigger>
+          <SelectContent>
+            {kanbanStatuses.map((status) => (
+              <SelectItem key={status.id} value={status.id}>
+                {translateChoice(translate, "crm.task.status", status.id, status.name)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className="flex-1 overflow-y-auto">
+            {selectedMobileStatus && (
+              <TaskColumn
+                status={selectedMobileStatus}
+                tasks={tasksByStatus[selectedMobileStatus] || []}
+                isDropDisabled={
+                  isOtherBucketReadOnly && selectedMobileStatus === OTHER_TASK_STATUS_ID
+                }
+                isCollapsed={false}
+                onToggleCollapse={() => { }}
+              />
+            )}
+          </div>
+        </DragDropContext>
+      </div>
+    );
+  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

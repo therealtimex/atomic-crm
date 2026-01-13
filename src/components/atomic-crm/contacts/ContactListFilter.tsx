@@ -33,7 +33,7 @@ export const ContactListFilter = () => {
   });
 
   return (
-    <div className="w-52 min-w-52 order-first pt-0.75 flex flex-col gap-4">
+    <div className="w-full md:w-52 md:min-w-52 order-first pt-0.75 flex flex-col gap-4">
       <FilterLiveForm>
         <SearchInput
           source="q"

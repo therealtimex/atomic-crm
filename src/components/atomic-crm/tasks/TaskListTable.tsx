@@ -8,6 +8,7 @@ import {
   useTranslate,
 } from "ra-core";
 import { Check, Pencil, Clock } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { DataTable } from "@/components/admin/data-table";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { TextField } from "@/components/admin/text-field";
@@ -25,6 +26,8 @@ import { TaskPriorityBadge } from "./TaskPriorityBadge";
 import { TaskStatusBadge } from "./TaskStatusBadge";
 import { TaskEdit } from "./TaskEdit";
 import { TaskTypeIcon } from "./TaskTypeIcon";
+import { SimpleList } from "@/components/atomic-crm/simple-list/SimpleList";
+import { DateField } from "@/components/admin/date-field";
 
 const RelatedEntityField = ({ record }: { record: Task | TaskSummary }) => {
   const translate = useTranslate();
@@ -361,70 +364,91 @@ export const TaskListTable = () => {
 
   return (
     <>
-      <DataTable rowClick="show" rowClassName={getRowClassName}>
-        <DataTable.Col
-          source="text"
-          label={translate("crm.task.field.task")}
-          className="w-[35%]"
-          cellClassName="max-w-md overflow-hidden"
-          render={(record: Task) => (
-            <div className="flex items-center gap-2">
+      {useIsMobile() ? (
+        <SimpleList
+          primaryText={(record) => record.text}
+          secondaryText={(record) => (
+            <div className="flex gap-2 items-center mt-1">
               <TaskTypeIcon taskType={record.type} />
-              <div className="line-clamp-2 flex-1" title={record.text}>
-                {record.text}
-              </div>
+              <TaskStatusBadge status={record.status} />
+              {record.due_date && <span className="text-xs text-muted-foreground"><DateField source="due_date" record={record} /></span>}
             </div>
           )}
-        />
-        <DataTable.Col
-          label={translate("crm.task.field.related_to")}
-          className="w-[16%]"
-          cellClassName="overflow-hidden"
-          sortable={false}
-          render={(record: Task) => <RelatedEntityField record={record} />}
-        />
-        <DataTable.Col
-          source="due_date"
-          label={translate("crm.task.field.due_date")}
-          className="w-[14%]"
-          cellClassName="overflow-hidden"
-          render={(record: Task) => (
-            <DueDateField
-              record={record}
-              translate={translate}
-              locale={locale}
-            />
+          tertiaryText={(record) => (
+            <div className="flex flex-col gap-1 items-end">
+              <TaskPriorityBadge priority={record.priority} />
+            </div>
           )}
+          linkType="edit"
+          rowClick={(id) => setEditingTaskId(id as number)}
         />
-        <DataTable.Col
-          label={translate("crm.task.field.priority")}
-          className="w-[8%]"
-          render={(record: Task) => (
-            <TaskPriorityBadge priority={record.priority} />
-          )}
-        />
-        <DataTable.Col
-          label={translate("crm.task.field.status")}
-          className="w-[8%]"
-          render={(record: Task) => <TaskStatusBadge status={record.status} />}
-        />
-        <DataTable.Col
-          label={translate("crm.task.field.assigned_to")}
-          className="w-[8%]"
-          cellClassName="truncate"
-        >
-          <ReferenceField source="assigned_to" reference="sales" link={false} />
-        </DataTable.Col>
-        <DataTable.Col
-          label={translate("crm.task.field.actions")}
-          className="w-[11%]"
-          sortable={false}
-          cellClassName="text-right pr-2"
-          render={(record: Task) => (
-            <TaskActions record={record} onEdit={setEditingTaskId} />
-          )}
-        />
-      </DataTable>
+      ) : (
+        <DataTable rowClick="show" rowClassName={getRowClassName}>
+          {/* ... existing DataTable columns ... */}
+          <DataTable.Col
+            source="text"
+            label={translate("crm.task.field.task")}
+            className="w-[35%]"
+            cellClassName="max-w-md overflow-hidden"
+            render={(record: Task) => (
+              <div className="flex items-center gap-2">
+                <TaskTypeIcon taskType={record.type} />
+                <div className="line-clamp-2 flex-1" title={record.text}>
+                  {record.text}
+                </div>
+              </div>
+            )}
+          />
+          <DataTable.Col
+            label={translate("crm.task.field.related_to")}
+            className="w-[16%]"
+            cellClassName="overflow-hidden"
+            sortable={false}
+            render={(record: Task) => <RelatedEntityField record={record} />}
+          />
+          <DataTable.Col
+            source="due_date"
+            label={translate("crm.task.field.due_date")}
+            className="w-[14%]"
+            cellClassName="overflow-hidden"
+            render={(record: Task) => (
+              <DueDateField
+                record={record}
+                translate={translate}
+                locale={locale}
+              />
+            )}
+          />
+          <DataTable.Col
+            label={translate("crm.task.field.priority")}
+            className="w-[8%]"
+            render={(record: Task) => (
+              <TaskPriorityBadge priority={record.priority} />
+            )}
+          />
+          <DataTable.Col
+            label={translate("crm.task.field.status")}
+            className="w-[8%]"
+            render={(record: Task) => <TaskStatusBadge status={record.status} />}
+          />
+          <DataTable.Col
+            label={translate("crm.task.field.assigned_to")}
+            className="w-[8%]"
+            cellClassName="truncate"
+          >
+            <ReferenceField source="assigned_to" reference="sales" link={false} />
+          </DataTable.Col>
+          <DataTable.Col
+            label={translate("crm.task.field.actions")}
+            className="w-[11%]"
+            sortable={false}
+            cellClassName="text-right pr-2"
+            render={(record: Task) => (
+              <TaskActions record={record} onEdit={setEditingTaskId} />
+            )}
+          />
+        </DataTable>
+      )}
 
       {editingTaskId && (
         <TaskEdit

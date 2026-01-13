@@ -34,8 +34,8 @@ const CompanyListLayout = () => {
   // Show loading skeleton while identity or data is loading
   if (!identity || isPending) {
     return (
-      <div className="w-full flex flex-row gap-8">
-        <div className="w-64">
+      <div className="w-full flex flex-col md:flex-row gap-8">
+        <div className="w-full md:w-64">
           <Skeleton className="h-96 w-full" />
         </div>
         <div className="flex flex-col flex-1 gap-4">
@@ -57,7 +57,7 @@ const CompanyListLayout = () => {
   if (!data?.length && !hasFilters) return <CompanyEmpty />;
 
   return (
-    <div className="w-full flex flex-row gap-8">
+    <div className="w-full flex flex-col md:flex-row gap-8">
       <CompanyListFilter />
       <div className="flex flex-col flex-1 gap-4">
         <ImageList />

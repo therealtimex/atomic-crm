@@ -1,109 +1,86 @@
 import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
+import { CanAccess, useGetOne, useTranslate } from "ra-core";
 import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Database, Settings, User, Webhook, ArrowLeft } from "lucide-react";
-import { CanAccess, useTranslate } from "ra-core";
-import { Link, matchPath, useLocation, useNavigate } from "react-router";
-import { RefreshButton } from "@/components/admin/refresh-button";
-import { ThemeModeToggle } from "@/components/admin/theme-mode-toggle";
-import { UserMenu } from "@/components/admin/user-menu";
-import { LocalesMenuButton } from "@/components/admin/locales-menu-button";
-import { useUserMenu } from "@/hooks/user-menu-context";
-import { MigrationPulseIndicator } from "@/components/atomic-crm/migration";
-import { useMigrationContextSafe } from "@/contexts/MigrationContext";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { ChangelogModal } from "./ChangelogModal";
+import { ArrowLeft, Database, Settings, User, Webhook } from "lucide-react";
 
-import { useConfigurationContext } from "../root/ConfigurationContext";
+import { useMigrationContext } from "@/contexts/MigrationContext";
+import { MigrationPulseIndicator } from "@/components/atomic-crm/migration/MigrationPulseIndicator";
+import { ChangelogModal } from "@/components/atomic-crm/layout/ChangelogModal";
+import { LocalesMenuButton } from "@/components/admin/locales-menu-button";
+import { ThemeModeToggle } from "@/components/admin/theme-mode-toggle";
+import { RefreshButton } from "@/components/admin/refresh-button";
+import { UserMenu } from "@/components/admin/user-menu";
+import { useUserMenu } from "@/hooks/user-menu-context";
 
 const Header = () => {
-  const { darkModeLogo, lightModeLogo, title } = useConfigurationContext();
-  const location = useLocation();
-  const migrationContext = useMigrationContextSafe();
   const translate = useTranslate();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const navigate = useNavigate();
+  const migrationContext = useMigrationContext();
+
+  const [darkModeLogo, setDarkModeLogo] = useState<string>("");
+  const [lightModeLogo, setLightModeLogo] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [showBackButton, setShowBackButton] = useState(false);
+  const [showPulseIndicator, setShowPulseIndicator] = useState(false);
   const [changelogOpen, setChangelogOpen] = useState(false);
 
-  // Simplified path matching logic
-  const navPaths = [
-    { path: "/", pattern: "/" },
-    { path: "/contacts", pattern: "/contacts/*" },
-    { path: "/companies", pattern: "/companies/*" },
-    { path: "/deals", pattern: "/deals/*" },
-    { path: "/invoices", pattern: "/invoices/*" },
-    { path: "/tasks", pattern: "/tasks/*" },
-  ];
+  const { data: businessProfile } = useGetOne("business_profile", { id: 1 });
 
-  const currentPath =
-    navPaths.find((nav) => matchPath(nav.pattern, location.pathname))?.path ||
-    false;
-
-  // Show pulse indicator when migration is needed but banner is dismissed
-  const showPulseIndicator =
-    migrationContext?.migrationStatus?.needsMigration &&
-    !migrationContext?.showMigrationBanner;
-
-  // Check if a dialog is currently open (synchronous check to prevent flash)
-  const checkDialogSync = () => {
-    const dialogOpen = document.querySelector(
-      '[role="dialog"][data-state="open"]',
-    );
-    return !!dialogOpen;
-  };
-
-  // Detect if a dialog/modal is currently open
   useEffect(() => {
-    const checkDialog = () => {
-      // Check if a dialog overlay exists in the DOM
-      // We look for role="dialog" which covers both Dialog and Sheet components
-      // and ensure it is in the open state
-      const dialogOpen = checkDialogSync();
-      setIsDialogOpen(dialogOpen);
+    if (businessProfile) {
+      setDarkModeLogo(businessProfile.logo_dark || "/branding/logo_dark.png");
+      setLightModeLogo(
+        businessProfile.logo_light || "/branding/logo_light.png",
+      );
+      setTitle(businessProfile.company_name || "Atomic CRM");
+    }
+  }, [businessProfile]);
+
+  useEffect(() => {
+    // Show back button on detail views (ID/show) or create views
+    const isDetailView = /\/[^/]+\/\d+(\/show)?$/.test(currentPath);
+    const isCreateView = /\/[^/]+\/create$/.test(currentPath);
+    setShowBackButton(isDetailView || isCreateView);
+  }, [currentPath]);
+
+  useEffect(() => {
+    const checkMigrations = () => {
+      if (
+        migrationContext?.pendingMigrations &&
+        migrationContext.pendingMigrations.length > 0
+      ) {
+        setShowPulseIndicator(true);
+      } else {
+        setShowPulseIndicator(false);
+      }
     };
-
-    // Check on mount and when location changes
-    checkDialog();
-
-    // Use MutationObserver to detect dialog state changes
-    const observer = new MutationObserver(checkDialog);
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ["data-state"],
-    });
-
-    return () => observer.disconnect();
-  }, [location.pathname]);
-
-  // Determine if back button should be shown
-  // Use whitelist approach: show only on specific non-modal pages
-  const backButtonPages = ["/settings", "/database", "/integrations", "/sales"];
-  const isBackButtonPage =
-    backButtonPages.some((page) => location.pathname.startsWith(page)) ||
-    /\/show$/.test(location.pathname);
-
-  // Check dialog state synchronously during render to prevent flash
-  const isDialogCurrentlyOpen = isDialogOpen || checkDialogSync();
-  const showBackButton = isBackButtonPage && !isDialogCurrentlyOpen;
+    checkMigrations();
+  }, [migrationContext?.pendingMigrations]);
 
   return (
     <header className="bg-secondary fixed top-0 left-0 right-0 z-50 border-b border-border">
       <div className="px-4 sm:px-5 lg:px-6">
-        <div className="flex justify-between items-center flex-1">
+        <div className="flex justify-between items-center h-16 md:h-20">
           <div className="flex items-center gap-2">
+            <SidebarTrigger className="md:hidden mr-2" />
             <Logo
               darkLogo={darkModeLogo}
               lightLogo={lightModeLogo}
               title={title}
             />
-            {showBackButton && <BackButton />}
+            <BackButton show={showBackButton} />
           </div>
 
-          <nav className="flex" aria-label="Main navigation">
+          <nav className="hidden md:flex" aria-label="Main navigation">
             <NavigationTab
               label={translate("crm.nav.dashboard")}
               to="/"
@@ -200,9 +177,11 @@ const Logo = ({
   </Link>
 );
 
-const BackButton = () => {
+const BackButton = ({ show }: { show: boolean }) => {
   const navigate = useNavigate();
   const translate = useTranslate();
+
+  if (!show) return null;
 
   return (
     <Button
@@ -229,18 +208,18 @@ const NavigationTab = ({
 }) => (
   <Link
     to={to}
-    className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
-      isActive
+    className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${isActive
         ? "text-secondary-foreground border-secondary-foreground"
         : "text-secondary-foreground/70 border-transparent hover:text-secondary-foreground/80"
-    }`}
+      }`}
   >
     {label}
   </Link>
 );
 
 const UsersMenu = () => {
-  const { onClose } = useUserMenu() ?? {};
+  const userMenu = useUserMenu();
+  const onClose = userMenu ? userMenu.onClose : undefined;
   const translate = useTranslate();
   return (
     <DropdownMenuItem asChild onClick={onClose}>
@@ -253,7 +232,8 @@ const UsersMenu = () => {
 };
 
 const ConfigurationMenu = () => {
-  const { onClose } = useUserMenu() ?? {};
+  const userMenu = useUserMenu();
+  const onClose = userMenu ? userMenu.onClose : undefined;
   const translate = useTranslate();
   return (
     <DropdownMenuItem asChild onClick={onClose}>
@@ -266,7 +246,8 @@ const ConfigurationMenu = () => {
 };
 
 const DatabaseMenu = () => {
-  const { onClose } = useUserMenu() ?? {};
+  const userMenu = useUserMenu();
+  const onClose = userMenu ? userMenu.onClose : undefined;
   const translate = useTranslate();
   return (
     <DropdownMenuItem asChild onClick={onClose}>
@@ -279,7 +260,8 @@ const DatabaseMenu = () => {
 };
 
 const IntegrationsMenu = () => {
-  const { onClose } = useUserMenu() ?? {};
+  const userMenu = useUserMenu();
+  const onClose = userMenu ? userMenu.onClose : undefined;
   const translate = useTranslate();
   return (
     <DropdownMenuItem asChild onClick={onClose}>

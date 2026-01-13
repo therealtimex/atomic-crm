@@ -65,7 +65,7 @@ const ContactListLayout = () => {
   if (!data?.length && !hasFilters) return <ContactEmpty />;
 
   return (
-    <div className="flex flex-row gap-8">
+    <div className="flex flex-col md:flex-row gap-8">
       <ContactListFilter />
       <div className="w-full flex flex-col gap-4">
         <Card className="py-0">
@@ -102,9 +102,8 @@ const exporter: Exporter<Contact> = async (records, fetchRelatedRecords) => {
         contact.company_id != null
           ? companies[contact.company_id].name
           : undefined,
-      sales: `${sales[contact.sales_id].first_name} ${
-        sales[contact.sales_id].last_name
-      }`,
+      sales: `${sales[contact.sales_id].first_name} ${sales[contact.sales_id].last_name
+        }`,
       tags: contact.tags?.map((tagId) => tags[tagId].name).join(", ") ?? "",
       email_work: contact.email_jsonb?.find((email) => email.type === "Work")
         ?.email,

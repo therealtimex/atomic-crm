@@ -9,10 +9,20 @@ import { DealColumn } from "./DealColumn";
 import type { DealsByStage } from "./stages";
 import { getDealsByStage } from "./stages";
 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useTranslate } from "ra-core";
+import { translateChoice } from "@/i18n/utils";
+
+// ... existing imports ...
+
 export const DealListContent = () => {
   const { dealStages } = useConfigurationContext();
   const { data: unorderedDeals, isPending, refetch } = useListContext<Deal>();
   const dataProvider = useDataProvider();
+  const isMobile = useIsMobile();
+  const translate = useTranslate();
+  const [selectedStage, setSelectedStage] = useState<string>(dealStages[0]?.value);
 
   const [dealsByStage, setDealsByStage] = useState<DealsByStage>(
     getDealsByStage([], dealStages),
@@ -28,9 +38,17 @@ export const DealListContent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unorderedDeals]);
 
+  useEffect(() => {
+    if (dealStages.length > 0 && !selectedStage) {
+      setSelectedStage(dealStages[0].value);
+    }
+  }, [dealStages, selectedStage]);
+
+
   if (isPending) return null;
 
   const onDragEnd: OnDragEndResponder = (result) => {
+    // ... existing onDragEnd logic ... (keep unchanged)
     const { destination, source } = result;
 
     if (!destination) {
@@ -70,9 +88,36 @@ export const DealListContent = () => {
     });
   };
 
+  if (isMobile) {
+    return (
+      <div className="flex flex-col gap-4">
+        <Select value={selectedStage} onValueChange={setSelectedStage}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={translate("crm.deal.field.stage")} />
+          </SelectTrigger>
+          <SelectContent>
+            {dealStages.map((stage) => (
+              <SelectItem key={stage.value} value={stage.value}>
+                {translateChoice(translate, "crm.deal.stage", stage.value, stage.label)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {selectedStage && (
+          <DragDropContext onDragEnd={onDragEnd}>
+            <DealColumn
+              stage={selectedStage}
+              deals={dealsByStage[selectedStage]}
+            />
+          </DragDropContext>
+        )}
+      </div>
+    )
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex gap-4">
+      <div className="flex gap-4 overflow-x-auto pb-4">
         {dealStages.map((stage) => (
           <DealColumn
             stage={stage.value}

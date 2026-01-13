@@ -1,4 +1,5 @@
 import { useTranslate } from "ra-core";
+import { SimpleList } from "@/components/atomic-crm/simple-list/SimpleList";
 import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { CreateButton } from "@/components/admin/create-button";
 import { ExportButton } from "@/components/admin/export-button";
@@ -12,12 +13,14 @@ import { TextField } from "@/components/admin/text-field";
 import { DateField } from "@/components/admin/date-field";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { FunctionField } from "@/components/admin/function-field";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import { TopToolbar } from "../layout/TopToolbar";
 import type { Invoice } from "../types";
 
 export const InvoiceList = () => {
   const translate = useTranslate();
+  const isMobile = useIsMobile();
 
   const invoiceFilters = [
     <SearchInput source="q" alwaysOn />,
@@ -70,93 +73,111 @@ export const InvoiceList = () => {
       resource="invoices"
       storeKey="invoices.list"
     >
-      <DataTable rowClick="show" bulkActionButtons={false}>
-        <DataTable.Col
-          source="invoice_number"
-          label="resources.invoices.fields.invoice_number"
-        >
-          <TextField source="invoice_number" />
-        </DataTable.Col>
-
-        <DataTable.Col
-          source="company_id"
-          label="resources.invoices.fields.company_id"
-        >
-          <ReferenceField source="company_id" reference="companies" link="show">
-            <TextField source="name" />
-          </ReferenceField>
-        </DataTable.Col>
-
-        <DataTable.Col
-          source="contact_id"
-          label="resources.invoices.fields.contact_id"
-        >
-          <ReferenceField source="contact_id" reference="contacts" link="show">
-            <FunctionField
-              render={(record: any) =>
-                `${record.first_name} ${record.last_name}`
-              }
-            />
-          </ReferenceField>
-        </DataTable.Col>
-
-        <DataTable.Col source="status" label="resources.invoices.fields.status">
-          <FunctionField
-            render={(record: Invoice) => <InvoiceStatusBadge record={record} />}
-          />
-        </DataTable.Col>
-
-        <DataTable.Col
-          source="issue_date"
-          label="resources.invoices.fields.issue_date"
-        >
-          <DateField source="issue_date" />
-        </DataTable.Col>
-
-        <DataTable.Col
-          source="due_date"
-          label="resources.invoices.fields.due_date"
-        >
-          <DateField source="due_date" />
-        </DataTable.Col>
-
-        <DataTable.Col
-          label="resources.invoices.fields.total"
-          headerClassName="text-right"
-        >
-          <FunctionField
-            render={(record: Invoice) => (
-              <span className="font-semibold">
-                {record.currency} {record.total.toFixed(2)}
+      {isMobile ? (
+        <SimpleList
+          primaryText={(record) => record.invoice_number}
+          secondaryText={(record) => (
+            <div className="flex gap-2 items-center">
+              <InvoiceStatusBadge record={record as Invoice} />
+              <span>
+                {record.currency} {record.total?.toFixed(2)}
               </span>
-            )}
-            className="block text-right"
-          />
-        </DataTable.Col>
+            </div>
+          )}
+          tertiaryText={(record) => (
+            <DateField source="issue_date" record={record} />
+          )}
+          linkType="show"
+        />
+      ) : (
+        <DataTable rowClick="show" bulkActionButtons={false}>
+          <DataTable.Col
+            source="invoice_number"
+            label="resources.invoices.fields.invoice_number"
+          >
+            <TextField source="invoice_number" />
+          </DataTable.Col>
 
-        <DataTable.Col
-          label="resources.invoices.fields.balance_due"
-          headerClassName="text-right"
-        >
-          <FunctionField
-            render={(record: Invoice) => {
-              const total = record.total || 0;
-              const paid = record.amount_paid || 0;
-              const balance = total - paid;
-              return balance > 0.01 ? (
-                <span className="text-red-600 font-semibold">
-                  {record.currency} {balance.toFixed(2)}
+          <DataTable.Col
+            source="company_id"
+            label="resources.invoices.fields.company_id"
+          >
+            <ReferenceField source="company_id" reference="companies" link="show">
+              <TextField source="name" />
+            </ReferenceField>
+          </DataTable.Col>
+
+          <DataTable.Col
+            source="contact_id"
+            label="resources.invoices.fields.contact_id"
+          >
+            <ReferenceField source="contact_id" reference="contacts" link="show">
+              <FunctionField
+                render={(record: any) =>
+                  `${record.first_name} ${record.last_name}`
+                }
+              />
+            </ReferenceField>
+          </DataTable.Col>
+
+          <DataTable.Col source="status" label="resources.invoices.fields.status">
+            <FunctionField
+              render={(record: Invoice) => <InvoiceStatusBadge record={record} />}
+            />
+          </DataTable.Col>
+
+          <DataTable.Col
+            source="issue_date"
+            label="resources.invoices.fields.issue_date"
+          >
+            <DateField source="issue_date" />
+          </DataTable.Col>
+
+          <DataTable.Col
+            source="due_date"
+            label="resources.invoices.fields.due_date"
+          >
+            <DateField source="due_date" />
+          </DataTable.Col>
+
+          <DataTable.Col
+            label="resources.invoices.fields.total"
+            headerClassName="text-right"
+          >
+            <FunctionField
+              render={(record: Invoice) => (
+                <span className="font-semibold">
+                  {record.currency} {record.total.toFixed(2)}
                 </span>
-              ) : (
-                <span className="text-green-600">
-                  {translate("resources.invoices.status.paid")}
-                </span>
-              );
-            }}
-            className="block text-right"
-          />
-        </DataTable.Col>
-      </DataTable>
+              )}
+              className="block text-right"
+            />
+          </DataTable.Col>
+
+          <DataTable.Col
+            label="resources.invoices.fields.balance_due"
+            headerClassName="text-right"
+          >
+            <FunctionField
+              render={(record: Invoice) => {
+                const total = record.total || 0;
+                const paid = record.amount_paid || 0;
+                const balance = total - paid;
+                return balance > 0.01 ? (
+                  <span className="text-red-600 font-semibold">
+                    {record.currency} {balance.toFixed(2)}
+                  </span>
+                ) : (
+                  <span className="text-green-600">
+                    {translate("resources.invoices.status.paid")}
+                  </span>
+                );
+              }}
+              className="block text-right"
+            />
+          </DataTable.Col>
+        </DataTable>
+      )}
     </List>
   );
 };
@@ -184,9 +205,8 @@ const InvoiceStatusBadge = ({ record }: { record: Invoice }) => {
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-        statusColors[status] || statusColors.draft
-      }`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${statusColors[status] || statusColors.draft
+        }`}
     >
       {translate(`resources.invoices.status.${status}`)}
     </span>
