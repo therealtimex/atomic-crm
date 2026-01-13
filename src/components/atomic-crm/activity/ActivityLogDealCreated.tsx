@@ -1,6 +1,8 @@
 import { Link } from "react-router";
 import { useTranslate, type RaRecord } from "ra-core";
 
+import { ReferenceField } from "@/components/admin/reference-field";
+import { SaleName } from "../sales/SaleName";
 import { RelativeDate } from "../misc/RelativeDate";
 import type { ActivityDealCreated } from "../types";
 import { useActivityLogContext } from "./ActivityLogContext";
@@ -21,7 +23,14 @@ export function ActivityLogDealCreated({
         <div className="w-5 h-5 bg-gray-300 rounded-full" />
         <div className="text-sm text-muted-foreground flex-grow">
           <span className="text-muted-foreground text-sm">
-            Sales ID: {activity.sales_id}
+            <ReferenceField
+              source="sales_id"
+              reference="sales"
+              record={activity}
+              link={false}
+            >
+              <SaleName />
+            </ReferenceField>
           </span>{" "}
           {translate("crm.activity.added_deal")}{" "}
           <Link to={`/deals/${deal.id}/show`}>{deal.name}</Link>{" "}
