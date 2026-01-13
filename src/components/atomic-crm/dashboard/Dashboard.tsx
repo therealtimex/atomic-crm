@@ -32,7 +32,7 @@ export const Dashboard = () => {
       pagination: { page: 1, perPage: 1 },
     });
 
-  const { total: totalDeal, isPending: isPendingDeal } = useGetList<Contact>(
+  const { isPending: isPendingDeal } = useGetList<Contact>(
     "deals",
     {
       pagination: { page: 1, perPage: 1 },

@@ -5,6 +5,12 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.48.11] - 2026-01-12
+
+### Fixed
+
+- **Performance**: Fixed lint error (unused `totalDeal` variable) preventing successful publication.
+
 ## [0.48.10] - 2026-01-12
 
 ### Added
