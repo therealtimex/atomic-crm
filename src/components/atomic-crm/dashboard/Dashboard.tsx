@@ -1,6 +1,6 @@
-import { useGetList, useTranslate } from "ra-core";
+import { useGetIdentity, useGetList, useGetOne, useTranslate } from "ra-core";
 
-import type { Contact, ContactNote } from "../types";
+import type { BusinessProfile, Contact, ContactNote } from "../types";
 import { DashboardActivityLog } from "./DashboardActivityLog";
 import { DashboardStepper } from "./DashboardStepper";
 import { DealsChart } from "./DealsChart";
@@ -14,6 +14,11 @@ import { TrendingUp, DollarSign } from "lucide-react";
 
 export const Dashboard = () => {
   const translate = useTranslate();
+  const { identity, isPending: isPendingIdentity } = useGetIdentity();
+
+  const { data: businessProfile, isPending: isPendingProfile } =
+    useGetOne<BusinessProfile>("business_profile", { id: 1 });
+
   const {
     data: dataContact,
     total: totalContact,
@@ -34,18 +39,29 @@ export const Dashboard = () => {
     },
   );
 
-  const isPending = isPendingContact || isPendingContactNotes || isPendingDeal;
+  const isPending =
+    isPendingContact ||
+    isPendingContactNotes ||
+    isPendingDeal ||
+    isPendingIdentity ||
+    isPendingProfile;
 
   if (isPending) {
     return null;
   }
 
-  if (!totalContact) {
-    return <DashboardStepper step={1} />;
-  }
+  // Only show onboarding to administrators if not completed
+  const showOnboarding =
+    identity?.administrator && !businessProfile?.onboarding_completed;
 
-  if (!totalContactNotes) {
-    return <DashboardStepper step={2} contactId={dataContact?.[0]?.id} />;
+  if (showOnboarding) {
+    if (!totalContact) {
+      return <DashboardStepper step={1} />;
+    }
+
+    if (!totalContactNotes) {
+      return <DashboardStepper step={2} contactId={dataContact?.[0]?.id} />;
+    }
   }
 
   return (

@@ -19,6 +19,7 @@ const baseAuthProvider = supabaseAuthProvider(supabase, {
       fullName: `${sale.first_name} ${sale.last_name}`,
       avatar: sale.avatar?.src,
       locale: sale.locale ?? undefined,
+      administrator: sale.administrator,
     };
   },
 });

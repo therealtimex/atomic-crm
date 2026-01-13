@@ -461,6 +461,7 @@ export type BusinessProfile = {
   email_from_name?: string;
   email_from_email?: string;
   resend_api_key?: string;
+  onboarding_completed?: boolean;
 } & Pick<RaRecord, "id">;
 
 export type InvoiceTemplate = {
