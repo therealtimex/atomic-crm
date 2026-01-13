@@ -5,6 +5,32 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.48.10] - 2026-01-12
+
+### Added
+
+- **UX**: The onboarding checklist is now dismissible and visible only to administrators.
+- **Security**: Implemented demo mode restrictions to protect sensitive configurations (DB setup, password change, API keys, webhooks).
+- **Seeding**: Updated seeding scripts with official demo credentials.
+
+### Fixed
+
+- **Performance**: Resolved MIME type errors for lazy-loaded modules in deployed environments.
+- **UX**: Fixed missing translation keys and "Deal Pipeline" tab visibility on the dashboard.
+- **Security**: Fixed potential leakage of sensitive data in seeding scripts.
+
+## [0.48.9] - 2026-01-12
+
+### Added
+
+- **Infrastructure**: Transferred the demo site to a real Supabase backend for persistent data.
+- **Seeding**: Added a robust demo data generator script (`seed-demo.mjs`).
+- **Build**: Optimized Vite build splitting to resolve memory limits on Vercel.
+
+### Fixed
+
+- **I18n**: Added missing translations for the "Change Password" page.
+
 ## [0.48.8] - 2026-01-12
 
 ### Added

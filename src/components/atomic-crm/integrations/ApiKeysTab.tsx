@@ -18,6 +18,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { isDemoMode } from "@/lib/demo-utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const ApiKeysTab = () => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -41,7 +48,10 @@ export const ApiKeysTab = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      await dataProvider.delete("api_keys", { id, previousData: {} });
+      await dataProvider.delete("api_keys", {
+        id,
+        previousData: { id } as any,
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["api_keys"] });
@@ -64,10 +74,26 @@ export const ApiKeysTab = () => {
         <p className="text-sm text-muted-foreground">
           {translate("crm.integrations.api_keys.description")}
         </p>
-        <Button onClick={() => setShowCreateDialog(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          {translate("crm.integrations.api_keys.action.create")}
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span>
+                <Button
+                  onClick={() => setShowCreateDialog(true)}
+                  disabled={isDemoMode()}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  {translate("crm.integrations.api_keys.action.create")}
+                </Button>
+              </span>
+            </TooltipTrigger>
+            {isDemoMode() && (
+              <TooltipContent>
+                <p>Creating API keys is disabled in demo mode</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       {isLoading ? (
@@ -185,9 +211,27 @@ const ApiKeyCard = ({
               )}
             </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={onDelete}>
-            <Trash2 className="h-4 w-4 text-destructive" />
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={onDelete}
+                    disabled={isDemoMode()}
+                  >
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              {isDemoMode() && (
+                <TooltipContent>
+                  <p>Deleting API keys is disabled in demo mode</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </CardHeader>
       <CardContent className="space-y-2">

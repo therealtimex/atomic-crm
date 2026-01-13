@@ -24,6 +24,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { isDemoMode } from "@/lib/demo-utils";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -84,7 +91,10 @@ export const WebhooksTab = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      await dataProvider.delete("webhooks", { id, previousData: {} });
+      await dataProvider.delete("webhooks", {
+        id,
+        previousData: { id } as any,
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["webhooks"] });
@@ -135,10 +145,26 @@ export const WebhooksTab = () => {
         <p className="text-sm text-muted-foreground">
           {translate("crm.integrations.webhooks.description")}
         </p>
-        <Button onClick={() => setShowCreateDialog(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          {translate("crm.integrations.webhooks.action.create")}
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span>
+                <Button
+                  onClick={() => setShowCreateDialog(true)}
+                  disabled={isDemoMode()}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  {translate("crm.integrations.webhooks.action.create")}
+                </Button>
+              </span>
+            </TooltipTrigger>
+            {isDemoMode() && (
+              <TooltipContent>
+                <p>Creating webhooks is disabled in demo mode</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       {isLoading ? (
@@ -270,19 +296,75 @@ const WebhookCard = ({
             </div>
           </div>
           <div className="flex gap-2">
-            <Button variant="ghost" size="icon" onClick={onEdit}>
-              <Pencil className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={onToggle}>
-              {webhook.is_active ? (
-                <PowerOff className="h-4 w-4" />
-              ) : (
-                <Power className="h-4 w-4" />
-              )}
-            </Button>
-            <Button variant="ghost" size="icon" onClick={onDelete}>
-              <Trash2 className="h-4 w-4 text-destructive" />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={onEdit}
+                      disabled={isDemoMode()}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                {isDemoMode() && (
+                  <TooltipContent>
+                    <p>Editing webhooks is disabled in demo mode</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={onToggle}
+                      disabled={isDemoMode()}
+                    >
+                      {webhook.is_active ? (
+                        <PowerOff className="h-4 w-4" />
+                      ) : (
+                        <Power className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                {isDemoMode() && (
+                  <TooltipContent>
+                    <p>Toggling webhooks is disabled in demo mode</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={onDelete}
+                      disabled={isDemoMode()}
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                {isDemoMode() && (
+                  <TooltipContent>
+                    <p>Deleting webhooks is disabled in demo mode</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
       </CardHeader>

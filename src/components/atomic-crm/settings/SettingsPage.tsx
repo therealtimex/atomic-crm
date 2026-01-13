@@ -36,6 +36,9 @@ import ImageEditorField from "../misc/ImageEditorField";
 import type { CrmDataProvider } from "../providers/types";
 import type { SalesFormData } from "../types";
 import { TemplatesList } from "../invoices/TemplatesList";
+import { isDemoMode } from "@/lib/demo-utils";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Info } from "lucide-react";
 
 export const SettingsPage = () => {
   const translate = useTranslate();
@@ -113,6 +116,15 @@ const ProfileSettings = () => {
     <Form onSubmit={(values: any) => mutate(values)} record={data}>
       <Card>
         <CardContent className="pt-6">
+          {isDemoMode() && (
+            <Alert className="mb-6 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+              <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <AlertDescription className="text-blue-700 dark:text-blue-300">
+                You are in Demo Mode. Personal settings can be viewed but not
+                all actions (like password changes) are available.
+              </AlertDescription>
+            </Alert>
+          )}
           <div className="space-y-4 mb-6">
             <ImageEditorField
               source="avatar"
@@ -210,7 +222,7 @@ const OrganizationSettings = () => {
       setEditMode(false);
       notify(
         translate("resources.business_profile.notification.updated") ||
-          "Organization profile updated",
+        "Organization profile updated",
       );
     },
     onError: (error: any) => {
@@ -336,6 +348,7 @@ const OrganizationSettings = () => {
                 isEditMode={isEditMode}
                 type="password"
                 helperText="Your Resend API key (re_...). Leave empty to use environment variable."
+                disabled={isDemoMode()}
               />
             </div>
           </div>
@@ -368,14 +381,30 @@ const OrganizationSettings = () => {
 const PasswordChangeButton = () => {
   const translate = useTranslate();
   const navigate = useNavigate();
+  const isDemo = isDemoMode();
+
   return (
-    <Button
-      variant="outline"
-      type="button"
-      onClick={() => navigate("/change-password")}
-    >
-      {translate("crm.settings.action.change_password")}
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span>
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => navigate("/change-password")}
+              disabled={isDemo}
+            >
+              {translate("crm.settings.action.change_password")}
+            </Button>
+          </span>
+        </TooltipTrigger>
+        {isDemo && (
+          <TooltipContent>
+            <p>Password changes are disabled in demo mode</p>
+          </TooltipContent>
+        )}
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
@@ -398,6 +427,7 @@ const TextRender = ({
   rows = 1,
   helperText,
   type = "text",
+  disabled = false,
 }: {
   source: string;
   label: string;
@@ -406,6 +436,7 @@ const TextRender = ({
   rows?: number;
   helperText?: string;
   type?: "text" | "password";
+  disabled?: boolean;
 }) => {
   if (isEditMode) {
     return (
@@ -416,6 +447,7 @@ const TextRender = ({
         multiline={multiline}
         rows={rows}
         type={type}
+        disabled={disabled}
       />
     );
   }

@@ -16,6 +16,13 @@ import {
   getConfigSource,
 } from "@/lib/supabase-config";
 import { SupabaseSetupWizard } from "../setup/SupabaseSetupWizard";
+import { isDemoMode } from "@/lib/demo-utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function DatabaseSettings() {
   const [showWizard, setShowWizard] = useState(false);
@@ -78,23 +85,52 @@ export function DatabaseSettings() {
 
               {/* Actions */}
               <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowWizard(true)}
-                  className="flex-1"
-                >
-                  <Settings className="h-4 w-4 mr-2" />
-                  {translate("crm.settings.database.action.change")}
-                </Button>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="flex-1">
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowWizard(true)}
+                          className="w-full"
+                          disabled={isDemoMode()}
+                        >
+                          <Settings className="h-4 w-4 mr-2" />
+                          {translate("crm.settings.database.action.change")}
+                        </Button>
+                      </span>
+                    </TooltipTrigger>
+                    {isDemoMode() && (
+                      <TooltipContent>
+                        <p>Changing configuration is disabled in demo mode</p>
+                      </TooltipContent>
+                    )}
+                  </Tooltip>
+                </TooltipProvider>
+
                 {source === "ui" && (
-                  <Button
-                    variant="destructive"
-                    onClick={handleClearConfig}
-                    className="flex-1"
-                  >
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    {translate("crm.settings.database.action.clear")}
-                  </Button>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="flex-1">
+                          <Button
+                            variant="destructive"
+                            onClick={handleClearConfig}
+                            className="w-full"
+                            disabled={isDemoMode()}
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            {translate("crm.settings.database.action.clear")}
+                          </Button>
+                        </span>
+                      </TooltipTrigger>
+                      {isDemoMode() && (
+                        <TooltipContent>
+                          <p>Clearing configuration is disabled in demo mode</p>
+                        </TooltipContent>
+                      )}
+                    </Tooltip>
+                  </TooltipProvider>
                 )}
               </div>
 
