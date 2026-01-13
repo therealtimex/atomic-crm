@@ -5,6 +5,19 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.48.13] - 2026-01-13
+
+### Added
+
+- **Demo**: Enhanced demo seeding with realistic data (150+ deals, 200+ tasks, invoices) and CSV contact import.
+- **UX**: Added skeleton loaders to Dashboard charts for better loading states.
+- **Dev**: Added `scripts/check-schema.mjs` for schema verification.
+
+### Fixed
+
+- **Dashboard**: Fixed "in-negotiation" stage typo support in Deals chart.
+- **Dashboard**: Standardized chart lookback period to 6 months.
+
 ## [0.48.12] - 2026-01-12
 
 ### Fixed

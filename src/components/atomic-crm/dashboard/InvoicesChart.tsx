@@ -4,10 +4,9 @@ import { Receipt } from "lucide-react";
 import { useGetList, useLocaleState, useTranslate } from "ra-core";
 import { memo, useMemo } from "react";
 import { getDateFnsLocale } from "@/i18n/date-fns";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import type { Invoice } from "../types";
-
-const sixMonthsAgo = subMonths(new Date(), 6).toISOString();
 
 const DEFAULT_LOCALE = "en-US";
 const CURRENCY = "USD";
@@ -19,6 +18,8 @@ export const InvoicesChart = memo(() => {
   const acceptedLanguages = navigator
     ? navigator.languages || [navigator.language]
     : [DEFAULT_LOCALE];
+
+  const sixMonthsAgo = useMemo(() => subMonths(new Date(), 6).toISOString(), []);
 
   const { data, isPending } = useGetList<Invoice>("invoices", {
     pagination: { perPage: 100, page: 1 },
@@ -42,7 +43,7 @@ export const InvoicesChart = memo(() => {
       }
       acc[month].push(invoice);
       return acc;
-    }, {} as any);
+    }, {} as Record<string, Invoice[]>);
 
     // Calculate totals for each month
     const result = Object.keys(invoicesByMonth).map((month) => {
@@ -63,7 +64,18 @@ export const InvoicesChart = memo(() => {
     return result;
   }, [data, dateFnsLocale]);
 
-  if (isPending) return null;
+  if (isPending) {
+    return (
+      <div className="flex flex-col">
+        <div className="flex items-center mb-4">
+          <Skeleton className="w-6 h-6 mr-3 rounded" />
+          <Skeleton className="h-7 w-40" />
+        </div>
+        <Skeleton className="h-[350px] w-full" />
+      </div>
+    );
+  }
+
   if (months.length === 0) return null;
 
   return (

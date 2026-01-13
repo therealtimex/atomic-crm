@@ -4,19 +4,17 @@ import { DollarSign } from "lucide-react";
 import { useGetList, useLocaleState, useTranslate } from "ra-core";
 import { memo, useMemo } from "react";
 import { getDateFnsLocale } from "@/i18n/date-fns";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import type { Deal } from "../types";
 
-const multiplier = {
+const stageMultiplier: Record<string, number> = {
   opportunity: 0.2,
   "proposal-sent": 0.5,
-  "in-negociation": 0.8,
+  "in-negotiation": 0.8,
+  "in-negociation": 0.8, // Legacy spelling support
   delayed: 0.3,
 };
-
-const threeMonthsAgo = new Date(
-  new Date().setMonth(new Date().getMonth() - 6),
-).toISOString();
 
 const DEFAULT_LOCALE = "en-US";
 const CURRENCY = "USD";
@@ -29,6 +27,12 @@ export const DealsChart = memo(() => {
     ? navigator.languages || [navigator.language]
     : [DEFAULT_LOCALE];
 
+  const sixMonthsAgo = useMemo(() => {
+    const date = new Date();
+    date.setMonth(date.getMonth() - 6);
+    return date.toISOString();
+  }, []);
+
   const { data, isPending } = useGetList<Deal>("deals", {
     pagination: { perPage: 100, page: 1 },
     sort: {
@@ -36,7 +40,7 @@ export const DealsChart = memo(() => {
       order: "ASC",
     },
     filter: {
-      "created_at@gte": threeMonthsAgo,
+      "created_at@gte": sixMonthsAgo,
     },
   });
   const months = useMemo(() => {
@@ -66,8 +70,7 @@ export const DealsChart = memo(() => {
           .filter((deal: Deal) => !["won", "lost"].includes(deal.stage))
           .reduce((acc: number, deal: Deal) => {
             const amount = deal.amount ?? 0;
-            // @ts-expect-error - multiplier type issue
-            const mult = multiplier[deal.stage] ?? 0;
+            const mult = stageMultiplier[deal.stage] ?? 0;
             if (!isNaN(amount) && !isNaN(mult)) {
               acc += amount * mult;
             }
@@ -92,7 +95,18 @@ export const DealsChart = memo(() => {
     );
   }, [data]);
 
-  if (isPending) return null; // FIXME return skeleton instead
+  if (isPending) {
+    return (
+      <div className="flex flex-col">
+        <div className="flex items-center mb-4">
+          <Skeleton className="w-6 h-6 mr-3 rounded" />
+          <Skeleton className="h-7 w-48" />
+        </div>
+        <Skeleton className="h-[400px] w-full" />
+      </div>
+    );
+  }
+
   if (months.length === 0) return null; // No data to display
 
   const range = months.reduce(
