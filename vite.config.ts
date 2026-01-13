@@ -5,7 +5,9 @@ import react from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
 import createHtmlPlugin from "vite-plugin-simple-html";
 import { execSync, spawn } from "child_process";
+import { copyFileSync } from "fs";
 import packageJson from "./package.json";
+
 
 // Get latest migration timestamp at build time
 function getLatestMigrationTimestamp() {
@@ -66,6 +68,27 @@ export default defineConfig(({ mode }) => {
           },
         },
       }),
+      {
+        name: "sync-changelog",
+        buildStart() {
+          try {
+            copyFileSync("CHANGELOG.md", "public/CHANGELOG.md");
+            console.log("📝 Synced CHANGELOG.md to public/");
+          } catch (e) {
+            console.warn("⚠️ Failed to sync CHANGELOG.md:", e);
+          }
+        },
+        handleHotUpdate({ file }) {
+          if (file.endsWith("CHANGELOG.md")) {
+            try {
+              copyFileSync("CHANGELOG.md", "public/CHANGELOG.md");
+              console.log("📝 Synced CHANGELOG.md to public/ (HMR)");
+            } catch (e) {
+              console.warn("⚠️ Failed to sync CHANGELOG.md:", e);
+            }
+          }
+        },
+      },
       {
         name: "api-migrate",
         configureServer(server) {

@@ -5,6 +5,89 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.48.18] - 2026-01-13
+
+### Added
+
+- **Dev**: Added a Vite plugin to automatically synchronize the root `CHANGELOG.md` to the `public/` directory during development and builds.
+
+## [0.48.17] - 2026-01-13
+
+### Fixed
+
+- **UI**: Added `saveContext.saving` check to the `SaveButton` component to prevent double submissions while a save operation is in progress.
+
+## [0.48.16] - 2026-01-13
+
+### Fixed
+
+- **Activity Log**: Fixed "Deal Created" activity entries to display the salesperson's name instead of a raw ID.
+
+## [0.48.15] - 2026-01-13
+
+### Fixed
+
+- **I18n**: Simplified pluralization strings for Japanese and Korean to improve UI naturalness.
+
+## [0.48.14] - 2026-01-13
+
+### Changed
+
+- **Dashboard**: Refactored Deals Chart into a diverging bar chart showing a rolling window (3 months past to 6 months future).
+- **Dashboard**: Deals Chart now visualizes "Lost" deals below the zero line for better pipeline contrast.
+- **Dashboard**: Switched Deals Chart grouping from creation date to expected closing date to improve forecasting.
+
+## [0.48.13] - 2026-01-13
+
+### Added
+
+- **Demo**: Enhanced demo seeding with realistic data (150+ deals, 200+ tasks, invoices) and CSV contact import.
+- **UX**: Added skeleton loaders to Dashboard charts for better loading states.
+- **Dev**: Added `scripts/check-schema.mjs` for schema verification.
+
+### Fixed
+
+- **Dashboard**: Fixed "in-negotiation" stage typo support in Deals chart.
+- **Dashboard**: Standardized chart lookback period to 6 months.
+
+## [0.48.12] - 2026-01-12
+
+### Fixed
+
+- **Tasks**: Restored missing `index` column in `tasks_summary` view, fixing the Kanban board crash.
+
+## [0.48.11] - 2026-01-12
+
+### Fixed
+
+- **Performance**: Fixed lint error (unused `totalDeal` variable) preventing successful publication.
+
+## [0.48.10] - 2026-01-12
+
+### Added
+
+- **UX**: The onboarding checklist is now dismissible and visible only to administrators.
+- **Security**: Implemented demo mode restrictions to protect sensitive configurations (DB setup, password change, API keys, webhooks).
+- **Seeding**: Updated seeding scripts with official demo credentials.
+
+### Fixed
+
+- **Performance**: Resolved MIME type errors for lazy-loaded modules in deployed environments.
+- **UX**: Fixed missing translation keys and "Deal Pipeline" tab visibility on the dashboard.
+- **Security**: Fixed potential leakage of sensitive data in seeding scripts.
+
+## [0.48.9] - 2026-01-12
+
+### Added
+
+- **Infrastructure**: Transferred the demo site to a real Supabase backend for persistent data.
+- **Seeding**: Added a robust demo data generator script (`seed-demo.mjs`).
+- **Build**: Optimized Vite build splitting to resolve memory limits on Vercel.
+
+### Fixed
+
+- **I18n**: Added missing translations for the "Change Password" page.
+
 ## [0.48.8] - 2026-01-12
 
 ### Added
