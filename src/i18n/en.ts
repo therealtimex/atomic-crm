@@ -4,6 +4,15 @@ export const enMessages = {
       send: "Send",
       sending: "Sending...",
     },
+    auth: {
+      user_menu: "Profile",
+      username: "Username",
+      password: "Password",
+      confirm_password: "Confirm Password",
+      sign_in: "Sign in",
+      sign_in_error: "Authentication failed, please retry",
+      logout: "Logout",
+    },
     navigation: {
       no_results: "No results found.",
       no_filtered_results: "No results found with the current filters.",

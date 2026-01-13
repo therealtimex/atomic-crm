@@ -1454,6 +1454,13 @@ export const jaMessages = {
     },
     auth: {
       auth_check_error: "続行するにはログインしてください",
+      user_menu: "プロフィール",
+      username: "ユーザー名",
+      password: "パスワード",
+      confirm_password: "パスワードの確認",
+      sign_in: "ログイン",
+      sign_in_error: "認証に失敗しました。もう一度お試しください",
+      logout: "ログアウト",
       email: "メール",
     },
     notification: {

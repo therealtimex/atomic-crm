@@ -1449,6 +1449,13 @@ export const koMessages = {
     },
     auth: {
       auth_check_error: "계속하려면 로그인하세요",
+      user_menu: "프로필",
+      username: "사용자 이름",
+      password: "비밀번호",
+      confirm_password: "비밀번호 확인",
+      sign_in: "로그인",
+      sign_in_error: "인증 실패, 다시 시도하세요",
+      logout: "로그아웃",
       email: "이메일",
     },
     notification: {

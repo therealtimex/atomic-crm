@@ -1497,6 +1497,12 @@ export const esMessages = {
     auth: {
       auth_check_error: "Por favor inicia sesión para continuar",
       user_menu: "Perfil",
+      username: "Nombre de usuario",
+      password: "Contraseña",
+      confirm_password: "Confirmar contraseña",
+      sign_in: "Iniciar sesión",
+      sign_in_error: "Autenticación fallida, por favor inténtalo de nuevo",
+      logout: "Cerrar sesión",
       email: "Correo electrónico",
     },
     notification: {

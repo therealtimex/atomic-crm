@@ -11,8 +11,8 @@ RealTimeX CRM is free and open-source.
 Experience RealTimeX CRM immediately: [realtimex-crm.vercel.app](https://realtimex-crm.vercel.app/)
 
 **Admin Credentials:**
-- **Email**: `janedoe@atomic.dev`
-- **Password**: `demo`
+- **Email**: `janedoe@realtimex.ai`
+- **Password**: `crmdemo`
 
 > [!NOTE]
 > This demo uses an in-memory database. All changes are local to your browser session and will reset upon refreshing the page.

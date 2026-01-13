@@ -4,6 +4,15 @@ export const frMessages = {
       send: "Envoyer",
       sending: "Envoi en cours...",
     },
+    auth: {
+      user_menu: "Profil",
+      username: "Nom d'utilisateur",
+      password: "Mot de passe",
+      confirm_password: "Confirmer le mot de passe",
+      sign_in: "Se connecter",
+      sign_in_error: "Échec de l'authentification, veuillez réessayer",
+      logout: "Se déconnecter",
+    },
     navigation: {
       no_results: "Aucun résultat trouvé.",
       no_filtered_results: "Aucun résultat trouvé avec les filtres actuels.",

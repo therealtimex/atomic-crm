@@ -1437,6 +1437,13 @@ export const viMessages = {
       DESC: "giảm dần",
     },
     auth: {
+      user_menu: "Hồ sơ",
+      username: "Tên đăng nhập",
+      password: "Mật khẩu",
+      confirm_password: "Xác nhận mật khẩu",
+      sign_in: "Đăng nhập",
+      sign_in_error: "Đăng nhập thất bại, vui lòng thử lại",
+      logout: "Đăng xuất",
       email: "Email",
     },
     notification: {
