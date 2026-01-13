@@ -1,5 +1,5 @@
 import { ResponsiveBar } from "@nivo/bar";
-import { format, startOfMonth } from "date-fns";
+import { format, startOfMonth, subMonths, addMonths } from "date-fns";
 import { DollarSign } from "lucide-react";
 import { useGetList, useLocaleState, useTranslate } from "ra-core";
 import { memo, useMemo } from "react";
@@ -27,26 +27,30 @@ export const DealsChart = memo(() => {
     ? navigator.languages || [navigator.language]
     : [DEFAULT_LOCALE];
 
-  const sixMonthsAgo = useMemo(() => {
-    const date = new Date();
-    date.setMonth(date.getMonth() - 6);
-    return date.toISOString();
+  // Rolling window: 3 months past to 6 months future
+  const dateRange = useMemo(() => {
+    const now = new Date();
+    return {
+      start: subMonths(now, 3).toISOString(),
+      end: addMonths(now, 6).toISOString(),
+    };
   }, []);
 
   const { data, isPending } = useGetList<Deal>("deals", {
-    pagination: { perPage: 100, page: 1 },
+    pagination: { perPage: 200, page: 1 },
     sort: {
-      field: "created_at",
+      field: "expected_closing_date",
       order: "ASC",
     },
     filter: {
-      "created_at@gte": sixMonthsAgo,
+      "expected_closing_date@gte": dateRange.start,
+      "expected_closing_date@lte": dateRange.end,
     },
   });
   const months = useMemo(() => {
     if (!data) return [];
     const dealsByMonth = data.reduce((acc, deal) => {
-      const month = startOfMonth(deal.created_at ?? new Date()).toISOString();
+      const month = startOfMonth(deal.expected_closing_date ?? new Date()).toISOString();
       if (!acc[month]) {
         acc[month] = [];
       }
@@ -55,36 +59,35 @@ export const DealsChart = memo(() => {
     }, {} as any);
 
     const amountByMonth = Object.keys(dealsByMonth).map((month) => {
+      // Calculate positive values (above zero line)
+      const wonAmount = dealsByMonth[month]
+        .filter((deal: Deal) => deal.stage === "won")
+        .reduce((acc: number, deal: Deal) => {
+          const amount = deal.amount ?? 0;
+          return !isNaN(amount) ? acc + amount : acc;
+        }, 0);
+
+      const pendingAmount = dealsByMonth[month]
+        .filter((deal: Deal) => !["won", "lost"].includes(deal.stage))
+        .reduce((acc: number, deal: Deal) => {
+          const amount = deal.amount ?? 0;
+          const mult = stageMultiplier[deal.stage] ?? 0;
+          return !isNaN(amount) && !isNaN(mult) ? acc + amount * mult : acc;
+        }, 0);
+
+      // Calculate negative value (below zero line) - store as negative for diverging chart
+      const lostAmount = dealsByMonth[month]
+        .filter((deal: Deal) => deal.stage === "lost")
+        .reduce((acc: number, deal: Deal) => {
+          const amount = deal.amount ?? 0;
+          return !isNaN(amount) ? acc + amount : acc;
+        }, 0);
+
       return {
         date: format(month, "MMM", { locale: dateFnsLocale }),
-        won: dealsByMonth[month]
-          .filter((deal: Deal) => deal.stage === "won")
-          .reduce((acc: number, deal: Deal) => {
-            const amount = deal.amount ?? 0;
-            if (!isNaN(amount)) {
-              acc += amount;
-            }
-            return acc;
-          }, 0),
-        pending: dealsByMonth[month]
-          .filter((deal: Deal) => !["won", "lost"].includes(deal.stage))
-          .reduce((acc: number, deal: Deal) => {
-            const amount = deal.amount ?? 0;
-            const mult = stageMultiplier[deal.stage] ?? 0;
-            if (!isNaN(amount) && !isNaN(mult)) {
-              acc += amount * mult;
-            }
-            return acc;
-          }, 0),
-        lost: dealsByMonth[month]
-          .filter((deal: Deal) => deal.stage === "lost")
-          .reduce((acc: number, deal: Deal) => {
-            const amount = deal.amount ?? 0;
-            if (!isNaN(amount)) {
-              acc -= amount;
-            }
-            return acc;
-          }, 0),
+        won: wonAmount,
+        pending: pendingAmount,
+        lost: -lostAmount, // Negative for diverging chart (renders below zero)
       };
     });
 
@@ -93,7 +96,7 @@ export const DealsChart = memo(() => {
       (month) =>
         !isNaN(month.won) && !isNaN(month.pending) && !isNaN(month.lost),
     );
-  }, [data]);
+  }, [data, dateFnsLocale]);
 
   if (isPending) {
     return (
@@ -139,7 +142,12 @@ export const DealsChart = memo(() => {
           data={months}
           indexBy="date"
           keys={["won", "pending", "lost"]}
-          colors={["#61cdbb", "#97e3d5", "#e25c3b"]}
+          colors={({ id }) => {
+            // won and pending are green shades, lost is red
+            if (id === "won") return "#61cdbb";
+            if (id === "pending") return "#97e3d5";
+            return "#e25c3b";
+          }}
           margin={{ top: 30, right: 50, bottom: 30, left: 0 }}
           padding={0.3}
           valueScale={{

@@ -5,6 +5,14 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.48.14] - 2026-01-13
+
+### Changed
+
+- **Dashboard**: Refactored Deals Chart into a diverging bar chart showing a rolling window (3 months past to 6 months future).
+- **Dashboard**: Deals Chart now visualizes "Lost" deals below the zero line for better pipeline contrast.
+- **Dashboard**: Switched Deals Chart grouping from creation date to expected closing date to improve forecasting.
+
 ## [0.48.13] - 2026-01-13
 
 ### Added
