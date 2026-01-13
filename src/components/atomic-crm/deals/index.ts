@@ -1,6 +1,5 @@
-import * as React from "react";
 import type { Deal } from "../types";
-const DealList = React.lazy(() => import("./DealList"));
+import DealList from "./DealList";
 import { DealShow } from "./DealShow";
 
 export default {
