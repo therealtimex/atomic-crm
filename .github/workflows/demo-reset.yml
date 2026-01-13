@@ -1,8 +1,6 @@
 name: Demo Data Reset
 
 on:
-  schedule:
-    - cron: '0 0 * * *' # Daily at midnight
   workflow_dispatch: # Allow manual trigger
 
 jobs:

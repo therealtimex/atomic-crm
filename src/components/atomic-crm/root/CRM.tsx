@@ -7,7 +7,7 @@ import {
 } from "ra-core";
 import { useEffect } from "react";
 import { Route } from "react-router";
-import { Admin } from "@/components/admin/admin";
+import { AdminContext, AdminUI } from "@/components/admin/admin";
 import { ForgotPasswordPage } from "@/components/supabase/forgot-password-page";
 import { SetPasswordPage } from "@/components/supabase/set-password-page";
 import { ChangePasswordPage } from "@/components/supabase/change-password-page";
@@ -156,59 +156,66 @@ export const CRM = ({
       externalHeartbeatStatuses={externalHeartbeatStatuses}
       internalHeartbeatStatuses={internalHeartbeatStatuses}
     >
-      <DatabaseHealthCheck dataProvider={dataProvider}>
-        <Admin
-          dataProvider={dataProvider}
-          authProvider={authProvider}
-          store={localStorageStore(undefined, "CRM")}
-          layout={Layout}
-          loginPage={StartPage}
-          i18nProvider={i18nProvider}
-          dashboard={Dashboard}
-          requireAuth
-          disableTelemetry
-          {...rest}
-        >
-          <CustomRoutes noLayout>
-            <Route path={SignupPage.path} element={<SignupPage />} />
-            <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
-            <Route
-              path={ForgotPasswordPage.path}
-              element={<ForgotPasswordPage />}
-            />
-            <Route
-              path={ChangePasswordPage.path}
-              element={<ChangePasswordPage />}
-            />
-            <Route path={OtpLoginPage.path} element={<OtpLoginPage />} />
-          </CustomRoutes>
+      <AdminContext
+        dataProvider={dataProvider}
+        authProvider={authProvider}
+        store={localStorageStore(undefined, "CRM")}
+        i18nProvider={i18nProvider}
+        {...rest}
+      >
+        <DatabaseHealthCheck dataProvider={dataProvider}>
+          <AdminUI
+            layout={Layout}
+            loginPage={StartPage}
+            dashboard={Dashboard}
+            requireAuth
+            disableTelemetry
+            {...rest}
+          >
+            <CustomRoutes noLayout>
+              <Route path={SignupPage.path} element={<SignupPage />} />
+              <Route
+                path={SetPasswordPage.path}
+                element={<SetPasswordPage />}
+              />
+              <Route
+                path={ForgotPasswordPage.path}
+                element={<ForgotPasswordPage />}
+              />
+              <Route
+                path={ChangePasswordPage.path}
+                element={<ChangePasswordPage />}
+              />
+              <Route path={OtpLoginPage.path} element={<OtpLoginPage />} />
+            </CustomRoutes>
 
-          <CustomRoutes>
-            <Route path={SettingsPage.path} element={<SettingsPage />} />
-            <Route path={DatabasePage.path} element={<DatabasePage />} />
-            <Route
-              path={IntegrationsPage.path}
-              element={<IntegrationsPage />}
-            />
-          </CustomRoutes>
-          <Resource name="deals" {...deals} />
-          <Resource name="invoices" {...invoices} />
-          <Resource name="invoice_items" />
-          <Resource name="invoice_notes" />
-          <Resource name="invoices_summary" />
-          <Resource name="tax_presets" />
-          <Resource name="contacts" {...contacts} />
-          <Resource name="companies" {...companies} />
-          <Resource name="companyNotes" />
-          <Resource name="contactNotes" />
-          <Resource name="dealNotes" />
-          <Resource name="taskNotes" />
-          <Resource name="task_activity" />
-          <Resource name="tasks" {...tasks} />
-          <Resource name="sales" {...sales} />
-          <Resource name="tags" />
-        </Admin>
-      </DatabaseHealthCheck>
+            <CustomRoutes>
+              <Route path={SettingsPage.path} element={<SettingsPage />} />
+              <Route path={DatabasePage.path} element={<DatabasePage />} />
+              <Route
+                path={IntegrationsPage.path}
+                element={<IntegrationsPage />}
+              />
+            </CustomRoutes>
+            <Resource name="deals" {...deals} />
+            <Resource name="invoices" {...invoices} />
+            <Resource name="invoice_items" />
+            <Resource name="invoice_notes" />
+            <Resource name="invoices_summary" />
+            <Resource name="tax_presets" />
+            <Resource name="contacts" {...contacts} />
+            <Resource name="companies" {...companies} />
+            <Resource name="companyNotes" />
+            <Resource name="contactNotes" />
+            <Resource name="dealNotes" />
+            <Resource name="taskNotes" />
+            <Resource name="task_activity" />
+            <Resource name="tasks" {...tasks} />
+            <Resource name="sales" {...sales} />
+            <Resource name="tags" />
+          </AdminUI>
+        </DatabaseHealthCheck>
+      </AdminContext>
     </ConfigurationProvider>
   );
 };

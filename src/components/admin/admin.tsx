@@ -23,7 +23,7 @@ const defaultStore = localStorageStore();
  *
  * @internal
  */
-const AdminContext = (props: CoreAdminContextProps) => (
+export const AdminContext = (props: CoreAdminContextProps) => (
   <CoreAdminContext {...props} />
 );
 
@@ -35,7 +35,7 @@ const AdminContext = (props: CoreAdminContextProps) => (
  *
  * @internal
  */
-const AdminUI = (props: CoreAdminUIProps) => (
+export const AdminUI = (props: CoreAdminUIProps) => (
   <ThemeProvider>
     <CoreAdminUI
       layout={Layout}

@@ -81,21 +81,17 @@ export const Dashboard = () => {
                 <DollarSign className="h-4 w-4" />
                 {translate("crm.dashboard.invoice_revenue")}
               </TabsTrigger>
-              {totalDeal ? (
-                <TabsTrigger value="deals" className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4" />
-                  {translate("crm.dashboard.deal_pipeline")}
-                </TabsTrigger>
-              ) : null}
+              <TabsTrigger value="deals" className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                {translate("crm.dashboard.deal_pipeline")}
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="invoices" className="mt-0">
               <InvoicesChart />
             </TabsContent>
-            {totalDeal ? (
-              <TabsContent value="deals" className="mt-0">
-                <DealsChart />
-              </TabsContent>
-            ) : null}
+            <TabsContent value="deals" className="mt-0">
+              <DealsChart />
+            </TabsContent>
           </Tabs>
           <DashboardActivityLog />
         </div>

@@ -58,7 +58,7 @@ async function seed() {
         {
             first_name: 'Jane',
             last_name: 'Doe',
-            email: 'janedoe@realtimex.ai',
+            email: 'realtimexcrm+demo@rta.vn',
             administrator: true,
             user_id: '00000000-0000-0000-0000-000000000000' // Mock UUID, update if needed
         }
@@ -196,12 +196,12 @@ async function seed() {
     await supabase.from('business_profile').upsert({
         id: 1,
         name: 'RealTimeX Demo Corp',
-        email: 'billing@realtimex.ai',
+        email: 'realtimexcrm+demo@rta.vn',
         website: 'https://realtimex.ai',
         address: '123 AI Avenue, San Francisco, CA',
         currency: 'USD',
-        email_from_name: 'RealTimeX Billing',
-        email_from_email: 'billing@realtimex.ai'
+        email_from_name: 'RealTimeX Demo Corp',
+        email_from_email: 'realtimexcrm+demo@rta.vn'
     });
 
     console.log('✨ Seeding Completed Successfully!');
