@@ -5,6 +5,12 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.48.12] - 2026-01-12
+
+### Fixed
+
+- **Tasks**: Restored missing `index` column in `tasks_summary` view, fixing the Kanban board crash.
+
 ## [0.48.11] - 2026-01-12
 
 ### Fixed
