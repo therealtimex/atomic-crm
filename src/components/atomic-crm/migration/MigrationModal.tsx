@@ -195,7 +195,7 @@ export function MigrationModal({
       open={open}
       onOpenChange={(val) => !isMigrating && onOpenChange(val)}
     >
-      <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
+      <DialogContent className="max-h-[90vh] sm:max-w-5xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
             <AlertTriangle className="h-6 w-6 text-red-700 dark:text-red-600" />

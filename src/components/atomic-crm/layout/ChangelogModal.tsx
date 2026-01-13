@@ -39,7 +39,7 @@ export const ChangelogModal = ({ open, onOpenChange }: ChangelogModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[80vh] flex flex-col p-0 overflow-hidden">
+      <DialogContent className="sm:max-w-5xl max-h-[80vh] flex flex-col p-0 overflow-hidden">
         <DialogHeader className="p-6 pb-2 border-b">
           <DialogTitle className="flex items-center gap-2">
             🚀 {translate("crm.changelog.title", { _: "What's New" })}
