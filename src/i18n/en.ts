@@ -1029,7 +1029,8 @@ export const enMessages = {
         description: "It seems your user list is empty.",
       },
       notification: {
-        invite_sent: "Invitation email resent successfully",
+        invite_sent: "Invitation resent successfully",
+        created_invite_sent: "User created. Invite email sent.",
         invite_error: "Failed to resend invitation email",
         reset_sent: "Password reset email sent successfully",
         reset_error: "Failed to send password reset email",

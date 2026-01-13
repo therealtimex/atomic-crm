@@ -14,13 +14,13 @@ export function SalesCreate() {
   const redirect = useRedirect();
   const translate = useTranslate();
 
-  const { mutate } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationKey: ["signup"],
     mutationFn: async (data: SalesFormData) => {
       return dataProvider.salesCreate(data);
     },
     onSuccess: () => {
-      notify(translate("crm.user.notification.created"));
+      notify(translate("crm.user.notification.created_invite_sent"));
       redirect("/sales");
     },
     onError: () => {
@@ -30,7 +30,7 @@ export function SalesCreate() {
     },
   });
   const onSubmit: SubmitHandler<SalesFormData> = async (data) => {
-    mutate(data);
+    await mutateAsync(data);
   };
 
   return (

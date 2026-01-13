@@ -1005,6 +1005,7 @@ export const viMessages = {
       },
       notification: {
         invite_sent: "Đã gửi lại email mời thành công",
+        created_invite_sent: "Người dùng đã được tạo. Email mời đã được gửi.",
         invite_error: "Gửi lại email mời thất bại",
         reset_sent: "Đã gửi email đặt lại mật khẩu thành công",
         reset_error: "Gửi email đặt lại mật khẩu thất bại",

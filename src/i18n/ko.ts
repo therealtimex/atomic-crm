@@ -999,6 +999,7 @@ export const koMessages = {
       },
       notification: {
         invite_sent: "초대 이메일이 성공적으로 재전송되었습니다",
+        created_invite_sent: "사용자가 생성되었습니다. 초대 이메일이 발송되었습니다.",
         invite_error: "초대 이메일 재전송에 실패했습니다",
         reset_sent: "비밀번호 재설정 이메일이 성공적으로 전송되었습니다",
         reset_error: "비밀번호 재설정 이메일 전송에 실패했습니다",

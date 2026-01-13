@@ -5,6 +5,16 @@ All notable changes to RealTimeX CRM will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.48.20] - 2026-01-13
+
+### Added
+
+- **UX**: Added a specific notification for when a new user is created to clarify that an invitation email has been sent.
+
+### Changed
+
+- **I18n**: Updated translations for all supported languages to include the new user creation notification.
+
 ## [0.48.19] - 2026-01-13
 
 ### Changed

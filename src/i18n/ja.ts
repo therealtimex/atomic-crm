@@ -182,7 +182,7 @@ export const jaMessages = {
       notification: {
         marked_complete: "タスクを完了にしました",
         snoozed_tomorrow: "タスクを明日まで延期しました",
-        postponed_day: "タスクを1日延期しました",
+        postponed_day: "1日延期しました",
         created: "タスクを作成しました",
         updated: "タスクを更新しました",
         deleted: "タスクを削除しました",
@@ -1004,6 +1004,7 @@ export const jaMessages = {
       },
       notification: {
         invite_sent: "招待メールを再送信しました",
+        created_invite_sent: "ユーザーが作成されました。招待メールが送信されました。",
         invite_error: "招待メールの再送信に失敗しました",
         reset_sent: "パスワードリセットメールを送信しました",
         reset_error: "パスワードリセットメールの送信に失敗しました",

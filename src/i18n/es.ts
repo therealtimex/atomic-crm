@@ -1025,6 +1025,7 @@ export const esMessages = {
       },
       notification: {
         invite_sent: "Invitación reenviada correctamente",
+        created_invite_sent: "Usuario creado. Correo de invitación enviado.",
         invite_error: "Error al reenviar la invitación",
         reset_sent: "Correo de restablecimiento enviado correctamente",
         reset_error: "Error al enviar el correo de restablecimiento",

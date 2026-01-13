@@ -1045,6 +1045,7 @@ export const frMessages = {
       },
       notification: {
         invite_sent: "E-mail d'invitation renvoyé avec succès",
+        created_invite_sent: "Utilisateur créé. Email d'invitation envoyé.",
         invite_error: "Échec du renvoi de l'e-mail d'invitation",
         reset_sent: "E-mail de réinitialisation envoyé avec succès",
         reset_error: "Échec de l'envoi de l'e-mail de réinitialisation",
